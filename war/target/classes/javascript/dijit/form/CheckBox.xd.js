@@ -1,0 +1,25 @@
+dojo._xdResourceLoaded({depends:[["provide","dijit.form.CheckBox"],["require","dijit.form.Button"]],defineResource:function(A){if(!A._hasResource["dijit.form.CheckBox"]){A._hasResource["dijit.form.CheckBox"]=true;
+A.provide("dijit.form.CheckBox");
+A.require("dijit.form.Button");
+A.declare("dijit.form.CheckBox",dijit.form.ToggleButton,{templateString:'<fieldset class="dijitReset dijitInline" waiRole="presentation"\r\n\t><input\r\n\t \ttype="${type}" name="${name}"\r\n\t\tclass="dijitReset dijitCheckBoxInput"\r\n\t\tdojoAttachPoint="inputNode,focusNode"\r\n\t \tdojoAttachEvent="onmouseover:_onMouse,onmouseout:_onMouse,onclick:_onClick"\r\n/></fieldset>\r\n',baseClass:"dijitCheckBox",type:"checkbox",value:"on",postCreate:function(){A.setSelectable(this.inputNode,false);
+this.setChecked(this.checked);
+this.inherited(arguments)
+},setChecked:function(B){if(A.isIE){if(B){this.inputNode.setAttribute("checked","checked")
+}else{this.inputNode.removeAttribute("checked")
+}}else{this.inputNode.checked=B
+}this.inherited(arguments)
+},setValue:function(B){if(B==null){B=""
+}this.inputNode.value=B;
+dijit.form.CheckBox.superclass.setValue.call(this,B)
+}});
+A.declare("dijit.form.RadioButton",dijit.form.CheckBox,{type:"radio",baseClass:"dijitRadio",_groups:{},postCreate:function(){(this._groups[this.name]=this._groups[this.name]||[]).push(this);
+this.inherited(arguments)
+},uninitialize:function(){A.forEach(this._groups[this.name],function(D,C,B){if(D===this){B.splice(C,1);
+return 
+}},this)
+},setChecked:function(B){if(B){A.forEach(this._groups[this.name],function(C){if(C!=this&&C.checked){C.setChecked(false)
+}},this)
+}this.inherited(arguments)
+},_clicked:function(B){if(!this.checked){this.setChecked(true)
+}}})
+}}});
