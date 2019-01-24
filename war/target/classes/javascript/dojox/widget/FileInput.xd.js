@@ -1,0 +1,27 @@
+dojo._xdResourceLoaded({depends:[["provide","dojox.widget.FileInput"],["require","dijit.form._FormWidget"],["require","dijit._Templated"]],defineResource:function(A){if(!A._hasResource["dojox.widget.FileInput"]){A._hasResource["dojox.widget.FileInput"]=true;
+A.provide("dojox.widget.FileInput");
+A.experimental("dojox.widget.FileInput");
+A.require("dijit.form._FormWidget");
+A.require("dijit._Templated");
+A.declare("dojox.widget.FileInput",[dijit.form._FormWidget,dijit._Templated],{label:"Browse ...",cancelText:"Cancel",name:"uploadFile",templateString:'<div class="dijitFileInput">\r\n\t<input id="${id}" class="dijitFileInputReal" type="file" dojoAttachPoint="fileInput" name="${name}" />\r\n\t<div class="dijitFakeInput">\r\n\t\t<input class="dijitFileInputVisible" type="text" dojoAttachPoint="focusNode, inputNode" />\r\n\t\t<span class="dijitFileInputText" dojoAttachPoint="titleNode">${label}</span>\r\n\t\t<span class="dijitFileInputButton" dojoAttachPoint="cancelNode" \r\n\t\t\tdojoAttachEvent="onclick:_onClick">${cancelText}</span>\r\n\t</div>\r\n</div>\r\n',startup:function(){this.inherited("startup",arguments);
+this._listener=A.connect(this.fileInput,"onchange",this,"_matchValue");
+this._keyListener=A.connect(this.fileInput,"onkeyup",this,"_matchValue")
+},_matchValue:function(){this.inputNode.value=this.fileInput.value;
+if(this.inputNode.value){this.cancelNode.style.visibility="visible";
+A.fadeIn({node:this.cancelNode,duration:275}).play()
+}},setLabel:function(C,B){this.titleNode.innerHTML=C
+},_onClick:function(B){A.disconnect(this._listener);
+A.disconnect(this._keyListener);
+this.domNode.removeChild(this.fileInput);
+A.fadeOut({node:this.cancelNode,duration:275}).play();
+this.fileInput=document.createElement("input");
+this.fileInput.setAttribute("type","file");
+this.fileInput.setAttribute("id",this.id);
+this.fileInput.setAttribute("name",this.name);
+A.addClass(this.fileInput,"dijitFileInputReal");
+this.domNode.appendChild(this.fileInput);
+this._keyListener=A.connect(this.fileInput,"onkeyup",this,"_matchValue");
+this._listener=A.connect(this.fileInput,"onchange",this,"_matchValue");
+this.inputNode.value=""
+}})
+}}});

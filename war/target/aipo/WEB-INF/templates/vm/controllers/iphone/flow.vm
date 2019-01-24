@@ -1,0 +1,54 @@
+#*
+ * Aipo is a groupware program developed by Aimluck,Inc.
+ * Copyright (C) 2004-2011 Aimluck,Inc.
+ * http://www.aipo.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *#
+
+## ---------------------------------------------------------------------------
+#set($career = 'iphone')
+#if($data.User.hasLoggedIn())
+<h2>${alias}ホーム</h2>
+<div id="contents">
+
+#set($tmp="")
+<ul id="mainMenu">
+#foreach ( $portlet in $portlets )
+#if($!portlet.Title == "ｽｹｼﾞｭｰﾙ")
+<li $tmp><a href="$!jslink.getAction("controls.Maximize",$!portlet.ID)"><img src="themes/iphone/img/icon/128/calendar.gif" width="64" height="64"  /><br />スケジュール</a></li>#elseif($!portlet.Title == "ﾌﾞﾛｸﾞ")<li $tmp><a href="$!jslink.getAction("controls.Maximize",$!portlet.ID)"><img src="themes/iphone/img/icon/128/notepad-write.gif" width="64" height="64"  /><br />ブログ</a></li>#elseif($!portlet.Title == "ﾜｰｸﾌﾛｰ")<li $tmp><a href="$!jslink.getAction("controls.Maximize",$!portlet.ID)"><img src="themes/iphone/img/icon/128/paste.gif" width="64" height="64"  /><br />ワークフロー</a></li>#elseif($!portlet.Title == "掲示板")<li $tmp><a href="$!jslink.getAction("controls.Maximize",$!portlet.ID)"><img src="themes/iphone/img/icon/128/comment-silver.gif" width="64" height="64"  /><br />$!portlet.Title</a></li>#elseif($!portlet.Title == "Webﾒｰﾙ")<li $tmp><a href="$!jslink.getAction("controls.Maximize",$!portlet.ID)"><img src="themes/iphone/img/icon/128/email.gif" width="64" height="64"  /><br />Webメール</a></li>#elseif($!portlet.Title == "ToDo")<li $tmp><a href="$!jslink.getAction("controls.Maximize",$!portlet.ID)"><img src="themes/iphone/img/icon/128/check.gif" width="64" height="64"  /><br />$!portlet.Title</a></li>#elseif($!portlet.Title == "ｱﾄﾞﾚｽ帳")<li $tmp><a href="$!jslink.getAction("controls.Maximize",$!portlet.ID)"><img src="themes/iphone/img/icon/128/address.gif" width="64" height="64"  /><br />アドレス帳</a></li>#elseif($!portlet.Title == "個人設定")<li $tmp><a href="$!jslink.getAction("controls.Maximize",$!portlet.ID)"><img src="themes/iphone/img/icon/128/user.gif" width="64" height = "64" /><br />個人設定</a></li>#end#if($tmp == "")#set($tmp='class="even"')#else#set($tmp="")#end#end
+</ul>
+<script type="text/javascript">
+function onChangeOrientation() {
+   var menuW = "300px";
+    switch ( window.orientation ) {
+        case 90:
+        case -90:
+            menuW = "400px";
+            break;
+    }
+    document.getElementById("mainMenu").style.width = menuW;
+}
+window.onorientationchange = onChangeOrientation;
+onChangeOrientation();
+</script>
+#else
+#foreach($portlet in $portlets)
+$!portlet.getContent($data)
+#end
+#end
+
+
+
+</div>

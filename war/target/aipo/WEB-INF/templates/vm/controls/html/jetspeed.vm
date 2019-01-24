@@ -1,0 +1,307 @@
+#*
+ * Aipo is a groupware program developed by Aimluck,Inc.
+ * Copyright (C) 2004-2011 Aimluck,Inc.
+ * http://www.aipo.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *#
+## ---------------------------------------------------------------------------
+#macro(ALtabElementMaximize $name $imageclass)
+#set($break=false)
+#foreach($tab in $menus)
+	#if($break==false)
+		#if($tab.Name.toString()==$name)
+		<li><a href="$!utils.escapeXML($tab.MaximizeLink)"><i class="auiMbIcon $!{imageclass}"></i><span>$tab.Title</span></a></li>
+		#set($break=true)
+		#elseif($tab.Name.toString()=="AjaxScheduleWeekly" && $name=="Schedule")
+		<li><a href="$!utils.escapeXML($tab.MaximizeLink)"><i class="auiMbIcon $!{imageclass}"></i><span>$tab.Title</span></a></li>
+		#set($break=true)
+		#end
+	#end
+#end
+#end
+
+## ---------------------------------------------------------------------------
+#set($beforeselected =false)
+#if( ! $portlet.isClosed($data) )
+#if($!isMaximized && ($!showTab == "true"))
+	#if(${client}=="IPHONE")
+<!-- appsNavigation -->
+<script language="javascript">
+// ウィジェットメニュー用
+aipo.onloadSmartPhone = function(){
+	var widgets_area = dojo.byId('auiWidgetsArea');
+	if(widgets_area != null){
+		// classの追加
+		var is_menu = false;
+		for(var i=0;i<widgets_area.childNodes.length;i++){
+			if(widgets_area.childNodes[i].className != null
+			&& widgets_area.childNodes[i].className.indexOf('auiWidget',0) >= 0){
+				if(widgets_area.childNodes[i].innerHTML.indexOf('auiButtonAction',0) >= 0){
+					widgets_area.childNodes[i].className += ' widgetButton';
+				}else if(widgets_area.childNodes[i].id == 'subNavigation'){
+					is_menu = true;
+				}else if(widgets_area.childNodes[i].innerHTML.indexOf('<ul>',0) >= 0){
+					widgets_area.childNodes[i].id = 'subNavigation';
+					is_menu = true;
+				}else{
+					widgets_area.childNodes[i].className += ' mb_hide';
+				}
+			}
+		}
+		// snDrawerの追加
+		if(is_menu){
+			var elem = document.createElement('div');
+			elem.className = 'snDrawer';
+			elem.innerHTML = '<a href="javascript:void(0)" class="auiButtonBold" onClick="widgetMenuSwitch()"><img src="themes/default/images/mobile/sn_list.png" /></a>';
+			widgets_area.appendChild(elem);
+		}
+	}
+}
+dojo.addOnLoad(function(){
+	aipo.onloadSmartPhone();
+});
+function widgetMenuSwitch() {
+        var subNavi = document.getElementById('subNavigation');
+        if(document.defaultView.getComputedStyle(subNavi,null).display=='none'){
+                subNavi.style.display = 'block';
+        }else{
+                subNavi.style.display = 'none';
+        }
+}
+// ナビゲーションメニュー用
+function appsNaviSwitch() {
+	var navi = document.getElementById('appsNavigation');
+	var lists = navi.getElementsByTagName("ul");
+	var bk = document.getElementById('appsNavigationBack');
+	var wrapper = document.getElementById('wrapper');
+	var nLeft = '-260px';
+	if(document.defaultView.getComputedStyle(navi,null).left==nLeft){
+		//show
+		for (var i=0; i<lists.length; i++){
+			lists[i].style.display = "block";
+		}
+		navi.style.left = '0px';
+		navi.style.boxShadow = '0 5px 5px rgba(0,0,0,0.5)';
+		navi.style.borderRight = 'solid 1px #909090';
+		bk.style.display = 'block';
+		wrapper.style.overflow = 'hidden';
+		wrapper.style.height = document.getElementById('anInner').clientHeight + 'px';
+		 if (aipo.userAgent.isAndroid()){
+		 	var content=dojo.query(".roundBlockContent")[0];
+		 	if(content){
+		 		content.style.display="none";
+		 	}
+		 }
+	}else{
+		//hide
+		navi.style.left = nLeft;
+		navi.style.boxShadow = 'none';
+		navi.style.borderRight = 'none';
+		bk.style.display = 'none';
+		wrapper.style.overflow = 'visible';
+		wrapper.style.height = 'auto';
+		for (var i=0; i<lists.length; i++){
+			lists[i].style.display = "none";
+		}
+		 if (aipo.userAgent.isAndroid()){
+		 	var content=dojo.query(".roundBlockContent")[0];
+		 	if(content){
+		 		content.style.display="";
+		 	}
+		 }
+	}
+}
+</script>
+<div id="appsNavigationBack"><a class="backLayer" href="javascript:void(0)" onClick="appsNaviSwitch()"><!--test--></a></div>
+<div id="appsNavigation"><div id="anInner">
+        <div class="anDrawer"><a href="javascript:void(0)" onClick="appsNaviSwitch()"><i class="auiMbIcon auiMbIconList"></i></a></div>
+        <div class="anUser">
+                <div class="avatar">#if ($data.User.hasPhoto())<img src="$!utils.escapeXML($jslink.getTemplate("FileuploadFacePhotoScreen").addQueryData("uid", $!{data.User.UserId}).addQueryData("t", $!{data.User.PhotoModified.Time}))" alt="顔写真" width="20" height="20" />#else<img src="images/common/avatar_default3.png" alt="顔写真" width="20" height="20"/>#end </div>
+                <div class="name">$utils.escapeXML($!data.User.LastName.toString()) $!utils.escapeXML($!data.User.FirstName.toString())</div>
+        </div>
+        <div class="anApps">
+                <h2>アプリ</h2>
+                <ul>
+#ALtabElementMaximize("Timeline" "auiMbIconTimeline")
+#ALtabElementMaximize("Schedule" "auiMbIconSchedule")
+#ALtabElementMaximize("ExtTimecard" "auiMbIconTimecard")
+#ALtabElementMaximize("Activity" "auiMbIconInfo")
+#ALtabElementMaximize("Blog" "auiMbIconBlog")
+#ALtabElementMaximize("Msgboard" "auiMbIconBbs")
+#ALtabElementMaximize("ToDo" "auiMbIconTodo")
+#ALtabElementMaximize("Cabinet" "auiMbIconFolder")
+#ALtabElementMaximize("Workflow" "auiMbIconWorkflow")
+#ALtabElementMaximize("Note" "auiMbIconNote")
+#ALtabElementMaximize("Report" "auiMbIconReport")
+#ALtabElementMaximize("WebMail" "auiMbIconMail")
+#ALtabElementMaximize("AddressBook" "auiMbIconAddress")
+#ALtabElementMaximize("UserList" "auiMbIconUsers")
+#ALtabElementMaximize("Memo" "auiMbIconMemo")
+                </ul>
+        </div>
+        <div class="anSetting">
+                <h2>設定</h2>
+                <ul>
+                        <!--<li><a href="javascript:void(0)"><span class="icon"><img src="themes/default/images/mobile/an_setting.png" /></span>個人設定</a></li>
+                        <li><a href="javascript:void(0)"><span class="icon"><img src="themes/default/images/mobile/an_pc.png" /></span>PC版表示へ変更</a></li>-->
+                        <li><a href="javascript:void(0)" onclick="location.href='$jslink.setAction($config.getString("action.logout"))'"><span class="icon"><img src="themes/default/images/mobile/an_logout.png" /></span>ログアウト</a></li>
+                </ul>
+        </div>
+        <div class="anFooter">
+                <div class="copyright">&copy; 2012 Aimluck</div>
+        </div>
+</div></div>
+<!-- /mobileNavigation -->
+#else
+<!-- MAIN TAB -->
+<div id="auiTabs" class="clearfix">
+	<ul>
+	#foreach ( $tab in $tabs )
+		#set($selected = $tab.Link && ($tab.isSelected() == true))
+		<li class="#if($velocityCount==1)first#end #if($velocityCount==$tabs.size())last#end ">
+			<div class="tab#if($beforeselected) activeNext#end#if($selected) active#end">
+				<div class="title"><a title="$tab.Title" href="$tab.Link">$tab.Title</a></div>
+				<div class="setting">
+				#if ($!tab.Authority)#foreach ($action in $tab.Actions)
+					#if (${client} == "IPAD")
+					<a href="${action.Link}" class="auiIcon auiIconSetting" title="${action.Alt}"></a>
+					#else
+					#set($clink = $!utils.escapeXML("$!{jslink}/js_pane/$!{tab.Id}?template=CustomizeFormScreen") )
+					#if ($tab.isSelected() == true)
+						#set($activeurlselected=$clink)
+					#end
+					<a href="javascript:void(0);" onclick="aipo.common.showDialog('$clink')" class="auiIcon auiIconSetting" title="${action.Alt}"></a>
+					#end
+				#end#end
+				</div>
+			</div>
+		</li>
+		#set($beforeselected =$selected)
+	#end
+		#if ($data.User.getUserName()!="admin")
+			<li class="addTab">
+				<a href="javascript:void(0);" onclick="aipo.common.showDialog('$!utils.escapeXML($!utils.getPortletURIinPersonalConfigPeid($data,'AccountPerson').addQueryData('template','PageFormScreen').addQueryData('entityid','new'))','$!portlet.ID',aipo.page.onLoadPageDialog);" title="メニュータブを追加"><span>+</span></a>
+			</li>
+		#end
+	</ul>
+</div>
+#if("$!{activeurlselected}"!="")
+	<input id="data-activecustomizeurl" type="hidden" value="$activeurlselected" />
+#else
+	<input id="data-activecustomizeurl" type="hidden" value="$!utils.escapeXML("$!{jslink}/js_pane/?template=CustomizeFormErrorScreen")" />
+#end
+<!-- /MAIN TAB -->
+#end
+<!-- MAIN OUTER -->
+<div id="roundWrapper">
+  <div class="roundMainWrapper">
+    ##<table class="tableWrapper">
+      ##<tbody>
+        ##<tr>
+          ##<td class="wide top">
+            ##<div class="roundTopMain clearfix">
+              ##<div class="roundRightMain">
+                ##<div class="roundBottomMain">
+                  ##<div class="roundLeftMain">
+                    ##<div class="roundTopLeftMain">
+                      ##<div class="roundTopRightMain">
+                        ##<div class="roundBottomRightMain">
+                          ##<div class="roundBottomLeftMain">
+                            ##<div class="roundMainWrapper">
+$portlet.getContent($data)
+                        	##</div>
+                          ##</div>
+                        ##</div>
+                      ##</div>
+                    ##</div>
+                  ##</div>
+                ##</div>
+              ##</div>
+            ##</div>
+          ##</td>
+        ##</tr>
+      ##</tbody>
+    ##</table>
+  </div>
+</div>
+<!-- /MAIN OUTER  -->
+#else
+#if (!$data.User.hasLoggedIn())
+	$!portlet.getContent($data)
+#else
+<!-- PORTLET OUTER -->
+<div class="dojoDndItem auiPortlet $!portlet.ID">
+	<div class="auiPortletHead"><div class="inner #if (${client} != "IPAD")dojoDndHandle#end">
+	#if( !$!isMaximized  && $portlet.isShowTitleBar($data))
+		<div class="auiPortletTitle">
+			<a href="$!utils.escapeXML($!jslink.getAction("controls.Maximize",$!portlet.ID))">$!utils.escapeXML($portlet_instance.Title)</a>
+		</div>
+		<div class="auiPortletTool">
+      #if($functions.size()==1)
+			<div class="auiPortletAction">
+        #foreach ( $function in $functions )
+				<a #if($function.Screen) href="javascript:void(0);" #if($!{function.AfterFunction}) onclick="aipo.common.showDialog('$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template",$function.Mode).addQueryData("entityid","new"))','$!portlet.ID',${function.AfterFunction});" #else onclick="aipo.common.showDialog('$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template",$function.Mode).addQueryData("entityid","new"))','$!portlet.ID');" #end #else href="$!utils.escapeXML($!jslink.getAction("controls.Maximize",$!portlet.ID).addQueryData("mode",$function.Mode))"#end>$function.Caption</a>
+        #end
+			</div>
+      #end
+			<div class="auiPortletSetting">
+				#foreach ( $action in $actions )
+					#if (${client} == "IPAD")
+					<a href="$!utils.escapeXML(${action.Link})" title="${action.Alt}" class="auiIcon auiIconSetting" ></a>
+					#else
+					<a href="javascript:void(0);" id="menubar_button_$!{portlet.ID}" class="customizeMenuIcon auiIcon auiIconSetting" onclick="aipo.customize.showMenu('$!{portlet.ID}');" title="${action.Alt}" ></a>
+					#end
+				#end
+				#if (${client} != "IPAD")
+			    <div class="menubar body-child" id="menubar_$!{portlet.ID}" style="position:absolute;left:-5;top:5;display:none;">
+					<ul>
+					#foreach ( $action in $actions)
+						<li><a href="$!utils.escapeXML(${action.Link})">設定</a></li>
+					#end
+					#if($accessControl == "true")
+						<li class="last" id="accessControlDelete_$!{portlet.ID}"><a href="javascript:void(0);" onclick="aipo.customize.deletesubmit('$!utils.escapeXML($!jslink.getPortletById($!portlet.ID).addQueryData("template", "CustomizeFormJSONScreen").addQueryData("mode", "delete"))', '$!portlet.ID', function(){ dojo.query('.dojoDndItem.$!{portlet.ID}').orphan(); window.location.reload(); } );">削除</a></li>
+					#end
+					</ul>
+			    </div>
+			    #end
+			</div>
+		</div>
+	#else
+		<div class="auiPortletTitle">
+			<a href="javascript:void(0)">$!utils.escapeXML($portlet_instance.Title)</a>
+		</div>
+		<div class="auiPortletTool">
+			<div class="auiPortletAction">
+				<span id="portletMenu"></span>
+			</div>
+			<div class="auiPortletSetting">
+			</div>
+		</div>
+	#end
+	</div></div>
+	<!-- auiPortletBody -->
+	<div class="auiPortletBody dndIdentifier">
+    <div class="inner" dojoType="aimluck.widget.Contentpane" widgetId="portlet_$!portlet.ID" id="portlet_$!portlet.ID">
+    $!portlet.getContent($data)
+	  </div>
+  </div>
+	<!-- /auiPortletBody -->
+	<div class="auiPortletFoot"><div class="inner"></div></div>
+</div>
+<!-- /PORTLET OUTER -->
+#end
+#end
+
+#end
