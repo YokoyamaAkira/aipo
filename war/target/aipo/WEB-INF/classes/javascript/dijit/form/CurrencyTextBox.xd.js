@@ -1,9 +1,0 @@
-dojo._xdResourceLoaded({depends:[["provide","dijit.form.CurrencyTextBox"],["require","dojo.currency"],["require","dijit.form.NumberTextBox"]],defineResource:function(A){if(!A._hasResource["dijit.form.CurrencyTextBox"]){A._hasResource["dijit.form.CurrencyTextBox"]=true;
-A.provide("dijit.form.CurrencyTextBox");
-A.require("dojo.currency");
-A.require("dijit.form.NumberTextBox");
-A.declare("dijit.form.CurrencyTextBox",dijit.form.NumberTextBox,{currency:"",regExpGen:A.currency.regexp,format:A.currency.format,parse:A.currency.parse,postMixInProperties:function(){if(this.constraints===dijit.form.ValidationTextBox.prototype.constraints){this.constraints={}
-}this.constraints.currency=this.currency;
-dijit.form.CurrencyTextBox.superclass.postMixInProperties.apply(this,arguments)
-}})
-}}});
