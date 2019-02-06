@@ -1,41 +1,24 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.validate.isbn"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.validate.isbn"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.validate.isbn"] = true;
-dojo.provide("dojox.validate.isbn");
-
-dojox.validate.isValidIsbn = function(/* String */value) {
-	// summary: Vadlidate ISBN-10 or ISBN-13 based on the length of value
-	// returns: Boolean
-	var len, sum, weight;
-	if(typeof value!='string'){
-		value = String(value);
-	}
-	value = value.replace(/[- ]/g,''); //ignore dashes and whitespaces
-	len = value.length;
-	sum = 0;
-	if(len == 10){
-		weight = 10;
-		// ISBN-10 validation algorithm
-		for(var i = 0; i< 9; i++){
-			sum += parseInt(value.charAt(i)) * weight;
-			weight --;
-		}
-		var t = value.charAt(9).toUpperCase();
-		sum += t == 'X' ? 10 : parseInt(t);
-		return sum % 11 == 0;
-	}else if(len == 13) {
-		weight = -1;
-		for(var i=0; i< len; i++){
-			sum += parseInt(value.charAt(i)) * (2 + weight);
-			weight *= -1;
-		}
-		return sum % 10 == 0;
-	}else{
-		return false;
-	}
-}
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.validate.isbn"]],defineResource:function(A){if(!A._hasResource["dojox.validate.isbn"]){A._hasResource["dojox.validate.isbn"]=true;
+A.provide("dojox.validate.isbn");
+dojox.validate.isValidIsbn=function(G){var B,E,F;
+if(typeof G!="string"){G=String(G)
+}G=G.replace(/[- ]/g,"");
+B=G.length;
+E=0;
+if(B==10){F=10;
+for(var D=0;
+D<9;
+D++){E+=parseInt(G.charAt(D))*F;
+F--
+}var C=G.charAt(9).toUpperCase();
+E+=C=="X"?10:parseInt(C);
+return E%11==0
+}else{if(B==13){F=-1;
+for(var D=0;
+D<B;
+D++){E+=parseInt(G.charAt(D))*(2+F);
+F*=-1
+}return E%10==0
+}else{return false
+}}}
+}}});

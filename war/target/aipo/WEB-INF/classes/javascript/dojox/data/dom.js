@@ -1,60 +1,60 @@
 if(!dojo._hasResource["dojox.data.dom"]){dojo._hasResource["dojox.data.dom"]=true;
 dojo.provide("dojox.data.dom");
 dojo.experimental("dojox.data.dom");
-dojox.data.dom.createDocument=function(F,G){var H=dojo.doc;
-if(!G){G="text/xml"
-}if(F&&(typeof dojo.global.DOMParser)!=="undefined"){var A=new DOMParser();
-return A.parseFromString(F,G)
-}else{if((typeof dojo.global.ActiveXObject)!=="undefined"){var C=["MSXML2","Microsoft","MSXML","MSXML3"];
-for(var D=0;
-D<C.length;
-D++){try{var I=new ActiveXObject(C[D]+".XMLDOM");
-if(F){if(I){I.async=false;
-I.loadXML(F);
-return I
+dojox.data.dom.createDocument=function(B,C){var D=dojo.doc;
+if(!C){C="text/xml"
+}if(B&&(typeof dojo.global.DOMParser)!=="undefined"){var G=new DOMParser();
+return G.parseFromString(B,C)
+}else{if((typeof dojo.global.ActiveXObject)!=="undefined"){var I=["MSXML2","Microsoft","MSXML","MSXML3"];
+for(var J=0;
+J<I.length;
+J++){try{var E=new ActiveXObject(I[J]+".XMLDOM");
+if(B){if(E){E.async=false;
+E.loadXML(B);
+return E
 }else{console.log("loadXML didn't work?")
-}}else{if(I){return I
-}}}catch(E){}}}else{if((H.implementation)&&(H.implementation.createDocument)){if(F){if(H.createElement){var B=H.createElement("xml");
-B.innerHTML=F;
-var J=H.implementation.createDocument("foo","",null);
-for(var D=0;
-D<B.childNodes.length;
-D++){J.importNode(B.childNodes.item(D),true)
-}return J
-}}else{return H.implementation.createDocument("","",null)
+}}else{if(E){return E
+}}}catch(A){}}}else{if((D.implementation)&&(D.implementation.createDocument)){if(B){if(D.createElement){var H=D.createElement("xml");
+H.innerHTML=B;
+var F=D.implementation.createDocument("foo","",null);
+for(var J=0;
+J<H.childNodes.length;
+J++){F.importNode(H.childNodes.item(J),true)
+}return F
+}}else{return D.implementation.createDocument("","",null)
 }}}}return null
 };
-dojox.data.dom.textContent=function(D,E){if(arguments.length>1){var A=D.ownerDocument||dojo.doc;
-dojox.data.dom.replaceChildren(D,A.createTextNode(E));
-return E
-}else{if(D.textContent!==undefined){return D.textContent
-}var C="";
-if(D==null){return C
-}for(var B=0;
-B<D.childNodes.length;
-B++){switch(D.childNodes[B].nodeType){case 1:case 5:C+=dojox.data.dom.textContent(D.childNodes[B]);
+dojox.data.dom.textContent=function(C,D){if(arguments.length>1){var E=C.ownerDocument||dojo.doc;
+dojox.data.dom.replaceChildren(C,E.createTextNode(D));
+return D
+}else{if(C.textContent!==undefined){return C.textContent
+}var B="";
+if(C==null){return B
+}for(var A=0;
+A<C.childNodes.length;
+A++){switch(C.childNodes[A].nodeType){case 1:case 5:B+=dojox.data.dom.textContent(C.childNodes[A]);
 break;
-case 3:case 2:case 4:C+=D.childNodes[B].nodeValue;
+case 3:case 2:case 4:B+=C.childNodes[A].nodeValue;
 break;
 default:break
-}}return C
+}}return B
 }};
-dojox.data.dom.replaceChildren=function(C,D){var A=[];
-if(dojo.isIE){for(var B=0;
-B<C.childNodes.length;
-B++){A.push(C.childNodes[B])
-}}dojox.data.dom.removeChildren(C);
-for(var B=0;
-B<A.length;
-B++){dojo._destroyElement(A[B])
-}if(!dojo.isArray(D)){C.appendChild(D)
-}else{for(var B=0;
-B<D.length;
-B++){C.appendChild(D[B])
+dojox.data.dom.replaceChildren=function(B,C){var D=[];
+if(dojo.isIE){for(var A=0;
+A<B.childNodes.length;
+A++){D.push(B.childNodes[A])
+}}dojox.data.dom.removeChildren(B);
+for(var A=0;
+A<D.length;
+A++){dojo._destroyElement(D[A])
+}if(!dojo.isArray(C)){B.appendChild(C)
+}else{for(var A=0;
+A<C.length;
+A++){B.appendChild(C[A])
 }}};
-dojox.data.dom.removeChildren=function(B){var A=B.childNodes.length;
-while(B.hasChildNodes()){B.removeChild(B.firstChild)
-}return A
+dojox.data.dom.removeChildren=function(A){var B=A.childNodes.length;
+while(A.hasChildNodes()){A.removeChild(A.firstChild)
+}return B
 };
 dojox.data.dom.innerXML=function(A){if(A.innerXML){return A.innerXML
 }else{if(A.xml){return A.xml

@@ -1,29 +1,29 @@
 if(!dojo._hasResource["dojox.gfx.move"]){dojo._hasResource["dojox.gfx.move"]=true;
 dojo.provide("dojox.gfx.move");
 dojo.experimental("dojox.gfx.move");
-dojox.gfx.Mover=function(A,C){this.shape=A;
-this.lastX=C.clientX;
-this.lastY=C.clientY;
-var D=document,B=dojo.connect(D,"onmousemove",this,"onFirstMove");
-this.events=[dojo.connect(D,"onmousemove",this,"onMouseMove"),dojo.connect(D,"onmouseup",this,"destroy"),dojo.connect(D,"ondragstart",dojo,"stopEvent"),dojo.connect(D,"onselectstart",dojo,"stopEvent"),B];
+dojox.gfx.Mover=function(D,B){this.shape=D;
+this.lastX=B.clientX;
+this.lastY=B.clientY;
+var C=document,A=dojo.connect(C,"onmousemove",this,"onFirstMove");
+this.events=[dojo.connect(C,"onmousemove",this,"onMouseMove"),dojo.connect(C,"onmouseup",this,"destroy"),dojo.connect(C,"ondragstart",dojo,"stopEvent"),dojo.connect(C,"onselectstart",dojo,"stopEvent"),A];
 dojo.publish("/gfx/move/start",[this]);
 dojo.addClass(dojo.body(),"dojoMove")
 };
-dojo.extend(dojox.gfx.Mover,{onMouseMove:function(B){var A=B.clientX;
-var C=B.clientY;
-this.shape.applyLeftTransform({dx:A-this.lastX,dy:C-this.lastY});
-this.lastX=A;
-this.lastY=C;
-dojo.stopEvent(B)
+dojo.extend(dojox.gfx.Mover,{onMouseMove:function(A){var C=A.clientX;
+var B=A.clientY;
+this.shape.applyLeftTransform({dx:C-this.lastX,dy:B-this.lastY});
+this.lastX=C;
+this.lastY=B;
+dojo.stopEvent(A)
 },onFirstMove:function(){dojo.disconnect(this.events.pop())
 },destroy:function(){dojo.forEach(this.events,dojo.disconnect);
 dojo.publish("/gfx/move/stop",[this]);
 dojo.removeClass(dojo.body(),"dojoMove");
 this.events=this.shape=null
 }});
-dojox.gfx.Moveable=function(A,B){this.shape=A;
-this.delay=(B&&B.delay>0)?B.delay:0;
-this.mover=(B&&B.mover)?B.mover:dojox.gfx.Mover;
+dojox.gfx.Moveable=function(B,A){this.shape=B;
+this.delay=(A&&A.delay>0)?A.delay:0;
+this.mover=(A&&A.mover)?A.mover:dojox.gfx.Mover;
 this.events=[this.shape.connect("onmousedown",this,"onMouseDown"),]
 };
 dojo.extend(dojox.gfx.Moveable,{destroy:function(){dojo.forEach(this.events,"disconnect",this.shape);

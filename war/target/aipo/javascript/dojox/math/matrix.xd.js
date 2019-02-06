@@ -1,298 +1,178 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.math.matrix"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.math.matrix"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.math.matrix"] = true;
-dojo.provide("dojox.math.matrix");
-
-dojo.mixin(dojox.math.matrix, {
-	iDF:0,
-	ALMOST_ZERO: 1e-10,
-	multiply: function(/* Array */a, /* Array */b){
-		//	summary
-		//	Multiply matrix a by matrix b.
-		var ay=a.length, ax=a[0].length, by=b.length, bx=b[0].length;
-		if(ax!=by){
-			console.warn("Can't multiply matricies of sizes " + ax + "," + ay + " and " + bx + "," + by);
-			return [[0]];
-		}
-		var c=[];
-		for (var k=0; k<ay; k++) {
-			c[k]=[];
-			for(var i=0; i<bx; i++){
-				c[k][i]=0;
-				for(var m=0; m<ax; m++){
-					c[k][i]+=a[k][m]*b[m][i];
-				}
-			}
-		}
-		return c;	//	Array
-	},
-	product: function(/* Array... */){
-		//	summary
-		//	Return the product of N matrices
-		if (arguments.length==0){
-			console.warn("can't multiply 0 matrices!");
-			return 1;
-		}
-		var m=arguments[0];
-		for(var i=1; i<arguments.length; i++){
-			m=this.multiply(m, arguments[i]);
-		}
-		return m;	//	Array
-	},
-	sum: function(/* Array... */){
-		//	summary
-		//	Return the sum of N matrices
-		if(arguments.length==0){
-			console.warn("can't sum 0 matrices!");
-			return 0;	//	Number
-		}
-		var m=this.copy(arguments[0]);
-		var rows=m.length;
-		if(rows==0){
-			console.warn("can't deal with matrices of 0 rows!");
-			return 0;
-		}
-		var cols=m[0].length;
-		if(cols==0){
-			console.warn("can't deal with matrices of 0 cols!");
-			return 0;
-		}
-		for(var i=1; i<arguments.length; ++i){
-			var arg=arguments[i];
-			if(arg.length!=rows || arg[0].length!=cols){
-				console.warn("can't add matrices of different dimensions: first dimensions were " + rows + "x" + cols + ", current dimensions are " + arg.length + "x" + arg[0].length);
-				return 0;
-			}
-			for(var r=0; r<rows; r++) {
-				for(var c=0; c<cols; c++) {
-					m[r][c]+=arg[r][c];
-				}
-			}
-		}
-		return m;	//	Array
-	},
-	inverse: function(/* Array */a){
-		//	summary
-		//	Return the inversion of the passed matrix
-		if(a.length==1 && a[0].length==1){
-			return [[1/a[0][0]]];	//	Array
-		}
-		var tms=a.length, m=this.create(tms, tms), mm=this.adjoint(a), det=this.determinant(a), dd=0;
-		if(det==0){
-			console.warn("Determinant Equals 0, Not Invertible.");
-			return [[0]];
-		}else{
-			dd=1/det;
-		}
-		for(var i=0; i<tms; i++) {
-			for (var j=0; j<tms; j++) {
-				m[i][j]=dd*mm[i][j];
-			}
-		}
-		return m;	//	Array
-	},
-	determinant: function(/* Array */a){
-		//	summary
-		//	Calculate the determinant of the passed square matrix.
-		if(a.length!=a[0].length){
-			console.warn("Can't calculate the determinant of a non-squre matrix!");
-			return 0;
-		}
-		var tms=a.length, det=1, b=this.upperTriangle(a);
-		for (var i=0; i<tms; i++){
-			var bii=b[i][i];
-			if (Math.abs(bii)<this.ALMOST_ZERO) {
-				return 0;	//	Number
-			}
-			det*=bii;
-		}
-		det*=this.iDF;
-		return det;	//	Number
-	},
-	upperTriangle: function(/* Array */m){
-		//	Summary
-		//	Find the upper triangle of the passed matrix and return it.
-		m=this.copy(m);
-		var f1=0, temp=0, tms=m.length, v=1;
-		this.iDF=1;
-		for(var col=0; col<tms-1; col++){
-			if(typeof m[col][col]!="number") {
-				console.warn("non-numeric entry found in a numeric matrix: m[" + col + "][" + col + "]=" + m[col][col]);
-			}
-			v=1;
-			var stop_loop=0;
-			while((m[col][col] == 0) && !stop_loop){
-				if (col+v>=tms){
-					this.iDF=0;
-					stop_loop=1;
-				}else{
-					for(var r=0; r<tms; r++){
-						temp=m[col][r];
-						m[col][r]=m[col+v][r];
-						m[col+v][r]=temp;
-					}
-					v++;
-					this.iDF*=-1;
-				}
-			}
-			for(var row=col+1; row<tms; row++){
-				if(typeof m[row][col]!="number"){
-					console.warn("non-numeric entry found in a numeric matrix: m[" + row + "][" + col + "]=" + m[row][col]);
-				}
-				if(typeof m[col][row]!="number"){
-					console.warn("non-numeric entry found in a numeric matrix: m[" + col + "][" + row + "]=" + m[col][row]);
-				}
-				if(m[col][col]!=0){
-					var f1=(-1)* m[row][col]/m[col][col];
-					for (var i=col; i<tms; i++){
-						m[row][i]=f1*m[col][i]+m[row][i];
-					}
-				}
-			}
-		}
-		return m;	//	Array
-	},
-	create: function(/* Number */a, /* Number */b, /* Number? */value){
-		//	summary
-		//	Create a new matrix with rows a and cols b, and pre-populate with value.
-		value=value||0;
-		var m=[];
-		for (var i=0; i<b; i++){
-			m[i]=[];
-			for(var j=0; j<a; j++) {
-				m[i][j]=value;
-			}
-		}
-		return m;	//	Array
-	},
-	ones: function(/* Number */a, /* Number */b){
-		//	summary
-		//	Create a matrix pre-populated with ones
-		return this.create(a, b, 1);	//	Array
-	},
-	zeros: function(/* Number */a, /* Number */b){
-		//	summary
-		//	Create a matrix pre-populated with zeros
-		return this.create(a, b);	// Array
-	},
-	identity: function(/* Number */size, /* Number? */scale){
-		//	summary
-		//	Create an identity matrix based on the size and scale.
-		scale=scale||1;
-		var m=[];
-		for(var i=0; i<size; i++){
-			m[i]=[];
-			for(var j=0; j<size; j++){
-				m[i][j]=(i==j?scale:0);
-			}
-		}
-		return m;	//	Array
-	},
-	adjoint: function(/* Array */a){
-		//	summary
-		//	Find the adjoint of the passed matrix
-		var tms=a.length;
-		if(tms<=1){
-			console.warn("Can't find the adjoint of a matrix with a dimension less than 2");
-			return [[0]];
-		}
-		if(a.length!=a[0].length){
-			console.warn("Can't find the adjoint of a non-square matrix");
-			return [[0]];
-		}
-		var m=this.create(tms, tms), ap=this.create(tms-1, tms-1);
-		var ii=0, jj=0, ia=0, ja=0, det=0;
-		for(var i=0; i<tms; i++){
-			for (var j=0; j<tms; j++){
-				ia=0;
-				for(ii=0; ii<tms; ii++){
-					if(ii==i){
-						continue;
-					}
-					ja = 0;
-					for(jj=0; jj<tms; jj++){
-						if(jj==j){
-							continue;
-						}
-						ap[ia][ja] = a[ii][jj];
-						ja++;
-					}
-					ia++;
-				}
-				det=this.determinant(ap);
-				m[i][j]=Math.pow(-1, (i+j))*det;
-			}
-		}
-		return this.transpose(m);	//	Array
-	},
-	transpose: function(/* Array */a){
-		//	summary
-		//	Transpose the passed matrix (i.e. rows to columns)
-		var m=this.create(a.length, a[0].length);
-		for(var i=0; i<a.length; i++){
-			for(var j=0; j<a[i].length; j++){
-				m[j][i]=a[i][j];
-			}
-		}
-		return m;	//	Array
-	},
-	format: function(/* Array */a, /* Number? */points){
-		//	summary
-		//	Return a string representation of the matrix, rounded to points (if needed)
-		points=points||5;
-		function format_int(x, dp){
-			var fac=Math.pow(10, dp);
-			var a=Math.round(x*fac)/fac;
-			var b=a.toString();
-			if(b.charAt(0)!="-"){
-				b=" "+b;
-			}
-			if(b.indexOf(".")>-1){
-				b+=".";
-			}
-			while(b.length<dp+3){
-				b+="0";
-			}
-			return b;
-		}
-		var ya=a.length;
-		var xa=ya>0?a[0].length:0;
-		var buffer="";
-		for(var y=0; y<ya; y++){
-			buffer+="| ";
-			for(var x=0; x<xa; x++){
-				buffer+=format_int(a[y][x], points)+" ";
-			}
-			buffer+="|\n";
-		}
-		return buffer;	//	string
-	},
-	copy: function(/* Array */a){
-		//	summary
-		//	Create a copy of the passed matrix
-		var ya=a.length, xa=a[0].length, m=this.create(xa, ya);
-		for(var y=0; y<ya; y++){
-			for(var x=0; x<xa; x++){
-				m[y][x]=a[y][x];
-			}
-		}
-		return m;	// Array
-	},
-	scale: function(/* Array */a, /* Number */factor){
-		//	summary
-		//	Create a copy of passed matrix and scale each member by factor.
-		a=this.copy(a);
-		var ya=a.length, xa=a[0].length;
-		for(var y=0; y<ya; y++){
-			for(var x=0; x<xa; x++){
-				a[y][x]*=factor;
-			}
-		}
-		return a;
-	}
-});
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.math.matrix"]],defineResource:function(A){if(!A._hasResource["dojox.math.matrix"]){A._hasResource["dojox.math.matrix"]=true;
+A.provide("dojox.math.matrix");
+A.mixin(dojox.math.matrix,{iDF:0,ALMOST_ZERO:1e-10,multiply:function(J,I){var K=J.length,B=J[0].length,F=I.length,H=I[0].length;
+if(B!=F){console.warn("Can't multiply matricies of sizes "+B+","+K+" and "+H+","+F);
+return[[0]]
+}var G=[];
+for(var D=0;
+D<K;
+D++){G[D]=[];
+for(var E=0;
+E<H;
+E++){G[D][E]=0;
+for(var C=0;
+C<B;
+C++){G[D][E]+=J[D][C]*I[C][E]
+}}}return G
+},product:function(){if(arguments.length==0){console.warn("can't multiply 0 matrices!");
+return 1
+}var B=arguments[0];
+for(var C=1;
+C<arguments.length;
+C++){B=this.multiply(B,arguments[C])
+}return B
+},sum:function(){if(arguments.length==0){console.warn("can't sum 0 matrices!");
+return 0
+}var C=this.copy(arguments[0]);
+var F=C.length;
+if(F==0){console.warn("can't deal with matrices of 0 rows!");
+return 0
+}var G=C[0].length;
+if(G==0){console.warn("can't deal with matrices of 0 cols!");
+return 0
+}for(var D=1;
+D<arguments.length;
+++D){var B=arguments[D];
+if(B.length!=F||B[0].length!=G){console.warn("can't add matrices of different dimensions: first dimensions were "+F+"x"+G+", current dimensions are "+B.length+"x"+B[0].length);
+return 0
+}for(var E=0;
+E<F;
+E++){for(var H=0;
+H<G;
+H++){C[E][H]+=B[E][H]
+}}}return C
+},inverse:function(E){if(E.length==1&&E[0].length==1){return[[1/E[0][0]]]
+}var D=E.length,C=this.create(D,D),I=this.adjoint(E),H=this.determinant(E),B=0;
+if(H==0){console.warn("Determinant Equals 0, Not Invertible.");
+return[[0]]
+}else{B=1/H
+}for(var G=0;
+G<D;
+G++){for(var F=0;
+F<D;
+F++){C[G][F]=B*I[G][F]
+}}return C
+},determinant:function(D){if(D.length!=D[0].length){console.warn("Can't calculate the determinant of a non-squre matrix!");
+return 0
+}var C=D.length,F=1,B=this.upperTriangle(D);
+for(var E=0;
+E<C;
+E++){var G=B[E][E];
+if(Math.abs(G)<this.ALMOST_ZERO){return 0
+}F*=G
+}F*=this.iDF;
+return F
+},upperTriangle:function(D){D=this.copy(D);
+var F=0,J=0,E=D.length,I=1;
+this.iDF=1;
+for(var C=0;
+C<E-1;
+C++){if(typeof D[C][C]!="number"){console.warn("non-numeric entry found in a numeric matrix: m["+C+"]["+C+"]="+D[C][C])
+}I=1;
+var H=0;
+while((D[C][C]==0)&&!H){if(C+I>=E){this.iDF=0;
+H=1
+}else{for(var B=0;
+B<E;
+B++){J=D[C][B];
+D[C][B]=D[C+I][B];
+D[C+I][B]=J
+}I++;
+this.iDF*=-1
+}}for(var K=C+1;
+K<E;
+K++){if(typeof D[K][C]!="number"){console.warn("non-numeric entry found in a numeric matrix: m["+K+"]["+C+"]="+D[K][C])
+}if(typeof D[C][K]!="number"){console.warn("non-numeric entry found in a numeric matrix: m["+C+"]["+K+"]="+D[C][K])
+}if(D[C][C]!=0){var F=(-1)*D[K][C]/D[C][C];
+for(var G=C;
+G<E;
+G++){D[K][G]=F*D[C][G]+D[K][G]
+}}}}return D
+},create:function(D,C,G){G=G||0;
+var B=[];
+for(var F=0;
+F<C;
+F++){B[F]=[];
+for(var E=0;
+E<D;
+E++){B[F][E]=G
+}}return B
+},ones:function(C,B){return this.create(C,B,1)
+},zeros:function(C,B){return this.create(C,B)
+},identity:function(E,F){F=F||1;
+var B=[];
+for(var D=0;
+D<E;
+D++){B[D]=[];
+for(var C=0;
+C<E;
+C++){B[D][C]=(D==C?F:0)
+}}return B
+},adjoint:function(J){var D=J.length;
+if(D<=1){console.warn("Can't find the adjoint of a matrix with a dimension less than 2");
+return[[0]]
+}if(J.length!=J[0].length){console.warn("Can't find the adjoint of a non-square matrix");
+return[[0]]
+}var C=this.create(D,D),F=this.create(D-1,D-1);
+var K=0,H=0,B=0,L=0,I=0;
+for(var G=0;
+G<D;
+G++){for(var E=0;
+E<D;
+E++){B=0;
+for(K=0;
+K<D;
+K++){if(K==G){continue
+}L=0;
+for(H=0;
+H<D;
+H++){if(H==E){continue
+}F[B][L]=J[K][H];
+L++
+}B++
+}I=this.determinant(F);
+C[G][E]=Math.pow(-1,(G+E))*I
+}}return this.transpose(C)
+},transpose:function(C){var B=this.create(C.length,C[0].length);
+for(var E=0;
+E<C.length;
+E++){for(var D=0;
+D<C[E].length;
+D++){B[D][E]=C[E][D]
+}}return B
+},format:function(E,F){F=F||5;
+function G(K,N){var M=Math.pow(10,N);
+var L=Math.round(K*M)/M;
+var J=L.toString();
+if(J.charAt(0)!="-"){J=" "+J
+}if(J.indexOf(".")>-1){J+="."
+}while(J.length<N+3){J+="0"
+}return J
+}var D=E.length;
+var I=D>0?E[0].length:0;
+var C="";
+for(var H=0;
+H<D;
+H++){C+="| ";
+for(var B=0;
+B<I;
+B++){C+=G(E[H][B],F)+" "
+}C+="|\n"
+}return C
+},copy:function(E){var D=E.length,G=E[0].length,C=this.create(G,D);
+for(var F=0;
+F<D;
+F++){for(var B=0;
+B<G;
+B++){C[F][B]=E[F][B]
+}}return C
+},scale:function(D,E){D=this.copy(D);
+var C=D.length,G=D[0].length;
+for(var F=0;
+F<C;
+F++){for(var B=0;
+B<G;
+B++){D[F][B]*=E
+}}return D
+}})
+}}});

@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ public abstract class JetspeedUserManagement {
    */
   protected static UserManagement getService() {
     return (UserManagement) TurbineServices.getInstance().getService(
-        UserManagement.SERVICE_NAME);
+      UserManagement.SERVICE_NAME);
   }
 
   /**
@@ -61,14 +61,14 @@ public abstract class JetspeedUserManagement {
   /**
    * @see org.apache.jetspeed.services.security.UserManagement#getUsers
    */
-  public static Iterator getUsers() throws JetspeedSecurityException {
+  public static Iterator<?> getUsers() throws JetspeedSecurityException {
     return getService().getUsers();
   }
 
   /**
    * @see org.apache.jetspeed.services.security.UserManagement#getUsers
    */
-  public static Iterator getUsers(String filter)
+  public static Iterator<?> getUsers(String filter)
       throws JetspeedSecurityException {
     return getService().getUsers(filter);
   }

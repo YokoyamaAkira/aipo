@@ -1,94 +1,45 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.collections.Set"],
-["require", "dojox.collections.ArrayList"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.collections.Set"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.collections.Set"] = true;
-dojo.provide("dojox.collections.Set");
-dojo.require("dojox.collections.ArrayList");
-
-(function(){
-	var dxc=dojox.collections;
-	dxc.Set=new (function(){
-		function conv(arr){
-			if(arr.constructor==Array){
-				return new dojox.collections.ArrayList(arr);	//	dojox.collections.ArrayList
-			}
-			return arr;		//	dojox.collections.ArrayList
-		}
-		this.union = function(/* array */setA, /* array */setB){
-			//	summary
-			//	Return the union of the two passed sets.
-			setA=conv(setA);
-			setB=conv(setB);
-			var result = new dojox.collections.ArrayList(setA.toArray());
-			var e = setB.getIterator();
-			while(!e.atEnd()){
-				var item=e.get();
-				if(!result.contains(item)){
-					result.add(item);
-				}
-			}
-			return result;	//	dojox.collections.ArrayList
-		};
-		this.intersection = function(/* array */setA, /* array */setB){
-			//	summary
-			//	Return the intersection of the two passed sets.
-			setA=conv(setA);
-			setB=conv(setB);
-			var result = new dojox.collections.ArrayList();
-			var e = setB.getIterator();
-			while(!e.atEnd()){
-				var item=e.get();
-				if(setA.contains(item)){
-					result.add(item);
-				}
-			}
-			return result;	//	dojox.collections.ArrayList
-		};
-		this.difference = function(/* array */setA, /* array */setB){
-			//	summary
-			//	Returns everything in setA that is not in setB.
-			setA=conv(setA);
-			setB=conv(setB);
-			var result = new dojox.collections.ArrayList();
-			var e=setA.getIterator();
-			while(!e.atEnd()){
-				var item=e.get();
-				if(!setB.contains(item)){
-					result.add(item);
-				}
-			}
-			return result;	//	dojox.collections.ArrayList
-		};
-		this.isSubSet = function(/* array */setA, /* array */setB) {
-			//	summary
-			//	Returns if set B is a subset of set A.
-			setA=conv(setA);
-			setB=conv(setB);
-			var e = setA.getIterator();
-			while(!e.atEnd()){
-				if(!setB.contains(e.get())){
-					return false;	//	boolean
-				}
-			}
-			return true;	//	boolean
-		};
-		this.isSuperSet = function(/* array */setA, /* array */setB){
-			//	summary
-			//	Returns if set B is a superset of set A.
-			setA=conv(setA);
-			setB=conv(setB);
-			var e = setB.getIterator();
-			while(!e.atEnd()){
-				if(!setA.contains(e.get())){
-					return false;	//	boolean
-				}
-			}
-			return true;	//	boolean
-		};
-	})();
-})();
-
+dojo._xdResourceLoaded({depends:[["provide","dojox.collections.Set"],["require","dojox.collections.ArrayList"]],defineResource:function(A){if(!A._hasResource["dojox.collections.Set"]){A._hasResource["dojox.collections.Set"]=true;
+A.provide("dojox.collections.Set");
+A.require("dojox.collections.ArrayList");
+(function(){var B=dojox.collections;
+B.Set=new (function(){function C(D){if(D.constructor==Array){return new dojox.collections.ArrayList(D)
+}return D
+}this.union=function(E,H){E=C(E);
+H=C(H);
+var D=new dojox.collections.ArrayList(E.toArray());
+var G=H.getIterator();
+while(!G.atEnd()){var F=G.get();
+if(!D.contains(F)){D.add(F)
+}}return D
+};
+this.intersection=function(E,H){E=C(E);
+H=C(H);
+var D=new dojox.collections.ArrayList();
+var G=H.getIterator();
+while(!G.atEnd()){var F=G.get();
+if(E.contains(F)){D.add(F)
+}}return D
+};
+this.difference=function(E,H){E=C(E);
+H=C(H);
+var D=new dojox.collections.ArrayList();
+var G=E.getIterator();
+while(!G.atEnd()){var F=G.get();
+if(!H.contains(F)){D.add(F)
+}}return D
+};
+this.isSubSet=function(D,F){D=C(D);
+F=C(F);
+var E=D.getIterator();
+while(!E.atEnd()){if(!F.contains(E.get())){return false
+}}return true
+};
+this.isSuperSet=function(D,F){D=C(D);
+F=C(F);
+var E=F.getIterator();
+while(!E.atEnd()){if(!D.contains(E.get())){return false
+}}return true
 }
-
-}});
+})()
+})()
+}}});

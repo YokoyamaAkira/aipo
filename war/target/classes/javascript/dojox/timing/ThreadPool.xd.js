@@ -17,76 +17,76 @@ C.state=B.threadStates.COMPLETE
 C.state=B.threadStates.ERROR
 }}
 };
-B.ThreadPool=new (function(K,J){var M=this;
-var I=K;
-var L=I;
-var D=J;
-var F=Math.floor((D/2)/I);
-var H=[];
-var E=new Array(I+1);
-var C=new dojox.timing.Timer();
-var G=function(){var P=E[0]={};
+B.ThreadPool=new (function(I,H){var K=this;
+var G=I;
+var J=G;
+var M=H;
+var D=Math.floor((M/2)/G);
+var F=[];
+var C=new Array(G+1);
+var L=new dojox.timing.Timer();
+var E=function(){var P=C[0]={};
 for(var O=0;
-O<E.length;
-O++){window.clearTimeout(E[O]);
-var N=H.shift();
+O<C.length;
+O++){window.clearTimeout(C[O]);
+var N=F.shift();
 if(typeof (N)=="undefined"){break
 }P["thread-"+O]=N;
-E[O]=window.setTimeout(N.invoke,(F*O))
-}L=I-(O-1)
+C[O]=window.setTimeout(N.invoke,(D*O))
+}J=G-(O-1)
 };
-this.getMaxThreads=function(){return I
+this.getMaxThreads=function(){return G
 };
-this.getAvailableThreads=function(){return L
+this.getAvailableThreads=function(){return J
 };
-this.getTickInterval=function(){return D
+this.getTickInterval=function(){return M
 };
 this.queueUserWorkItem=function(P){var Q=P;
 if(Q instanceof Function){Q=new B.Thread(Q)
-}var N=H.length;
+}var N=F.length;
 for(var O=0;
-O<H.length;
-O++){if(H[O].priority<Q.priority){N=O;
+O<F.length;
+O++){if(F[O].priority<Q.priority){N=O;
 break
-}}if(N<H.length){H.splice(N,0,Q)
-}else{H.push(Q)
+}}if(N<F.length){F.splice(N,0,Q)
+}else{F.push(Q)
 }return true
 };
 this.removeQueuedUserWorkItem=function(P){if(P instanceof Function){var N=-1;
 for(var O=0;
-O<H.length;
-O++){if(H[O].func==P){N=O;
+O<F.length;
+O++){if(F[O].func==P){N=O;
 break
-}}if(N>-1){H.splice(N,1);
+}}if(N>-1){F.splice(N,1);
 return true
 }return false
 }var N=-1;
 for(var O=0;
-O<H.length;
-O++){if(H[O]==P){N=O;
+O<F.length;
+O++){if(F[O]==P){N=O;
 break
-}}if(N>-1){H.splice(N,1);
+}}if(N>-1){F.splice(N,1);
 return true
 }return false
 };
-this.start=function(){C.start()
+this.start=function(){L.start()
 };
-this.stop=function(){C.stop()
+this.stop=function(){L.stop()
 };
 this.abort=function(){this.stop();
 for(var O=1;
-O<E.length;
-O++){if(E[O]){window.clearTimeout(E[O])
-}}for(var N in E[0]){this.queueUserWorkItem(N)
-}E[0]={}
+O<C.length;
+O++){if(C[O]){window.clearTimeout(C[O])
+}}for(var N in C[0]){this.queueUserWorkItem(N)
+}C[0]={}
 };
 this.reset=function(){this.abort();
-H=[]
+F=[]
 };
-this.sleep=function(N){C.stop();
-window.setTimeout(C.start,N)
+this.sleep=function(N){L.stop();
+window.setTimeout(L.start,N)
 };
-C.onTick=M.invoke
+L.onTick=K.invoke
 })(16,5000)
 })()
 }}});

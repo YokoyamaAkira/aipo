@@ -2,42 +2,42 @@ dojo._xdResourceLoaded({depends:[["provide","dojox.wire.DataWire"],["require","d
 A.provide("dojox.wire.DataWire");
 A.require("dojox.wire.Wire");
 A.declare("dojox.wire.DataWire",dojox.wire.Wire,{_wireClass:"dojox.wire.DataWire",constructor:function(B){if(!this.dataStore&&this.parent){this.dataStore=this.parent.dataStore
-}},_getValue:function(B){if(!B||!this.attribute||!this.dataStore){return B
-}var E=B;
-var D=this.attribute.split(".");
-for(var C in D){E=this._getAttributeValue(E,D[C]);
-if(!E){return undefined
-}}return E
-},_setValue:function(B,G){if(!B||!this.attribute||!this.dataStore){return B
-}var E=B;
-var F=this.attribute.split(".");
-var D=F.length-1;
-for(var C=0;
-C<D;
-C++){E=this._getAttributeValue(E,F[C]);
-if(!E){return undefined
-}}this._setAttributeValue(E,F[D],G);
-return B
-},_getAttributeValue:function(F,E){var G=undefined;
-var D=E.indexOf("[");
-if(D>=0){var C=E.indexOf("]");
-var B=E.substring(D+1,C);
-E=E.substring(0,D);
-var H=this.dataStore.getValues(F,E);
-if(H){if(!B){G=H
-}else{G=H[B]
-}}}else{G=this.dataStore.getValue(F,E)
-}return G
-},_setAttributeValue:function(F,E,G){var D=E.indexOf("[");
-if(D>=0){var C=E.indexOf("]");
-var B=E.substring(D+1,C);
-E=E.substring(0,D);
-var H=null;
-if(!B){H=G
-}else{H=this.dataStore.getValues(F,E);
-if(!H){H=[]
-}H[B]=G
-}this.dataStore.setValues(F,E,H)
-}else{this.dataStore.setValue(F,E,G)
+}},_getValue:function(C){if(!C||!this.attribute||!this.dataStore){return C
+}var B=C;
+var E=this.attribute.split(".");
+for(var D in E){B=this._getAttributeValue(B,E[D]);
+if(!B){return undefined
+}}return B
+},_setValue:function(C,B){if(!C||!this.attribute||!this.dataStore){return C
+}var F=C;
+var G=this.attribute.split(".");
+var E=G.length-1;
+for(var D=0;
+D<E;
+D++){F=this._getAttributeValue(F,G[D]);
+if(!F){return undefined
+}}this._setAttributeValue(F,G[E],B);
+return C
+},_getAttributeValue:function(E,D){var F=undefined;
+var C=D.indexOf("[");
+if(C>=0){var H=D.indexOf("]");
+var G=D.substring(C+1,H);
+D=D.substring(0,C);
+var B=this.dataStore.getValues(E,D);
+if(B){if(!G){F=B
+}else{F=B[G]
+}}}else{F=this.dataStore.getValue(E,D)
+}return F
+},_setAttributeValue:function(E,D,F){var C=D.indexOf("[");
+if(C>=0){var H=D.indexOf("]");
+var G=D.substring(C+1,H);
+D=D.substring(0,C);
+var B=null;
+if(!G){B=F
+}else{B=this.dataStore.getValues(E,D);
+if(!B){B=[]
+}B[G]=F
+}this.dataStore.setValues(E,D,B)
+}else{this.dataStore.setValue(E,D,F)
 }}})
 }}});

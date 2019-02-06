@@ -1,11 +1,4 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.timing"],
-["require", "dojox.timing._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.timing"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.timing"] = true;
-dojo.provide("dojox.timing");
-dojo.require("dojox.timing._base"); 
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.timing"],["require","dojox.timing._base"]],defineResource:function(A){if(!A._hasResource["dojox.timing"]){A._hasResource["dojox.timing"]=true;
+A.provide("dojox.timing");
+A.require("dojox.timing._base")
+}}});

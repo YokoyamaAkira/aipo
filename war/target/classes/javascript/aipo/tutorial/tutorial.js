@@ -1,39 +1,39 @@
 dojo.provide("aipo.tutorial");
-aipo.tutorial.showDialog=function(A,C,D){var B=dijit.byId("imageDialog");
+aipo.tutorial.showDialog=function(D,B,C){var A=dijit.byId("imageDialog");
 dojo.query(".roundBlockContent").addClass("mb_dialoghide");
 dojo.query("#imageDialog").addClass("mb_dialog");
-if(!B){B=new aipo.widget.TutorialDialog({widgetId:"imageDialog",_portlet_id:C,_callback:D},"imageDialog")
-}else{B.setCallback(C,D)
-}if(B){B.setHref(A);
-B.show()
+if(!A){A=new aipo.widget.TutorialDialog({widgetId:"imageDialog",_portlet_id:B,_callback:C},"imageDialog")
+}else{A.setCallback(B,C)
+}if(A){A.setHref(D);
+A.show()
 }};
 aipo.tutorial.hideDialog=function(){var A=dijit.byId("imageDialog");
 if(A){A.hide()
 }};
-aipo.tutorial.onLoadImage=function(B){var A=dojo.byId("imageDialog");
-A.style.visibility="hidden";
-A.style.width=1050+"px";
-A.style.height=650+"px";
+aipo.tutorial.onLoadImage=function(A){var B=dojo.byId("imageDialog");
+B.style.visibility="hidden";
+B.style.width=1050+"px";
+B.style.height=650+"px";
 dijit.byId("imageDialog")._position();
-A.style.visibility="visible"
+B.style.visibility="visible"
 };
-aipo.tutorial.nextPage=function(){var A=dojo.byId("page_tutorial");
-var B=A.value-0;
-dojo.byId("popupImage"+B).style.display="none";
-if(B==1){dojo.byId("tutorial_prev").style.display=""
-}B++;
-dojo.byId("popupImage"+B).style.display="";
-if(B==3){dojo.byId("tutorial_next").style.display="none"
-}A.value=B+""
+aipo.tutorial.nextPage=function(){var B=dojo.byId("page_tutorial");
+var A=B.value-0;
+dojo.byId("popupImage"+A).style.display="none";
+if(A==1){dojo.byId("tutorial_prev").style.display=""
+}A++;
+dojo.byId("popupImage"+A).style.display="";
+if(A==3){dojo.byId("tutorial_next").style.display="none"
+}B.value=A+""
 };
-aipo.tutorial.prevPage=function(){var A=dojo.byId("page_tutorial");
-var B=A.value-0;
-dojo.byId("popupImage"+B).style.display="none";
-if(B==3){dojo.byId("tutorial_next").style.display=""
-}B--;
-dojo.byId("popupImage"+B).style.display="";
-if(B==1){dojo.byId("tutorial_prev").style.display="none"
-}A.value=B+""
+aipo.tutorial.prevPage=function(){var B=dojo.byId("page_tutorial");
+var A=B.value-0;
+dojo.byId("popupImage"+A).style.display="none";
+if(A==3){dojo.byId("tutorial_next").style.display=""
+}A--;
+dojo.byId("popupImage"+A).style.display="";
+if(A==1){dojo.byId("tutorial_prev").style.display="none"
+}B.value=A+""
 };
 dojo.provide("aipo.widget.TutorialDialog");
 dojo.provide("aipo.widget.TutorialDialogUnderlay");

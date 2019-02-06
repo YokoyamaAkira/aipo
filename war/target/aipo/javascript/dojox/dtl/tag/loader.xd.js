@@ -1,151 +1,76 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.dtl.tag.loader"],
-["require", "dojox.dtl._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.dtl.tag.loader"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.dtl.tag.loader"] = true;
-dojo.provide("dojox.dtl.tag.loader");
-
-dojo.require("dojox.dtl._base");
-
-dojox.dtl.tag.loader.BlockNode = function(name, nodelist){
-	this.name = name;
-	this.nodelist = nodelist; // Can be overridden
-}
-dojo.extend(dojox.dtl.tag.loader.BlockNode, {
-	render: function(context, buffer){
-		if(this.override){
-			buffer = this.override.render(context, buffer, this);
-			this.rendered = this.override;
-		}else{
-			buffer =  this.nodelist.render(context, buffer, this);
-			this.rendered = this.nodelist;
-		}
-		this.override = null;
-		return buffer;
-	},
-	unrender: function(context, buffer){
-		return this.rendered.unrender(context, buffer);
-	},
-	setOverride: function(nodelist){
-		// summary: In a shared parent, we override, not overwrite
-		if(!this.override){
-			this.override = nodelist;
-		}
-	},
-	toString: function(){ return "dojox.dtl.tag.loader.BlockNode"; }
-});
-dojox.dtl.tag.loader.block = function(parser, text){
-	var parts = text.split(" ");
-	var name = parts[1];
-	
-	parser._blocks = parser._blocks || {};
-	parser._blocks[name] = parser._blocks[name] || [];
-	parser._blocks[name].push(name);
-	
-	var nodelist = parser.parse(["endblock", "endblock " + name]);
-	parser.next();
-	return new dojox.dtl.tag.loader.BlockNode(name, nodelist);
-}
-
-dojox.dtl.tag.loader.ExtendsNode = function(getTemplate, nodelist, shared, parent, key){
-	this.getTemplate = getTemplate;
-	this.nodelist = nodelist;
-	this.shared = shared;
-	this.parent = parent;
-	this.key = key;
-}
-dojo.extend(dojox.dtl.tag.loader.ExtendsNode, {
-	parents: {},
-	getParent: function(context){
-		if(!this.parent){
-			this.parent = context.get(this.key, false);
-			if(!this.parent){
-				throw new Error("extends tag used a variable that did not resolve");
-			}
-			if(typeof this.parent == "object"){
-				if(this.parent.url){
-					if(this.parent.shared){
-						this.shared = true;
-					}
-					this.parent = this.parent.url.toString();
-				}else{
-					this.parent = this.parent.toString();
-				}
-			}
-			if(this.parent && this.parent.indexOf("shared:") == 0){
-				this.shared = true;
-				this.parent = this.parent.substring(7, parent.length);
-			}
-		}
-		var parent = this.parent;
-		if(!parent){
-			throw new Error("Invalid template name in 'extends' tag.");
-		}
-		if(parent.render){
-			return parent;
-		}
-		if(this.parents[parent]){
-			return this.parents[parent];
-		}
-		this.parent = this.getTemplate(dojox.dtl.text.getTemplateString(parent));
-		if(this.shared){
-			this.parents[parent] = this.parent;
-		}
-		return this.parent;
-	},
-	render: function(context, buffer){
-		var st = dojox.dtl;
-		var stbl = dojox.dtl.tag.loader;
-		var parent = this.getParent(context);
-		var isChild = parent.nodelist[0] instanceof this.constructor;
-		var parentBlocks = {};
-		for(var i = 0, node; node = parent.nodelist.contents[i]; i++){
-			if(node instanceof stbl.BlockNode){
-				parentBlocks[node.name] = node;
-			}
-		}
-		for(var i = 0, node; node = this.nodelist.contents[i]; i++){
-			if(node instanceof stbl.BlockNode){
-				var block = parentBlocks[node.name];
-				if(!block){
-					if(isChild){
-						parent.nodelist[0].nodelist.append(node);
-					}
-				}else{
-					if(this.shared){
-						block.setOverride(node.nodelist);
-					}else{
-						block.nodelist = node.nodelist;
-					}
-				}
-			}
-		}
-		this.rendered = parent;
-		return parent.render(context, buffer, this);
-	},
-	unrender: function(context, buffer){
-		return this.rendered.unrender(context, buffer, this);
-	},
-	toString: function(){ return "dojox.dtl.block.ExtendsNode"; }
-});
-dojox.dtl.tag.loader.extends_ = function(parser, text){
-	var parts = text.split(" ");
-	var shared = false;
-	var parent = null;
-	var key = null;
-	if(parts[1].charAt(0) == '"' || parts[1].charAt(0) == "'"){
-		parent = parts[1].substring(1, parts[1].length - 1);
-	}else{
-		key = parts[1];
-	}
-	if(parent && parent.indexOf("shared:") == 0){
-		shared = true;
-		parent = parent.substring(7, parent.length);
-	}
-	var nodelist = parser.parse();
-	return new dojox.dtl.tag.loader.ExtendsNode(parser.getTemplate, nodelist, shared, parent, key);
-}
-
-}
-
+dojo._xdResourceLoaded({depends:[["provide","dojox.dtl.tag.loader"],["require","dojox.dtl._base"]],defineResource:function(A){if(!A._hasResource["dojox.dtl.tag.loader"]){A._hasResource["dojox.dtl.tag.loader"]=true;
+A.provide("dojox.dtl.tag.loader");
+A.require("dojox.dtl._base");
+dojox.dtl.tag.loader.BlockNode=function(B,C){this.name=B;
+this.nodelist=C
+};
+A.extend(dojox.dtl.tag.loader.BlockNode,{render:function(C,B){if(this.override){B=this.override.render(C,B,this);
+this.rendered=this.override
+}else{B=this.nodelist.render(C,B,this);
+this.rendered=this.nodelist
+}this.override=null;
+return B
+},unrender:function(C,B){return this.rendered.unrender(C,B)
+},setOverride:function(B){if(!this.override){this.override=B
+}},toString:function(){return"dojox.dtl.tag.loader.BlockNode"
 }});
+dojox.dtl.tag.loader.block=function(F,E){var D=E.split(" ");
+var B=D[1];
+F._blocks=F._blocks||{};
+F._blocks[B]=F._blocks[B]||[];
+F._blocks[B].push(B);
+var C=F.parse(["endblock","endblock "+B]);
+F.next();
+return new dojox.dtl.tag.loader.BlockNode(B,C)
+};
+dojox.dtl.tag.loader.ExtendsNode=function(B,E,F,D,C){this.getTemplate=B;
+this.nodelist=E;
+this.shared=F;
+this.parent=D;
+this.key=C
+};
+A.extend(dojox.dtl.tag.loader.ExtendsNode,{parents:{},getParent:function(B){if(!this.parent){this.parent=B.get(this.key,false);
+if(!this.parent){throw new Error("extends tag used a variable that did not resolve")
+}if(typeof this.parent=="object"){if(this.parent.url){if(this.parent.shared){this.shared=true
+}this.parent=this.parent.url.toString()
+}else{this.parent=this.parent.toString()
+}}if(this.parent&&this.parent.indexOf("shared:")==0){this.shared=true;
+this.parent=this.parent.substring(7,C.length)
+}}var C=this.parent;
+if(!C){throw new Error("Invalid template name in 'extends' tag.")
+}if(C.render){return C
+}if(this.parents[C]){return this.parents[C]
+}this.parent=this.getTemplate(dojox.dtl.text.getTemplateString(C));
+if(this.shared){this.parents[C]=this.parent
+}return this.parent
+},render:function(C,F){var K=dojox.dtl;
+var G=dojox.dtl.tag.loader;
+var J=this.getParent(C);
+var B=J.nodelist[0] instanceof this.constructor;
+var I={};
+for(var H=0,D;
+D=J.nodelist.contents[H];
+H++){if(D instanceof G.BlockNode){I[D.name]=D
+}}for(var H=0,D;
+D=this.nodelist.contents[H];
+H++){if(D instanceof G.BlockNode){var E=I[D.name];
+if(!E){if(B){J.nodelist[0].nodelist.append(D)
+}}else{if(this.shared){E.setOverride(D.nodelist)
+}else{E.nodelist=D.nodelist
+}}}}this.rendered=J;
+return J.render(C,F,this)
+},unrender:function(C,B){return this.rendered.unrender(C,B,this)
+},toString:function(){return"dojox.dtl.block.ExtendsNode"
+}});
+dojox.dtl.tag.loader.extends_=function(H,G){var F=G.split(" ");
+var E=false;
+var C=null;
+var B=null;
+if(F[1].charAt(0)=='"'||F[1].charAt(0)=="'"){C=F[1].substring(1,F[1].length-1)
+}else{B=F[1]
+}if(C&&C.indexOf("shared:")==0){E=true;
+C=C.substring(7,C.length)
+}var D=H.parse();
+return new dojox.dtl.tag.loader.ExtendsNode(H.getTemplate,D,E,C,B)
+}
+}}});

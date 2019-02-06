@@ -96,8 +96,7 @@ public class ActivityUtils {
       return null;
     }
 
-    @SuppressWarnings("unchecked")
-    Iterator<Entry> iterator = portlets.getEntriesIterator();
+    Iterator<Entry> iterator = (Iterator<Entry>) portlets.getEntriesIterator();
     while (iterator.hasNext()) {
       Entry next = iterator.next();
       if ("Activity".equals(next.getParent())) {

@@ -1,192 +1,192 @@
 dojo.require("dojox.gfx.vml");
 dojo.experimental("dojox.gfx.vml_attach");
-(function(){dojox.gfx.attachNode=function(Q){if(!Q){return null
-}var P=null;
-switch(Q.tagName.toLowerCase()){case dojox.gfx.Rect.nodeType:P=new dojox.gfx.Rect(Q);
-C(P);
+(function(){dojox.gfx.attachNode=function(P){if(!P){return null
+}var Q=null;
+switch(P.tagName.toLowerCase()){case dojox.gfx.Rect.nodeType:Q=new dojox.gfx.Rect(P);
+J(Q);
 break;
-case dojox.gfx.Ellipse.nodeType:if(Q.style.width==Q.style.height){P=new dojox.gfx.Circle(Q);
-N(P)
-}else{P=new dojox.gfx.Ellipse(Q);
-O(P)
+case dojox.gfx.Ellipse.nodeType:if(P.style.width==P.style.height){Q=new dojox.gfx.Circle(P);
+F(Q)
+}else{Q=new dojox.gfx.Ellipse(P);
+G(Q)
 }break;
-case dojox.gfx.Path.nodeType:switch(Q.getAttribute("dojoGfxType")){case"line":P=new dojox.gfx.Line(Q);
-G(P);
+case dojox.gfx.Path.nodeType:switch(P.getAttribute("dojoGfxType")){case"line":Q=new dojox.gfx.Line(P);
+N(Q);
 break;
-case"polyline":P=new dojox.gfx.Polyline(Q);
-I(P);
+case"polyline":Q=new dojox.gfx.Polyline(P);
+A(Q);
 break;
-case"path":P=new dojox.gfx.Path(Q);
-F(P);
+case"path":Q=new dojox.gfx.Path(P);
+M(Q);
 break;
-case"text":P=new dojox.gfx.Text(Q);
-D(P);
-M(P);
-K(P);
+case"text":Q=new dojox.gfx.Text(P);
+K(Q);
+E(Q);
+C(Q);
 break;
-case"textpath":P=new dojox.gfx.TextPath(Q);
-F(P);
-D(P);
-M(P);
+case"textpath":Q=new dojox.gfx.TextPath(P);
+M(Q);
+K(Q);
+E(Q);
 break
 }break;
-case dojox.gfx.Image.nodeType:switch(Q.getAttribute("dojoGfxType")){case"image":P=new dojox.gfx.Image(Q);
-J(P);
-A(P);
+case dojox.gfx.Image.nodeType:switch(P.getAttribute("dojoGfxType")){case"image":Q=new dojox.gfx.Image(P);
+B(Q);
+H(Q);
 break
 }break;
 default:return null
-}if(!(P instanceof dojox.gfx.Image)){E(P);
-L(P);
-if(!(P instanceof dojox.gfx.Text)){H(P)
-}}return P
+}if(!(Q instanceof dojox.gfx.Image)){L(Q);
+D(Q);
+if(!(Q instanceof dojox.gfx.Text)){O(Q)
+}}return Q
 };
-dojox.gfx.attachSurface=function(S){var Q=new dojox.gfx.Surface();
-Q.clipNode=S;
-var R=Q.rawNode=S.firstChild;
-var P=R.firstChild;
-if(!P||P.tagName!="rect"){return null
-}Q.bgNode=R;
-return Q
+dojox.gfx.attachSurface=function(P){var R=new dojox.gfx.Surface();
+R.clipNode=P;
+var S=R.rawNode=P.firstChild;
+var Q=S.firstChild;
+if(!Q||Q.tagName!="rect"){return null
+}R.bgNode=S;
+return R
 };
-var E=function(Q){var W=null,P=Q.rawNode,T=P.fill;
-if(T.on&&T.type=="gradient"){var W=dojo.clone(dojox.gfx.defaultLinearGradient),U=dojox.gfx.matrix._degToRad(T.angle);
-W.x2=Math.cos(U);
-W.y2=Math.sin(U);
-W.colors=[];
-var X=T.colors.value.split(";");
-for(var R=0;
-R<X.length;
-++R){var Y=X[R].match(/\S+/g);
-if(!Y||Y.length!=2){continue
-}W.colors.push({offset:dojox.gfx.vml._parseFloat(Y[0]),color:new dojo.Color(Y[1])})
-}}else{if(T.on&&T.type=="gradientradial"){var W=dojo.clone(dojox.gfx.defaultRadialGradient),V=parseFloat(P.style.width),S=parseFloat(P.style.height);
-W.cx=isNaN(V)?0:T.focusposition.x*V;
-W.cy=isNaN(S)?0:T.focusposition.y*S;
-W.r=isNaN(V)?1:V/2;
-W.colors=[];
-var X=T.colors.value.split(";");
-for(var R=X.length-1;
-R>=0;
---R){var Y=X[R].match(/\S+/g);
-if(!Y||Y.length!=2){continue
-}W.colors.push({offset:dojox.gfx.vml._parseFloat(Y[0]),color:new dojo.Color(Y[1])})
-}}else{if(T.on&&T.type=="tile"){var W=dojo.clone(dojox.gfx.defaultPattern);
-W.width=dojox.gfx.pt2px(T.size.x);
-W.height=dojox.gfx.pt2px(T.size.y);
-W.x=T.origin.x*W.width;
-W.y=T.origin.y*W.height;
-W.src=T.src
-}else{if(T.on&&P.fillcolor){W=new dojo.Color(P.fillcolor+"");
-W.a=T.opacity
-}}}}Q.fillStyle=W
+var L=function(U){var Q=null,T=U.rawNode,X=T.fill;
+if(X.on&&X.type=="gradient"){var Q=dojo.clone(dojox.gfx.defaultLinearGradient),Y=dojox.gfx.matrix._degToRad(X.angle);
+Q.x2=Math.cos(Y);
+Q.y2=Math.sin(Y);
+Q.colors=[];
+var R=X.colors.value.split(";");
+for(var V=0;
+V<R.length;
+++V){var S=R[V].match(/\S+/g);
+if(!S||S.length!=2){continue
+}Q.colors.push({offset:dojox.gfx.vml._parseFloat(S[0]),color:new dojo.Color(S[1])})
+}}else{if(X.on&&X.type=="gradientradial"){var Q=dojo.clone(dojox.gfx.defaultRadialGradient),P=parseFloat(T.style.width),W=parseFloat(T.style.height);
+Q.cx=isNaN(P)?0:X.focusposition.x*P;
+Q.cy=isNaN(W)?0:X.focusposition.y*W;
+Q.r=isNaN(P)?1:P/2;
+Q.colors=[];
+var R=X.colors.value.split(";");
+for(var V=R.length-1;
+V>=0;
+--V){var S=R[V].match(/\S+/g);
+if(!S||S.length!=2){continue
+}Q.colors.push({offset:dojox.gfx.vml._parseFloat(S[0]),color:new dojo.Color(S[1])})
+}}else{if(X.on&&X.type=="tile"){var Q=dojo.clone(dojox.gfx.defaultPattern);
+Q.width=dojox.gfx.pt2px(X.size.x);
+Q.height=dojox.gfx.pt2px(X.size.y);
+Q.x=X.origin.x*Q.width;
+Q.y=X.origin.y*Q.height;
+Q.src=X.src
+}else{if(X.on&&T.fillcolor){Q=new dojo.Color(T.fillcolor+"");
+Q.a=X.opacity
+}}}}U.fillStyle=Q
 };
-var L=function(Q){var R=Q.rawNode;
-if(!R.stroked){Q.strokeStyle=null;
+var D=function(R){var S=R.rawNode;
+if(!S.stroked){R.strokeStyle=null;
 return 
-}var S=Q.strokeStyle=dojo.clone(dojox.gfx.defaultStroke),P=R.stroke;
-S.color=new dojo.Color(R.strokecolor.value);
-S.width=dojox.gfx.normalizedLength(R.strokeweight+"");
-S.color.a=P.opacity;
-S.cap=this._translate(this._capMapReversed,P.endcap);
-S.join=P.joinstyle=="miter"?P.miterlimit:P.joinstyle;
-S.style=P.dashstyle
+}var P=R.strokeStyle=dojo.clone(dojox.gfx.defaultStroke),Q=S.stroke;
+P.color=new dojo.Color(S.strokecolor.value);
+P.width=dojox.gfx.normalizedLength(S.strokeweight+"");
+P.color.a=Q.opacity;
+P.cap=this._translate(this._capMapReversed,Q.endcap);
+P.join=Q.joinstyle=="miter"?Q.miterlimit:Q.joinstyle;
+P.style=Q.dashstyle
 };
-var H=function(P){var Q=rawNode.skew,S=Q.matrix,R=Q.offset;
-P.matrix=dojox.gfx.matrix.normalize({xx:S.xtox,xy:S.ytox,yx:S.xtoy,yy:S.ytoy,dx:dojox.gfx.pt2px(R.x),dy:dojox.gfx.pt2px(R.y)})
+var O=function(Q){var R=rawNode.skew,P=R.matrix,S=R.offset;
+Q.matrix=dojox.gfx.matrix.normalize({xx:P.xtox,xy:P.ytox,yx:P.xtoy,yy:P.ytoy,dx:dojox.gfx.pt2px(S.x),dy:dojox.gfx.pt2px(S.y)})
 };
-var B=function(P){P.bgNode=P.rawNode.firstChild
+var I=function(P){P.bgNode=P.rawNode.firstChild
 };
-var C=function(R){var U=R.rawNode,Q=U.outerHTML.match(/arcsize = \"(\d*\.?\d+[%f]?)\"/)[1],T=U.style,S=parseFloat(T.width),P=parseFloat(T.height);
-Q=(Q.indexOf("%")>=0)?parseFloat(Q)/100:dojox.gfx.vml._parseFloat(Q);
-R.shape=dojox.gfx.makeParameters(dojox.gfx.defaultRect,{x:parseInt(T.left),y:parseInt(T.top),width:S,height:P,r:Math.min(S,P)*Q})
+var J=function(S){var P=S.rawNode,R=P.outerHTML.match(/arcsize = \"(\d*\.?\d+[%f]?)\"/)[1],U=P.style,T=parseFloat(U.width),Q=parseFloat(U.height);
+R=(R.indexOf("%")>=0)?parseFloat(R)/100:dojox.gfx.vml._parseFloat(R);
+S.shape=dojox.gfx.makeParameters(dojox.gfx.defaultRect,{x:parseInt(U.left),y:parseInt(U.top),width:T,height:Q,r:Math.min(T,Q)*R})
 };
-var O=function(P){var Q=P.rawNode.style,S=parseInt(Q.width)/2,R=parseInt(Q.height)/2;
-P.shape=dojox.gfx.makeParameters(dojox.gfx.defaultEllipse,{cx:parseInt(Q.left)+S,cy:parseInt(Q.top)+R,rx:S,ry:R})
+var G=function(Q){var R=Q.rawNode.style,P=parseInt(R.width)/2,S=parseInt(R.height)/2;
+Q.shape=dojox.gfx.makeParameters(dojox.gfx.defaultEllipse,{cx:parseInt(R.left)+P,cy:parseInt(R.top)+S,rx:P,ry:S})
 };
-var N=function(P){var Q=P.rawNode.style,R=parseInt(Q.width)/2;
-P.shape=dojox.gfx.makeParameters(dojox.gfx.defaultCircle,{cx:parseInt(Q.left)+R,cy:parseInt(Q.top)+R,r:R})
+var F=function(Q){var R=Q.rawNode.style,P=parseInt(R.width)/2;
+Q.shape=dojox.gfx.makeParameters(dojox.gfx.defaultCircle,{cx:parseInt(R.left)+P,cy:parseInt(R.top)+P,r:P})
 };
-var G=function(Q){var P=Q.shape=dojo.clone(dojox.gfx.defaultLine),R=Q.rawNode.path.v.match(dojox.gfx.pathVmlRegExp);
-do{if(R.length<7||R[0]!="m"||R[3]!="l"||R[6]!="e"){break
-}P.x1=parseInt(R[1]);
-P.y1=parseInt(R[2]);
-P.x2=parseInt(R[4]);
-P.y2=parseInt(R[5])
+var N=function(R){var Q=R.shape=dojo.clone(dojox.gfx.defaultLine),P=R.rawNode.path.v.match(dojox.gfx.pathVmlRegExp);
+do{if(P.length<7||P[0]!="m"||P[3]!="l"||P[6]!="e"){break
+}Q.x1=parseInt(P[1]);
+Q.y1=parseInt(P[2]);
+Q.x2=parseInt(P[4]);
+Q.y2=parseInt(P[5])
 }while(false)
 };
-var I=function(R){var Q=R.shape=dojo.clone(dojox.gfx.defaultPolyline),T=R.rawNode.path.v.match(dojox.gfx.pathVmlRegExp);
-do{if(T.length<3||T[0]!="m"){break
-}var P=parseInt(T[0]),U=parseInt(T[1]);
-if(isNaN(P)||isNaN(U)){break
-}Q.points.push({x:P,y:U});
-if(T.length<6||T[3]!="l"){break
-}for(var S=4;
-S<T.length;
-S+=2){P=parseInt(T[S]);
-U=parseInt(T[S+1]);
-if(isNaN(P)||isNaN(U)){break
-}Q.points.push({x:P,y:U})
+var A=function(S){var R=S.shape=dojo.clone(dojox.gfx.defaultPolyline),U=S.rawNode.path.v.match(dojox.gfx.pathVmlRegExp);
+do{if(U.length<3||U[0]!="m"){break
+}var Q=parseInt(U[0]),P=parseInt(U[1]);
+if(isNaN(Q)||isNaN(P)){break
+}R.points.push({x:Q,y:P});
+if(U.length<6||U[3]!="l"){break
+}for(var T=4;
+T<U.length;
+T+=2){Q=parseInt(U[T]);
+P=parseInt(U[T+1]);
+if(isNaN(Q)||isNaN(P)){break
+}R.points.push({x:Q,y:P})
 }}while(false)
 };
-var J=function(P){P.shape=dojo.clone(dojox.gfx.defaultImage);
+var B=function(P){P.shape=dojo.clone(dojox.gfx.defaultImage);
 P.shape.src=P.rawNode.firstChild.src
 };
-var A=function(Q){var P=Q.rawNode.filters["DXImageTransform.Microsoft.Matrix"];
-Q.matrix=dojox.gfx.matrix.normalize({xx:P.M11,xy:P.M12,yx:P.M21,yy:P.M22,dx:P.Dx,dy:P.Dy})
+var H=function(P){var Q=P.rawNode.filters["DXImageTransform.Microsoft.Matrix"];
+P.matrix=dojox.gfx.matrix.normalize({xx:Q.M11,xy:Q.M12,yx:Q.M21,yy:Q.M22,dx:Q.Dx,dy:Q.Dy})
 };
-var D=function(Q){var P=Q.shape=dojo.clone(dojox.gfx.defaultText),T=Q.rawNode,U=T.path.v.match(dojox.gfx.pathVmlRegExp);
-do{if(!U||U.length!=7){break
-}var V=T.childNodes,R=0;
+var K=function(R){var Q=R.shape=dojo.clone(dojox.gfx.defaultText),U=R.rawNode,V=U.path.v.match(dojox.gfx.pathVmlRegExp);
+do{if(!V||V.length!=7){break
+}var P=U.childNodes,S=0;
 for(;
-R<V.length&&V[R].tagName!="textpath";
-++R){}if(R>=V.length){break
-}var S=V[R].style;
-P.text=V[R].string;
-switch(S["v-text-align"]){case"left":P.x=parseInt(U[1]);
-P.align="start";
+S<P.length&&P[S].tagName!="textpath";
+++S){}if(S>=P.length){break
+}var T=P[S].style;
+Q.text=P[S].string;
+switch(T["v-text-align"]){case"left":Q.x=parseInt(V[1]);
+Q.align="start";
 break;
-case"center":P.x=(parseInt(U[1])+parseInt(U[4]))/2;
-P.align="middle";
+case"center":Q.x=(parseInt(V[1])+parseInt(V[4]))/2;
+Q.align="middle";
 break;
-case"right":P.x=parseInt(U[4]);
-P.align="end";
+case"right":Q.x=parseInt(V[4]);
+Q.align="end";
 break
-}P.y=parseInt(U[2]);
-P.decoration=S["text-decoration"];
-P.rotated=S["v-rotate-letters"].toLowerCase() in dojox.gfx.vml._bool;
-P.kerning=S["v-text-kern"].toLowerCase() in dojox.gfx.vml._bool;
+}Q.y=parseInt(V[2]);
+Q.decoration=T["text-decoration"];
+Q.rotated=T["v-rotate-letters"].toLowerCase() in dojox.gfx.vml._bool;
+Q.kerning=T["v-text-kern"].toLowerCase() in dojox.gfx.vml._bool;
 return 
 }while(false);
-Q.shape=null
+R.shape=null
 };
-var M=function(P){var S=P.fontStyle=dojo.clone(dojox.gfx.defaultFont),T=P.rawNode.childNodes,Q=0;
+var E=function(Q){var T=Q.fontStyle=dojo.clone(dojox.gfx.defaultFont),P=Q.rawNode.childNodes,R=0;
 for(;
-Q<T.length&&T[Q].tagName=="textpath";
-++Q){}if(Q>=T.length){P.fontStyle=null;
+R<P.length&&P[R].tagName=="textpath";
+++R){}if(R>=P.length){Q.fontStyle=null;
 return 
-}var R=T[Q].style;
-S.style=R.fontstyle;
-S.variant=R.fontvariant;
-S.weight=R.fontweight;
-S.size=R.fontsize;
-S.family=R.fontfamily
+}var S=P[R].style;
+T.style=S.fontstyle;
+T.variant=S.fontvariant;
+T.weight=S.fontweight;
+T.size=S.fontsize;
+T.family=S.fontfamily
 };
-var K=function(R){H(R);
-var Q=R.matrix,P=R.fontStyle;
-if(Q&&P){R.matrix=dojox.gfx.matrix.multiply(Q,{dy:dojox.gfx.normalizedLength(P.size)*0.35})
+var C=function(P){O(P);
+var R=P.matrix,Q=P.fontStyle;
+if(R&&Q){P.matrix=dojox.gfx.matrix.multiply(R,{dy:dojox.gfx.normalizedLength(Q.size)*0.35})
 }};
-var F=function(T){var V=T.shape=dojo.clone(dojox.gfx.defaultPath),Q=rawNode.path.v.match(dojox.gfx.pathVmlRegExp),X=[],W=false,P=dojox.gfx.Path._pathVmlToSvgMap;
-for(var U=0;
-U<Q.length;
-++Q){var Y=Q[U];
-if(Y in P){W=false;
-X.push(P[Y])
-}else{if(!W){var R=parseInt(Y);
-if(isNaN(R)){W=true
-}else{X.push(R)
-}}}}var S=X.length;
-if(S>=4&&X[S-1]==""&&X[S-2]==0&&X[S-3]==0&&X[S-4]=="l"){X.splice(S-4,4)
-}if(S){V.path=X.join(" ")
+var M=function(X){var P=X.shape=dojo.clone(dojox.gfx.defaultPath),U=rawNode.path.v.match(dojox.gfx.pathVmlRegExp),R=[],Q=false,T=dojox.gfx.Path._pathVmlToSvgMap;
+for(var Y=0;
+Y<U.length;
+++U){var S=U[Y];
+if(S in T){Q=false;
+R.push(T[S])
+}else{if(!Q){var V=parseInt(S);
+if(isNaN(V)){Q=true
+}else{R.push(V)
+}}}}var W=R.length;
+if(W>=4&&R[W-1]==""&&R[W-2]==0&&R[W-3]==0&&R[W-4]=="l"){R.splice(W-4,4)
+}if(W){P.path=R.join(" ")
 }}
 })();

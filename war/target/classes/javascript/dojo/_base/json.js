@@ -7,37 +7,37 @@ return json
 dojo._escapeString=function(A){return('"'+A.replace(/(["\\])/g,"\\$1")+'"').replace(/[\f]/g,"\\f").replace(/[\b]/g,"\\b").replace(/[\n]/g,"\\n").replace(/[\t]/g,"\\t").replace(/[\r]/g,"\\r")
 };
 dojo.toJsonIndentStr="\t";
-dojo.toJson=function(H,E,L){L=L||"";
-var K=(E?L+dojo.toJsonIndentStr:"");
-var I=(E?"\n":"");
-var M=typeof (H);
-if(M=="undefined"){return"undefined"
-}else{if((M=="number")||(M=="boolean")){return H+""
-}else{if(H===null){return"null"
-}}}if(dojo.isString(H)){return dojo._escapeString(H)
-}if(H.nodeType&&H.cloneNode){return""
-}var A=arguments.callee;
-var F;
-if(typeof H.__json__=="function"){F=H.__json__();
-if(H!==F){return A(F,E,K)
-}}if(typeof H.json=="function"){F=H.json();
-if(H!==F){return A(F,E,K)
-}}if(dojo.isArray(H)){var J=[];
-for(var G=0;
-G<H.length;
-G++){var D=A(H[G],E,K);
-if(typeof (D)!="string"){D="undefined"
-}J.push(I+K+D)
-}return"["+J.join(", ")+I+L+"]"
-}if(M=="function"){return null
-}var C=[];
-for(var N in H){var B;
-if(typeof (N)=="number"){B='"'+N+'"'
-}else{if(typeof (N)=="string"){B=dojo._escapeString(N)
+dojo.toJson=function(B,M,F){F=F||"";
+var E=(M?F+dojo.toJsonIndentStr:"");
+var C=(M?"\n":"");
+var G=typeof (B);
+if(G=="undefined"){return"undefined"
+}else{if((G=="number")||(G=="boolean")){return B+""
+}else{if(B===null){return"null"
+}}}if(dojo.isString(B)){return dojo._escapeString(B)
+}if(B.nodeType&&B.cloneNode){return""
+}var I=arguments.callee;
+var N;
+if(typeof B.__json__=="function"){N=B.__json__();
+if(B!==N){return I(N,M,E)
+}}if(typeof B.json=="function"){N=B.json();
+if(B!==N){return I(N,M,E)
+}}if(dojo.isArray(B)){var D=[];
+for(var A=0;
+A<B.length;
+A++){var L=I(B[A],M,E);
+if(typeof (L)!="string"){L="undefined"
+}D.push(C+E+L)
+}return"["+D.join(", ")+C+F+"]"
+}if(G=="function"){return null
+}var K=[];
+for(var H in B){var J;
+if(typeof (H)=="number"){J='"'+H+'"'
+}else{if(typeof (H)=="string"){J=dojo._escapeString(H)
 }else{continue
-}}D=A(H[N],E,K);
-if(typeof (D)!="string"){continue
-}C.push(I+K+B+": "+D)
-}return"{"+C.join(", ")+I+L+"}"
+}}L=I(B[H],M,E);
+if(typeof (L)!="string"){continue
+}K.push(C+E+J+": "+L)
+}return"{"+K.join(", ")+C+F+"}"
 }
 };

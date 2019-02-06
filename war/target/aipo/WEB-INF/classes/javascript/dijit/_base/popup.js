@@ -3,61 +3,61 @@ dojo.provide("dijit._base.popup");
 dojo.require("dijit._base.focus");
 dojo.require("dijit._base.place");
 dojo.require("dijit._base.window");
-dijit.popup=new function(){var A=[],B=1000,C=1;
-this.open=function(L){var K=L.popup,J=L.orient||{BL:"TL",TL:"BL"},M=L.around,F=(L.around&&L.around.id)?(L.around.id+"_dropdown"):("popup_"+C++);
-var E=dojo.doc.createElement("div");
-E.id=F;
-E.className="dijitPopup";
-E.style.zIndex=B+A.length;
-E.style.visibility="hidden";
-if(L.parent){E.dijitPopupParent=L.parent.id
-}dojo.body().appendChild(E);
-K.domNode.style.display="";
-E.appendChild(K.domNode);
-var I=new dijit.BackgroundIframe(E);
-var H=M?dijit.placeOnScreenAroundElement(E,M,J,K.orient?dojo.hitch(K,"orient"):null):dijit.placeOnScreen(E,L,J=="R"?["TR","BR","TL","BL"]:["TL","BL","TR","BR"]);
-E.style.visibility="visible";
-var G=[];
-function D(){for(var N=A.length-1;
-N>0&&A[N].parent===A[N-1].widget;
-N--){}return A[N]
-}G.push(dojo.connect(E,"onkeypress",this,function(N){if(N.keyCode==dojo.keys.ESCAPE&&L.onCancel){L.onCancel()
+dijit.popup=new function(){var C=[],A=1000,B=1;
+this.open=function(D){var M=D.popup,L=D.orient||{BL:"TL",TL:"BL"},E=D.around,H=(D.around&&D.around.id)?(D.around.id+"_dropdown"):("popup_"+B++);
+var G=dojo.doc.createElement("div");
+G.id=H;
+G.className="dijitPopup";
+G.style.zIndex=A+C.length;
+G.style.visibility="hidden";
+if(D.parent){G.dijitPopupParent=D.parent.id
+}dojo.body().appendChild(G);
+M.domNode.style.display="";
+G.appendChild(M.domNode);
+var K=new dijit.BackgroundIframe(G);
+var J=E?dijit.placeOnScreenAroundElement(G,E,L,M.orient?dojo.hitch(M,"orient"):null):dijit.placeOnScreen(G,D,L=="R"?["TR","BR","TL","BL"]:["TL","BL","TR","BR"]);
+G.style.visibility="visible";
+var I=[];
+function F(){for(var N=C.length-1;
+N>0&&C[N].parent===C[N-1].widget;
+N--){}return C[N]
+}I.push(dojo.connect(G,"onkeypress",this,function(N){if(N.keyCode==dojo.keys.ESCAPE&&D.onCancel){D.onCancel()
 }else{if(N.keyCode==dojo.keys.TAB){dojo.stopEvent(N);
-var O=D();
+var O=F();
 if(O&&O.onCancel){O.onCancel()
 }}}}));
-if(K.onCancel){G.push(dojo.connect(K,"onCancel",null,L.onCancel))
-}G.push(dojo.connect(K,K.onExecute?"onExecute":"onChange",null,function(){var N=D();
+if(M.onCancel){I.push(dojo.connect(M,"onCancel",null,D.onCancel))
+}I.push(dojo.connect(M,M.onExecute?"onExecute":"onChange",null,function(){var N=F();
 if(N&&N.onExecute){N.onExecute()
 }}));
-A.push({wrapper:E,iframe:I,widget:K,parent:L.parent,onExecute:L.onExecute,onCancel:L.onCancel,onClose:L.onClose,handlers:G});
-if(K.onOpen){K.onOpen(H)
-}return H
+C.push({wrapper:G,iframe:K,widget:M,parent:D.parent,onExecute:D.onExecute,onCancel:D.onCancel,onClose:D.onClose,handlers:I});
+if(M.onOpen){M.onOpen(J)
+}return J
 };
-this.close=function(E){while(dojo.some(A,function(J){return J.widget==E
-})){var H=A.pop(),I=H.wrapper,F=H.iframe,G=H.widget,D=H.onClose;
-if(G.onClose){G.onClose()
-}dojo.forEach(H.handlers,dojo.disconnect);
-if(!G||!G.domNode){return 
-}dojo.style(G.domNode,"display","none");
-dojo.body().appendChild(G.domNode);
-F.destroy();
-dojo._destroyElement(I);
+this.close=function(F){while(dojo.some(C,function(J){return J.widget==F
+})){var I=C.pop(),E=I.wrapper,G=I.iframe,H=I.widget,D=I.onClose;
+if(H.onClose){H.onClose()
+}dojo.forEach(I.handlers,dojo.disconnect);
+if(!H||!H.domNode){return 
+}dojo.style(H.domNode,"display","none");
+dojo.body().appendChild(H.domNode);
+G.destroy();
+dojo._destroyElement(E);
 if(D){D()
 }}}
 }();
 dijit._frames=new function(){var A=[];
-this.pop=function(){var C;
-if(A.length){C=A.pop();
-C.style.display=""
-}else{if(dojo.isIE){var B="<iframe src='javascript:\"\"' style='position: absolute; left: 0px; top: 0px;z-index: -1; filter:Alpha(Opacity=\"0\");'>";
-C=dojo.doc.createElement(B)
-}else{var C=dojo.doc.createElement("iframe");
-C.src='javascript:""';
-C.className="dijitBackgroundIframe"
-}C.tabIndex=-1;
-dojo.body().appendChild(C)
-}return C
+this.pop=function(){var B;
+if(A.length){B=A.pop();
+B.style.display=""
+}else{if(dojo.isIE){var C="<iframe src='javascript:\"\"' style='position: absolute; left: 0px; top: 0px;z-index: -1; filter:Alpha(Opacity=\"0\");'>";
+B=dojo.doc.createElement(C)
+}else{var B=dojo.doc.createElement("iframe");
+B.src='javascript:""';
+B.className="dijitBackgroundIframe"
+}B.tabIndex=-1;
+dojo.body().appendChild(B)
+}return B
 };
 this.push=function(B){B.style.display="";
 if(dojo.isIE){B.style.removeExpression("width");
@@ -68,12 +68,12 @@ B.style.removeExpression("height")
 if(dojo.isIE&&dojo.isIE<7){dojo.addOnLoad(function(){var A=dijit._frames;
 dojo.forEach([A.pop()],A.push)
 })
-}dijit.BackgroundIframe=function(B){if(!B.id){throw new Error("no id")
-}if((dojo.isIE&&dojo.isIE<7)||(dojo.isFF&&dojo.isFF<3&&dojo.hasClass(dojo.body(),"dijit_a11y"))){var A=dijit._frames.pop();
-B.appendChild(A);
-if(dojo.isIE){A.style.setExpression("width","document.getElementById('"+B.id+"').offsetWidth");
-A.style.setExpression("height","document.getElementById('"+B.id+"').offsetHeight")
-}this.iframe=A
+}dijit.BackgroundIframe=function(A){if(!A.id){throw new Error("no id")
+}if((dojo.isIE&&dojo.isIE<7)||(dojo.isFF&&dojo.isFF<3&&dojo.hasClass(dojo.body(),"dijit_a11y"))){var B=dijit._frames.pop();
+A.appendChild(B);
+if(dojo.isIE){B.style.setExpression("width","document.getElementById('"+A.id+"').offsetWidth");
+B.style.setExpression("height","document.getElementById('"+A.id+"').offsetHeight")
+}this.iframe=B
 }};
 dojo.extend(dijit.BackgroundIframe,{destroy:function(){if(this.iframe){dijit._frames.push(this.iframe);
 delete this.iframe

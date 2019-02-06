@@ -1,31 +1,9 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.fx._arg"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.fx._arg"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.fx._arg"] = true;
-dojo.provide("dojox.fx._arg");
-
-dojox.fx._arg.StyleArgs = function(/*Object*/ args){
-	// summary:
-	//		The node and CSS class to use for style manipulations.
-	// node: DOMNode
-	//		The node to manipulate
-	// cssClass: String
-	//		The class to use during the manipulation
-	this.node = args.node;
-	this.cssClass = args.cssClass;
+dojo._xdResourceLoaded({depends:[["provide","dojox.fx._arg"]],defineResource:function(A){if(!A._hasResource["dojox.fx._arg"]){A._hasResource["dojox.fx._arg"]=true;
+A.provide("dojox.fx._arg");
+dojox.fx._arg.StyleArgs=function(B){this.node=B.node;
+this.cssClass=B.cssClass
+};
+dojox.fx._arg.ShadowResizeArgs=function(B){this.x=B.x;
+this.y=B.y
 }
-
-dojox.fx._arg.ShadowResizeArgs = function(/*Object*/ args){
-	// summary: 
-	//	The odd way to document object parameters.
-	// x: Integer
-	//	the width to set
-	// y: Integer
-	//	the height to set	
-	this.x = args.x;
-	this.y = args.y;
-}
-
-}
-
-}});
+}}});

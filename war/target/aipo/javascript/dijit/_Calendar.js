@@ -1,214 +1,88 @@
-if(!dojo._hasResource["dijit._Calendar"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit._Calendar"] = true;
+if(!dojo._hasResource["dijit._Calendar"]){dojo._hasResource["dijit._Calendar"]=true;
 dojo.provide("dijit._Calendar");
-
 dojo.require("dojo.cldr.supplemental");
 dojo.require("dojo.date");
 dojo.require("dojo.date.locale");
-
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
-
-dojo.declare(
-	"dijit._Calendar",
-	[dijit._Widget, dijit._Templated],
-	{
-		/*
-		summary:
-			A simple GUI for choosing a date in the context of a monthly calendar.
-
-		description:
-			This widget is used internally by other widgets and is not accessible
-			as a standalone widget.
-			This widget can't be used in a form because it doesn't serialize the date to an
-			<input> field.  For a form element, use DateTextBox instead.
-
-			Note that the parser takes all dates attributes passed in the `RFC 3339` format:
-			http://www.faqs.org/rfcs/rfc3339.html (2005-06-30T08:05:00-07:00)
-			so that they are serializable and locale-independent.
-
-		usage:
-			var calendar = new dijit._Calendar({}, dojo.byId("calendarNode"));
-		 	-or-
-			<div dojoType="dijit._Calendar"></div>
-		*/
-		templateString:"<table cellspacing=\"0\" cellpadding=\"0\" class=\"dijitCalendarContainer\">\r\n\t<thead>\r\n\t\t<tr class=\"dijitReset dijitCalendarMonthContainer\" valign=\"top\">\r\n\t\t\t<th class='dijitReset' dojoAttachPoint=\"decrementMonth\">\r\n\t\t\t\t<span class=\"dijitInline dijitCalendarIncrementControl dijitCalendarDecrease\"><span dojoAttachPoint=\"decreaseArrowNode\" class=\"dijitA11ySideArrow dijitCalendarIncrementControl dijitCalendarDecreaseInner\">-</span></span>\r\n\t\t\t</th>\r\n\t\t\t<th class='dijitReset' colspan=\"5\">\r\n\t\t\t\t<div dojoAttachPoint=\"monthLabelSpacer\" class=\"dijitCalendarMonthLabelSpacer\"></div>\r\n\t\t\t\t<div dojoAttachPoint=\"monthLabelNode\" class=\"dijitCalendarMonth\"></div>\r\n\t\t\t</th>\r\n\t\t\t<th class='dijitReset' dojoAttachPoint=\"incrementMonth\">\r\n\t\t\t\t<div class=\"dijitInline dijitCalendarIncrementControl dijitCalendarIncrease\"><span dojoAttachPoint=\"increaseArrowNode\" class=\"dijitA11ySideArrow dijitCalendarIncrementControl dijitCalendarIncreaseInner\">+</span></div>\r\n\t\t\t</th>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<th class=\"dijitReset dijitCalendarDayLabelTemplate\"><span class=\"dijitCalendarDayLabel\"></span></th>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody dojoAttachEvent=\"onclick: _onDayClick\" class=\"dijitReset dijitCalendarBodyContainer\">\r\n\t\t<tr class=\"dijitReset dijitCalendarWeekTemplate\">\r\n\t\t\t<td class=\"dijitReset dijitCalendarDateTemplate\"><span class=\"dijitCalendarDateLabel\"></span></td>\r\n\t\t</tr>\r\n\t</tbody>\r\n\t<tfoot class=\"dijitReset dijitCalendarYearContainer\">\r\n\t\t<tr>\r\n\t\t\t<td class='dijitReset' valign=\"top\" colspan=\"7\">\r\n\t\t\t\t<h3 class=\"dijitCalendarYearLabel\">\r\n\t\t\t\t\t<span dojoAttachPoint=\"previousYearLabelNode\" class=\"dijitInline dijitCalendarPreviousYear\"></span>\r\n\t\t\t\t\t<span dojoAttachPoint=\"currentYearLabelNode\" class=\"dijitInline dijitCalendarSelectedYear\"></span>\r\n\t\t\t\t\t<span dojoAttachPoint=\"nextYearLabelNode\" class=\"dijitInline dijitCalendarNextYear\"></span>\r\n\t\t\t\t</h3>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t</tfoot>\r\n</table>\t\r\n",
-
-		// value: Date
-		// the currently selected Date
-		value: new Date(),
-
-		// dayWidth: String
-		// How to represent the days of the week in the calendar header. See dojo.date.locale
-		dayWidth: "narrow",
-
-		setValue: function(/*Date*/ value){
-			// summary: set the current date and update the UI.  If the date is disabled, the selection will
-			//	not change, but the display will change to the corresponding month.
-			if(!this.value || dojo.date.compare(value, this.value)){
-				value = new Date(value);
-				this.displayMonth = new Date(value);
-				if(!this.isDisabledDate(value, this.lang)){
-					this.value = value;
-					this.value.setHours(0,0,0,0);
-					this.onChange(this.value);
-				}
-				this._populateGrid();
-			}
-		},
-
-		_setText: function(node, text){
-			while(node.firstChild){
-				node.removeChild(node.firstChild);
-			}
-			node.appendChild(document.createTextNode(text));
-		},
-
-		_populateGrid: function(){
-			var month = this.displayMonth;
-			month.setDate(1);
-			var firstDay = month.getDay();
-			var daysInMonth = dojo.date.getDaysInMonth(month);
-			var daysInPreviousMonth = dojo.date.getDaysInMonth(dojo.date.add(month, "month", -1));
-			var today = new Date();
-			var selected = this.value;
-
-			var dayOffset = dojo.cldr.supplemental.getFirstDayOfWeek(this.lang);
-			if(dayOffset > firstDay){ dayOffset -= 7; }
-
-			// Iterate through dates in the calendar and fill in date numbers and style info
-			dojo.query(".dijitCalendarDateTemplate", this.domNode).forEach(function(template, i){
-				i += dayOffset;
-				var date = new Date(month);
-				var number, clazz = "dijitCalendar", adj = 0;
-
-				if(i < firstDay){
-					number = daysInPreviousMonth - firstDay + i + 1;
-					adj = -1;
-					clazz += "Previous";
-				}else if(i >= (firstDay + daysInMonth)){
-					number = i - firstDay - daysInMonth + 1;
-					adj = 1;
-					clazz += "Next";
-				}else{
-					number = i - firstDay + 1;
-					clazz += "Current";
-				}
-
-				if(adj){
-					date = dojo.date.add(date, "month", adj);
-				}
-				date.setDate(number);
-
-				if(!dojo.date.compare(date, today, "date")){
-					clazz = "dijitCalendarCurrentDate " + clazz;
-				}
-
-				if(!dojo.date.compare(date, selected, "date")){
-					clazz = "dijitCalendarSelectedDate " + clazz;
-				}
-
-				if(this.isDisabledDate(date, this.lang)){
-					clazz = "dijitCalendarDisabledDate " + clazz;
-				}
-
-				template.className =  clazz + "Month dijitCalendarDateTemplate";
-				template.dijitDateValue = date.valueOf();
-				var label = dojo.query(".dijitCalendarDateLabel", template)[0];
-				this._setText(label, date.getDate());
-			}, this);
-
-			// Fill in localized month name
-			var monthNames = dojo.date.locale.getNames('months', 'wide', 'standAlone', this.lang);
-			this._setText(this.monthLabelNode, monthNames[month.getMonth()]);
-
-			// Fill in localized prev/current/next years
-			var y = month.getFullYear() - 1;
-			dojo.forEach(["previous", "current", "next"], function(name){
-				this._setText(this[name+"YearLabelNode"],
-					dojo.date.locale.format(new Date(y++, 0), {selector:'year', locale:this.lang}));
-			}, this);
-
-			// Set up repeating mouse behavior
-			var _this = this;
-			var typematic = function(nodeProp, dateProp, adj){
-				dijit.typematic.addMouseListener(_this[nodeProp], _this, function(count){
-					if(count >= 0){ _this._adjustDisplay(dateProp, adj); }
-				}, 0.8, 500);
-			};
-			typematic("incrementMonth", "month", 1);
-			typematic("decrementMonth", "month", -1);
-			typematic("nextYearLabelNode", "year", 1);
-			typematic("previousYearLabelNode", "year", -1);
-		},
-
-		postCreate: function(){
-			dijit._Calendar.superclass.postCreate.apply(this);
-
-			var cloneClass = dojo.hitch(this, function(clazz, n){
-				var template = dojo.query(clazz, this.domNode)[0];
-	 			for(var i=0; i<n; i++){
-					template.parentNode.appendChild(template.cloneNode(true));
-				}
-			});
-
-			// clone the day label and calendar day templates 6 times to make 7 columns
-			cloneClass(".dijitCalendarDayLabelTemplate", 6);
-			cloneClass(".dijitCalendarDateTemplate", 6);
-
-			// now make 6 week rows
-			cloneClass(".dijitCalendarWeekTemplate", 5);
-
-			// insert localized day names in the header
-			var dayNames = dojo.date.locale.getNames('days', this.dayWidth, 'standAlone', this.lang);
-			var dayOffset = dojo.cldr.supplemental.getFirstDayOfWeek(this.lang);
-			dojo.query(".dijitCalendarDayLabel", this.domNode).forEach(function(label, i){
-				this._setText(label, dayNames[(i + dayOffset) % 7]);
-			}, this);
-
-			// Fill in spacer element with all the month names (invisible) so that the maximum width will affect layout
-			var monthNames = dojo.date.locale.getNames('months', 'wide', 'standAlone', this.lang);
-			dojo.forEach(monthNames, function(name){
-				var monthSpacer = dojo.doc.createElement("div");
-				this._setText(monthSpacer, name);
-				this.monthLabelSpacer.appendChild(monthSpacer);
-			}, this);
-
-			this.value = null;
-			this.setValue(new Date());
-		},
-
-		_adjustDisplay: function(/*String*/part, /*int*/amount){
-			this.displayMonth = dojo.date.add(this.displayMonth, part, amount);
-			this._populateGrid();
-		},
-
-		_onDayClick: function(/*Event*/evt){
-			var node = evt.target;
-			dojo.stopEvent(evt);
-			while(!node.dijitDateValue){
-				node = node.parentNode;
-			}
-			if(!dojo.hasClass(node, "dijitCalendarDisabledDate")){
-				this.setValue(node.dijitDateValue);
-				this.onValueSelected(this.value);
-			}
-		},
-
-		onValueSelected: function(/*Date*/date){
-			//summary: a date cell was selected.  It may be the same as the previous value.
-		},
-
-		onChange: function(/*Date*/date){
-			//summary: called only when the selected date has changed
-		},
-
-		isDisabledDate: function(/*Date*/dateObject, /*String?*/locale){
-			// summary:
-			//	May be overridden to disable certain dates in the calendar e.g. isDisabledDate=dojo.date.locale.isWeekend
-			return false; // Boolean
-		}
-	}
-);
-
-}
+dojo.declare("dijit._Calendar",[dijit._Widget,dijit._Templated],{templateString:'<table cellspacing="0" cellpadding="0" class="dijitCalendarContainer">\r\n\t<thead>\r\n\t\t<tr class="dijitReset dijitCalendarMonthContainer" valign="top">\r\n\t\t\t<th class=\'dijitReset\' dojoAttachPoint="decrementMonth">\r\n\t\t\t\t<span class="dijitInline dijitCalendarIncrementControl dijitCalendarDecrease"><span dojoAttachPoint="decreaseArrowNode" class="dijitA11ySideArrow dijitCalendarIncrementControl dijitCalendarDecreaseInner">-</span></span>\r\n\t\t\t</th>\r\n\t\t\t<th class=\'dijitReset\' colspan="5">\r\n\t\t\t\t<div dojoAttachPoint="monthLabelSpacer" class="dijitCalendarMonthLabelSpacer"></div>\r\n\t\t\t\t<div dojoAttachPoint="monthLabelNode" class="dijitCalendarMonth"></div>\r\n\t\t\t</th>\r\n\t\t\t<th class=\'dijitReset\' dojoAttachPoint="incrementMonth">\r\n\t\t\t\t<div class="dijitInline dijitCalendarIncrementControl dijitCalendarIncrease"><span dojoAttachPoint="increaseArrowNode" class="dijitA11ySideArrow dijitCalendarIncrementControl dijitCalendarIncreaseInner">+</span></div>\r\n\t\t\t</th>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<th class="dijitReset dijitCalendarDayLabelTemplate"><span class="dijitCalendarDayLabel"></span></th>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody dojoAttachEvent="onclick: _onDayClick" class="dijitReset dijitCalendarBodyContainer">\r\n\t\t<tr class="dijitReset dijitCalendarWeekTemplate">\r\n\t\t\t<td class="dijitReset dijitCalendarDateTemplate"><span class="dijitCalendarDateLabel"></span></td>\r\n\t\t</tr>\r\n\t</tbody>\r\n\t<tfoot class="dijitReset dijitCalendarYearContainer">\r\n\t\t<tr>\r\n\t\t\t<td class=\'dijitReset\' valign="top" colspan="7">\r\n\t\t\t\t<h3 class="dijitCalendarYearLabel">\r\n\t\t\t\t\t<span dojoAttachPoint="previousYearLabelNode" class="dijitInline dijitCalendarPreviousYear"></span>\r\n\t\t\t\t\t<span dojoAttachPoint="currentYearLabelNode" class="dijitInline dijitCalendarSelectedYear"></span>\r\n\t\t\t\t\t<span dojoAttachPoint="nextYearLabelNode" class="dijitInline dijitCalendarNextYear"></span>\r\n\t\t\t\t</h3>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t</tfoot>\r\n</table>\t\r\n',value:new Date(),dayWidth:"narrow",setValue:function(A){if(!this.value||dojo.date.compare(A,this.value)){A=new Date(A);
+this.displayMonth=new Date(A);
+if(!this.isDisabledDate(A,this.lang)){this.value=A;
+this.value.setHours(0,0,0,0);
+this.onChange(this.value)
+}this._populateGrid()
+}},_setText:function(A,B){while(A.firstChild){A.removeChild(A.firstChild)
+}A.appendChild(document.createTextNode(B))
+},_populateGrid:function(){var F=this.displayMonth;
+F.setDate(1);
+var A=F.getDay();
+var B=dojo.date.getDaysInMonth(F);
+var I=dojo.date.getDaysInMonth(dojo.date.add(F,"month",-1));
+var G=new Date();
+var C=this.value;
+var K=dojo.cldr.supplemental.getFirstDayOfWeek(this.lang);
+if(K>A){K-=7
+}dojo.query(".dijitCalendarDateTemplate",this.domNode).forEach(function(Q,P){P+=K;
+var O=new Date(F);
+var R,N="dijitCalendar",L=0;
+if(P<A){R=I-A+P+1;
+L=-1;
+N+="Previous"
+}else{if(P>=(A+B)){R=P-A-B+1;
+L=1;
+N+="Next"
+}else{R=P-A+1;
+N+="Current"
+}}if(L){O=dojo.date.add(O,"month",L)
+}O.setDate(R);
+if(!dojo.date.compare(O,G,"date")){N="dijitCalendarCurrentDate "+N
+}if(!dojo.date.compare(O,C,"date")){N="dijitCalendarSelectedDate "+N
+}if(this.isDisabledDate(O,this.lang)){N="dijitCalendarDisabledDate "+N
+}Q.className=N+"Month dijitCalendarDateTemplate";
+Q.dijitDateValue=O.valueOf();
+var M=dojo.query(".dijitCalendarDateLabel",Q)[0];
+this._setText(M,O.getDate())
+},this);
+var D=dojo.date.locale.getNames("months","wide","standAlone",this.lang);
+this._setText(this.monthLabelNode,D[F.getMonth()]);
+var H=F.getFullYear()-1;
+dojo.forEach(["previous","current","next"],function(L){this._setText(this[L+"YearLabelNode"],dojo.date.locale.format(new Date(H++,0),{selector:"year",locale:this.lang}))
+},this);
+var E=this;
+var J=function(M,N,L){dijit.typematic.addMouseListener(E[M],E,function(O){if(O>=0){E._adjustDisplay(N,L)
+}},0.8,500)
+};
+J("incrementMonth","month",1);
+J("decrementMonth","month",-1);
+J("nextYearLabelNode","year",1);
+J("previousYearLabelNode","year",-1)
+},postCreate:function(){dijit._Calendar.superclass.postCreate.apply(this);
+var B=dojo.hitch(this,function(E,H){var G=dojo.query(E,this.domNode)[0];
+for(var F=0;
+F<H;
+F++){G.parentNode.appendChild(G.cloneNode(true))
+}});
+B(".dijitCalendarDayLabelTemplate",6);
+B(".dijitCalendarDateTemplate",6);
+B(".dijitCalendarWeekTemplate",5);
+var D=dojo.date.locale.getNames("days",this.dayWidth,"standAlone",this.lang);
+var A=dojo.cldr.supplemental.getFirstDayOfWeek(this.lang);
+dojo.query(".dijitCalendarDayLabel",this.domNode).forEach(function(E,F){this._setText(E,D[(F+A)%7])
+},this);
+var C=dojo.date.locale.getNames("months","wide","standAlone",this.lang);
+dojo.forEach(C,function(F){var E=dojo.doc.createElement("div");
+this._setText(E,F);
+this.monthLabelSpacer.appendChild(E)
+},this);
+this.value=null;
+this.setValue(new Date())
+},_adjustDisplay:function(A,B){this.displayMonth=dojo.date.add(this.displayMonth,A,B);
+this._populateGrid()
+},_onDayClick:function(A){var B=A.target;
+dojo.stopEvent(A);
+while(!B.dijitDateValue){B=B.parentNode
+}if(!dojo.hasClass(B,"dijitCalendarDisabledDate")){this.setValue(B.dijitDateValue);
+this.onValueSelected(this.value)
+}},onValueSelected:function(A){},onChange:function(A){},isDisabledDate:function(B,A){return false
+}})
+};

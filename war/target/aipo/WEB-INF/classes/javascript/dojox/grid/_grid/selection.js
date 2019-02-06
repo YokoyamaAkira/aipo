@@ -8,24 +8,24 @@ this.selected=[]
 },onDeselected:function(A){return this.grid.onDeselected(A)
 },onChanging:function(){},onChanged:function(){return this.grid.onSelectionChanged()
 },isSelected:function(A){return this.selected[A]
-},getFirstSelected:function(){for(var B=0,A=this.selected.length;
-B<A;
-B++){if(this.selected[B]){return B
+},getFirstSelected:function(){for(var A=0,B=this.selected.length;
+A<B;
+A++){if(this.selected[A]){return A
 }}return -1
-},getNextSelected:function(C){for(var B=C+1,A=this.selected.length;
-B<A;
-B++){if(this.selected[B]){return B
+},getNextSelected:function(B){for(var A=B+1,C=this.selected.length;
+A<C;
+A++){if(this.selected[A]){return A
 }}return -1
-},getSelected:function(){var A=[];
-for(var C=0,B=this.selected.length;
-C<B;
-C++){if(this.selected[C]){A.push(C)
+},getSelected:function(){var C=[];
+for(var B=0,A=this.selected.length;
+B<A;
+B++){if(this.selected[B]){C.push(B)
+}}return C
+},getSelectedCount:function(){var A=0;
+for(var B=0;
+B<this.selected.length;
+B++){if(this.selected[B]){A++
 }}return A
-},getSelectedCount:function(){var B=0;
-for(var A=0;
-A<this.selected.length;
-A++){if(this.selected[A]){B++
-}}return B
 },beginUpdate:function(){if(this.updating==0){this.onChanging()
 }this.updating++
 },endUpdate:function(){this.updating--;
@@ -46,26 +46,26 @@ if(this.selectedIndex==A){this.selectedIndex=-1
 delete this.selected[A];
 this.grid.onDeselected(A);
 this.endUpdate()
-}},setSelected:function(B,A){this[(A?"addToSelection":"deselect")](B)
+}},setSelected:function(A,B){this[(B?"addToSelection":"deselect")](A)
 },toggleSelect:function(A){this.setSelected(A,!this.selected[A])
 },insert:function(A){this.selected.splice(A,0,false);
 if(this.selectedIndex>=A){this.selectedIndex++
 }},remove:function(A){this.selected.splice(A,1);
 if(this.selectedIndex>=A){this.selectedIndex--
-}},unselectAll:function(B){for(var A in this.selected){if((A!=B)&&(this.selected[A]===true)){this.deselect(A)
-}}},shiftSelect:function(A,D){var C=(A>=0?A:D),E=D;
-if(C>E){E=C;
-C=D
-}for(var B=C;
-B<=E;
-B++){this.addToSelection(B)
-}},clickSelect:function(D,A,B){this.beginUpdate();
-if(!this.multiSelect){this.select(D)
-}else{var C=this.selectedIndex;
-if(!A){this.unselectAll(D)
-}if(B){this.shiftSelect(C,D)
-}else{if(A){this.toggleSelect(D)
-}else{this.addToSelection(D)
+}},unselectAll:function(A){for(var B in this.selected){if((B!=A)&&(this.selected[B]===true)){this.deselect(B)
+}}},shiftSelect:function(E,C){var B=(E>=0?E:C),D=C;
+if(B>D){D=B;
+B=C
+}for(var A=B;
+A<=D;
+A++){this.addToSelection(A)
+}},clickSelect:function(C,D,A){this.beginUpdate();
+if(!this.multiSelect){this.select(C)
+}else{var B=this.selectedIndex;
+if(!D){this.unselectAll(C)
+}if(A){this.shiftSelect(B,C)
+}else{if(D){this.toggleSelect(C)
+}else{this.addToSelection(C)
 }}}this.endUpdate()
 },clickSelectEvent:function(A){this.clickSelect(A.rowIndex,A.ctrlKey,A.shiftKey)
 },clear:function(){this.beginUpdate();

@@ -62,8 +62,8 @@ import org.apache.turbine.util.RunData;
 
 /**
  * Default Jetspeed-Turbine User Management implementation
- *
- *
+ * 
+ * 
  * @author <a href="mailto:david@bluesunrise.com">David Sean Taylor</a>
  * @author <a href="mailto:morciuch@apache.org">Mark Orciuch</a>
  * @version $Id: TurbineUserManagement.java,v 1.13 2004/02/23 03:54:49 jford Exp
@@ -76,11 +76,12 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * Static initialization of the logger for this class
    */
   private static final JetspeedLogger logger = JetspeedLogFactoryService
-      .getLogger(TurbineUserManagement.class.getName());
+    .getLogger(TurbineUserManagement.class.getName());
 
   private final static String CONFIG_SECURE_PASSWORDS_KEY = "secure.passwords";
 
-  private final static String CONFIG_SECURE_PASSWORDS_ALGORITHM = "secure.passwords.algorithm";
+  private final static String CONFIG_SECURE_PASSWORDS_ALGORITHM =
+    "secure.passwords.algorithm";
 
   private final static String CONFIG_SYSTEM_USERS = "system.users";
 
@@ -88,7 +89,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
 
   String passwordsAlgorithm = "SHA";
 
-  Vector systemUsers = null;
+  Vector<?> systemUsers = null;
 
   private final static String CONFIG_NEWUSER_ROLES = "newuser.roles";
 
@@ -108,10 +109,10 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * principal can be any valid Jetspeed Security Principal:
    * <code>org.apache.jetspeed.om.security.UserNamePrincipal</code>
    * <code>org.apache.jetspeed.om.security.UserIdPrincipal</code>
-   *
+   * 
    * The security service may optionally check the current user context to
    * determine if the requestor has permission to perform this action.
-   *
+   * 
    * @param principal
    *          a principal identity to be retrieved.
    * @return a <code>JetspeedUser</code> associated to the principal identity.
@@ -124,6 +125,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * @exception InsufficientPrivilegeException
    *              when the requestor is denied due to insufficient privilege
    */
+  @Override
   public JetspeedUser getUser(Principal principal)
       throws JetspeedSecurityException {
     // TODO: check requestor for permission
@@ -135,9 +137,9 @@ public class TurbineUserManagement extends TurbineBaseService implements
       criteria.add(TurbineUserPeer.USER_ID, principal.getName());
     } else {
       throw new UserException("Invalid Principal Type in getUser: "
-          + principal.getClass().getName());
+        + principal.getClass().getName());
     }
-    List users;
+    List<JetspeedUser> users;
     try {
       users = TurbineUserPeer.doSelectUsers(criteria);
     } catch (Exception e) {
@@ -147,15 +149,17 @@ public class TurbineUserManagement extends TurbineBaseService implements
     }
     if (users.size() > 1) {
       throw new UserException("Multiple Users with same username '"
-          + principal.getName() + "'");
+        + principal.getName()
+        + "'");
     }
     if (users.size() == 1) {
-      return (JetspeedUser) users.get(0);
+      return users.get(0);
     }
     throw new UnknownUserException("Unknown user '" + principal.getName() + "'");
 
   }
 
+  @Override
   public JetspeedUser getUser(RunData rundata, Principal principal)
       throws JetspeedSecurityException {
     return getUser(principal);
@@ -165,7 +169,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * Retrieves a collection of all <code>JetspeedUser</code>s. The security
    * service may optionally check the current user context to determine if the
    * requestor has permission to perform this action.
-   *
+   * 
    * @return a collection of <code>JetspeedUser</code> entities.
    * @exception UserException
    *              when the security provider has a general failure retrieving
@@ -173,9 +177,10 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * @exception InsufficientPrivilegeException
    *              when the requestor is denied due to insufficient privilege
    */
-  public Iterator getUsers() throws JetspeedSecurityException {
+  @Override
+  public Iterator<?> getUsers() throws JetspeedSecurityException {
     Criteria criteria = new Criteria();
-    List users;
+    List<JetspeedUser> users;
     try {
       users = TurbineUserPeer.doSelectUsers(criteria);
     } catch (Exception e) {
@@ -190,7 +195,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * provider-specific query string. For example SQL, OQL, JDOQL. The security
    * service may optionally check the current user context to determine if the
    * requestor has permission to perform this action.
-   *
+   * 
    * @return a collection of <code>JetspeedUser</code> entities.
    * @exception UserException
    *              when the security provider has a general failure retrieving
@@ -198,11 +203,12 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * @exception InsufficientPrivilegeException
    *              when the requestor is denied due to insufficient privilege
    */
-  public Iterator getUsers(String filter) throws JetspeedSecurityException {
+  @Override
+  public Iterator<?> getUsers(String filter) throws JetspeedSecurityException {
     // TODO: implement this with a SQL string
 
     Criteria criteria = new Criteria();
-    List users;
+    List<JetspeedUser> users;
     try {
       users = TurbineUserPeer.doSelectUsers(criteria);
     } catch (Exception e) {
@@ -217,17 +223,19 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * user's account is required to exist in the storage. The security service
    * may optionally check the current user context to determine if the requestor
    * has permission to perform this action.
-   *
+   * 
    * @exception UserException
    *              when the security provider has a general failure retrieving
    *              users.
    * @exception InsufficientPrivilegeException
    *              when the requestor is denied due to insufficient privilege
    */
+  @Override
   public void saveUser(JetspeedUser user) throws JetspeedSecurityException {
     if (!accountExists(user, true)) {
-      throw new UnknownUserException("Cannot save user '" + user.getUserName()
-          + "', User doesn't exist");
+      throw new UnknownUserException("Cannot save user '"
+        + user.getUserName()
+        + "', User doesn't exist");
     }
     Criteria criteria = TurbineUserPeer.buildCriteria(user);
     try {
@@ -245,7 +253,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * credentials fail to meet the security provider-specific unique constraints.
    * The security service may optionally check the current user context to
    * determine if the requestor has permission to perform this action.
-   *
+   * 
    * @exception UserException
    *              when the security provider has a general failure retrieving
    *              users.
@@ -255,10 +263,12 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * @exception InsufficientPrivilegeException
    *              when the requestor is denied due to insufficient privilege
    */
+  @Override
   public void addUser(JetspeedUser user) throws JetspeedSecurityException {
     if (accountExists(user)) {
-      throw new NotUniqueUserException("The account '" + user.getUserName()
-          + "' already exists");
+      throw new NotUniqueUserException("The account '"
+        + user.getUserName()
+        + "' already exists");
     }
     String initialPassword = user.getPassword();
     String encrypted = JetspeedSecurity.encryptPassword(initialPassword);
@@ -282,9 +292,9 @@ public class TurbineUserManagement extends TurbineBaseService implements
   /*
    * A default PSML page is added for the user, and the Jetspeed default roles
    * are assigned to the new user.
-   *
+   * 
    * @param user The new user.
-   *
+   * 
    * @throws
    */
   protected void addDefaultPSML(JetspeedUser user)
@@ -292,11 +302,13 @@ public class TurbineUserManagement extends TurbineBaseService implements
     for (int ix = 0; ix < roles.length; ix++) {
       try {
         JetspeedSecurity.grantRole(user.getUserName(), JetspeedSecurity
-            .getRole(roles[ix]).getName());
+          .getRole(roles[ix])
+          .getName());
       } catch (Exception e) {
-        logger.error(
-            "Could not grant role: " + roles[ix] + " to user "
-                + user.getUserName(), e);
+        logger.error("Could not grant role: "
+          + roles[ix]
+          + " to user "
+          + user.getUserName(), e);
       }
     }
     try {
@@ -318,7 +330,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * Removes a <code>JetspeedUser</code> from the permanent store. The security
    * service may optionally check the current user context to determine if the
    * requestor has permission to perform this action.
-   *
+   * 
    * @param principal
    *          the principal identity to be retrieved.
    * @exception UserException
@@ -330,10 +342,12 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * @exception InsufficientPrivilegeException
    *              when the requestor is denied due to insufficient privilege
    */
+  @Override
   public void removeUser(Principal principal) throws JetspeedSecurityException {
     if (systemUsers.contains(principal.getName())) {
-      throw new UserException("[" + principal.getName()
-          + "] is a system user and cannot be removed");
+      throw new UserException("["
+        + principal.getName()
+        + "] is a system user and cannot be removed");
     }
 
     JetspeedUser user = getUser(principal);
@@ -345,7 +359,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
       criteria.add(TurbineUserPeer.USER_ID, principal.getName());
     } else {
       throw new UserException("Invalid Principal Type in removeUser: "
-          + principal.getClass().getName());
+        + principal.getClass().getName());
     }
 
     try {
@@ -365,7 +379,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
 
   /**
    * Allows for a user to change their own password.
-   *
+   * 
    * @param user
    *          the JetspeedUser to change password
    * @param oldPassword
@@ -381,6 +395,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * @exception InsufficientPrivilegeException
    *              when the requestor is denied due to insufficient privilege
    */
+  @Override
   public void changePassword(JetspeedUser user, String oldPassword,
       String newPassword) throws JetspeedSecurityException {
     oldPassword = JetspeedSecurity.convertPassword(oldPassword);
@@ -388,12 +403,12 @@ public class TurbineUserManagement extends TurbineBaseService implements
 
     String encrypted = JetspeedSecurity.encryptPassword(oldPassword);
     if (!accountExists(user)) {
-      throw new UnknownUserException(
-          Localization.getString("UPDATEACCOUNT_NOUSER"));
+      throw new UnknownUserException(Localization
+        .getString("UPDATEACCOUNT_NOUSER"));
     }
     if (!user.getPassword().equals(encrypted)) {
-      throw new UserException(
-          Localization.getString("UPDATEACCOUNT_BADOLDPASSWORD"));
+      throw new UserException(Localization
+        .getString("UPDATEACCOUNT_BADOLDPASSWORD"));
     }
     user.setPassword(JetspeedSecurity.encryptPassword(newPassword));
 
@@ -408,11 +423,11 @@ public class TurbineUserManagement extends TurbineBaseService implements
 
   /**
    * Forcibly sets new password for a User.
-   *
+   * 
    * Provides an administrator the ability to change the forgotten or
    * compromised passwords. Certain implementatations of this feature would
    * require administrative level access to the authenticating server / program.
-   *
+   * 
    * @param user
    *          the user to change the password for.
    * @param password
@@ -426,11 +441,13 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * @exception InsufficientPrivilegeException
    *              when the requestor is denied due to insufficient privilege
    */
+  @Override
   public void forcePassword(JetspeedUser user, String password)
       throws JetspeedSecurityException {
     if (!accountExists(user)) {
-      throw new UnknownUserException("The account '" + user.getUserName()
-          + "' does not exist");
+      throw new UnknownUserException("The account '"
+        + user.getUserName()
+        + "' does not exist");
     }
     user.setPassword(JetspeedSecurity.encryptPassword(password));
     // save the changes in the database immediately, to prevent the
@@ -441,17 +458,18 @@ public class TurbineUserManagement extends TurbineBaseService implements
 
   /**
    * This method provides client-side encryption of passwords.
-   *
+   * 
    * If <code>secure.passwords</code> are enabled in JetspeedSecurity
    * properties, the password will be encrypted, if not, it will be returned
    * unchanged. The <code>secure.passwords.algorithm</code> property can be used
    * to chose which digest algorithm should be used for performing the
    * encryption. <code>SHA</code> is used by default.
-   *
+   * 
    * @param password
    *          the password to process
    * @return processed password
    */
+  @Override
   public String encryptPassword(String password)
       throws JetspeedSecurityException {
     if (securePasswords == false) {
@@ -466,8 +484,8 @@ public class TurbineUserManagement extends TurbineBaseService implements
       // We need to use unicode here, to be independent of platform's
       // default encoding. Thanks to SGawin for spotting this.
       byte[] digest = md.digest(password.getBytes("UTF-8"));
-      ByteArrayOutputStream bas = new ByteArrayOutputStream(digest.length
-          + digest.length / 3 + 1);
+      ByteArrayOutputStream bas =
+        new ByteArrayOutputStream(digest.length + digest.length / 3 + 1);
       OutputStream encodedStream = MimeUtility.encode(bas, "base64");
       encodedStream.write(digest);
       encodedStream.flush();
@@ -486,28 +504,34 @@ public class TurbineUserManagement extends TurbineBaseService implements
   /**
    * This is the early initialization method called by the Turbine
    * <code>Service</code> framework
-   *
+   * 
    * @param conf
    *          The <code>ServletConfig</code>
    * @exception throws a <code>InitializationException</code> if the service
    *            fails to initialize
    */
+  @Override
   public synchronized void init(ServletConfig conf)
       throws InitializationException {
-    if (getInit())
+    if (getInit()) {
       return;
+    }
 
     super.init(conf);
 
     // get configuration parameters from Jetspeed Resources
-    ResourceService serviceConf = ((TurbineServices) TurbineServices
-        .getInstance()).getResources(JetspeedSecurityService.SERVICE_NAME);
+    ResourceService serviceConf =
+      ((TurbineServices) TurbineServices.getInstance())
+        .getResources(JetspeedSecurityService.SERVICE_NAME);
 
-    securePasswords = serviceConf.getBoolean(CONFIG_SECURE_PASSWORDS_KEY,
-        securePasswords);
-    passwordsAlgorithm = serviceConf.getString(
-        CONFIG_SECURE_PASSWORDS_ALGORITHM, passwordsAlgorithm);
-    systemUsers = serviceConf.getVector(CONFIG_SYSTEM_USERS, new Vector());
+    securePasswords =
+      serviceConf.getBoolean(CONFIG_SECURE_PASSWORDS_KEY, securePasswords);
+    passwordsAlgorithm =
+      serviceConf.getString(
+        CONFIG_SECURE_PASSWORDS_ALGORITHM,
+        passwordsAlgorithm);
+    systemUsers =
+      serviceConf.getVector(CONFIG_SYSTEM_USERS, new Vector<Object>());
 
     try {
       roles = serviceConf.getStringArray(CONFIG_NEWUSER_ROLES);
@@ -518,8 +542,9 @@ public class TurbineUserManagement extends TurbineBaseService implements
       roles = DEFAULT_CONFIG_NEWUSER_ROLES;
     }
 
-    this.runDataService = (JetspeedRunDataService) TurbineServices
-        .getInstance().getService(RunDataService.SERVICE_NAME);
+    this.runDataService =
+      (JetspeedRunDataService) TurbineServices.getInstance().getService(
+        RunDataService.SERVICE_NAME);
 
     setInit(true);
   }
@@ -530,9 +555,9 @@ public class TurbineUserManagement extends TurbineBaseService implements
 
   /**
    * Check whether a specified user's account exists.
-   *
+   * 
    * The login name is used for looking up the account.
-   *
+   * 
    * @param user
    *          the user to be checked.
    * @param checkUniqueId
@@ -541,7 +566,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
    * @return true if the specified account exists
    * @throws UserException
    *           if there was a general db access error
-   *
+   * 
    */
   protected boolean accountExists(JetspeedUser user) throws UserException {
     return accountExists(user, false);
@@ -552,7 +577,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
     String id = user.getUserId();
     Criteria criteria = new Criteria();
     criteria.add(TurbineUserPeer.LOGIN_NAME, user.getUserName());
-    List users;
+    List<TurbineUser> users;
     try {
       users = TurbineUserPeer.doSelect(criteria);
     } catch (Exception e) {
@@ -562,7 +587,7 @@ public class TurbineUserManagement extends TurbineBaseService implements
     if (users.size() < 1) {
       return false;
     }
-    TurbineUser retrieved = (TurbineUser) users.get(0);
+    TurbineUser retrieved = users.get(0);
     int key = retrieved.getUserId();
     String keyId = String.valueOf(key);
     if (checkUniqueId && !keyId.equals(id)) {

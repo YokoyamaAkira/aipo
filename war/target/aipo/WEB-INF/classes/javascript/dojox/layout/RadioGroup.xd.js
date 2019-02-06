@@ -12,22 +12,22 @@ this._buttons=this._children.length;
 this._size=A.coords(this.containerNode);
 if(this.hasButtons){A.style(this.buttonHolder,"display","block");
 A.forEach(this._children,this._makeButton,this)
-}},_makeButton:function(E){A.style(E.domNode,"position","absolute");
-var C=document.createElement("td");
-this.buttonNode.appendChild(C);
-var D=C.appendChild(document.createElement("div"));
-var B=new dojox.layout._RadioButton({label:E.title,page:E},D);
-B.startup()
-},_transition:function(C,B){this._showChild(C);
-if(B){this._hideChild(B)
-}if(this.doLayout&&C.resize){C.resize(this._containerContentBox||this._contentBox)
-}},_showChild:function(C){var B=this.getChildren();
-C.isFirstChild=(C==B[0]);
-C.isLastChild=(C==B[B.length-1]);
-C.selected=true;
-C.domNode.style.display="";
-if(C._loadCheck){C._loadCheck()
-}if(C.onShow){C.onShow()
+}},_makeButton:function(B){A.style(B.domNode,"position","absolute");
+var D=document.createElement("td");
+this.buttonNode.appendChild(D);
+var E=D.appendChild(document.createElement("div"));
+var C=new dojox.layout._RadioButton({label:B.title,page:B},E);
+C.startup()
+},_transition:function(B,C){this._showChild(B);
+if(C){this._hideChild(C)
+}if(this.doLayout&&B.resize){B.resize(this._containerContentBox||this._contentBox)
+}},_showChild:function(B){var C=this.getChildren();
+B.isFirstChild=(B==C[0]);
+B.isLastChild=(B==C[C.length-1]);
+B.selected=true;
+B.domNode.style.display="";
+if(B._loadCheck){B._loadCheck()
+}if(B.onShow){B.onShow()
 }},_hideChild:function(B){B.selected=false;
 B.domNode.style.display="none";
 if(B.onHide){B.onHide()
@@ -39,9 +39,9 @@ A.fadeIn({node:B.domNode,duration:this.duration}).play()
 }});
 A.declare("dojox.layout.RadioGroupSlide",dojox.layout.RadioGroup,{easing:dojox.fx.easing.easeOut,startup:function(){this.inherited("startup",arguments);
 A.forEach(this._children,this._positionChild,this)
-},_positionChild:function(C){var D=Math.round(Math.random());
-var B=Math.round(Math.random());
-A.style(C.domNode,D?"top":"left",(B?"-":"")+this._size[D?"h":"w"]+"px")
+},_positionChild:function(D){var B=Math.round(Math.random());
+var C=Math.round(Math.random());
+A.style(D.domNode,B?"top":"left",(C?"-":"")+this._size[B?"h":"w"]+"px")
 },_showChild:function(B){this.inherited("_showChild",arguments);
 if(this._anim&&this._anim.status()=="playing"){this._anim.gotoPercent(100,true)
 }this._anim=A.animateProperty({node:B.domNode,properties:{left:{end:0,unit:"px"},top:{end:0,unit:"px"}},duration:this.duration,easing:this.easing});

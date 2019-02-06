@@ -138,6 +138,7 @@ public class ReportUtils {
         throw new ALPageNotFoundException();
       }
 
+      @SuppressWarnings("unused")
       int userid = ALEipUtils.getUserId(rundata);
 
       SelectQuery<EipTReport> query = Database.query(EipTReport.class);
@@ -956,13 +957,15 @@ public class ReportUtils {
         ? ALLocalizationUtils.getl10n("REPORT_ADD_MSG")
         : ALLocalizationUtils.getl10n("REPORT_UPDATED_MSG")).append(CR).append(
       CR);
+    body.append(
+      "["
+        + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_REPORT_NAME")
+        + "]").append(CR).append(report.getReportName().toString()).append(CR);
     body
-      .append("[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_REPORT_NAME") + "]")
-      .append(CR)
-      .append(report.getReportName().toString())
-      .append(CR);
-    body
-      .append("[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_CREATEDATE") + "]")
+      .append(
+        "["
+          + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_CREATEDATE")
+          + "]")
       .append(CR)
       .append(
         translateDate(report.getCreateDate(), ALLocalizationUtils
@@ -971,7 +974,8 @@ public class ReportUtils {
 
     if (report.getNote().toString().length() > 0) {
       body
-        .append("[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_NOTE") + "]")
+        .append(
+          "[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_NOTE") + "]")
         .append(CR)
         .append(report.getNote().toString())
         .append(CR);
@@ -980,10 +984,12 @@ public class ReportUtils {
     if (memberList != null) {
       int size = memberList.size();
       int i;
-      body.append(
-        "["
-          + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_MENVERS")
-          + "]").append(CR);
+      body
+        .append(
+          "["
+            + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_MENVERS")
+            + "]")
+        .append(CR);
       for (i = 0; i < size; i++) {
         if (i != 0) {
           body.append(", ");
@@ -998,8 +1004,9 @@ public class ReportUtils {
       int size = mapList.size();
       int i;
       body.append(
-        "[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_POSITIONS") + "]").append(
-        CR);
+        "["
+          + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_POSITIONS")
+          + "]").append(CR);
       for (i = 0; i < size; i++) {
         if (i != 0) {
           body.append(", ");
@@ -1061,13 +1068,15 @@ public class ReportUtils {
         ? ALLocalizationUtils.getl10n("REPORT_ADD_MSG")
         : ALLocalizationUtils.getl10n("REPORT_UPDATED_MSG")).append(CR).append(
       CR);
+    body.append(
+      "["
+        + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_REPORT_NAME")
+        + "]").append(CR).append(report.getReportName().toString()).append(CR);
     body
-      .append("[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_REPORT_NAME") + "]")
-      .append(CR)
-      .append(report.getReportName().toString())
-      .append(CR);
-    body
-      .append("[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_CREATEDATE") + "]")
+      .append(
+        "["
+          + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_CREATEDATE")
+          + "]")
       .append(CR)
       .append(
         translateDate(report.getCreateDate(), ALLocalizationUtils
@@ -1077,10 +1086,12 @@ public class ReportUtils {
     if (memberList != null) {
       int size = memberList.size();
       int i;
-      body.append(
-        "["
-          + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_MENVERS")
-          + "]").append(CR);
+      body
+        .append(
+          "["
+            + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_MENVERS")
+            + "]")
+        .append(CR);
       for (i = 0; i < size; i++) {
         if (i != 0) {
           body.append(", ");
@@ -1094,8 +1105,9 @@ public class ReportUtils {
       int size = mapList.size();
       int i;
       body.append(
-        "[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_POSITIONS") + "]").append(
-        CR);
+        "["
+          + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_POSITIONS")
+          + "]").append(CR);
       for (i = 0; i < size; i++) {
         if (i != 0) {
           body.append(", ");
@@ -1149,19 +1161,20 @@ public class ReportUtils {
     if (!"".equals(user.getEmail())) {
       body.append("(").append(user.getEmail()).append(")");
     }
+    body.append(ALLocalizationUtils.getl10n("REPORT_REPORT_MSG")).append(
+      ALLocalizationUtils.getl10n("REPORT_REPLY_MSG")).append(CR).append(CR);
     body
-      .append(ALLocalizationUtils.getl10n("REPORT_REPORT_MSG"))
-      .append(ALLocalizationUtils.getl10n("REPORT_REPLY_MSG"))
-      .append(CR)
-      .append(CR);
-    body
-      .append("[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_REPORT_NAME") + "]")
+      .append(
+        "["
+          + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_REPORT_NAME")
+          + "]")
       .append(CR)
       .append(reportparentreport.getReportName().toString())
       .append(CR);
     body.append(
-      "[" + ALLocalizationUtils.getl10n("REPORT_RETURN_REPORT_CREATEDATE") + "]").append(
-      CR).append(
+      "["
+        + ALLocalizationUtils.getl10n("REPORT_RETURN_REPORT_CREATEDATE")
+        + "]").append(CR).append(
       translateDate(report.getCreateDate(), ALLocalizationUtils
         .getl10n("REPORT_TIME"))).append(CR);
 
@@ -1219,19 +1232,20 @@ public class ReportUtils {
     if (!"".equals(user.getEmail())) {
       body.append("(").append(user.getEmail()).append(")");
     }
+    body.append(ALLocalizationUtils.getl10n("REPORT_REPORT_MSG")).append(
+      ALLocalizationUtils.getl10n("REPORT_REPLY_MSG")).append(CR).append(CR);
     body
-      .append(ALLocalizationUtils.getl10n("REPORT_REPORT_MSG"))
-      .append(ALLocalizationUtils.getl10n("REPORT_REPLY_MSG"))
-      .append(CR)
-      .append(CR);
-    body
-      .append("[" + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_REPORT_NAME") + "]")
+      .append(
+        "["
+          + ALLocalizationUtils.getl10n("REPORT_SETFIELDNAME_REPORT_NAME")
+          + "]")
       .append(CR)
       .append(reportparentreport.getReportName().toString())
       .append(CR);
     body.append(
-      "[" + ALLocalizationUtils.getl10n("REPORT_RETURN_REPORT_CREATEDATE") + "]").append(
-      CR).append(
+      "["
+        + ALLocalizationUtils.getl10n("REPORT_RETURN_REPORT_CREATEDATE")
+        + "]").append(CR).append(
       translateDate(report.getCreateDate(), ALLocalizationUtils
         .getl10n("REPORT_TIME"))).append(CR);
     body.append(CR);

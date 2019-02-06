@@ -1,122 +1,23 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.wire.ml.DataStore"],
-["require", "dijit._Widget"],
-["require", "dojox.wire._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.wire.ml.DataStore"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.ml.DataStore"] = true;
-dojo.provide("dojox.wire.ml.DataStore");
-
-dojo.require("dijit._Widget");
-dojo.require("dojox.wire._base");
-
-dojo.declare("dojox.wire.ml.DataStore", dijit._Widget, {
-	//	summary:
-	//		A widget for a data store
-	//	description:
-	//		This widget represents a data store of 'storeClass' attribute.
-	//	storeClass:
-	//		A class name of a data store
-	storeClass: "",
-
-	postCreate: function(){
-		//	summary:
-		//		Call _createStore()
-		//	description:
-		//		See _createStore().
-		this.store = this._createStore();
-	},
-
-	_createStore: function(){
-		//	summary:
-		//		Create a data store
-		//	desription:
-		//		A data store of 'storeClass' is created with arguments
-		//		specified with attributes.
-		//	returns:
-		//		A data store
-		if(!this.storeClass){
-			return null; //null
-		}
-		var storeClass = dojox.wire._getClass(this.storeClass);
-		if(!storeClass){
-			return null; //null
-		}
-		var args = {};
-		var attributes = this.domNode.attributes;
-		for(var i = 0; i < attributes.length; i++){
-			var a = attributes.item(i);
-			if(a.specified && !this[a.nodeName]){
-				args[a.nodeName] = a.nodeValue;
-			}
-		}
-		return new storeClass(args); //Object
-	},
-
-	getFeatures: function(){
-		//	summary:
-		//		Call getFeatures() method of a data store
-		//	description:
-		//		See dojo.data.api.Read.getFeatures().
-		//	returns:
-		//		A features object
-		return this.store.getFeatures(); //Object
-	},
-
-	fetch: function(/*Object*/request){
-		//	summary:
-		//		Call fetch() method of a data store
-		//	description:
-		//		See dojo.data.api.Read.fetch().
-		//	request:
-		//		A request object
-		//	returns:
-		//		A request object
-		return this.store.fetch(request); //Object
-	},
-
-	save: function(/*Object*/args){
-		//	summary:
-		//		Call save() method of a data store
-		//	description:
-		//		See dojo.data.api.Write.save().
-		//	args:
-		//		A save arguments object
-		this.store.save(args);
-	},
-
-	newItem: function(/*Object*/args){
-		//	summary:
-		//		Call newItem() method of a data store
-		//	description:
-		//		See dojo.data.api.Write.newItem().
-		//	args:
-		//		A new item arguments object
-		//	returns:
-		//		A new item
-		return this.store.newItem(args); //Object
-	},
-
-	deleteItem: function(/*Object*/item){
-		//	summary:
-		//		Call deleteItem() method of a data store
-		//	description:
-		//		See dojo.data.api.Write.deleteItem().
-		//	returns:
-		//		A boolean
-		return this.store.deleteItem(item); //Boolean
-	},
-
-	revert: function(){
-		//	summary:
-		//		Call revert() method of a data store
-		//	description:
-		//		See dojo.data.api.Write.revert().
-		//	returns:
-		//		A boolean
-		return this.store.revert(); //Boolean
-	}
-});
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.wire.ml.DataStore"],["require","dijit._Widget"],["require","dojox.wire._base"]],defineResource:function(A){if(!A._hasResource["dojox.wire.ml.DataStore"]){A._hasResource["dojox.wire.ml.DataStore"]=true;
+A.provide("dojox.wire.ml.DataStore");
+A.require("dijit._Widget");
+A.require("dojox.wire._base");
+A.declare("dojox.wire.ml.DataStore",dijit._Widget,{storeClass:"",postCreate:function(){this.store=this._createStore()
+},_createStore:function(){if(!this.storeClass){return null
+}var B=dojox.wire._getClass(this.storeClass);
+if(!B){return null
+}var E={};
+var D=this.domNode.attributes;
+for(var F=0;
+F<D.length;
+F++){var C=D.item(F);
+if(C.specified&&!this[C.nodeName]){E[C.nodeName]=C.nodeValue
+}}return new B(E)
+},getFeatures:function(){return this.store.getFeatures()
+},fetch:function(B){return this.store.fetch(B)
+},save:function(B){this.store.save(B)
+},newItem:function(B){return this.store.newItem(B)
+},deleteItem:function(B){return this.store.deleteItem(B)
+},revert:function(){return this.store.revert()
+}})
+}}});

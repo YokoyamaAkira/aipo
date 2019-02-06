@@ -2,8 +2,8 @@ if(!dojo._hasResource["dijit.form.NumberTextBox"]){dojo._hasResource["dijit.form
 dojo.provide("dijit.form.NumberTextBox");
 dojo.require("dijit.form.ValidationTextBox");
 dojo.require("dojo.number");
-dojo.declare("dijit.form.NumberTextBoxMixin",null,{regExpGen:dojo.number.regexp,format:function(A,B){if(isNaN(A)){return""
-}return dojo.number.format(A,B)
+dojo.declare("dijit.form.NumberTextBoxMixin",null,{regExpGen:dojo.number.regexp,format:function(B,A){if(isNaN(B)){return""
+}return dojo.number.format(B,A)
 },parse:dojo.number.parse,filter:function(A){if(typeof A=="string"){return this.inherited("filter",arguments)
 }return(isNaN(A)?"":A)
 },value:NaN});

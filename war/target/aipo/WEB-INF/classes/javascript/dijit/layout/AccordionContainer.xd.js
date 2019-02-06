@@ -15,40 +15,40 @@ if(this.selectedChildWidget){var B=this.selectedChildWidget.containerNode.style;
 B.display="";
 B.overflow="auto";
 this.selectedChildWidget._setSelectedState(true)
-}},layout:function(){var D=0;
-var C=this.selectedChildWidget;
-A.forEach(this.getChildren(),function(E){D+=E.getTitleHeight()
+}},layout:function(){var B=0;
+var D=this.selectedChildWidget;
+A.forEach(this.getChildren(),function(E){B+=E.getTitleHeight()
 });
-var B=this._contentBox;
-this._verticalSpace=(B.h-D);
-if(C){C.containerNode.style.height=this._verticalSpace+"px"
+var C=this._contentBox;
+this._verticalSpace=(C.h-B);
+if(D){D.containerNode.style.height=this._verticalSpace+"px"
 }},_setupChild:function(B){return B
-},_transition:function(F,E){if(this._inTransition){return 
+},_transition:function(G,F){if(this._inTransition){return 
 }this._inTransition=true;
-var G=[];
-var D=this._verticalSpace;
-if(F){F.setSelected(true);
-var C=F.containerNode;
-C.style.display="";
-G.push(A.animateProperty({node:C,duration:this.duration,properties:{height:{start:"1",end:D}},onEnd:function(){C.style.overflow="auto"
+var C=[];
+var E=this._verticalSpace;
+if(G){G.setSelected(true);
+var D=G.containerNode;
+D.style.display="";
+C.push(A.animateProperty({node:D,duration:this.duration,properties:{height:{start:"1",end:E}},onEnd:function(){D.style.overflow="auto"
 }}))
-}if(E){E.setSelected(false);
-var B=E.containerNode;
+}if(F){F.setSelected(false);
+var B=F.containerNode;
 B.style.overflow="hidden";
-G.push(A.animateProperty({node:B,duration:this.duration,properties:{height:{start:D,end:"1"}},onEnd:function(){B.style.display="none"
+C.push(A.animateProperty({node:B,duration:this.duration,properties:{height:{start:E,end:"1"}},onEnd:function(){B.style.display="none"
 }}))
 }this._inTransition=false;
-A.fx.combine(G).play()
-},_onKeyPress:function(C){if(this.disabled||C.altKey){return 
-}var B=A.keys;
-switch(C.keyCode){case B.LEFT_ARROW:case B.UP_ARROW:case B.PAGE_UP:this._adjacent(false)._onTitleClick();
-A.stopEvent(C);
+A.fx.combine(C).play()
+},_onKeyPress:function(B){if(this.disabled||B.altKey){return 
+}var C=A.keys;
+switch(B.keyCode){case C.LEFT_ARROW:case C.UP_ARROW:case C.PAGE_UP:this._adjacent(false)._onTitleClick();
+A.stopEvent(B);
 break;
-case B.RIGHT_ARROW:case B.DOWN_ARROW:case B.PAGE_DOWN:this._adjacent(true)._onTitleClick();
-A.stopEvent(C);
+case C.RIGHT_ARROW:case C.DOWN_ARROW:case C.PAGE_DOWN:this._adjacent(true)._onTitleClick();
+A.stopEvent(B);
 break;
-default:if(C.ctrlKey&&C.keyCode==B.TAB){this._adjacent(C._dijitWidget,!C.shiftKey)._onTitleClick();
-A.stopEvent(C)
+default:if(B.ctrlKey&&B.keyCode==C.TAB){this._adjacent(B._dijitWidget,!B.shiftKey)._onTitleClick();
+A.stopEvent(B)
 }}}});
 A.declare("dijit.layout.AccordionPane",[dijit.layout.ContentPane,dijit._Templated,dijit._Contained],{templateString:"<div class='dijitAccordionPane'\r\n\t><div dojoAttachPoint='titleNode,focusNode' dojoAttachEvent='ondijitclick:_onTitleClick,onkeypress:_onTitleKeyPress,onfocus:_handleFocus,onblur:_handleFocus'\r\n\t\tclass='dijitAccordionTitle' wairole=\"tab\"\r\n\t\t><div class='dijitAccordionArrow'></div\r\n\t\t><div class='arrowTextUp' waiRole=\"presentation\">&#9650;</div\r\n\t\t><div class='arrowTextDown' waiRole=\"presentation\">&#9660;</div\r\n\t\t><div dojoAttachPoint='titleTextNode' class='dijitAccordionText'>${title}</div></div\r\n\t><div><div dojoAttachPoint='containerNode' style='overflow: hidden; height: 1px; display: none'\r\n\t\tclass='dijitAccordionBody' wairole=\"tabpanel\"\r\n\t></div></div>\r\n</div>\r\n",postCreate:function(){this.inherited("postCreate",arguments);
 A.setSelectable(this.titleNode,false);

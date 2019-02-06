@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +42,7 @@ public class URLRefresher implements Runnable {
    * Static initialization of the logger for this class
    */
   private static final JetspeedLogger logger = JetspeedLogFactoryService
-      .getLogger(URLRefresher.class.getName());
+    .getLogger(URLRefresher.class.getName());
 
   /**
    * default constructor
@@ -56,6 +56,7 @@ public class URLRefresher implements Runnable {
   /**
    * Used within the ThreadPool... IE Runnable interface.
    */
+  @Override
   public void run() {
 
     try {
@@ -68,7 +69,7 @@ public class URLRefresher implements Runnable {
 
         // create a Runnable for updating this Portlet in the cache.
 
-        Enumeration enu = Registry.get(Registry.PORTLET).getEntries();
+        Enumeration<?> enu = Registry.get(Registry.PORTLET).getEntries();
 
         while (enu.hasMoreElements()) {
           PortletEntry entry = (PortletEntry) enu.nextElement();

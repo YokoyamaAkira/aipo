@@ -4,15 +4,15 @@ dojo.require("dijit._Widget");
 dojo.require("dojox.wire._base");
 dojo.declare("dojox.wire.ml.DataStore",dijit._Widget,{storeClass:"",postCreate:function(){this.store=this._createStore()
 },_createStore:function(){if(!this.storeClass){return null
-}var A=dojox.wire._getClass(this.storeClass);
-if(!A){return null
-}var D={};
-var C=this.domNode.attributes;
-for(var E=0;
-E<C.length;
-E++){var B=C.item(E);
-if(B.specified&&!this[B.nodeName]){D[B.nodeName]=B.nodeValue
-}}return new A(D)
+}var E=dojox.wire._getClass(this.storeClass);
+if(!E){return null
+}var C={};
+var B=this.domNode.attributes;
+for(var D=0;
+D<B.length;
+D++){var A=B.item(D);
+if(A.specified&&!this[A.nodeName]){C[A.nodeName]=A.nodeValue
+}}return new E(C)
 },getFeatures:function(){return this.store.getFeatures()
 },fetch:function(A){return this.store.fetch(A)
 },save:function(A){this.store.save(A)

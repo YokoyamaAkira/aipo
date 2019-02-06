@@ -2,7 +2,7 @@ dojo._xdResourceLoaded({depends:[["provide","dijit.layout.LayoutContainer"],["re
 A.provide("dijit.layout.LayoutContainer");
 A.require("dijit.layout._LayoutWidget");
 A.declare("dijit.layout.LayoutContainer",dijit.layout._LayoutWidget,{layout:function(){dijit.layout.layoutChildren(this.domNode,this._contentBox,this.getChildren())
-},addChild:function(C,B){dijit._Container.prototype.addChild.apply(this,arguments);
+},addChild:function(B,C){dijit._Container.prototype.addChild.apply(this,arguments);
 if(this._started){dijit.layout.layoutChildren(this.domNode,this._contentBox,this.getChildren())
 }},removeChild:function(B){dijit._Container.prototype.removeChild.apply(this,arguments);
 if(this._started){dijit.layout.layoutChildren(this.domNode,this._contentBox,this.getChildren())

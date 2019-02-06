@@ -1,21 +1,21 @@
 dojo.provide("aipo.exttimecardsystem");
-aipo.exttimecardsystem.onLoadFormDialog=function(A){};
-aipo.exttimecardsystem.onReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
-if(A){A.hide()
+aipo.exttimecardsystem.onLoadFormDialog=function(B){};
+aipo.exttimecardsystem.onReceiveMessage=function(D){if(!D){var C=dijit.byId("modalDialog");
+if(C){C.hide()
 }aipo.portletReload("exttimecardsystem")
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=D
 }};
-aipo.exttimecardsystem.hideDialog=function(){var A=dijit.byId("modalDialog");
-if(A){A.hide()
+aipo.exttimecardsystem.hideDialog=function(){var B=dijit.byId("modalDialog");
+if(B){B.hide()
 }aipo.portletReload("exttimecardsystem")
 };
-aipo.exttimecardsystem.addHiddenValue=function(B,A,D){if(B[A]){B[A].value=D
-}else{var C=document.createElement("input");
-C.type="hidden";
-C.name=A;
-C.value=D;
-B.appendChild(C)
+aipo.exttimecardsystem.addHiddenValue=function(H,E,F){if(H[E]){H[E].value=F
+}else{var G=document.createElement("input");
+G.type="hidden";
+G.name=E;
+G.value=F;
+H.appendChild(G)
 }};
-aipo.exttimecardsystem.onLoadExtTimecardSystemDialog=function(A){var B=dojo.byId("reason");
-if(B){B.focus()
+aipo.exttimecardsystem.onLoadExtTimecardSystemDialog=function(C){var D=dojo.byId("reason");
+if(D){D.focus()
 }};

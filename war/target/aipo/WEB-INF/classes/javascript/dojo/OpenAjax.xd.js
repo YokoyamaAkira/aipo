@@ -1,34 +1,34 @@
-dojo._xdResourceLoaded({defineResource:function(A){if(!window.OpenAjax){OpenAjax=new function(){var C=true;
-var G=false;
-var E=window;
-var F;
+dojo._xdResourceLoaded({defineResource:function(A){if(!window.OpenAjax){OpenAjax=new function(){var D=true;
+var C=false;
+var F=window;
+var G;
 var B="org.openajax.hub.";
-var D={};
-this.hub=D;
-D.implementer="http://openajax.org";
-D.implVersion="0.6";
-D.specVersion="0.6";
-D.implExtraData={};
-var F={};
-D.libraries=F;
-D.registerLibrary=function(K,J,I,H){F[K]={prefix:K,namespaceURI:J,version:I,extraData:H};
-this.publish(B+"registerLibrary",F[K])
+var E={};
+this.hub=E;
+E.implementer="http://openajax.org";
+E.implVersion="0.6";
+E.specVersion="0.6";
+E.implExtraData={};
+var G={};
+E.libraries=G;
+E.registerLibrary=function(K,J,I,H){G[K]={prefix:K,namespaceURI:J,version:I,extraData:H};
+this.publish(B+"registerLibrary",G[K])
 };
-D.unregisterLibrary=function(H){this.publish(B+"unregisterLibrary",F[H]);
-delete F[H]
+E.unregisterLibrary=function(H){this.publish(B+"unregisterLibrary",G[H]);
+delete G[H]
 };
-D._subscriptions={c:{},s:[]};
-D._cleanup=[];
-D._subIndex=0;
-D._pubDepth=0;
-D.subscribe=function(H,O,L,K,J){if(!L){L=window
-}var M=H+"."+this._subIndex;
-var I={scope:L,cb:O,fcb:J,data:K,sid:this._subIndex++,hdl:M};
-var N=H.split(".");
-this._subscribe(this._subscriptions,N,0,I);
-return M
+E._subscriptions={c:{},s:[]};
+E._cleanup=[];
+E._subIndex=0;
+E._pubDepth=0;
+E.subscribe=function(I,M,O,N,L){if(!O){O=window
+}var H=I+"."+this._subIndex;
+var K={scope:O,cb:M,fcb:L,data:N,sid:this._subIndex++,hdl:H};
+var J=I.split(".");
+this._subscribe(this._subscriptions,J,0,K);
+return H
 };
-D.publish=function(H,J){var K=H.split(".");
+E.publish=function(H,J){var K=H.split(".");
 this._pubDepth++;
 this._publish(this._subscriptions,K,0,H,J);
 this._pubDepth--;
@@ -38,49 +38,49 @@ I++){this.unsubscribe(this._cleanup[I].hdl)
 }delete (this._cleanup);
 this._cleanup=[]
 }};
-D.unsubscribe=function(I){var J=I.split(".");
+E.unsubscribe=function(I){var J=I.split(".");
 var H=J.pop();
 this._unsubscribe(this._subscriptions,J,0,H)
 };
-D._subscribe=function(H,L,I,K){var J=L[I];
+E._subscribe=function(H,L,I,K){var J=L[I];
 if(I==L.length){H.s.push(K)
 }else{if(typeof H.c=="undefined"){H.c={}
 }if(typeof H.c[J]=="undefined"){H.c[J]={c:{},s:[]};
 this._subscribe(H.c[J],L,I+1,K)
 }else{this._subscribe(H.c[J],L,I+1,K)
 }}};
-D._publish=function(T,S,N,H,I){if(typeof T!="undefined"){var J;
-if(N==S.length){J=T
-}else{this._publish(T.c[S[N]],S,N+1,H,I);
-this._publish(T.c["*"],S,N+1,H,I);
-J=T.c["**"]
+E._publish=function(I,H,N,P,Q){if(typeof I!="undefined"){var J;
+if(N==H.length){J=I
+}else{this._publish(I.c[H[N]],H,N+1,P,Q);
+this._publish(I.c["*"],H,N+1,P,Q);
+J=I.c["**"]
 }if(typeof J!="undefined"){var O=J.s;
-var R=O.length;
+var T=O.length;
 for(var L=0;
-L<R;
-L++){if(O[L].cb){var Q=O[L].scope;
+L<T;
+L++){if(O[L].cb){var S=O[L].scope;
 var K=O[L].cb;
 var M=O[L].fcb;
-var P=O[L].data;
-if(typeof K=="string"){K=Q[K]
-}if(typeof M=="string"){M=Q[M]
-}if((!M)||(M.call(Q,H,I,P))){K.call(Q,H,I,P)
+var R=O[L].data;
+if(typeof K=="string"){K=S[K]
+}if(typeof M=="string"){M=S[M]
+}if((!M)||(M.call(S,P,Q,R))){K.call(S,P,Q,R)
 }}}}}};
-D._unsubscribe=function(P,O,K,I){if(typeof P!="undefined"){if(K<O.length){var H=P.c[O[K]];
-this._unsubscribe(H,O,K+1,I);
-if(H.s.length==0){for(var N in H.c){return 
-}delete P.c[O[K]]
+E._unsubscribe=function(I,H,M,K){if(typeof I!="undefined"){if(M<H.length){var J=I.c[H[M]];
+this._unsubscribe(J,H,M+1,K);
+if(J.s.length==0){for(var P in J.c){return 
+}delete I.c[H[M]]
 }return 
-}else{var L=P.s;
-var M=L.length;
-for(var J=0;
-J<M;
-J++){if(I==L[J].sid){if(this._pubDepth>0){L[J].cb=null;
-this._cleanup.push(L[J])
-}else{L.splice(J,1)
+}else{var N=I.s;
+var O=N.length;
+for(var L=0;
+L<O;
+L++){if(K==N[L].sid){if(this._pubDepth>0){N[L].cb=null;
+this._cleanup.push(N[L])
+}else{N.splice(L,1)
 }return 
 }}}}};
-D.reinit=function(){for(var H in OpenAjax.hub.libraries){delete OpenAjax.hub.libraries[H]
+E.reinit=function(){for(var H in OpenAjax.hub.libraries){delete OpenAjax.hub.libraries[H]
 }OpenAjax.hub.registerLibrary("OpenAjax","http://openajax.org/hub","0.6",{});
 delete OpenAjax._subscriptions;
 OpenAjax._subscriptions={c:{},s:[]};

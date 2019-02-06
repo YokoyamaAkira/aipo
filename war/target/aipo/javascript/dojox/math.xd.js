@@ -1,11 +1,4 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.math"],
-["require", "dojox.math._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.math"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.math"] = true;
-dojo.provide("dojox.math");
-dojo.require("dojox.math._base");
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.math"],["require","dojox.math._base"]],defineResource:function(A){if(!A._hasResource["dojox.math"]){A._hasResource["dojox.math"]=true;
+A.provide("dojox.math");
+A.require("dojox.math._base")
+}}});

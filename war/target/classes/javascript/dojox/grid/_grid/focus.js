@@ -5,45 +5,45 @@ this.cell=null;
 this.rowIndex=-1;
 dojo.connect(this.grid.domNode,"onfocus",this,"doFocus")
 },tabbingOut:false,focusClass:"dojoxGrid-cell-focus",focusView:null,initFocusView:function(){this.focusView=this.grid.views.getFirstScrollingView()
-},isFocusCell:function(A,B){return(this.cell==A)&&(this.rowIndex==B)
+},isFocusCell:function(B,A){return(this.cell==B)&&(this.rowIndex==A)
 },isLastFocusCell:function(){return(this.rowIndex==this.grid.rowCount-1)&&(this.cell.index==this.grid.layout.cellCount-1)
 },isFirstFocusCell:function(){return(this.rowIndex==0)&&(this.cell.index==0)
 },isNoFocusCell:function(){return(this.rowIndex<0)||!this.cell
-},_focusifyCellNode:function(A){var C=this.cell&&this.cell.getNode(this.rowIndex);
-if(C){dojo.toggleClass(C,this.focusClass,A);
+},_focusifyCellNode:function(C){var B=this.cell&&this.cell.getNode(this.rowIndex);
+if(B){dojo.toggleClass(B,this.focusClass,C);
 this.scrollIntoView();
-try{if(!this.grid.edit.isEditing()){dojox.grid.fire(C,"focus")
-}}catch(B){}}},scrollIntoView:function(){if(!this.cell){return 
-}var F=this.cell,C=F.view.scrollboxNode,B={w:C.clientWidth,l:C.scrollLeft,t:C.scrollTop,h:C.clientHeight},E=F.getNode(this.rowIndex),D=F.view.getRowNode(this.rowIndex),A=this.grid.scroller.findScrollTop(this.rowIndex);
-if(E.offsetLeft+E.offsetWidth>B.l+B.w){C.scrollLeft=E.offsetLeft+E.offsetWidth-B.w
-}else{if(E.offsetLeft<B.l){C.scrollLeft=E.offsetLeft
-}}if(A+D.offsetHeight>B.t+B.h){this.grid.setScrollTop(A+D.offsetHeight-B.h)
-}else{if(A<B.t){this.grid.setScrollTop(A)
+try{if(!this.grid.edit.isEditing()){dojox.grid.fire(B,"focus")
+}}catch(A){}}},scrollIntoView:function(){if(!this.cell){return 
+}var E=this.cell,B=E.view.scrollboxNode,A={w:B.clientWidth,l:B.scrollLeft,t:B.scrollTop,h:B.clientHeight},D=E.getNode(this.rowIndex),C=E.view.getRowNode(this.rowIndex),F=this.grid.scroller.findScrollTop(this.rowIndex);
+if(D.offsetLeft+D.offsetWidth>A.l+A.w){B.scrollLeft=D.offsetLeft+D.offsetWidth-A.w
+}else{if(D.offsetLeft<A.l){B.scrollLeft=D.offsetLeft
+}}if(F+C.offsetHeight>A.t+A.h){this.grid.setScrollTop(F+C.offsetHeight-A.h)
+}else{if(F<A.t){this.grid.setScrollTop(F)
 }}},styleRow:function(A){if(A.index==this.rowIndex){this._focusifyCellNode(true)
-}},setFocusIndex:function(B,A){this.setFocusCell(this.grid.getCell(A),B)
-},setFocusCell:function(A,B){if(A&&!this.isFocusCell(A,B)){this.tabbingOut=false;
+}},setFocusIndex:function(A,B){this.setFocusCell(this.grid.getCell(B),A)
+},setFocusCell:function(B,A){if(B&&!this.isFocusCell(B,A)){this.tabbingOut=false;
 this.focusGrid();
 this._focusifyCellNode(false);
-this.cell=A;
-this.rowIndex=B;
+this.cell=B;
+this.rowIndex=A;
 this._focusifyCellNode(true)
 }if(dojo.isOpera){setTimeout(dojo.hitch(this.grid,"onCellFocus",this.cell,this.rowIndex),1)
 }else{this.grid.onCellFocus(this.cell,this.rowIndex)
-}},next:function(){var C=this.rowIndex,A=this.cell.index+1,D=this.grid.layout.cellCount-1,B=this.grid.rowCount-1;
-if(A>D){A=0;
-C++
-}if(C>B){A=D;
-C=B
-}this.setFocusIndex(C,A)
-},previous:function(){var B=(this.rowIndex||0),A=(this.cell.index||0)-1;
-if(A<0){A=this.grid.layout.cellCount-1;
-B--
-}if(B<0){B=0;
-A=0
-}this.setFocusIndex(B,A)
-},move:function(D,A){var F=this.grid.rowCount-1,H=this.grid.layout.cellCount-1,E=this.rowIndex,C=this.cell.index,G=Math.min(F,Math.max(0,E+D)),B=Math.min(H,Math.max(0,C+A));
-this.setFocusIndex(G,B);
-if(D){this.grid.updateRow(E)
+}},next:function(){var B=this.rowIndex,D=this.cell.index+1,C=this.grid.layout.cellCount-1,A=this.grid.rowCount-1;
+if(D>C){D=0;
+B++
+}if(B>A){D=C;
+B=A
+}this.setFocusIndex(B,D)
+},previous:function(){var A=(this.rowIndex||0),B=(this.cell.index||0)-1;
+if(B<0){B=this.grid.layout.cellCount-1;
+A--
+}if(A<0){A=0;
+B=0
+}this.setFocusIndex(A,B)
+},move:function(G,D){var A=this.grid.rowCount-1,C=this.grid.layout.cellCount-1,H=this.rowIndex,F=this.cell.index,B=Math.min(A,Math.max(0,H+G)),E=Math.min(C,Math.max(0,F+D));
+this.setFocusIndex(B,E);
+if(G){this.grid.updateRow(H)
 }},previousKey:function(A){if(this.isFirstFocusCell()){this.tabOut(this.grid.domNode)
 }else{dojo.stopEvent(A);
 this.previous()

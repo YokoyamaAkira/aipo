@@ -1,57 +1,14 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.widget.TimeSpinner"],
-["require", "dijit.form._Spinner"],
-["require", "dijit.form.NumberTextBox"],
-["require", "dojo.date"],
-["require", "dojo.date.locale"],
-["require", "dojo.date.stamp"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.widget.TimeSpinner"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.widget.TimeSpinner"] = true;
-dojo.provide("dojox.widget.TimeSpinner");
-
-dojo.require("dijit.form._Spinner");
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dojo.date");
-dojo.require("dojo.date.locale");
-dojo.require("dojo.date.stamp");
-
-dojo.declare(
-"dojox.widget.TimeSpinner",
-[dijit.form._Spinner],
-{
-	// summary: Time Spinner
-	// description: This widget is the same as a normal NumberSpinner, but for the time component of a date object instead
-
-	required: false,
-
-	adjust: function(/* Object */ val, /*Number*/ delta){
-		return dojo.date.add(val, "minute", delta)
-	},
-
-	//FIXME should we allow for constraints in this widget?
-	isValid: function(){return true;},
-
-	smallDelta: 5,
-
-	largeDelta: 30,
-
-	timeoutChangeRate: 0.50,	
-
-	parse: function(time, locale){
-		return dojo.date.locale.parse(time, {selector:"time", formatLength:"short"});
-	},
-
-	format: function(time, locale){
-		if (dojo.isString(time)) { return time; }
-		return dojo.date.locale.format(time, {selector:"time", formatLength:"short"});
-	},
-
-	serialize: dojo.date.stamp.toISOString,
-
-	value: "12:00 AM"
-
-});
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.widget.TimeSpinner"],["require","dijit.form._Spinner"],["require","dijit.form.NumberTextBox"],["require","dojo.date"],["require","dojo.date.locale"],["require","dojo.date.stamp"]],defineResource:function(A){if(!A._hasResource["dojox.widget.TimeSpinner"]){A._hasResource["dojox.widget.TimeSpinner"]=true;
+A.provide("dojox.widget.TimeSpinner");
+A.require("dijit.form._Spinner");
+A.require("dijit.form.NumberTextBox");
+A.require("dojo.date");
+A.require("dojo.date.locale");
+A.require("dojo.date.stamp");
+A.declare("dojox.widget.TimeSpinner",[dijit.form._Spinner],{required:false,adjust:function(B,C){return A.date.add(B,"minute",C)
+},isValid:function(){return true
+},smallDelta:5,largeDelta:30,timeoutChangeRate:0.5,parse:function(C,B){return A.date.locale.parse(C,{selector:"time",formatLength:"short"})
+},format:function(C,B){if(A.isString(C)){return C
+}return A.date.locale.format(C,{selector:"time",formatLength:"short"})
+},serialize:A.date.stamp.toISOString,value:"12:00 AM"})
+}}});

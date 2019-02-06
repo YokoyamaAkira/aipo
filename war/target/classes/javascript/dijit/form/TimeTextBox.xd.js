@@ -5,27 +5,27 @@ A.require("dojo.date.locale");
 A.require("dojo.date.stamp");
 A.require("dijit._TimePicker");
 A.require("dijit.form.ValidationTextBox");
-A.declare("dijit.form.TimeTextBox",dijit.form.RangeBoundTextBox,{regExpGen:A.date.locale.regexp,compare:A.date.compare,format:function(B,C){if(!B||B.toString()==this._invalid){return null
-}return A.date.locale.format(B,C)
+A.declare("dijit.form.TimeTextBox",dijit.form.RangeBoundTextBox,{regExpGen:A.date.locale.regexp,compare:A.date.compare,format:function(C,B){if(!C||C.toString()==this._invalid){return null
+}return A.date.locale.format(C,B)
 },parse:A.date.locale.parse,serialize:A.date.stamp.toISOString,value:new Date(""),_invalid:(new Date("")).toString(),_popupClass:"dijit._TimePicker",postMixInProperties:function(){this.inherited("postMixInProperties",arguments);
 var B=this.constraints;
 B.selector="time";
 if(typeof B.min=="string"){B.min=A.date.stamp.fromISOString(B.min)
 }if(typeof B.max=="string"){B.max=A.date.stamp.fromISOString(B.max)
 }},_onFocus:function(B){this._open()
-},setValue:function(C,B){this.inherited("setValue",arguments);
-if(this._picker){if(!C||C.toString()==this._invalid){C=new Date()
-}this._picker.setValue(C)
+},setValue:function(B,C){this.inherited("setValue",arguments);
+if(this._picker){if(!B||B.toString()==this._invalid){B=new Date()
+}this._picker.setValue(B)
 }},_open:function(){if(this.disabled){return 
-}var B=this;
-if(!this._picker){var C=A.getObject(this._popupClass,false);
-this._picker=new C({onValueSelected:function(D){B.focus();
-setTimeout(A.hitch(B,"_close"),1);
-dijit.form.TimeTextBox.superclass.setValue.call(B,D,true)
-},lang:this.lang,constraints:this.constraints,isDisabledDate:function(D){return B.constraints&&(A.date.compare(B.constraints.min,D)>0||A.date.compare(B.constraints.max,D)<0)
+}var C=this;
+if(!this._picker){var B=A.getObject(this._popupClass,false);
+this._picker=new B({onValueSelected:function(D){C.focus();
+setTimeout(A.hitch(C,"_close"),1);
+dijit.form.TimeTextBox.superclass.setValue.call(C,D,true)
+},lang:this.lang,constraints:this.constraints,isDisabledDate:function(D){return C.constraints&&(A.date.compare(C.constraints.min,D)>0||A.date.compare(C.constraints.max,D)<0)
 }});
 this._picker.setValue(this.getValue()||new Date())
-}if(!this._opened){dijit.popup.open({parent:this,popup:this._picker,around:this.domNode,onCancel:A.hitch(this,this._close),onClose:function(){B._opened=false
+}if(!this._opened){dijit.popup.open({parent:this,popup:this._picker,around:this.domNode,onCancel:A.hitch(this,this._close),onClose:function(){C._opened=false
 }});
 this._opened=true
 }A.marginBox(this._picker.domNode,{w:this.domNode.offsetWidth})

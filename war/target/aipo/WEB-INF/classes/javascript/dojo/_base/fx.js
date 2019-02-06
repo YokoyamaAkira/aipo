@@ -5,48 +5,48 @@ dojo.require("dojo._base.connect");
 dojo.require("dojo._base.declare");
 dojo.require("dojo._base.lang");
 dojo.require("dojo._base.html");
-dojo._Line=function(B,A){this.start=B;
-this.end=A;
+dojo._Line=function(A,B){this.start=A;
+this.end=B;
 this.getValue=function(C){return((this.end-this.start)*C)+this.start
 }
 };
 dojo.declare("dojo._Animation",null,{constructor:function(A){dojo.mixin(this,A);
 if(dojo.isArray(this.curve)){this.curve=new dojo._Line(this.curve[0],this.curve[1])
-}},duration:1000,repeat:0,rate:10,_percent:0,_startRepeatCount:0,fire:function(A,B){if(this[A]){this[A].apply(this,B||[])
+}},duration:1000,repeat:0,rate:10,_percent:0,_startRepeatCount:0,fire:function(B,A){if(this[B]){this[B].apply(this,A||[])
 }return this
-},play:function(C,B){var D=this;
-if(B){D._stopTimer();
-D._active=D._paused=false;
-D._percent=0
-}else{if(D._active&&!D._paused){return D
-}}D.fire("beforeBegin");
-var E=C||D.delay;
-var A=dojo.hitch(D,"_play",B);
-if(E>0){setTimeout(A,E);
-return D
-}A();
-return D
-},_play:function(A){var C=this;
-C._startTime=new Date().valueOf();
-if(C._paused){C._startTime-=C.duration*C._percent
-}C._endTime=C._startTime+C.duration;
-C._active=true;
-C._paused=false;
-var B=C.curve.getValue(C._percent);
-if(!C._percent){if(!C._startRepeatCount){C._startRepeatCount=C.repeat
-}C.fire("onBegin",[B])
-}C.fire("onPlay",[B]);
-C._cycle();
+},play:function(B,A){var C=this;
+if(A){C._stopTimer();
+C._active=C._paused=false;
+C._percent=0
+}else{if(C._active&&!C._paused){return C
+}}C.fire("beforeBegin");
+var D=B||C.delay;
+var E=dojo.hitch(C,"_play",A);
+if(D>0){setTimeout(E,D);
 return C
+}E();
+return C
+},_play:function(C){var B=this;
+B._startTime=new Date().valueOf();
+if(B._paused){B._startTime-=B.duration*B._percent
+}B._endTime=B._startTime+B.duration;
+B._active=true;
+B._paused=false;
+var A=B.curve.getValue(B._percent);
+if(!B._percent){if(!B._startRepeatCount){B._startRepeatCount=B.repeat
+}B.fire("onBegin",[A])
+}B.fire("onPlay",[A]);
+B._cycle();
+return B
 },pause:function(){this._stopTimer();
 if(!this._active){return this
 }this._paused=true;
 this.fire("onPause",[this.curve.getValue(this._percent)]);
 return this
-},gotoPercent:function(B,A){this._stopTimer();
+},gotoPercent:function(A,B){this._stopTimer();
 this._active=this._paused=true;
-this._percent=B;
-if(A){this.play()
+this._percent=A;
+if(B){this.play()
 }return this
 },stop:function(A){if(!this._timer){return 
 }this._stopTimer();
@@ -56,92 +56,92 @@ this._active=this._paused=false;
 return this
 },status:function(){if(this._active){return this._paused?"paused":"playing"
 }return"stopped"
-},_cycle:function(){var B=this;
-if(B._active){var C=new Date().valueOf();
-var A=(C-B._startTime)/(B._endTime-B._startTime);
-if(A>=1){A=1
-}B._percent=A;
-if(B.easing){A=B.easing(A)
-}B.fire("onAnimate",[B.curve.getValue(A)]);
-if(A<1){B._startTimer()
-}else{B._active=false;
-if(B.repeat>0){B.repeat--;
-B.play(null,true)
-}else{if(B.repeat==-1){B.play(null,true)
-}else{if(B._startRepeatCount){B.repeat=B._startRepeatCount;
-B._startRepeatCount=0
-}}}B._percent=0;
-B.fire("onEnd")
-}}return B
+},_cycle:function(){var A=this;
+if(A._active){var B=new Date().valueOf();
+var C=(B-A._startTime)/(A._endTime-A._startTime);
+if(C>=1){C=1
+}A._percent=C;
+if(A.easing){C=A.easing(C)
+}A.fire("onAnimate",[A.curve.getValue(C)]);
+if(C<1){A._startTimer()
+}else{A._active=false;
+if(A.repeat>0){A.repeat--;
+A.play(null,true)
+}else{if(A.repeat==-1){A.play(null,true)
+}else{if(A._startRepeatCount){A.repeat=A._startRepeatCount;
+A._startRepeatCount=0
+}}}A._percent=0;
+A.fire("onEnd")
+}}return A
 }});
-(function(){var F=dojo;
-var D=0;
-var C=[];
-var B={run:function(){}};
-var G=null;
-dojo._Animation.prototype._startTimer=function(){if(!this._timer){this._timer=dojo.connect(B,"run",this,"_cycle");
-D++
-}if(!G){G=setInterval(dojo.hitch(B,"run"),this.rate)
+(function(){var C=dojo;
+var A=0;
+var G=[];
+var F={run:function(){}};
+var D=null;
+dojo._Animation.prototype._startTimer=function(){if(!this._timer){this._timer=dojo.connect(F,"run",this,"_cycle");
+A++
+}if(!D){D=setInterval(dojo.hitch(F,"run"),this.rate)
 }};
 dojo._Animation.prototype._stopTimer=function(){dojo.disconnect(this._timer);
 this._timer=null;
-D--;
-if(!D){clearInterval(G);
-G=null
+A--;
+if(!A){clearInterval(D);
+D=null
 }};
-var E=(F.isIE)?function(I){var H=I.style;
-if(!H.zoom.length&&F.style(I,"zoom")=="normal"){H.zoom="1"
-}if(!H.width.length&&F.style(I,"width")=="auto"){H.width="auto"
+var B=(C.isIE)?function(H){var I=H.style;
+if(!I.zoom.length&&C.style(H,"zoom")=="normal"){I.zoom="1"
+}if(!I.width.length&&C.style(H,"width")=="auto"){I.width="auto"
 }}:function(){};
-dojo._fade=function(H){H.node=F.byId(H.node);
-var K=F.mixin({properties:{}},H);
-var I=(K.properties.opacity={});
-I.start=!("start" in K)?function(){return Number(F.style(K.node,"opacity"))
-}:K.start;
-I.end=K.end;
-var J=F.animateProperty(K);
-F.connect(J,"beforeBegin",F.partial(E,K.node));
-return J
+dojo._fade=function(I){I.node=C.byId(I.node);
+var H=C.mixin({properties:{}},I);
+var J=(H.properties.opacity={});
+J.start=!("start" in H)?function(){return Number(C.style(H.node,"opacity"))
+}:H.start;
+J.end=H.end;
+var K=C.animateProperty(H);
+C.connect(K,"beforeBegin",C.partial(B,H.node));
+return K
 };
-dojo.fadeIn=function(H){return F._fade(F.mixin({end:1},H))
+dojo.fadeIn=function(H){return C._fade(C.mixin({end:1},H))
 };
-dojo.fadeOut=function(H){return F._fade(F.mixin({end:0},H))
+dojo.fadeOut=function(H){return C._fade(C.mixin({end:0},H))
 };
 dojo._defaultEasing=function(H){return 0.5+((Math.sin((H+1.5)*Math.PI))/2)
 };
-var A=function(H){this._properties=H;
-for(var I in H){var J=H[I];
-if(J.start instanceof F.Color){J.tempColor=new F.Color()
-}}this.getValue=function(L){var K={};
-for(var M in this._properties){var O=this._properties[M];
-var N=O.start;
-if(N instanceof F.Color){K[M]=F.blendColors(N,O.end,L,O.tempColor).toCss()
-}else{if(!F.isArray(N)){K[M]=((O.end-N)*L)+N+(M!="opacity"?O.units||"px":"")
-}}}return K
+var E=function(I){this._properties=I;
+for(var J in I){var H=I[J];
+if(H.start instanceof C.Color){H.tempColor=new C.Color()
+}}this.getValue=function(O){var N={};
+for(var M in this._properties){var L=this._properties[M];
+var K=L.start;
+if(K instanceof C.Color){N[M]=C.blendColors(K,L.end,O,L.tempColor).toCss()
+}else{if(!C.isArray(K)){N[M]=((L.end-K)*O)+K+(M!="opacity"?L.units||"px":"")
+}}}return N
 }
 };
-dojo.animateProperty=function(H){H.node=F.byId(H.node);
-if(!H.easing){H.easing=F._defaultEasing
-}var I=new F._Animation(H);
-F.connect(I,"beforeBegin",I,function(){var L={};
-for(var M in this.properties){var N=(L[M]=F.mixin({},this.properties[M]));
-if(F.isFunction(N.start)){N.start=N.start()
-}if(F.isFunction(N.end)){N.end=N.end()
-}var K=(M.toLowerCase().indexOf("color")>=0);
-function J(P,Q){var O=({height:P.offsetHeight,width:P.offsetWidth})[Q];
+dojo.animateProperty=function(I){I.node=C.byId(I.node);
+if(!I.easing){I.easing=C._defaultEasing
+}var H=new C._Animation(I);
+C.connect(H,"beforeBegin",H,function(){var N={};
+for(var J in this.properties){var K=(N[J]=C.mixin({},this.properties[J]));
+if(C.isFunction(K.start)){K.start=K.start()
+}if(C.isFunction(K.end)){K.end=K.end()
+}var M=(J.toLowerCase().indexOf("color")>=0);
+function L(P,Q){var O=({height:P.offsetHeight,width:P.offsetWidth})[Q];
 if(O!==undefined){return O
-}O=F.style(P,Q);
+}O=C.style(P,Q);
 return(Q=="opacity")?Number(O):parseFloat(O)
-}if(!("end" in N)){N.end=J(this.node,M)
-}else{if(!("start" in N)){N.start=J(this.node,M)
-}}if(K){N.start=new F.Color(N.start);
-N.end=new F.Color(N.end)
-}else{N.start=(M=="opacity")?Number(N.start):parseFloat(N.start)
-}}this.curve=new A(L)
+}if(!("end" in K)){K.end=L(this.node,J)
+}else{if(!("start" in K)){K.start=L(this.node,J)
+}}if(M){K.start=new C.Color(K.start);
+K.end=new C.Color(K.end)
+}else{K.start=(J=="opacity")?Number(K.start):parseFloat(K.start)
+}}this.curve=new E(N)
 });
-F.connect(I,"onAnimate",I,function(J){for(var K in J){F.style(this.node,K,J[K])
+C.connect(H,"onAnimate",H,function(J){for(var K in J){C.style(this.node,K,J[K])
 }});
-return I
+return H
 }
 })()
 };

@@ -55,6 +55,7 @@ public class ReportAction extends ALBaseAction {
   private List<String> errmsgListOnReportDetail;
 
   /** logger */
+  @SuppressWarnings("unused")
   private static final JetspeedLogger logger = JetspeedLogFactoryService
     .getLogger(ReportAction.class.getName());
 

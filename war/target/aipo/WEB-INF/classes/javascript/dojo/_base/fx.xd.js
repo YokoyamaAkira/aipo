@@ -5,48 +5,48 @@ A.require("dojo._base.connect");
 A.require("dojo._base.declare");
 A.require("dojo._base.lang");
 A.require("dojo._base.html");
-A._Line=function(C,B){this.start=C;
-this.end=B;
+A._Line=function(B,C){this.start=B;
+this.end=C;
 this.getValue=function(D){return((this.end-this.start)*D)+this.start
 }
 };
 A.declare("dojo._Animation",null,{constructor:function(B){A.mixin(this,B);
 if(A.isArray(this.curve)){this.curve=new A._Line(this.curve[0],this.curve[1])
-}},duration:1000,repeat:0,rate:10,_percent:0,_startRepeatCount:0,fire:function(B,C){if(this[B]){this[B].apply(this,C||[])
+}},duration:1000,repeat:0,rate:10,_percent:0,_startRepeatCount:0,fire:function(C,B){if(this[C]){this[C].apply(this,B||[])
 }return this
-},play:function(D,C){var E=this;
-if(C){E._stopTimer();
-E._active=E._paused=false;
-E._percent=0
-}else{if(E._active&&!E._paused){return E
-}}E.fire("beforeBegin");
-var F=D||E.delay;
-var B=A.hitch(E,"_play",C);
-if(F>0){setTimeout(B,F);
-return E
-}B();
-return E
-},_play:function(B){var D=this;
-D._startTime=new Date().valueOf();
-if(D._paused){D._startTime-=D.duration*D._percent
-}D._endTime=D._startTime+D.duration;
-D._active=true;
-D._paused=false;
-var C=D.curve.getValue(D._percent);
-if(!D._percent){if(!D._startRepeatCount){D._startRepeatCount=D.repeat
-}D.fire("onBegin",[C])
-}D.fire("onPlay",[C]);
-D._cycle();
-return D
+},play:function(E,D){var F=this;
+if(D){F._stopTimer();
+F._active=F._paused=false;
+F._percent=0
+}else{if(F._active&&!F._paused){return F
+}}F.fire("beforeBegin");
+var B=E||F.delay;
+var C=A.hitch(F,"_play",D);
+if(B>0){setTimeout(C,B);
+return F
+}C();
+return F
+},_play:function(C){var B=this;
+B._startTime=new Date().valueOf();
+if(B._paused){B._startTime-=B.duration*B._percent
+}B._endTime=B._startTime+B.duration;
+B._active=true;
+B._paused=false;
+var D=B.curve.getValue(B._percent);
+if(!B._percent){if(!B._startRepeatCount){B._startRepeatCount=B.repeat
+}B.fire("onBegin",[D])
+}B.fire("onPlay",[D]);
+B._cycle();
+return B
 },pause:function(){this._stopTimer();
 if(!this._active){return this
 }this._paused=true;
 this.fire("onPause",[this.curve.getValue(this._percent)]);
 return this
-},gotoPercent:function(C,B){this._stopTimer();
+},gotoPercent:function(B,C){this._stopTimer();
 this._active=this._paused=true;
-this._percent=C;
-if(B){this.play()
+this._percent=B;
+if(C){this.play()
 }return this
 },stop:function(B){if(!this._timer){return 
 }this._stopTimer();
@@ -56,90 +56,90 @@ this._active=this._paused=false;
 return this
 },status:function(){if(this._active){return this._paused?"paused":"playing"
 }return"stopped"
-},_cycle:function(){var C=this;
-if(C._active){var D=new Date().valueOf();
-var B=(D-C._startTime)/(C._endTime-C._startTime);
-if(B>=1){B=1
-}C._percent=B;
-if(C.easing){B=C.easing(B)
-}C.fire("onAnimate",[C.curve.getValue(B)]);
-if(B<1){C._startTimer()
-}else{C._active=false;
-if(C.repeat>0){C.repeat--;
-C.play(null,true)
-}else{if(C.repeat==-1){C.play(null,true)
-}else{if(C._startRepeatCount){C.repeat=C._startRepeatCount;
-C._startRepeatCount=0
-}}}C._percent=0;
-C.fire("onEnd")
-}}return C
+},_cycle:function(){var D=this;
+if(D._active){var B=new Date().valueOf();
+var C=(B-D._startTime)/(D._endTime-D._startTime);
+if(C>=1){C=1
+}D._percent=C;
+if(D.easing){C=D.easing(C)
+}D.fire("onAnimate",[D.curve.getValue(C)]);
+if(C<1){D._startTimer()
+}else{D._active=false;
+if(D.repeat>0){D.repeat--;
+D.play(null,true)
+}else{if(D.repeat==-1){D.play(null,true)
+}else{if(D._startRepeatCount){D.repeat=D._startRepeatCount;
+D._startRepeatCount=0
+}}}D._percent=0;
+D.fire("onEnd")
+}}return D
 }});
-(function(){var G=A;
-var E=0;
-var D=[];
-var C={run:function(){}};
-var H=null;
-A._Animation.prototype._startTimer=function(){if(!this._timer){this._timer=A.connect(C,"run",this,"_cycle");
-E++
-}if(!H){H=setInterval(A.hitch(C,"run"),this.rate)
+(function(){var F=A;
+var D=0;
+var C=[];
+var H={run:function(){}};
+var B=null;
+A._Animation.prototype._startTimer=function(){if(!this._timer){this._timer=A.connect(H,"run",this,"_cycle");
+D++
+}if(!B){B=setInterval(A.hitch(H,"run"),this.rate)
 }};
 A._Animation.prototype._stopTimer=function(){A.disconnect(this._timer);
 this._timer=null;
-E--;
-if(!E){clearInterval(H);
-H=null
+D--;
+if(!D){clearInterval(B);
+B=null
 }};
-var F=(G.isIE)?function(J){var I=J.style;
-if(!I.zoom.length&&G.style(J,"zoom")=="normal"){I.zoom="1"
-}if(!I.width.length&&G.style(J,"width")=="auto"){I.width="auto"
+var E=(F.isIE)?function(J){var I=J.style;
+if(!I.zoom.length&&F.style(J,"zoom")=="normal"){I.zoom="1"
+}if(!I.width.length&&F.style(J,"width")=="auto"){I.width="auto"
 }}:function(){};
-A._fade=function(I){I.node=G.byId(I.node);
-var L=G.mixin({properties:{}},I);
+A._fade=function(I){I.node=F.byId(I.node);
+var L=F.mixin({properties:{}},I);
 var J=(L.properties.opacity={});
-J.start=!("start" in L)?function(){return Number(G.style(L.node,"opacity"))
+J.start=!("start" in L)?function(){return Number(F.style(L.node,"opacity"))
 }:L.start;
 J.end=L.end;
-var K=G.animateProperty(L);
-G.connect(K,"beforeBegin",G.partial(F,L.node));
+var K=F.animateProperty(L);
+F.connect(K,"beforeBegin",F.partial(E,L.node));
 return K
 };
-A.fadeIn=function(I){return G._fade(G.mixin({end:1},I))
+A.fadeIn=function(I){return F._fade(F.mixin({end:1},I))
 };
-A.fadeOut=function(I){return G._fade(G.mixin({end:0},I))
+A.fadeOut=function(I){return F._fade(F.mixin({end:0},I))
 };
 A._defaultEasing=function(I){return 0.5+((Math.sin((I+1.5)*Math.PI))/2)
 };
-var B=function(I){this._properties=I;
+var G=function(I){this._properties=I;
 for(var J in I){var K=I[J];
-if(K.start instanceof G.Color){K.tempColor=new G.Color()
-}}this.getValue=function(M){var L={};
-for(var N in this._properties){var P=this._properties[N];
-var O=P.start;
-if(O instanceof G.Color){L[N]=G.blendColors(O,P.end,M,P.tempColor).toCss()
-}else{if(!G.isArray(O)){L[N]=((P.end-O)*M)+O+(N!="opacity"?P.units||"px":"")
-}}}return L
+if(K.start instanceof F.Color){K.tempColor=new F.Color()
+}}this.getValue=function(N){var P={};
+for(var O in this._properties){var M=this._properties[O];
+var L=M.start;
+if(L instanceof F.Color){P[O]=F.blendColors(L,M.end,N,M.tempColor).toCss()
+}else{if(!F.isArray(L)){P[O]=((M.end-L)*N)+L+(O!="opacity"?M.units||"px":"")
+}}}return P
 }
 };
-A.animateProperty=function(I){I.node=G.byId(I.node);
-if(!I.easing){I.easing=G._defaultEasing
-}var J=new G._Animation(I);
-G.connect(J,"beforeBegin",J,function(){var M={};
-for(var N in this.properties){var O=(M[N]=G.mixin({},this.properties[N]));
-if(G.isFunction(O.start)){O.start=O.start()
-}if(G.isFunction(O.end)){O.end=O.end()
-}var L=(N.toLowerCase().indexOf("color")>=0);
-function K(Q,R){var P=({height:Q.offsetHeight,width:Q.offsetWidth})[R];
+A.animateProperty=function(I){I.node=F.byId(I.node);
+if(!I.easing){I.easing=F._defaultEasing
+}var J=new F._Animation(I);
+F.connect(J,"beforeBegin",J,function(){var O={};
+for(var K in this.properties){var L=(O[K]=F.mixin({},this.properties[K]));
+if(F.isFunction(L.start)){L.start=L.start()
+}if(F.isFunction(L.end)){L.end=L.end()
+}var N=(K.toLowerCase().indexOf("color")>=0);
+function M(Q,R){var P=({height:Q.offsetHeight,width:Q.offsetWidth})[R];
 if(P!==undefined){return P
-}P=G.style(Q,R);
+}P=F.style(Q,R);
 return(R=="opacity")?Number(P):parseFloat(P)
-}if(!("end" in O)){O.end=K(this.node,N)
-}else{if(!("start" in O)){O.start=K(this.node,N)
-}}if(L){O.start=new G.Color(O.start);
-O.end=new G.Color(O.end)
-}else{O.start=(N=="opacity")?Number(O.start):parseFloat(O.start)
-}}this.curve=new B(M)
+}if(!("end" in L)){L.end=M(this.node,K)
+}else{if(!("start" in L)){L.start=M(this.node,K)
+}}if(N){L.start=new F.Color(L.start);
+L.end=new F.Color(L.end)
+}else{L.start=(K=="opacity")?Number(L.start):parseFloat(L.start)
+}}this.curve=new G(O)
 });
-G.connect(J,"onAnimate",J,function(K){for(var L in K){G.style(this.node,L,K[L])
+F.connect(J,"onAnimate",J,function(K){for(var L in K){F.style(this.node,L,K[L])
 }});
 return J
 }

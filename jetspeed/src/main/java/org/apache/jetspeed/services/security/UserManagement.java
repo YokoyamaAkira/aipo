@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,22 +40,22 @@ public interface UserManagement extends Service, CredentialsManagement {
    * Retrieves a <code>JetspeedUser</code> given the primary principle. The
    * principal can be any valid Jetspeed Security Principal:
    * <code>org.apache.jetspeed.om.security.UserNamePrincipal</code>
-   *   <code>org.apache.jetspeed.om.security.UserIdPrincipal</code>
+   * <code>org.apache.jetspeed.om.security.UserIdPrincipal</code>
    * 
    * The security service may optionally check the current user context to
    * determine if the requestor has permission to perform this action.
    * 
    * @param principal
-   *            a principal identity to be retrieved.
+   *          a principal identity to be retrieved.
    * @return a <code>JetspeedUser</code> associated to the principal identity.
    * @exception UserException
-   *                when the security provider has a general failure retrieving
-   *                a user.
+   *              when the security provider has a general failure retrieving a
+   *              user.
    * @exception UnknownUserException
-   *                when the security provider cannot match the principal
-   *                identity to a user.
+   *              when the security provider cannot match the principal identity
+   *              to a user.
    * @exception InsufficientPrivilegeException
-   *                when the requestor is denied due to insufficient privilege
+   *              when the requestor is denied due to insufficient privilege
    */
   JetspeedUser getUser(Principal principal) throws JetspeedSecurityException;
 
@@ -69,12 +69,12 @@ public interface UserManagement extends Service, CredentialsManagement {
    * 
    * @return a collection of <code>JetspeedUser</code> entities.
    * @exception UserException
-   *                when the security provider has a general failure retrieving
-   *                users.
+   *              when the security provider has a general failure retrieving
+   *              users.
    * @exception InsufficientPrivilegeException
-   *                when the requestor is denied due to insufficient privilege
+   *              when the requestor is denied due to insufficient privilege
    */
-  Iterator getUsers() throws JetspeedSecurityException;
+  Iterator<?> getUsers() throws JetspeedSecurityException;
 
   /**
    * Retrieves a collection of <code>JetspeedUser</code> s filtered by a
@@ -84,24 +84,24 @@ public interface UserManagement extends Service, CredentialsManagement {
    * 
    * @return a collection of <code>JetspeedUser</code> entities.
    * @exception UserException
-   *                when the security provider has a general failure retrieving
-   *                users.
+   *              when the security provider has a general failure retrieving
+   *              users.
    * @exception InsufficientPrivilegeException
-   *                when the requestor is denied due to insufficient privilege
+   *              when the requestor is denied due to insufficient privilege
    */
-  Iterator getUsers(String filter) throws JetspeedSecurityException;
+  Iterator<?> getUsers(String filter) throws JetspeedSecurityException;
 
   /**
-   * Saves a <code>JetspeedUser</code>'s attributes into permanent storage.
-   * The user's account is required to exist in the storage. The security
-   * service may optionally check the current user context to determine if the
-   * requestor has permission to perform this action.
+   * Saves a <code>JetspeedUser</code>'s attributes into permanent storage. The
+   * user's account is required to exist in the storage. The security service
+   * may optionally check the current user context to determine if the requestor
+   * has permission to perform this action.
    * 
    * @exception UserException
-   *                when the security provider has a general failure retrieving
-   *                users.
+   *              when the security provider has a general failure retrieving
+   *              users.
    * @exception InsufficientPrivilegeException
-   *                when the requestor is denied due to insufficient privilege
+   *              when the requestor is denied due to insufficient privilege
    */
   void saveUser(JetspeedUser user) throws JetspeedSecurityException;
 
@@ -113,31 +113,31 @@ public interface UserManagement extends Service, CredentialsManagement {
    * determine if the requestor has permission to perform this action.
    * 
    * @exception UserException
-   *                when the security provider has a general failure retrieving
-   *                users.
+   *              when the security provider has a general failure retrieving
+   *              users.
    * @exception NotUniqueUserException
-   *                when the public credentials fail to meet the security
-   *                provider-specific unique constraints.
+   *              when the public credentials fail to meet the security
+   *              provider-specific unique constraints.
    * @exception InsufficientPrivilegeException
-   *                when the requestor is denied due to insufficient privilege
+   *              when the requestor is denied due to insufficient privilege
    */
   void addUser(JetspeedUser user) throws JetspeedSecurityException;
 
   /**
-   * Removes a <code>JetspeedUser</code> from the permanent store. The
-   * security service may optionally check the current user context to determine
-   * if the requestor has permission to perform this action.
+   * Removes a <code>JetspeedUser</code> from the permanent store. The security
+   * service may optionally check the current user context to determine if the
+   * requestor has permission to perform this action.
    * 
    * @param principal
-   *            the principal identity to be retrieved.
+   *          the principal identity to be retrieved.
    * @exception UserException
-   *                when the security provider has a general failure retrieving
-   *                a user.
+   *              when the security provider has a general failure retrieving a
+   *              user.
    * @exception UnknownUserException
-   *                when the security provider cannot match the principal
-   *                identity to a user.
+   *              when the security provider cannot match the principal identity
+   *              to a user.
    * @exception InsufficientPrivilegeException
-   *                when the requestor is denied due to insufficient privilege
+   *              when the requestor is denied due to insufficient privilege
    */
   void removeUser(Principal principal) throws JetspeedSecurityException;
 

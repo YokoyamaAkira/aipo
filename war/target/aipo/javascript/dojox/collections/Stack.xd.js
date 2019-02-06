@@ -1,77 +1,34 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.collections.Stack"],
-["require", "dojox.collections._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.collections.Stack"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.collections.Stack"] = true;
-dojo.provide("dojox.collections.Stack");
-dojo.require("dojox.collections._base");
-
-dojox.collections.Stack=function(/* array? */arr){
-	//	summary
-	//	returns an object of type dojox.collections.Stack
-	var q=[];
-	if (arr) q=q.concat(arr);
-	this.count=q.length;
-	this.clear=function(){
-		//	summary
-		//	Clear the internal array and reset the count
-		q=[];
-		this.count=q.length;
-	};
-	this.clone=function(){
-		//	summary
-		//	Create and return a clone of this Stack
-		return new dojox.collections.Stack(q);
-	};
-	this.contains=function(/* object */o){
-		//	summary
-		//	check to see if the stack contains object o
-		for (var i=0; i<q.length; i++){
-			if (q[i] == o){
-				return true;	//	bool
-			}
-		}
-		return false;	//	bool
-	};
-	this.copyTo=function(/* array */ arr, /* int */ i){
-		//	summary
-		//	copy the stack into array arr at index i
-		arr.splice(i,0,q);
-	};
-	this.forEach=function(/* function */ fn, /* object? */ scope){
-		//	summary
-		//	functional iterator, following the mozilla spec.
-		dojo.forEach(q, fn, scope);
-	};
-	this.getIterator=function(){
-		//	summary
-		//	get an iterator for this collection
-		return new dojox.collections.Iterator(q);	//	dojox.collections.Iterator
-	};
-	this.peek=function(){
-		//	summary
-		//	Return the next item without altering the stack itself.
-		return q[(q.length-1)];	//	object
-	};
-	this.pop=function(){
-		//	summary
-		//	pop and return the next item on the stack
-		var r=q.pop();
-		this.count=q.length;
-		return r;	//	object
-	};
-	this.push=function(/* object */ o){
-		//	summary
-		//	Push object o onto the stack
-		this.count=q.push(o);
-	};
-	this.toArray=function(){
-		//	summary
-		//	create and return an array based on the internal collection
-		return [].concat(q);	//	array
-	};
+dojo._xdResourceLoaded({depends:[["provide","dojox.collections.Stack"],["require","dojox.collections._base"]],defineResource:function(A){if(!A._hasResource["dojox.collections.Stack"]){A._hasResource["dojox.collections.Stack"]=true;
+A.provide("dojox.collections.Stack");
+A.require("dojox.collections._base");
+dojox.collections.Stack=function(B){var C=[];
+if(B){C=C.concat(B)
+}this.count=C.length;
+this.clear=function(){C=[];
+this.count=C.length
+};
+this.clone=function(){return new dojox.collections.Stack(C)
+};
+this.contains=function(E){for(var D=0;
+D<C.length;
+D++){if(C[D]==E){return true
+}}return false
+};
+this.copyTo=function(D,E){D.splice(E,0,C)
+};
+this.forEach=function(E,D){A.forEach(C,E,D)
+};
+this.getIterator=function(){return new dojox.collections.Iterator(C)
+};
+this.peek=function(){return C[(C.length-1)]
+};
+this.pop=function(){var D=C.pop();
+this.count=C.length;
+return D
+};
+this.push=function(D){this.count=C.push(D)
+};
+this.toArray=function(){return[].concat(C)
 }
-
 }
-
-}});
+}}});

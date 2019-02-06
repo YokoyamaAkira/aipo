@@ -161,8 +161,8 @@ public class JetspeedTool implements ApplicationTool {
           (ClientRegistry) Registry.get(Registry.CLIENT);
         ClientEntry entry = registry.findEntry(useragent);
         if ("IPHONE".equals(entry == null ? null : entry.getManufacturer())) {
-          for (@SuppressWarnings("unchecked")
-          Iterator<Portlets> it = portlets.getPortletsIterator(); it.hasNext();) {
+          for (Iterator<Portlets> it =
+            (Iterator<Portlets>) portlets.getPortletsIterator(); it.hasNext();) {
             Portlets subset = it.next();
 
             {
@@ -257,7 +257,7 @@ public class JetspeedTool implements ApplicationTool {
   public ConcreteElement getPortlet(String name) {
     ConcreteElement result = null;
     Portlet found = null;
-    Stack sets = new Stack();
+    Stack<Portlet> sets = new Stack<Portlet>();
     sets.push(rundata.getProfile().getRootSet());
 
     while ((sets.size() > 0) && (found == null)) {
@@ -266,7 +266,7 @@ public class JetspeedTool implements ApplicationTool {
       if (set.getName().equals(name)) {
         found = set;
       } else {
-        Enumeration en = set.getPortlets();
+        Enumeration<?> en = set.getPortlets();
         while ((found == null) && en.hasMoreElements()) {
           Portlet p = (Portlet) en.nextElement();
 
@@ -412,7 +412,7 @@ public class JetspeedTool implements ApplicationTool {
     JetspeedRunData jdata = (JetspeedRunData) rundata;
     String peid = jdata.getJs_peid();
     if (peid != null) {
-      Stack sets = new Stack();
+      Stack<Portlet> sets = new Stack<Portlet>();
       sets.push(jdata.getProfile().getRootSet());
 
       while ((found == null) && (sets.size() > 0)) {
@@ -421,7 +421,7 @@ public class JetspeedTool implements ApplicationTool {
         if (set.getID().equals(peid)) {
           found = set;
         } else {
-          Enumeration en = set.getPortlets();
+          Enumeration<?> en = set.getPortlets();
           while ((found == null) && en.hasMoreElements()) {
             Portlet p = (Portlet) en.nextElement();
 
@@ -512,7 +512,7 @@ public class JetspeedTool implements ApplicationTool {
   public ConcreteElement getPortletById(String peid) {
     ConcreteElement result = null;
     Portlet found = null;
-    Stack sets = new Stack();
+    Stack<Portlet> sets = new Stack<Portlet>();
     sets.push(rundata.getProfile().getRootSet());
 
     while ((sets.size() > 0) && (found == null)) {
@@ -521,7 +521,7 @@ public class JetspeedTool implements ApplicationTool {
       if (set.getID().equals(peid)) {
         found = set;
       } else {
-        Enumeration en = set.getPortlets();
+        Enumeration<?> en = set.getPortlets();
         while ((found == null) && en.hasMoreElements()) {
           Portlet p = (Portlet) en.nextElement();
 

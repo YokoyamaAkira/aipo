@@ -1,132 +1,55 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.gfx3d.scheduler"],
-["provide", "dojox.gfx3d.drawer"],
-["require", "dojox.gfx3d.vector"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.gfx3d.scheduler"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.gfx3d.scheduler"] = true;
-dojo.provide("dojox.gfx3d.scheduler");
-dojo.provide("dojox.gfx3d.drawer");
-dojo.require("dojox.gfx3d.vector");
-
-dojo.mixin(dojox.gfx3d.scheduler, {
-	zOrder: function(buffer, order){
-		order = order ? order : dojox.gfx3d.scheduler.order;
-		buffer.sort(function(a, b){
-			return order(b) - order(a);
-		});
-		return buffer;
-	},
-
-	bsp: function(buffer, outline){
-		console.debug("BSP scheduler");
-		outline = outline ? outline : dojox.gfx3d.scheduler.outline;
-		var p = new dojox.gfx3d.scheduler.BinarySearchTree(buffer[0], outline);
-		dojo.forEach(buffer.slice(1), function(item){ p.add(item, outline); });
-		return p.iterate(outline);
-	},
-
-	// default implementation
-	order: function(it){
-		return it.getZOrder();
-	},
-
-	outline: function(it){
-		return it.getOutline();
-	}
-
+dojo._xdResourceLoaded({depends:[["provide","dojox.gfx3d.scheduler"],["provide","dojox.gfx3d.drawer"],["require","dojox.gfx3d.vector"]],defineResource:function(A){if(!A._hasResource["dojox.gfx3d.scheduler"]){A._hasResource["dojox.gfx3d.scheduler"]=true;
+A.provide("dojox.gfx3d.scheduler");
+A.provide("dojox.gfx3d.drawer");
+A.require("dojox.gfx3d.vector");
+A.mixin(dojox.gfx3d.scheduler,{zOrder:function(C,B){B=B?B:dojox.gfx3d.scheduler.order;
+C.sort(function(E,D){return B(D)-B(E)
 });
-
-dojo.declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
-	constructor: function(obj, outline){
-		// summary: build the binary search tree, using binary space partition algorithm.
-		// The idea is for any polygon, for example, (a, b, c), the space is divided by 
-		// the plane into two space: plus and minus. 
-		// 
-		// for any arbitary vertex p, if(p - a) dotProduct n = 0, p is inside the plane,
-		// > 0, p is in the plus space, vice versa for minus space. 
-		// n is the normal vector that is perpendicular the plate, defined as:
-		//            n = ( b - a) crossProduct ( c - a )
-		//
-		// in this implementation, n is declared as normal, ,a is declared as orient.
-		// 
-		// obj: object: dojox.gfx3d.Object
-		this.plus = null;
-		this.minus = null;
-		this.object = obj;
-
-		var o = outline(obj);
-		this.orient = o[0];
-		this.normal = dojox.gfx3d.vector.normalize(o);
-	},
-
-	add: function(obj, outline){
-		var epsilon = 0.5, o = outline(obj), v = dojox.gfx3d.vector, n = this.normal, a = this.orient;
-
-		if(dojo.every(o, function(item){ return Math.floor(epsilon + v.dotProduct(n, v.substract(item, a))) <= 0; })){
-			if(this.minus){
-				this.minus.add(obj, outline);
-			} else {
-				this.minus = new dojox.gfx3d.scheduler.BinarySearchTree(obj, outline);
-			}
-		} else if(dojo.every(o, function(item){ return Math.floor(epsilon + v.dotProduct(n, v.substract(item, a))) >= 0; })){
-			if(this.plus){
-				this.plus.add(obj, outline);
-			} else {
-				this.plus = new dojox.gfx3d.scheduler.BinarySearchTree(obj, outline);
-			}
-		} else {
-			dojo.forEach(o, function(item){ console.debug(v.dotProduct(n, v.substract(item, a))); });
-			throw "The case: polygon cross siblings' plate is not implemneted yet";
-		}
-	},
-
-	iterate: function(outline){
-		var epsilon = 0.5;
-		var v = dojox.gfx3d.vector;
-		var sorted = [];
-		var subs = null;
-		// FIXME: using Infinity here?
-		var view = {x: 0, y: 0, z: -10000};
-		if(Math.floor( epsilon + v.dotProduct(this.normal, v.substract(view, this.orient))) <= 0){
-		subs = [this.plus, this.minus];
-		} else {
-			subs = [this.minus, this.plus];
-		}
-
-		if(subs[0]){ 
-			sorted = sorted.concat(subs[0].iterate());
-		}
-		sorted.push(this.object);
-		if(subs[1]){ 
-			sorted = sorted.concat(subs[1].iterate());
-		}
-		return sorted;
-	}
-
+return C
+},bsp:function(B,C){console.debug("BSP scheduler");
+C=C?C:dojox.gfx3d.scheduler.outline;
+var D=new dojox.gfx3d.scheduler.BinarySearchTree(B[0],C);
+A.forEach(B.slice(1),function(E){D.add(E,C)
 });
-
-dojo.mixin(dojox.gfx3d.drawer, {
-	conservative: function(todos, objects, viewport){
-		console.debug('conservative draw');
-		dojo.forEach(this.objects, function(item){
-			item.destroy();
-		});
-		dojo.forEach(objects, function(item){
-			item.draw(viewport.lighting);
-		});
-	},
-	chart: function(todos, objects, viewport){
-		// NOTE: ondemand may require the todos' objects to use setShape
-		// to redraw themselves to maintain the z-order.
-		console.debug('chart draw');
-		dojo.forEach(this.todos, function(item){
-			item.draw(viewport.lighting);
-		});
-	}
-	// More aggrasive optimization may re-order the DOM nodes using the order 
-	// of objects, and only elements of todos call setShape.
-});
-
-}
-
+return D.iterate(C)
+},order:function(B){return B.getZOrder()
+},outline:function(B){return B.getOutline()
 }});
+A.declare("dojox.gfx3d.scheduler.BinarySearchTree",null,{constructor:function(C,B){this.plus=null;
+this.minus=null;
+this.object=C;
+var D=B(C);
+this.orient=D[0];
+this.normal=dojox.gfx3d.vector.normalize(D)
+},add:function(E,D){var H=0.5,F=D(E),C=dojox.gfx3d.vector,G=this.normal,B=this.orient;
+if(A.every(F,function(I){return Math.floor(H+C.dotProduct(G,C.substract(I,B)))<=0
+})){if(this.minus){this.minus.add(E,D)
+}else{this.minus=new dojox.gfx3d.scheduler.BinarySearchTree(E,D)
+}}else{if(A.every(F,function(I){return Math.floor(H+C.dotProduct(G,C.substract(I,B)))>=0
+})){if(this.plus){this.plus.add(E,D)
+}else{this.plus=new dojox.gfx3d.scheduler.BinarySearchTree(E,D)
+}}else{A.forEach(F,function(I){console.debug(C.dotProduct(G,C.substract(I,B)))
+});
+throw"The case: polygon cross siblings' plate is not implemneted yet"
+}}},iterate:function(F){var G=0.5;
+var D=dojox.gfx3d.vector;
+var C=[];
+var E=null;
+var B={x:0,y:0,z:-10000};
+if(Math.floor(G+D.dotProduct(this.normal,D.substract(B,this.orient)))<=0){E=[this.plus,this.minus]
+}else{E=[this.minus,this.plus]
+}if(E[0]){C=C.concat(E[0].iterate())
+}C.push(this.object);
+if(E[1]){C=C.concat(E[1].iterate())
+}return C
+}});
+A.mixin(dojox.gfx3d.drawer,{conservative:function(C,D,B){console.debug("conservative draw");
+A.forEach(this.objects,function(E){E.destroy()
+});
+A.forEach(D,function(E){E.draw(B.lighting)
+})
+},chart:function(C,D,B){console.debug("chart draw");
+A.forEach(this.todos,function(E){E.draw(B.lighting)
+})
+}})
+}}});

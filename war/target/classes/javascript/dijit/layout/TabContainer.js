@@ -12,10 +12,10 @@ return A
 this.inherited("startup",arguments);
 if(dojo.isSafari){setTimeout(dojo.hitch(this,"layout"),0)
 }},layout:function(){if(!this.doLayout){return 
-}var B=this.tabPosition.replace(/-h/,"");
-var A=[{domNode:this.tablist.domNode,layoutAlign:B},{domNode:this.containerNode,layoutAlign:"client"}];
-dijit.layout.layoutChildren(this.domNode,this._contentBox,A);
-this._containerContentBox=dijit.layout.marginBox2contentBox(this.containerNode,A[1]);
+}var A=this.tabPosition.replace(/-h/,"");
+var B=[{domNode:this.tablist.domNode,layoutAlign:A},{domNode:this.containerNode,layoutAlign:"client"}];
+dijit.layout.layoutChildren(this.domNode,this._contentBox,B);
+this._containerContentBox=dijit.layout.marginBox2contentBox(this.containerNode,B[1]);
 if(this.selectedChildWidget){this._showChild(this.selectedChildWidget);
 if(this.doLayout&&this.selectedChildWidget.resize){this.selectedChildWidget.resize(this._containerContentBox)
 }}},destroy:function(){this.tablist.destroy();

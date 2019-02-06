@@ -13,17 +13,17 @@ A.release=function(B){if(B.releaseCapture){B.releaseCapture()
 document.removeEventListener("mouseup",B.onmouseup,true);
 document.removeEventListener("mousemove",B.onmousemove,true)
 }};
-A.start=function(E,D,F,B,C){if(!E||A.dragging){console.debug("failed to start drag: bad input node or already dragging");
+A.start=function(F,E,B,C,D){if(!F||A.dragging){console.debug("failed to start drag: bad input node or already dragging");
 return 
 }A.dragging=true;
-A.elt=E;
-A.events={drag:D||dojox.grid.nop,end:F||dojox.grid.nop,start:C||dojox.grid.nop,oldmove:E.onmousemove,oldup:E.onmouseup,oldclick:E.onclick};
-A.positionX=(B&&("screenX" in B)?B.screenX:false);
-A.positionY=(B&&("screenY" in B)?B.screenY:false);
+A.elt=F;
+A.events={drag:E||dojox.grid.nop,end:B||dojox.grid.nop,start:D||dojox.grid.nop,oldmove:F.onmousemove,oldup:F.onmouseup,oldclick:F.onclick};
+A.positionX=(C&&("screenX" in C)?C.screenX:false);
+A.positionY=(C&&("screenY" in C)?C.screenY:false);
 A.started=(A.position===false);
-E.onmousemove=A.mousemove;
-E.onmouseup=A.mouseup;
-E.onclick=A.click;
+F.onmousemove=A.mousemove;
+F.onmouseup=A.mouseup;
+F.onclick=A.click;
 A.capture(A.elt)
 };
 A.end=function(){A.release(A.elt);

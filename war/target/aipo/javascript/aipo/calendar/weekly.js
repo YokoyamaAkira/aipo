@@ -6,665 +6,665 @@ dojo.require("aipo.widget.MemberNormalSelectList");
 dojo.require("aipo.widget.GroupNormalSelectList");
 aipo.calendar.objectlist=Array();
 aipo.calendar.maximum_to=30;
-function hasClass(B,A){return B.className.match(new RegExp("(\\s|^)"+A+"(\\s|$)"))
-}function addClass(B,A){if(!this.hasClass(B,A)){B.className+=" "+A
-}}function removeClass(C,A){if(hasClass(C,A)){var B=new RegExp("(\\s|^)"+A+"(\\s|$)");
-C.className=C.className.replace(B," ")
-}}aipo.calendar.changeDisypayPeriod=function(J,G){var C=dojo.byId("weeklyHeadRights-"+G).children;
-var E=dojo.byId("weeklyTermRights-"+G).children;
-var H=dojo.byId("weeklyRights-"+G).children;
-dojo.byId("view_type_"+G).value=J;
-var I=dojo.byId("indicateDate_"+G);
-if(I==null){return 
-}for(var F=0;
-F<7;
-F++){var B=C[F];
-var D=H[F];
-var A=E[F];
-var K=dojo.byId("scheduleDivAdd0"+F+"_"+G);
-switch(J){case"1":I.innerHTML="<span>1日</span>";
-D.className="weeklyRight";
-if(F==0){B.className="weeklyHeadRightR weeklyHeadRightborder"+F+"_"+G;
-B.style.width="100%";
-D.style.width="100%";
-A.style.width="100%";
-addClass(A,"weeklyTermRightR");
-K.style.width="100%"
-}else{B.className="weeklyHeadRight weeklyHeadRightborder"+F+"_"+G;
-B.style.width="0%";
-B.style.display="none";
-D.style.width="0%";
-D.style.display="none";
-A.style.width="0%";
-A.style.display="none";
-removeClass(A,"weeklyTermRightR");
-K.style.width="0%";
-K.style.display="none"
+function hasClass(D,C){return D.className.match(new RegExp("(\\s|^)"+C+"(\\s|$)"))
+}function addClass(D,C){if(!this.hasClass(D,C)){D.className+=" "+C
+}}function removeClass(E,D){if(hasClass(E,D)){var F=new RegExp("(\\s|^)"+D+"(\\s|$)");
+E.className=E.className.replace(F," ")
+}}aipo.calendar.changeDisypayPeriod=function(Q,T){var M=dojo.byId("weeklyHeadRights-"+T).children;
+var V=dojo.byId("weeklyTermRights-"+T).children;
+var S=dojo.byId("weeklyRights-"+T).children;
+dojo.byId("view_type_"+T).value=Q;
+var R=dojo.byId("indicateDate_"+T);
+if(R==null){return 
+}for(var U=0;
+U<7;
+U++){var N=M[U];
+var L=S[U];
+var O=V[U];
+var P=dojo.byId("scheduleDivAdd0"+U+"_"+T);
+switch(Q){case"1":R.innerHTML="<span>1日</span>";
+L.className="weeklyRight";
+if(U==0){N.className="weeklyHeadRightR weeklyHeadRightborder"+U+"_"+T;
+N.style.width="100%";
+L.style.width="100%";
+O.style.width="100%";
+addClass(O,"weeklyTermRightR");
+P.style.width="100%"
+}else{N.className="weeklyHeadRight weeklyHeadRightborder"+U+"_"+T;
+N.style.width="0%";
+N.style.display="none";
+L.style.width="0%";
+L.style.display="none";
+O.style.width="0%";
+O.style.display="none";
+removeClass(O,"weeklyTermRightR");
+P.style.width="0%";
+P.style.display="none"
 }break;
-case"4":I.innerHTML="<span>4日</span>";
-if(F==0){removeClass(A,"weeklyTermRightR")
-}if(F<=3){B.style.width="25%";
-B.style.left=F*25+"%";
-B.style.display="";
-D.style.width="25%";
-D.style.left=F*25+"%";
-D.style.display="";
-A.style.width="25%";
-A.style.left=F*25+"%";
-A.style.display="";
-K.style.width="25%";
-K.style.left=F*25+"%";
-K.style.display="";
-if(F<3){B.className="weeklyHeadRight weeklyHeadRightborder"+F+"_"+G
-}else{if(F==3){B.className="weeklyHeadRightR weeklyHeadRightborder"+F+"_"+G;
-D.className="weeklyRightR";
-addClass(A,"weeklyTermRightR")
-}}}else{B.className="weeklyHeadRight weeklyHeadRightborder"+F+"_"+G;
-B.style.width="0%";
-B.style.display="none";
-D.style.width="0%";
-D.style.display="none";
-A.style.width="0%";
-A.style.display="none";
-removeClass(A,"weeklyTermRightR");
-K.style.width="0%";
-K.style.display="none"
+case"4":R.innerHTML="<span>4日</span>";
+if(U==0){removeClass(O,"weeklyTermRightR")
+}if(U<=3){N.style.width="25%";
+N.style.left=U*25+"%";
+N.style.display="";
+L.style.width="25%";
+L.style.left=U*25+"%";
+L.style.display="";
+O.style.width="25%";
+O.style.left=U*25+"%";
+O.style.display="";
+P.style.width="25%";
+P.style.left=U*25+"%";
+P.style.display="";
+if(U<3){N.className="weeklyHeadRight weeklyHeadRightborder"+U+"_"+T
+}else{if(U==3){N.className="weeklyHeadRightR weeklyHeadRightborder"+U+"_"+T;
+L.className="weeklyRightR";
+addClass(O,"weeklyTermRightR")
+}}}else{N.className="weeklyHeadRight weeklyHeadRightborder"+U+"_"+T;
+N.style.width="0%";
+N.style.display="none";
+L.style.width="0%";
+L.style.display="none";
+O.style.width="0%";
+O.style.display="none";
+removeClass(O,"weeklyTermRightR");
+P.style.width="0%";
+P.style.display="none"
 }break;
-case"7":I.innerHTML="<span>7日</span>";
-B.style.left=F*(100/7)+"%";
-B.style.display="";
-B.style.width="14.2857%";
-D.style.left=F*(100/7)+"%";
-D.style.display="";
-D.style.width="14.2857%";
-A.style.left=F*(100/7)+"%";
-A.style.display="";
-A.style.width="14.2857%";
-K.style.left=F*(100/7)+"%";
-K.style.display="";
-K.style.width="14.2857%";
-if(F==0){removeClass(A,"weeklyTermRightR")
-}if(F<6){B.className="weeklyHeadRight weeklyHeadRightborder"+F+"_"+G;
-D.className="weeklyRight";
-removeClass(A,"weeklyTermRightR")
-}else{B.className="weeklyHeadRightR weeklyHeadRightborder"+F+"_"+G;
-D.className="weeklyRightR";
-addClass(A,"weeklyTermRightR")
+case"7":R.innerHTML="<span>7日</span>";
+N.style.left=U*(100/7)+"%";
+N.style.display="";
+N.style.width="14.2857%";
+L.style.left=U*(100/7)+"%";
+L.style.display="";
+L.style.width="14.2857%";
+O.style.left=U*(100/7)+"%";
+O.style.display="";
+O.style.width="14.2857%";
+P.style.left=U*(100/7)+"%";
+P.style.display="";
+P.style.width="14.2857%";
+if(U==0){removeClass(O,"weeklyTermRightR")
+}if(U<6){N.className="weeklyHeadRight weeklyHeadRightborder"+U+"_"+T;
+L.className="weeklyRight";
+removeClass(O,"weeklyTermRightR")
+}else{N.className="weeklyHeadRightR weeklyHeadRightborder"+U+"_"+T;
+L.className="weeklyRightR";
+addClass(O,"weeklyTermRightR")
 }}}};
-aipo.calendar.populateWeeklySchedule=function(E,F){var C;
-var D=dojo.byId("member_to-"+E);
-if(typeof F=="undefined"||typeof ptConfig[E].jsonData=="undefined"){C=""
-}else{C=F
-}var B=dojo.byId("secid-"+E);
-if(B){C+="&secid="+B.value
-}if(C.match(/ign_dup_f/)==null){if(D){var G=D.options;
-to_size=G.length;
-if(to_size==0){C+="&m_id="+aipo.schedule.login_id;
-C+="&m_empty=empty";
-dojo.byId("calender_m_empty_"+E).style.display=""
-}else{C+="&m_empty=";
-dojo.byId("calender_m_empty_"+E).style.display="none"
+aipo.calendar.populateWeeklySchedule=function(K,J){var M;
+var L=dojo.byId("member_to-"+K);
+if(typeof J=="undefined"||typeof ptConfig[K].jsonData=="undefined"){M=""
+}else{M=J
+}var N=dojo.byId("secid-"+K);
+if(N){M+="&secid="+N.value
+}if(M.match(/ign_dup_f/)==null){if(L){var I=L.options;
+to_size=I.length;
+if(to_size==0){M+="&m_id="+aipo.schedule.login_id;
+M+="&m_empty=empty";
+dojo.byId("calender_m_empty_"+K).style.display=""
+}else{M+="&m_empty=";
+dojo.byId("calender_m_empty_"+K).style.display="none"
 }for(i=0;
 i<to_size;
-i++){G[i].selected=true;
-C+="&m_id="+G[i].value
-}}var A=dojo.byId("showAll-"+E);
-if(A){C+="&s_all="+A.value
+i++){I[i].selected=true;
+M+="&m_id="+I[i].value
+}}var H=dojo.byId("showAll-"+K);
+if(H){M+="&s_all="+H.value
 }}djConfig.usePlainJson=true;
-ptConfig[E].reloadFunction=aipo.calendar.populateWeeklySchedule;
-ptConfig[E].isTooltipEnable=false;
+ptConfig[K].reloadFunction=aipo.calendar.populateWeeklySchedule;
+ptConfig[K].isTooltipEnable=false;
 if(aipo.calendar.dummyDivObj){aipo.calendar.dummyDivObj.destroy();
 aipo.calendar.dummyDivObj=null
-}if(dojo.byId("groupselect-"+E).value.indexOf("pickup")!=-1){C+="&pickup=true"
-}dojo.xhrGet({portletId:E,url:ptConfig[E].jsonUrl+C,encoding:"utf-8",handleAs:"json-comment-filtered",load:function(r,g){if(aipo.calendar.reloadMonthlyCalendar!=null){aipo.calendar.reloadMonthlyCalendar()
-}obj_error=dojo.byId("error-"+E);
+}if(dojo.byId("groupselect-"+K).value.indexOf("pickup")!=-1){M+="&pickup=true"
+}dojo.xhrGet({portletId:K,url:ptConfig[K].jsonUrl+M,encoding:"utf-8",handleAs:"json-comment-filtered",load:function(AE,AM){if(aipo.calendar.reloadMonthlyCalendar!=null){aipo.calendar.reloadMonthlyCalendar()
+}obj_error=dojo.byId("error-"+K);
 dojo.style(obj_error,"display","none");
-if("PermissionError"==r[0]){dojo.style(obj_error,"display","block");
-obj_error.innerHTML=r[1];
-obj_content=dojo.byId("content-"+E);
+if("PermissionError"==AE[0]){dojo.style(obj_error,"display","block");
+obj_error.innerHTML=AE[1];
+obj_content=dojo.byId("content-"+K);
 dojo.style(obj_content,"display","none");
-obj_indicator=dojo.byId("indicator-"+E);
+obj_indicator=dojo.byId("indicator-"+K);
 dojo.style(obj_indicator,"display","none");
 return 
-}else{if(r.errList){if("duplicate_facility"==r.errList[0]){if(confirm("既に同じ時間帯に設備が予約されています。スケジュールを登録しますか？")){var I=C+"&ign_dup_f=true";
-aipo.calendar.populateWeeklySchedule(E,I);
-aipo.portletReload("schedule",E);
+}else{if(AE.errList){if("duplicate_facility"==AE.errList[0]){if(confirm("既に同じ時間帯に設備が予約されています。スケジュールを登録しますか？")){var AC=M+"&ign_dup_f=true";
+aipo.calendar.populateWeeklySchedule(K,AC);
+aipo.portletReload("schedule",K);
 return 
-}}if("UpdateError"==r.errList[0]){dojo.style(obj_error,"display","block");
-obj_error.innerHTML='<ul><li><span class="caution">'+r.errList[1]+"</span></li></ul>";
-obj_content=dojo.byId("content-"+E);
+}}if("UpdateError"==AE.errList[0]){dojo.style(obj_error,"display","block");
+obj_error.innerHTML='<ul><li><span class="caution">'+AE.errList[1]+"</span></li></ul>";
+obj_content=dojo.byId("content-"+K);
 dojo.style(obj_content,"visibility","visible");
-obj_indicator=dojo.byId("indicator-"+E);
+obj_indicator=dojo.byId("indicator-"+K);
 dojo.style(obj_indicator,"display","none")
-}}}var h;
-if(!!aipo.calendar.objectlist){var m=aipo.calendar.objectlist.length;
-for(h=0;
-h<m;
-h++){var a=aipo.calendar.objectlist[h];
-if(a.portletId==E){a.destroy()
-}}}if(!aipo.errorTreatment(r,ptConfig[E].thisUrl)){return 
-}ptConfig[E].jsonData=r;
-var p=Array(ptConfig[E].scheduleDivDaySum);
-for(var h=0;
-h<ptConfig[E].scheduleDivDaySum;
-h++){p[h]=Array()
-}var Q=0;
-var q=0;
-var R=0;
-var X="";
-var S="";
-var e="";
+}}}var AL;
+if(!!aipo.calendar.objectlist){var AJ=aipo.calendar.objectlist.length;
+for(AL=0;
+AL<AJ;
+AL++){var AS=aipo.calendar.objectlist[AL];
+if(AS.portletId==K){AS.destroy()
+}}}if(!aipo.errorTreatment(AE,ptConfig[K].thisUrl)){return 
+}ptConfig[K].jsonData=AE;
+var AG=Array(ptConfig[K].scheduleDivDaySum);
+for(var AL=0;
+AL<ptConfig[K].scheduleDivDaySum;
+AL++){AG[AL]=Array()
+}var u=0;
+var AF=0;
+var t=0;
+var C="";
+var s="";
+var AO="";
+var w="";
+var A=[];
+var B,D,E,F;
+var AI=AE.startDate.substring(0,4)+"年"+parseInt(AE.startDate.substring(5,7),10)+"月"+parseInt(AE.startDate.substring(8,10),10)+"日"+AE.dayOfWeek[0];
+dojo.byId("viewWeekly-"+K).innerHTML=AI;
+var AD="";
+var AN="";
+var y=dojo.byId("top_form_"+this.portletId).value=="simple";
+var AQ=dojo.byId("view_type_"+this.portletId).value=="1";
+var v=dojo.byId("view_type_"+this.portletId).value=="4";
+var AK=window.navigator.userAgent.toLowerCase().indexOf("ipad")>=0;
+if(y&&AQ){AD="width: 100%;";
+AN="width: 0%;display: none;"
+}AO+='<table id="termTable_'+this.portletId+'" style="width:100%;" cellspacing="0" cellpadding="0" border="0"><tbody>';
+var AP=dojo.byId("weeklyScrollPane_"+this.portletId);
+dojo.forEach(AE.termSchedule,function(T){var S="";
 var O="";
-var Z=[];
-var Y,W,V,U;
-var n=r.startDate.substring(0,4)+"年"+parseInt(r.startDate.substring(5,7),10)+"月"+parseInt(r.startDate.substring(8,10),10)+"日"+r.dayOfWeek[0];
-dojo.byId("viewWeekly-"+E).innerHTML=n;
-var H="";
-var f="";
-var M=dojo.byId("top_form_"+this.portletId).value=="simple";
-var c=dojo.byId("view_type_"+this.portletId).value=="1";
-var P=dojo.byId("view_type_"+this.portletId).value=="4";
-var l=window.navigator.userAgent.toLowerCase().indexOf("ipad")>=0;
-if(M&&c){H="width: 100%;";
-f="width: 0%;display: none;"
-}e+='<table id="termTable_'+this.portletId+'" style="width:100%;" cellspacing="0" cellpadding="0" border="0"><tbody>';
-var d=dojo.byId("weeklyScrollPane_"+this.portletId);
-dojo.forEach(r.termSchedule,function(s){var t="";
-var x="";
-if(M&&(c||P)){t=' style="display: none;"';
-R++;
+if(y&&(AQ||v)){S=' style="display: none;"';
+t++;
 for(k=0;
-k<s.length;
-k++){v=s[k];
-if(v.index==0||(M&&P&&v.index<4)){t="";
-x=" weeklyTermRightR";
-R--;
+k<T.length;
+k++){Q=T[k];
+if(Q.index==0||(y&&v&&Q.index<4)){S="";
+O=" weeklyTermRightR";
+t--;
 break
-}}}var v=null;
-var u=scheduleTooltipEnable!==true&&M&&c?"border-right:0":"";
-if(scheduleTooltipEnable!==true&&M&&c){e+="<tr"+t+'><td colspan="2" nowrap="nowrap" width="100%" height="17px" valign="top"><div class="weeklyTermRights">'
-}else{e+="<tr"+t+'><td nowrap="nowrap" width="100%" height="17px" valign="top"><div class="weeklyTermRights">'
-}if(M&&P){e+='<div class="_weeklyHeadRightborder0_'+E+" weeklyTermRight weeklyTermRightL"+x+'" id="termDay0-'+q+"-"+E+'" style="width: 25%;left: 0%;'+H+u+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder1_'+E+' weeklyTermRight" id="termDay1-'+q+"-"+E+'" style="width: 25%;left: 25%;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder2_'+E+' weeklyTermRight" id="termDay2-'+q+"-"+E+'" style="width: 25%;left: 50%;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder3_'+E+' weeklyTermRight weeklyTermRightR" id="termDay3-'+q+"-"+E+'" style="width: 25%;left: 75%;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder4_'+E+' weeklyTermRight" id="termDay4-'+q+"-"+E+'" style="left: 57.1429%;display:none;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder5_'+E+' weeklyTermRight" id="termDay5-'+q+"-"+E+'" style="left: 71.4286%;display:none;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder6_'+E+' weeklyTermRight weeklyTermRightR" id="termDay6-'+q+"-"+E+'" style="left: 85.7143%;display:none;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-O+='<div id="termScheduleItemGarage-'+q+"-"+E+'" class="weeklyTermRights" style="top:'+(-(17*(q-R+1)))+'px"> </div>'
-}else{e+='<div class="_weeklyHeadRightborder0_'+E+" weeklyTermRight weeklyTermRightL"+x+'" id="termDay0-'+q+"-"+E+'" style="left: 0%;'+H+u+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder1_'+E+' weeklyTermRight" id="termDay1-'+q+"-"+E+'" style="left: 14.2857%;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder2_'+E+' weeklyTermRight" id="termDay2-'+q+"-"+E+'" style="left: 28.5714%;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder3_'+E+' weeklyTermRight" id="termDay3-'+q+"-"+E+'" style="left: 42.8571%;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder4_'+E+' weeklyTermRight" id="termDay4-'+q+"-"+E+'" style="left: 57.1429%;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder5_'+E+' weeklyTermRight" id="termDay5-'+q+"-"+E+'" style="left: 71.4286%;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-e+='<div class="_weeklyHeadRightborder6_'+E+' weeklyTermRight weeklyTermRightR" id="termDay6-'+q+"-"+E+'" style="left: 85.7143%;'+f+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
-O+='<div id="termScheduleItemGarage-'+q+"-"+E+'" class="weeklyTermRights" style="top:'+(-(17*(q-R+1)))+'px"> </div>'
-}var w;
-e+="</div></td></tr>";
-q++
+}}}var Q=null;
+var R=scheduleTooltipEnable!==true&&y&&AQ?"border-right:0":"";
+if(scheduleTooltipEnable!==true&&y&&AQ){AO+="<tr"+S+'><td colspan="2" nowrap="nowrap" width="100%" height="17px" valign="top"><div class="weeklyTermRights">'
+}else{AO+="<tr"+S+'><td nowrap="nowrap" width="100%" height="17px" valign="top"><div class="weeklyTermRights">'
+}if(y&&v){AO+='<div class="_weeklyHeadRightborder0_'+K+" weeklyTermRight weeklyTermRightL"+O+'" id="termDay0-'+AF+"-"+K+'" style="width: 25%;left: 0%;'+AD+R+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder1_'+K+' weeklyTermRight" id="termDay1-'+AF+"-"+K+'" style="width: 25%;left: 25%;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder2_'+K+' weeklyTermRight" id="termDay2-'+AF+"-"+K+'" style="width: 25%;left: 50%;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder3_'+K+' weeklyTermRight weeklyTermRightR" id="termDay3-'+AF+"-"+K+'" style="width: 25%;left: 75%;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder4_'+K+' weeklyTermRight" id="termDay4-'+AF+"-"+K+'" style="left: 57.1429%;display:none;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder5_'+K+' weeklyTermRight" id="termDay5-'+AF+"-"+K+'" style="left: 71.4286%;display:none;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder6_'+K+' weeklyTermRight weeklyTermRightR" id="termDay6-'+AF+"-"+K+'" style="left: 85.7143%;display:none;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+w+='<div id="termScheduleItemGarage-'+AF+"-"+K+'" class="weeklyTermRights" style="top:'+(-(17*(AF-t+1)))+'px"> </div>'
+}else{AO+='<div class="_weeklyHeadRightborder0_'+K+" weeklyTermRight weeklyTermRightL"+O+'" id="termDay0-'+AF+"-"+K+'" style="left: 0%;'+AD+R+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder1_'+K+' weeklyTermRight" id="termDay1-'+AF+"-"+K+'" style="left: 14.2857%;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder2_'+K+' weeklyTermRight" id="termDay2-'+AF+"-"+K+'" style="left: 28.5714%;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder3_'+K+' weeklyTermRight" id="termDay3-'+AF+"-"+K+'" style="left: 42.8571%;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder4_'+K+' weeklyTermRight" id="termDay4-'+AF+"-"+K+'" style="left: 57.1429%;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder5_'+K+' weeklyTermRight" id="termDay5-'+AF+"-"+K+'" style="left: 71.4286%;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+AO+='<div class="_weeklyHeadRightborder6_'+K+' weeklyTermRight weeklyTermRightR" id="termDay6-'+AF+"-"+K+'" style="left: 85.7143%;'+AN+'"><div class="weeklyTermRightTop">&nbsp;</div></div>';
+w+='<div id="termScheduleItemGarage-'+AF+"-"+K+'" class="weeklyTermRights" style="top:'+(-(17*(AF-t+1)))+'px"> </div>'
+}var P;
+AO+="</div></td></tr>";
+AF++
 });
-e+="</tbody></table>";
-dojo.byId("termScheduleGarage-"+E).innerHTML=e;
-dojo.byId("termScheduleDivAdd_"+E).style.height=(17*(q-R+1))+"px";
-dojo.byId("termScheduleDivAdd_"+E).style.top=(-(17*(q-R+1)))+"px";
-dojo.byId("termScheduleContainer-"+E).innerHTML=O;
-dojo.byId("weeklyTermLeftTopTall-"+E).style.height=(17*(q-R))+"px";
-for(var h=0;
-h<ptConfig[E].scheduleDivDaySum;
-h++){Y=dojo.byId("weeklyDay"+h+"-"+E);
-W=dojo.byId("weeklyHoliday"+h+"-"+E);
-V=dojo.byId("weeklyRight"+h+"-"+E);
-U=dojo.byId("termDay"+h+"-"+E);
-Y.innerHTML=parseInt(r.date[h].substring(8,10),10)+r.dayOfWeek[h];
-W.innerHTML=r.holiday[h];
-if(r.dayOfWeek[h]=="（土）"){dojo.addClass(Y,"saturday");
-dojo.addClass(W,"saturday");
-dojo.addClass(V,"saturday");
-dojo.addClass(U,"saturday")
-}else{dojo.removeClass(Y,"saturday");
-dojo.removeClass(W,"saturday");
-dojo.removeClass(V,"saturday");
-dojo.removeClass(U,"saturday")
-}if(r.dayOfWeek[h]=="（日）"){dojo.addClass(Y,"sunday");
-dojo.addClass(W,"sunday");
-dojo.addClass(V,"sunday");
-dojo.addClass(U,"sunday")
-}else{dojo.removeClass(Y,"sunday");
-dojo.removeClass(W,"sunday");
-dojo.removeClass(V,"sunday");
-dojo.removeClass(U,"sunday")
-}if(r.holiday[h]){dojo.addClass(Y,"holiday");
-dojo.addClass(W,"holiday");
-dojo.addClass(V,"holiday");
-dojo.addClass(U,"holiday")
-}else{dojo.removeClass(Y,"holiday");
-dojo.removeClass(W,"holiday");
-dojo.removeClass(V,"holiday");
-dojo.removeClass(U,"holiday")
-}}dojo.forEach(r.schedule,function(AI){var s=ptConfig[E].rowHeight;
-var AE=AI.startDateHour*s*2+AI.startDateMinute*s/30;
-var AH=AI.endDateHour*s*2+AI.endDateMinute*s/30-AE;
-if(AH<=s){Z[Q]=AH;
-AH=s
-}else{Z[Q]=-1
-}var x=100/ptConfig[E].scheduleDivDaySum*AI.index;
-var v=100/ptConfig[E].scheduleDivDaySum*0.99;
-var t=AI.name;
-var w=Z[Q]==-1?((AI.startDateHour>9)?AI.startDate:"0"+AI.startDate):AI.name;
-var AC=Z[Q]==-1?((AI.endDateHour>9)?AI.endDate:"0"+AI.endDate):"";
-var AB=Z[Q]==-1?"-":"";
-var AD=AI.scheduleId;
-var AF="0";
-var y="";
-var u=dojo.byId("member_to-"+E);
-if(u){var z=u.options;
-for(h=0;
-h<z.length;
-h++){if(((AI.type=="U")&&(AI.ownerId==z[h].value))||((AI.type=="F")&&(AI.ownerId==z[h].value))){AF=h%aipo.calendar.maximum_to
-}if(AI.memberList){var AA=0;
-var AG=0;
+AO+="</tbody></table>";
+dojo.byId("termScheduleGarage-"+K).innerHTML=AO;
+dojo.byId("termScheduleDivAdd_"+K).style.height=(17*(AF-t+1))+"px";
+dojo.byId("termScheduleDivAdd_"+K).style.top=(-(17*(AF-t+1)))+"px";
+dojo.byId("termScheduleContainer-"+K).innerHTML=w;
+dojo.byId("weeklyTermLeftTopTall-"+K).style.height=(17*(AF-t))+"px";
+for(var AL=0;
+AL<ptConfig[K].scheduleDivDaySum;
+AL++){B=dojo.byId("weeklyDay"+AL+"-"+K);
+D=dojo.byId("weeklyHoliday"+AL+"-"+K);
+E=dojo.byId("weeklyRight"+AL+"-"+K);
+F=dojo.byId("termDay"+AL+"-"+K);
+B.innerHTML=parseInt(AE.date[AL].substring(8,10),10)+AE.dayOfWeek[AL];
+D.innerHTML=AE.holiday[AL];
+if(AE.dayOfWeek[AL]=="（土）"){dojo.addClass(B,"saturday");
+dojo.addClass(D,"saturday");
+dojo.addClass(E,"saturday");
+dojo.addClass(F,"saturday")
+}else{dojo.removeClass(B,"saturday");
+dojo.removeClass(D,"saturday");
+dojo.removeClass(E,"saturday");
+dojo.removeClass(F,"saturday")
+}if(AE.dayOfWeek[AL]=="（日）"){dojo.addClass(B,"sunday");
+dojo.addClass(D,"sunday");
+dojo.addClass(E,"sunday");
+dojo.addClass(F,"sunday")
+}else{dojo.removeClass(B,"sunday");
+dojo.removeClass(D,"sunday");
+dojo.removeClass(E,"sunday");
+dojo.removeClass(F,"sunday")
+}if(AE.holiday[AL]){dojo.addClass(B,"holiday");
+dojo.addClass(D,"holiday");
+dojo.addClass(E,"holiday");
+dojo.addClass(F,"holiday")
+}else{dojo.removeClass(B,"holiday");
+dojo.removeClass(D,"holiday");
+dojo.removeClass(E,"holiday");
+dojo.removeClass(F,"holiday")
+}}dojo.forEach(AE.schedule,function(O){var e=ptConfig[K].rowHeight;
+var S=O.startDateHour*e*2+O.startDateMinute*e/30;
+var P=O.endDateHour*e*2+O.endDateMinute*e/30-S;
+if(P<=e){A[u]=P;
+P=e
+}else{A[u]=-1
+}var Z=100/ptConfig[K].scheduleDivDaySum*O.index;
+var b=100/ptConfig[K].scheduleDivDaySum*0.99;
+var d=O.name;
+var a=A[u]==-1?((O.startDateHour>9)?O.startDate:"0"+O.startDate):O.name;
+var U=A[u]==-1?((O.endDateHour>9)?O.endDate:"0"+O.endDate):"";
+var V=A[u]==-1?"-":"";
+var T=O.scheduleId;
+var R="0";
+var Y="";
+var c=dojo.byId("member_to-"+K);
+if(c){var X=c.options;
+for(AL=0;
+AL<X.length;
+AL++){if(((O.type=="U")&&(O.ownerId==X[AL].value))||((O.type=="F")&&(O.ownerId==X[AL].value))){R=AL%aipo.calendar.maximum_to
+}if(O.memberList){var W=0;
+var Q=0;
 for(j=0;
-j<AI.memberList.length;
-j++){if(AI.memberList[j].charAt(0)=="f"){AG++
-}else{AA++
-}}}}var y;
-if(AI.userCount>1){y="[共有]"
-}if(AI.facilityCount>0){y+="[設備]"
-}}if(!AI["public"]){t+='<img src="images/schedule/schedule_secret.gif" border="0" width="16" height="16" alt="非公開" title="非公開" align="top" class="icon" />'
-}if(AI.duplicate){t+='<img src="images/schedule/schedule_duplicate.gif" border="0" width="16" height="16" alt="重複スケジュール" title="重複スケジュール" align="top" class="icon" />'
-}if(AI.repeat){t+='<img src="images/schedule/schedule_repeat.gif" border="0" width="16" height="16" alt="繰り返し" title="繰り返し" align="top" class="icon" />'
-}if(AI.tmpreserve){t+='<img src="images/schedule/schedule_tmpreserve.gif" border="0" width="16" height="16" alt="仮スケジュール" title="仮スケジュール" align="top" class="icon" />'
-}X+='<div id="schedule-'+Q+"-"+E+'" class="scheduleDiv color'+AF+'" style="top: '+AE+"px; left: "+x+"%; height: "+(AH-1)+"px; width: "+v+'%; z-index: 0; visibility: hidden;"><div class="scheduleDivFirstLine color'+AF+'"><span id="scheduleDivStartTime-'+Q+"-"+E+'" class="scheduleDivTime color'+AF+'">'+y+w+'</span><span id="scheduleDivSepalater-'+Q+"-"+E+'"  class="scheduleDivSepalater color'+AF+'">'+AB+'</span><span id="scheduleDivEndTime-'+Q+"-"+E+'" class="scheduleDivTime color'+AF+'">'+AC+'</span></div><div class="scheduleDivName color'+AF+'">'+t+'</div><div class="scheduleDivLastLine color'+AF+'"><center><div class="handleDiv color'+AF+'" align="center">&nbsp;</div></center></div></div>';
-Q++
+j<O.memberList.length;
+j++){if(O.memberList[j].charAt(0)=="f"){Q++
+}else{W++
+}}}}var Y;
+if(O.userCount>1){Y="[共有]"
+}if(O.facilityCount>0){Y+="[設備]"
+}}if(!O["public"]){d+='<img src="images/schedule/schedule_secret.gif" border="0" width="16" height="16" alt="非公開" title="非公開" align="top" class="icon" />'
+}if(O.duplicate){d+='<img src="images/schedule/schedule_duplicate.gif" border="0" width="16" height="16" alt="重複スケジュール" title="重複スケジュール" align="top" class="icon" />'
+}if(O.repeat){d+='<img src="images/schedule/schedule_repeat.gif" border="0" width="16" height="16" alt="繰り返し" title="繰り返し" align="top" class="icon" />'
+}if(O.tmpreserve){d+='<img src="images/schedule/schedule_tmpreserve.gif" border="0" width="16" height="16" alt="仮スケジュール" title="仮スケジュール" align="top" class="icon" />'
+}C+='<div id="schedule-'+u+"-"+K+'" class="scheduleDiv color'+R+'" style="top: '+S+"px; left: "+Z+"%; height: "+(P-1)+"px; width: "+b+'%; z-index: 0; visibility: hidden;"><div class="scheduleDivFirstLine color'+R+'"><span id="scheduleDivStartTime-'+u+"-"+K+'" class="scheduleDivTime color'+R+'">'+Y+a+'</span><span id="scheduleDivSepalater-'+u+"-"+K+'"  class="scheduleDivSepalater color'+R+'">'+V+'</span><span id="scheduleDivEndTime-'+u+"-"+K+'" class="scheduleDivTime color'+R+'">'+U+'</span></div><div class="scheduleDivName color'+R+'">'+d+'</div><div class="scheduleDivLastLine color'+R+'"><center><div class="handleDiv color'+R+'" align="center">&nbsp;</div></center></div></div>';
+u++
 });
-X+='<div id="dummy_div_'+E+'" class="scheduleDivAdd dummy_div" style=" position:absolute; width: 0px; height : 0px; left: 0px; top: -10000px; Filter: Alpha(Opacity=10);opacity:.10; background-color:#FFFFFF; ">&nbsp;</div>';
-dojo.byId("scheduleGarage-"+E).innerHTML=X;
-var o=null;
-var N,L;
-var T=[];
-Q=0;
-dojo.forEach(r.schedule,function(t){N=dojo.byId("schedule-"+Q+"-"+E);
-var s=t.scheduleId;
-o=new aipo.calendar.WeeklyScheduleDraggable(N,{pid:E,sid:'"schedule-'+Q+"-"+E+'"',handle:'"dummy_div_-'+E+'"'});
-aipo.calendar.objectlist.push(o);
-if(t.member||t.loginuser||t.owner||t["public"]){o.setDraggable(true)
-}else{o.setDraggable(false)
-}o.schedule=t;
-o.tmpIndex=t.index;
-o.count=Q;
-o.tmpHeight=Z[Q];
-o.position=0;
-o.division=1;
-o.portletId=E;
-p[t.index].push(N);
-if(t["public"]||t.member){dojo.connect(N,"onclick",o,"onScheduleClick")
-}dojo.connect(N,"onmouseover",o,"onScheduleOver");
-Q++
+C+='<div id="dummy_div_'+K+'" class="scheduleDivAdd dummy_div" style=" position:absolute; width: 0px; height : 0px; left: 0px; top: -10000px; Filter: Alpha(Opacity=10);opacity:.10; background-color:#FFFFFF; ">&nbsp;</div>';
+dojo.byId("scheduleGarage-"+K).innerHTML=C;
+var AH=null;
+var x,z;
+var G=[];
+u=0;
+dojo.forEach(AE.schedule,function(O){x=dojo.byId("schedule-"+u+"-"+K);
+var P=O.scheduleId;
+AH=new aipo.calendar.WeeklyScheduleDraggable(x,{pid:K,sid:'"schedule-'+u+"-"+K+'"',handle:'"dummy_div_-'+K+'"'});
+aipo.calendar.objectlist.push(AH);
+if(O.member||O.loginuser||O.owner||O["public"]){AH.setDraggable(true)
+}else{AH.setDraggable(false)
+}AH.schedule=O;
+AH.tmpIndex=O.index;
+AH.count=u;
+AH.tmpHeight=A[u];
+AH.position=0;
+AH.division=1;
+AH.portletId=K;
+AG[O.index].push(x);
+if(O["public"]||O.member){dojo.connect(x,"onclick",AH,"onScheduleClick")
+}dojo.connect(x,"onmouseover",AH,"onScheduleOver");
+u++
 });
-for(var h=0;
-h<ptConfig[E].scheduleDivDaySum;
-h++){aipo.calendar.relocation(E,p[h].length,p[h],100/ptConfig[E].scheduleDivDaySum*h);
-p[h]=Array()
-}Q=0;
-q=0;
-dojo.forEach(r.termSchedule,function(AB){var AG=null;
-S="";
-for(var AA=0;
-AA<ptConfig[E].scheduleDivDaySum;
-AA++){tmpNode5=dojo.byId("termDay"+AA+"-"+q+"-"+E);
-if(r.dayOfWeek[AA]=="（土）"){dojo.addClass(tmpNode5,"saturday")
+for(var AL=0;
+AL<ptConfig[K].scheduleDivDaySum;
+AL++){aipo.calendar.relocation(K,AG[AL].length,AG[AL],100/ptConfig[K].scheduleDivDaySum*AL);
+AG[AL]=Array()
+}u=0;
+AF=0;
+dojo.forEach(AE.termSchedule,function(T){var O=null;
+s="";
+for(var U=0;
+U<ptConfig[K].scheduleDivDaySum;
+U++){tmpNode5=dojo.byId("termDay"+U+"-"+AF+"-"+K);
+if(AE.dayOfWeek[U]=="（土）"){dojo.addClass(tmpNode5,"saturday")
 }else{dojo.removeClass(tmpNode5,"saturday")
-}if(r.dayOfWeek[AA]=="（日）"){dojo.addClass(tmpNode5,"sunday")
+}if(AE.dayOfWeek[U]=="（日）"){dojo.addClass(tmpNode5,"sunday")
 }else{dojo.removeClass(tmpNode5,"sunday")
-}if(r.holiday[AA]){dojo.addClass(tmpNode5,"holiday")
+}if(AE.holiday[U]){dojo.addClass(tmpNode5,"holiday")
 }else{dojo.removeClass(tmpNode5,"holiday")
 }}for(k=0;
-k<AB.length;
-k++){AG=AB[k];
-if(M&&P){var AD=AG.rowspan;
-if(AG.rowspan+AG.index>4){AD=AD-(AG.rowspan+AG.index-4)
-}var u=25*AD;
-var w=25*AG.index;
-if(AG.index>4){u=0
-}}else{var u=100/ptConfig[E].scheduleDivDaySum*AG.rowspan;
-var w=100/ptConfig[E].scheduleDivDaySum*AG.index
-}var v="";
-if(M&&c){u=100;
-v=((AG.index==0)?"":"display: none;")
-}var s=AG.name;
-var AC=AG.scheduleId;
-var AE="0";
-var x="";
-var t=dojo.byId("member_to-"+E);
-if(t){var y=t.options;
-for(AA=0;
-AA<y.length;
-AA++){if(((AG.type=="U")&&(AG.ownerId==y[AA].value))||((AG.type=="F")&&(AG.ownerId==y[AA].value))){AE=AA%aipo.calendar.maximum_to
-}if(AG.memberList){var z=0;
-var AF=0;
+k<T.length;
+k++){O=T[k];
+if(y&&v){var R=O.rowspan;
+if(O.rowspan+O.index>4){R=R-(O.rowspan+O.index-4)
+}var a=25*R;
+var Y=25*O.index;
+if(O.index>4){a=0
+}}else{var a=100/ptConfig[K].scheduleDivDaySum*O.rowspan;
+var Y=100/ptConfig[K].scheduleDivDaySum*O.index
+}var Z="";
+if(y&&AQ){a=100;
+Z=((O.index==0)?"":"display: none;")
+}var c=O.name;
+var S=O.scheduleId;
+var Q="0";
+var X="";
+var b=dojo.byId("member_to-"+K);
+if(b){var W=b.options;
+for(U=0;
+U<W.length;
+U++){if(((O.type=="U")&&(O.ownerId==W[U].value))||((O.type=="F")&&(O.ownerId==W[U].value))){Q=U%aipo.calendar.maximum_to
+}if(O.memberList){var V=0;
+var P=0;
 for(j=0;
-j<AG.memberList.length;
-j++){if(AG.memberList[j].charAt(0)=="f"){AF++
-}else{z++
-}}}}var x;
-if(z>1){x="[共有]"
-}if(AF>0){x+="[設備]"
-}}if(!AG["public"]){s+='<img src="images/schedule/schedule_secret.gif" border="0" width="16" height="16" alt="非公開" title="非公開" align="top" class="icon" />'
-}if(AG.duplicate){s+='<img src="images/schedule/schedule_duplicate.gif" border="0" width="16" height="16" alt="重複スケジュール" title="重複スケジュール" align="top" class="icon" />'
-}if(AG.repeat){s+='<img src="images/schedule/schedule_repeat.gif" border="0" width="16" height="16" alt="繰り返し" title="繰り返し" align="top" class="icon" />'
-}if(AG.tmpreserve){s+='<img src="images/schedule/schedule_tmpreserve.gif" border="0" width="16" height="16" alt="仮スケジュール" title="仮スケジュール" align="top" class="icon" />'
-}if(u==100){u="99.99999"
-}S+='<div id="termSchedule-'+Q+"-"+E+'" class="termScheduleDiv termColor'+AE+'" style="left: '+w+"%; width: "+u+"%;"+v+'"><div class="termScheduleDivHandleLeft" id="termScheduleDivHandleLeft-'+Q+"-"+E+'">&nbsp;</div><div class="termScheduleDivNameDiv">'+x+s+'</div><div class="termScheduleDivHandleRight" id="termScheduleDivHandleRight-'+Q+"-"+E+'">&nbsp;</div></div>';
-Q++
-}dojo.byId("termScheduleItemGarage-"+q+"-"+E).innerHTML=S;
-q++
+j<O.memberList.length;
+j++){if(O.memberList[j].charAt(0)=="f"){P++
+}else{V++
+}}}}var X;
+if(V>1){X="[共有]"
+}if(P>0){X+="[設備]"
+}}if(!O["public"]){c+='<img src="images/schedule/schedule_secret.gif" border="0" width="16" height="16" alt="非公開" title="非公開" align="top" class="icon" />'
+}if(O.duplicate){c+='<img src="images/schedule/schedule_duplicate.gif" border="0" width="16" height="16" alt="重複スケジュール" title="重複スケジュール" align="top" class="icon" />'
+}if(O.repeat){c+='<img src="images/schedule/schedule_repeat.gif" border="0" width="16" height="16" alt="繰り返し" title="繰り返し" align="top" class="icon" />'
+}if(O.tmpreserve){c+='<img src="images/schedule/schedule_tmpreserve.gif" border="0" width="16" height="16" alt="仮スケジュール" title="仮スケジュール" align="top" class="icon" />'
+}if(a==100){a="99.99999"
+}s+='<div id="termSchedule-'+u+"-"+K+'" class="termScheduleDiv termColor'+Q+'" style="left: '+Y+"%; width: "+a+"%;"+Z+'"><div class="termScheduleDivHandleLeft" id="termScheduleDivHandleLeft-'+u+"-"+K+'">&nbsp;</div><div class="termScheduleDivNameDiv">'+X+c+'</div><div class="termScheduleDivHandleRight" id="termScheduleDivHandleRight-'+u+"-"+K+'">&nbsp;</div></div>';
+u++
+}dojo.byId("termScheduleItemGarage-"+AF+"-"+K).innerHTML=s;
+AF++
 });
-tableLeft=dojo.byId("weeklyTermLeft_"+E);
-o=null;
-Q=0;
-q=0;
-dojo.forEach(r.termSchedule,function(s){var u=null;
+tableLeft=dojo.byId("weeklyTermLeft_"+K);
+AH=null;
+u=0;
+AF=0;
+dojo.forEach(AE.termSchedule,function(Q){var O=null;
 for(k=0;
-k<s.length;
-k++){u=s[k];
-var t=u.scheduleId;
-N=dojo.byId("termSchedule-"+Q+"-"+E);
-L=dojo.byId("termScheduleDivHandleLeft-"+Q+"-"+E);
-draggable3=dojo.byId("termScheduleDivHandleRight-"+Q+"-"+E);
-o=new aipo.calendar.WeeklyTermScheduleDraggable(N,{pid:E,sid:"termSchedule-"+Q+"-"+E});
-aipo.calendar.objectlist.push(o);
-o.schedule=u;
-o.scheduleNode=N;
-o.portletId=E;
-o.termType="center";
-dojo.connect(N,"onclick",o,"onScheduleClick");
-N.style.zIndex=1;
-if(u.indexReal>=0){tmpDraggable2=new aipo.calendar.WeeklyTermScheduleDraggable(L,{pid:E,sid:"termScheduleDivHandleLeft-"+Q+"-"+E});
+k<Q.length;
+k++){O=Q[k];
+var P=O.scheduleId;
+x=dojo.byId("termSchedule-"+u+"-"+K);
+z=dojo.byId("termScheduleDivHandleLeft-"+u+"-"+K);
+draggable3=dojo.byId("termScheduleDivHandleRight-"+u+"-"+K);
+AH=new aipo.calendar.WeeklyTermScheduleDraggable(x,{pid:K,sid:"termSchedule-"+u+"-"+K});
+aipo.calendar.objectlist.push(AH);
+AH.schedule=O;
+AH.scheduleNode=x;
+AH.portletId=K;
+AH.termType="center";
+dojo.connect(x,"onclick",AH,"onScheduleClick");
+x.style.zIndex=1;
+if(O.indexReal>=0){tmpDraggable2=new aipo.calendar.WeeklyTermScheduleDraggable(z,{pid:K,sid:"termScheduleDivHandleLeft-"+u+"-"+K});
 aipo.calendar.objectlist.push(tmpDraggable2);
-tmpDraggable2.schedule=u;
-tmpDraggable2.scheduleNode=N;
-tmpDraggable2.portletId=E;
+tmpDraggable2.schedule=O;
+tmpDraggable2.scheduleNode=x;
+tmpDraggable2.portletId=K;
 tmpDraggable2.termType="left";
-if(u.member||u.loginuser||u.owner||u["public"]){tmpDraggable2.setDraggable(true)
+if(O.member||O.loginuser||O.owner||O["public"]){tmpDraggable2.setDraggable(true)
 }else{tmpDraggable2.setDraggable(false)
-}}else{dojo.style(L,"cursor","pointer");
-L.style.zIndex=1
-}dojo.connect(L,"onclick",o,"onScheduleClick");
-if(u.indexReal+u.colspanReal<=ptConfig[E].scheduleDivDaySum){tmpDraggable3=new aipo.calendar.WeeklyTermScheduleDraggable(draggable3,{pid:E,sid:"termScheduleDivHandleRight-"+Q+"-"+E});
+}}else{dojo.style(z,"cursor","pointer");
+z.style.zIndex=1
+}dojo.connect(z,"onclick",AH,"onScheduleClick");
+if(O.indexReal+O.colspanReal<=ptConfig[K].scheduleDivDaySum){tmpDraggable3=new aipo.calendar.WeeklyTermScheduleDraggable(draggable3,{pid:K,sid:"termScheduleDivHandleRight-"+u+"-"+K});
 aipo.calendar.objectlist.push(tmpDraggable3);
-tmpDraggable3.schedule=u;
-tmpDraggable3.scheduleNode=N;
-tmpDraggable3.portletId=E;
+tmpDraggable3.schedule=O;
+tmpDraggable3.scheduleNode=x;
+tmpDraggable3.portletId=K;
 tmpDraggable3.termType="right";
-if(u.member||u.loginuser||u.owner||u["public"]){tmpDraggable3.setDraggable(true)
+if(O.member||O.loginuser||O.owner||O["public"]){tmpDraggable3.setDraggable(true)
 }else{tmpDraggable3.setDraggable(false)
 }}else{dojo.style(draggable3,"cursor","pointer");
 draggable3.style.zIndex=1
-}dojo.connect(draggable3,"onclick",o,"onScheduleClick");
-dojo.connect(N,"onmouseover",o,"onScheduleOver");
-if(u.member||u.loginuser||u.owner||u["public"]){o.setDraggable(true)
-}else{o.setDraggable(false)
-}Q++
-}q++
+}dojo.connect(draggable3,"onclick",AH,"onScheduleClick");
+dojo.connect(x,"onmouseover",AH,"onScheduleOver");
+if(O.member||O.loginuser||O.owner||O["public"]){AH.setDraggable(true)
+}else{AH.setDraggable(false)
+}u++
+}AF++
 });
-obj_content=dojo.byId("content-"+E);
+obj_content=dojo.byId("content-"+K);
 dojo.style(obj_content,"visibility","visible");
-obj_indicator=dojo.byId("indicator-"+E);
+obj_indicator=dojo.byId("indicator-"+K);
 dojo.style(obj_indicator,"display","none");
-dojo.removeClass(dojo.byId("tableWrapper_"+E),"hide");
-var d=dojo.byId("weeklyScrollPane_"+E);
-if((d.clientWidth==d.offsetWidth)&&!(l&&!M)){if(dojo.byId("weeklySpan-"+E)!=null){dojo.byId("weeklySpan-"+E).style.display="none"
-}dojo.query(".weeklyTermTailTd_"+E).style("display","none");
-if(dojo.byId("termTable_"+E)!=null){dojo.query("termTable_"+E).style("width","99.9999%")
-}if(M&&c){dojo.query(".weeklyHeadRightborder0_"+E).style("border-right-style","none");
-dojo.query("._weeklyHeadRightborder0_"+E).style("border-right-style","none");
-dojo.byId("weeklyRight0-"+E).style.borderRightStyle="";
-if(l){if(dojo.byId("weeklyRight0-"+E).className.indexOf("sunday")>=0||dojo.byId("weeklyRight0-"+E).className.indexOf("saturday")>=0){dojo.query(".scroll_width").style("padding-right","1px")
+dojo.removeClass(dojo.byId("tableWrapper_"+K),"hide");
+var AP=dojo.byId("weeklyScrollPane_"+K);
+if((AP.clientWidth==AP.offsetWidth)&&!(AK&&!y)){if(dojo.byId("weeklySpan-"+K)!=null){dojo.byId("weeklySpan-"+K).style.display="none"
+}dojo.query(".weeklyTermTailTd_"+K).style("display","none");
+if(dojo.byId("termTable_"+K)!=null){dojo.query("termTable_"+K).style("width","99.9999%")
+}if(y&&AQ){dojo.query(".weeklyHeadRightborder0_"+K).style("border-right-style","none");
+dojo.query("._weeklyHeadRightborder0_"+K).style("border-right-style","none");
+dojo.byId("weeklyRight0-"+K).style.borderRightStyle="";
+if(AK){if(dojo.byId("weeklyRight0-"+K).className.indexOf("sunday")>=0||dojo.byId("weeklyRight0-"+K).className.indexOf("saturday")>=0){dojo.query(".scroll_width").style("padding-right","1px")
 }else{dojo.query(".scroll_width").style("padding-right","0px")
 }dojo.query(".weeklyTableHead").style("padding-right","1px")
 }else{dojo.query(".weeklyTableHead").style("padding-right","1px")
-}}else{if(M&&P){if(l){dojo.query(".weeklyTableHead").style("padding-right","0px");
+}}else{if(y&&v){if(AK){dojo.query(".weeklyTableHead").style("padding-right","0px");
 dojo.query(".scroll_width").style("padding-right","0px")
-}else{dojo.byId("weeklyRight3-"+E).style.borderRightStyle="none";
-dojo.query(".weeklyHeadRightborder3_"+E).style("border-right-style","none");
-dojo.query("._weeklyHeadRightborder3_"+E).style("border-right-style","none");
+}else{dojo.byId("weeklyRight3-"+K).style.borderRightStyle="none";
+dojo.query(".weeklyHeadRightborder3_"+K).style("border-right-style","none");
+dojo.query("._weeklyHeadRightborder3_"+K).style("border-right-style","none");
 dojo.query(".weeklyTableHead").style("padding-right","1px")
-}}else{if(l){dojo.query(".scroll_width").style("padding-right","0px");
+}}else{if(AK){dojo.query(".scroll_width").style("padding-right","0px");
 dojo.query(".weeklyTableHead").style("padding-right","0px")
-}else{if(window.navigator.userAgent.toLowerCase().indexOf("chrome")>=0&&(dojo.byId("weeklyRight6-"+E).className.indexOf("sunday")>=0||dojo.byId("weeklyRight6-"+E).className.indexOf("saturday"))>=0){dojo.query(".scroll_width").style("padding-right","1px");
+}else{if(window.navigator.userAgent.toLowerCase().indexOf("chrome")>=0&&(dojo.byId("weeklyRight6-"+K).className.indexOf("sunday")>=0||dojo.byId("weeklyRight6-"+K).className.indexOf("saturday"))>=0){dojo.query(".scroll_width").style("padding-right","1px");
 dojo.query(".weeklyTableHead").style("padding-right","1px")
 }else{dojo.query(".scroll_width").style("padding-right","0px");
 dojo.query(".weeklyTableHead").style("padding-right","0px")
-}dojo.byId("weeklyRight6-"+E).style.borderRightStyle="none";
-dojo.query(".weeklyHeadRightborder6_"+E).style("border-right-style","none");
-dojo.query("._weeklyHeadRightborder6_"+E).style("border-right-style","none")
-}}}}else{if(d.clientWidth!=d.offsetWidth&&d.offsetWidth-d.clientWidth!=18){if(dojo.byId("weeklySpan-"+E)!=null){dojo.byId("weeklySpan-"+E).width=(d.offsetWidth-d.clientWidth+1)+"px"
-}dojo.query(".weeklyTermTailTd_"+E).width=(d.offsetWidth-d.clientWidth+1)+"px";
-dojo.query(".weeklyTermTail").style("width",((d.offsetWidth-d.clientWidth+1)+"px"))
-}}if(q==0){dojo.byId("termScheduleContainer-"+E).style.height="0px"
-}else{}dojo.byId("weeklyTableHead_"+E).style.marginTop="5px";
-var K=dojo.byId("weeklyTableHead_"+E).offsetHeight;
-var b=dojo.byId("weeklyTermTr_"+E).offsetHeight;
-K+=5;
-K-=b;
-b-=b%17;
-K+=b;
-dojo.byId("weeklyTableHeadWrapper_"+E).style.overflow="hidden";
-dojo.byId("weeklyTableHeadWrapper_"+E).style.height=K+"px";
-if(q>0){var J=0;
-for(J=0;
-J<7;
-J++){if(dojo.byId("termDay"+J+"-"+(q-1)+"-"+E).className.indexOf("sunday")>=0||dojo.byId("termDay"+J+"-"+(q-1)+"-"+E).className.indexOf("saturday")>=0){dojo.byId("termDay"+J+"-"+(q-1)+"-"+E).style.height="95%"
-}}}if(!ptConfig[E].isScroll){dojo.byId("weeklyScrollPane_"+E).scrollTop=ptConfig[E].contentScrollTop;
-ptConfig[E].isScroll=true
-}ptConfig[E].isTooltipEnable=true
+}dojo.byId("weeklyRight6-"+K).style.borderRightStyle="none";
+dojo.query(".weeklyHeadRightborder6_"+K).style("border-right-style","none");
+dojo.query("._weeklyHeadRightborder6_"+K).style("border-right-style","none")
+}}}}else{if(AP.clientWidth!=AP.offsetWidth&&AP.offsetWidth-AP.clientWidth!=18){if(dojo.byId("weeklySpan-"+K)!=null){dojo.byId("weeklySpan-"+K).width=(AP.offsetWidth-AP.clientWidth+1)+"px"
+}dojo.query(".weeklyTermTailTd_"+K).width=(AP.offsetWidth-AP.clientWidth+1)+"px";
+dojo.query(".weeklyTermTail").style("width",((AP.offsetWidth-AP.clientWidth+1)+"px"))
+}}if(AF==0){dojo.byId("termScheduleContainer-"+K).style.height="0px"
+}else{}dojo.byId("weeklyTableHead_"+K).style.marginTop="5px";
+var AA=dojo.byId("weeklyTableHead_"+K).offsetHeight;
+var AR=dojo.byId("weeklyTermTr_"+K).offsetHeight;
+AA+=5;
+AA-=AR;
+AR-=AR%17;
+AA+=AR;
+dojo.byId("weeklyTableHeadWrapper_"+K).style.overflow="hidden";
+dojo.byId("weeklyTableHeadWrapper_"+K).style.height=AA+"px";
+if(AF>0){var AB=0;
+for(AB=0;
+AB<7;
+AB++){if(dojo.byId("termDay"+AB+"-"+(AF-1)+"-"+K).className.indexOf("sunday")>=0||dojo.byId("termDay"+AB+"-"+(AF-1)+"-"+K).className.indexOf("saturday")>=0){dojo.byId("termDay"+AB+"-"+(AF-1)+"-"+K).style.height="95%"
+}}}if(!ptConfig[K].isScroll){dojo.byId("weeklyScrollPane_"+K).scrollTop=ptConfig[K].contentScrollTop;
+ptConfig[K].isScroll=true
+}ptConfig[K].isTooltipEnable=true
 }})
 };
-aipo.calendar.relocation=function(B,A,S,T){var O,N;
-var R=0.99;
-var J=100/7;
-var Q=0;
-var I=0;
-var G=0;
-var F=0;
-var H=new Array(A);
-var C=new Array(A);
-var P=new Array(A);
-var K=1;
-var L=0;
-if(dojo.byId("view_type_"+B).value=="1"&&dojo.byId("top_form_"+B).value=="simple"){K=7.2
-}else{if(dojo.byId("view_type_"+B).value=="4"){K=1.75;
-if(T>57){T=100
-}}}S.sort(aipo.calendar.sortByRegion);
-for(O=0;
-O<A;
-O++){S[O].style.zIndex=O+1
-}for(O=0;
-O<A;
-O=Q){Q=aipo.calendar.overlapSchedule(S,O,O,++Q,A);
-if(G<parseInt(dojo.getComputedStyle(S[O]).top)){F=O;
-G=parseInt(dojo.getComputedStyle(S[F]).top);
-I=0
-}for(N=F;
-N<Q;
-N++){var E=parseInt(dojo.getComputedStyle(S[N]).top)+parseInt(dojo.getComputedStyle(S[N]).height)
-}if(G<E){G=E
-}for(N=F;
-N<Q;
-N++){C[N]=aipo.calendar.positionLeft(S,C,F,N,0);
-if(C[N]>I){I=C[N]
-}}for(N=F;
-N<Q;
-N++){P[N]=aipo.calendar.positionRight(S,C,I,F,N)
-}for(N=F;
-N<Q;
-N++){H[N]=I
-}}for(O=0;
-O<A;
-O++){var M;
-var D;
-if(H[O]!=0){if(C[O]<C[O+1]){M=(J*2/(H[O]+1))*0.8*R*K
-}else{if(P[O]==0){M=(J-(J/(H[O]+1))*C[O])*R*K
-}else{M=(J-(J/(H[O]+1))*C[O]-(J*2/(H[O]+1))*0.2-(J/(H[O]+1))*(P[O]-1))*R*K
-}}}else{M=J*R*K
-}D=(T+((J/(H[O]+1))*C[O]))*K;
-if(D+M>100){M=100
-}dojo.style(S[O],"width",M+"%");
-dojo.style(S[O],"left",D+"%");
-dojo.style(S[O],"visibility","visible")
+aipo.calendar.relocation=function(p,q,V,U){var Z,a;
+var W=0.99;
+var e=100/7;
+var X=0;
+var f=0;
+var h=0;
+var l=0;
+var g=new Array(q);
+var o=new Array(q);
+var Y=new Array(q);
+var d=1;
+var c=0;
+if(dojo.byId("view_type_"+p).value=="1"&&dojo.byId("top_form_"+p).value=="simple"){d=7.2
+}else{if(dojo.byId("view_type_"+p).value=="4"){d=1.75;
+if(U>57){U=100
+}}}V.sort(aipo.calendar.sortByRegion);
+for(Z=0;
+Z<q;
+Z++){V[Z].style.zIndex=Z+1
+}for(Z=0;
+Z<q;
+Z=X){X=aipo.calendar.overlapSchedule(V,Z,Z,++X,q);
+if(h<parseInt(dojo.getComputedStyle(V[Z]).top)){l=Z;
+h=parseInt(dojo.getComputedStyle(V[l]).top);
+f=0
+}for(a=l;
+a<X;
+a++){var m=parseInt(dojo.getComputedStyle(V[a]).top)+parseInt(dojo.getComputedStyle(V[a]).height)
+}if(h<m){h=m
+}for(a=l;
+a<X;
+a++){o[a]=aipo.calendar.positionLeft(V,o,l,a,0);
+if(o[a]>f){f=o[a]
+}}for(a=l;
+a<X;
+a++){Y[a]=aipo.calendar.positionRight(V,o,f,l,a)
+}for(a=l;
+a<X;
+a++){g[a]=f
+}}for(Z=0;
+Z<q;
+Z++){var b;
+var n;
+if(g[Z]!=0){if(o[Z]<o[Z+1]){b=(e*2/(g[Z]+1))*0.8*W*d
+}else{if(Y[Z]==0){b=(e-(e/(g[Z]+1))*o[Z])*W*d
+}else{b=(e-(e/(g[Z]+1))*o[Z]-(e*2/(g[Z]+1))*0.2-(e/(g[Z]+1))*(Y[Z]-1))*W*d
+}}}else{b=e*W*d
+}n=(U+((e/(g[Z]+1))*o[Z]))*d;
+if(n+b>100){b=100
+}dojo.style(V[Z],"width",b+"%");
+dojo.style(V[Z],"left",n+"%");
+dojo.style(V[Z],"visibility","visible")
 }};
-aipo.calendar.overlapSchedule=function(D,B,H,G,C){var F=parseInt(dojo.getComputedStyle(D[B]).top)+parseInt(dojo.getComputedStyle(D[B]).height);
-var E=parseInt(dojo.getComputedStyle(D[H]).top)+parseInt(dojo.getComputedStyle(D[H]).height);
-var A;
-if(D[G]){A=parseInt(dojo.getComputedStyle(D[G]).top)
-}else{A="NaN"
-}if((G>C-1)||(F<A)||(E<A)){return G
-}else{G=aipo.calendar.overlapSchedule(D,B,G,++G,C)
-}G=aipo.calendar.overlapSchedule(D,B,H,G,C);
-return G
+aipo.calendar.overlapSchedule=function(N,P,J,K,O){var L=parseInt(dojo.getComputedStyle(N[P]).top)+parseInt(dojo.getComputedStyle(N[P]).height);
+var M=parseInt(dojo.getComputedStyle(N[J]).top)+parseInt(dojo.getComputedStyle(N[J]).height);
+var I;
+if(N[K]){I=parseInt(dojo.getComputedStyle(N[K]).top)
+}else{I="NaN"
+}if((K>O-1)||(L<I)||(M<I)){return K
+}else{K=aipo.calendar.overlapSchedule(N,P,K,++K,O)
+}K=aipo.calendar.overlapSchedule(N,P,J,K,O);
+return K
 };
-aipo.calendar.positionLeft=function(F,E,H,G,B){var A=parseInt(dojo.getComputedStyle(F[G]).top);
-for(i=H;
-i<G;
-i++){var D=parseInt(dojo.getComputedStyle(F[i]).top);
-var C=D+parseInt(dojo.getComputedStyle(F[i]).height);
-if((D<=A)&&(C>A)&&(E[i]==B)){B=aipo.calendar.positionLeft(F,E,H,G,++B)
-}}return B
+aipo.calendar.positionLeft=function(L,M,J,K,P){var I=parseInt(dojo.getComputedStyle(L[K]).top);
+for(i=J;
+i<K;
+i++){var N=parseInt(dojo.getComputedStyle(L[i]).top);
+var O=N+parseInt(dojo.getComputedStyle(L[i]).height);
+if((N<=I)&&(O>I)&&(M[i]==P)){P=aipo.calendar.positionLeft(L,M,J,K,++P)
+}}return P
 };
-aipo.calendar.positionRight=function(A,E,G,D,H){var F=0;
-var C=parseInt(dojo.getComputedStyle(A[H]).top);
-for(i=D;
-i<H;
-i++){var B=parseInt(dojo.getComputedStyle(A[i]).top);
-var I=B+parseInt(dojo.getComputedStyle(A[i]).height);
-if((B<=C)&&(I>C)&&(E[i]>E[H])&&((G-E[i]+1)>F)){F=G-E[i]+1
-}}return F
+aipo.calendar.positionRight=function(M,R,P,J,O){var Q=0;
+var K=parseInt(dojo.getComputedStyle(M[O]).top);
+for(i=J;
+i<O;
+i++){var L=parseInt(dojo.getComputedStyle(M[i]).top);
+var N=L+parseInt(dojo.getComputedStyle(M[i]).height);
+if((L<=K)&&(N>K)&&(R[i]>R[O])&&((P-R[i]+1)>Q)){Q=P-R[i]+1
+}}return Q
 };
-aipo.calendar.sortByRegion=function(C,B){var F=parseInt(dojo.getComputedStyle(C).top);
-var E=parseInt(dojo.getComputedStyle(B).top);
-var A=F+parseInt(dojo.getComputedStyle(C).height);
-var D=A+parseInt(dojo.getComputedStyle(B).height);
-if(F==E){return D-A
-}else{return F-E
+aipo.calendar.sortByRegion=function(K,L){var H=parseInt(dojo.getComputedStyle(K).top);
+var I=parseInt(dojo.getComputedStyle(L).top);
+var G=H+parseInt(dojo.getComputedStyle(K).height);
+var J=G+parseInt(dojo.getComputedStyle(L).height);
+if(H==I){return J-G
+}else{return H-I
 }};
-aipo.calendar.getDate=function(A,B){tmpYear=parseInt(A.substring(0,4),10);
-tmpMonth=parseInt(A.substring(5,7),10);
-tmpDay=parseInt(A.substring(8,10),10);
-if(B>0){do{tmpMonthDays=aipo.calendar.getDay(tmpYear,tmpMonth);
-if(tmpDay+B<=tmpMonthDays){tmpDay=tmpDay+B;
+aipo.calendar.getDate=function(C,D){tmpYear=parseInt(C.substring(0,4),10);
+tmpMonth=parseInt(C.substring(5,7),10);
+tmpDay=parseInt(C.substring(8,10),10);
+if(D>0){do{tmpMonthDays=aipo.calendar.getDay(tmpYear,tmpMonth);
+if(tmpDay+D<=tmpMonthDays){tmpDay=tmpDay+D;
 if((tmpMonth<10)&&(tmpDay<10)){date=tmpYear+"-0"+tmpMonth+"-0"+tmpDay
 }else{if((tmpMonth<10)&&!(tmpDay<10)){date=tmpYear+"-0"+tmpMonth+"-"+tmpDay
 }else{if(!(tmpMonth<10)&&(tmpDay<10)){date=tmpYear+"-"+tmpMonth+"-0"+tmpDay
 }else{date=tmpYear+"-"+tmpMonth+"-"+tmpDay
-}}}B=-1
-}else{B=B-(tmpMonthDays-tmpDay)-1;
+}}}D=-1
+}else{D=D-(tmpMonthDays-tmpDay)-1;
 if(tmpMonth==12){tmpYear++;
 tmpMonth=1
 }else{tmpMonth++
 }tmpDay=1
-}}while(B>=0)
-}else{if(B<0){do{if(tmpDay+B>0){tmpDay=tmpDay+B;
+}}while(D>=0)
+}else{if(D<0){do{if(tmpDay+D>0){tmpDay=tmpDay+D;
 if((tmpMonth<10)&&(tmpDay<10)){date=tmpYear+"-0"+tmpMonth+"-0"+tmpDay
 }else{if((tmpMonth<10)&&!(tmpDay<10)){date=tmpYear+"-0"+tmpMonth+"-"+tmpDay
 }else{if(!(tmpMonth<10)&&(tmpDay<10)){date=tmpYear+"-"+tmpMonth+"-0"+tmpDay
 }else{date=tmpYear+"-"+tmpMonth+"-"+tmpDay
-}}}B=1
+}}}D=1
 }else{if(tmpMonth==1){tmpYear--;
 tmpMonth=12
 }else{tmpMonth--
 }tmpMonthDays=aipo.calendar.getDay(tmpYear,tmpMonth);
-B=B+tmpDay;
+D=D+tmpDay;
 tmpDay=tmpMonthDays
-}}while(B<=0)
-}else{date=A
+}}while(D<=0)
+}else{date=C
 }}return date
 };
-aipo.calendar.getDay=function(A,B){if(B==2){if(!(A%4)&&((A%100)||!(A%400))){return 29
+aipo.calendar.getDay=function(C,D){if(D==2){if(!(C%4)&&((C%100)||!(C%400))){return 29
 }else{return 28
-}}else{if(B==4||B==6||B==9||B==11){return 30
+}}else{if(D==4||D==6||D==9||D==11){return 30
 }else{return 31
 }}};
-aipo.calendar.setGridArray=function(C,B){var A=0;
+aipo.calendar.setGridArray=function(E,F){var D=0;
 if(aipo.calendar.gridArray){delete (aipo.calendar.gridArray)
-}aipo.calendar.gridArray=new Array(B);
+}aipo.calendar.gridArray=new Array(F);
 for(i=0;
-i<B;
-i++){A=dojo._abs(dojo.byId("weeklyDay"+i+"-"+C),true).x;
-aipo.calendar.gridArray[i]=A
+i<F;
+i++){D=dojo._abs(dojo.byId("weeklyDay"+i+"-"+E),true).x;
+aipo.calendar.gridArray[i]=D
 }};
-aipo.calendar.getCurrentMouseX=function(D,E){if(aipo.calendar.gridArray==null){return{index:-1,x:0}
-}var B=aipo.calendar.gridArray[0];
-var G=0;
-var C;
-if(E.pageX>B){var A=parseInt(aipo.calendar.gridArray.length)-1;
-if(dojo.byId("view_type_"+D)&&dojo.byId("top_form_"+D).value=="simple"){A=parseInt(dojo.byId("view_type_"+D).value)-1
-}for(C=A;
-C>-1;
-C--){if(E.pageX>aipo.calendar.gridArray[C]){G=C;
+aipo.calendar.getCurrentMouseX=function(L,K){if(aipo.calendar.gridArray==null){return{index:-1,x:0}
+}var N=aipo.calendar.gridArray[0];
+var I=0;
+var M;
+if(K.pageX>N){var H=parseInt(aipo.calendar.gridArray.length)-1;
+if(dojo.byId("view_type_"+L)&&dojo.byId("top_form_"+L).value=="simple"){H=parseInt(dojo.byId("view_type_"+L).value)-1
+}for(M=H;
+M>-1;
+M--){if(K.pageX>aipo.calendar.gridArray[M]){I=M;
 break
-}}}else{G=0
-}var F=aipo.calendar.gridArray[G]-B;
-return{index:G,x:F}
+}}}else{I=0
+}var J=aipo.calendar.gridArray[I]-N;
+return{index:I,x:J}
 };
-aipo.calendar.onCloseMemberpicker=function(A){aipo.calendar.populateWeeklySchedule(A)
+aipo.calendar.onCloseMemberpicker=function(B){aipo.calendar.populateWeeklySchedule(B)
 };
-aipo.calendar.showTooltip=function(D,F,A){var E="";
-var B="";
-var C="";
-var H="";
-var G=function(J){var I=function(K){switch(K){case"<":return"&lt;";
+aipo.calendar.showTooltip=function(N,L,I){var M="";
+var P="";
+var O="";
+var J="";
+var K=function(A){var B=function(C){switch(C){case"<":return"&lt;";
 case">":return"&gt;";
 case"&":return"&amp;";
 case"'":return"&#39;";
 case'"':return"&quot;"
 }return"?"
 };
-return String(J).replace(/[<>&"']/g,I)
+return String(A).replace(/[<>&"']/g,B)
 };
-dojo.style(A,"display","block");
-dojo.xhrGet({portletId:F,url:D,encoding:"utf-8",handleAs:"json-comment-filtered",load:function(N,L){if(!N.id){dojo.style(A,"display","none");
+dojo.style(I,"display","block");
+dojo.xhrGet({portletId:L,url:N,encoding:"utf-8",handleAs:"json-comment-filtered",load:function(E,A){if(!E.id){dojo.style(I,"display","none");
 return 
-}if(!N.isSpan){E='<span style="font-size: 0.90em;">'+N.date+"</span><br/>"
-}if(N.memberList){var K=N.memberList.length;
-for(var I=0;
-I<K;
-I++){B+="<li>"+G(N.memberList[I].aliasName.value)+"</li>"
-}}if(N.facilityList){var J=N.facilityList.length;
-for(var I=0;
-I<J;
-I++){C+="<li>"+G(N.facilityList[I].facilityName.value)+"</li>"
-}}if(N.place!=""){H='<span style="font-size: 0.90em;">場所</span><br/><ul><li>'+N.place+"</li></ul>"
-}if(B!=""){B='<span style="font-size: 0.90em;">参加者</span><br/><ul>'+B+"</ul>"
-}if(C!=""){C='<span style="font-size: 0.90em;">設備</span><br/><ul>'+C+"</ul>"
-}var M="<h4>"+N.name+"</h4>"+E+B+C+H;
-A.innerHTML=M
+}if(!E.isSpan){M='<span style="font-size: 0.90em;">'+E.date+"</span><br/>"
+}if(E.memberList){var B=E.memberList.length;
+for(var D=0;
+D<B;
+D++){P+="<li>"+K(E.memberList[D].aliasName.value)+"</li>"
+}}if(E.facilityList){var C=E.facilityList.length;
+for(var D=0;
+D<C;
+D++){O+="<li>"+K(E.facilityList[D].facilityName.value)+"</li>"
+}}if(E.place!=""){J='<span style="font-size: 0.90em;">場所</span><br/><ul><li>'+E.place+"</li></ul>"
+}if(P!=""){P='<span style="font-size: 0.90em;">参加者</span><br/><ul>'+P+"</ul>"
+}if(O!=""){O='<span style="font-size: 0.90em;">設備</span><br/><ul>'+O+"</ul>"
+}var F="<h4>"+E.name+"</h4>"+M+P+O+J;
+I.innerHTML=F
 }})
 };
-dojo.declare("aipo.calendar.DummyDivObject",null,{portletId:null,parentnode:null,draggable:null,TooltipObject:null,constructor:function(A,B){this.portletId=B.pid;
-this.parentnode=B.node;
-this.node=dojo.byId(A);
+dojo.declare("aipo.calendar.DummyDivObject",null,{portletId:null,parentnode:null,draggable:null,TooltipObject:null,constructor:function(C,D){this.portletId=D.pid;
+this.parentnode=D.node;
+this.node=dojo.byId(C);
 this.events=[dojo.connect(this.node,"onmousedown",this,"onMouseDown"),dojo.connect(this.node,"onmouseover",this,"onMouseOver")]
-},onMouseDown:function(A){this.hide();
+},onMouseDown:function(B){this.hide();
 if(this.parentnode==null||this.parentnode=="undefined"){return 
-}if(this.draggable){this.draggable.onMouseDown(A)
-}},onMouseOver:function(A){if(this.parentnode==null||this.parentnode=="undefined"){return 
+}if(this.draggable){this.draggable.onMouseDown(B)
+}},onMouseOver:function(B){if(this.parentnode==null||this.parentnode=="undefined"){return 
 }},destroy:function(){dojo.forEach(this.events,dojo.disconnect);
 this.events=this.node=this.handle=null
 },hide:function(){dojo.marginBox(this.node,{l:0,t:-10000,w:0,h:0})
 }});
-dojo.declare("aipo.calendar.WeeklyScheduleDragMoveObject",[aimluck.dnd.DragMoveObject],{_rowHeight_:18,isResize:false,distance:3,lastScroll:0,onFirstMove:function(B){if(this.dragSource.TooltipObject!=null){this.dragSource.TooltipObject.uninitialize()
-}var D=dojo.clone(this.node);
-D.id="schedule-dummy-"+this.portletId;
-D.style.zIndex=998;
-dojo.style(D,"opacity",0);
-var C=dojo.byId("scheduleGarage-"+this.portletId);
-C.appendChild(D);
-this.tmpDraggable=D;
+dojo.declare("aipo.calendar.WeeklyScheduleDragMoveObject",[aimluck.dnd.DragMoveObject],{_rowHeight_:18,isResize:false,distance:3,lastScroll:0,onFirstMove:function(H){if(this.dragSource.TooltipObject!=null){this.dragSource.TooltipObject.uninitialize()
+}var F=dojo.clone(this.node);
+F.id="schedule-dummy-"+this.portletId;
+F.style.zIndex=998;
+dojo.style(F,"opacity",0);
+var G=dojo.byId("scheduleGarage-"+this.portletId);
+G.appendChild(F);
+this.tmpDraggable=F;
 dojo.connect(this.node,"onmousedown",this,"onMouseDown");
-if(dojo.isIE){document.onkeydown=function(E){dojo.style(D,"opacity",0.3)
+if(dojo.isIE){document.onkeydown=function(A){dojo.style(F,"opacity",0.3)
 };
-document.onkeyup=function(E){dojo.style(D,"opacity",0)
+document.onkeyup=function(A){dojo.style(F,"opacity",0)
 }
 }else{dojo.connect(null,"onkeydown",this,"onKeyPress");
 dojo.connect(null,"onkeyup",this,"onKeyPress")
@@ -673,270 +673,270 @@ dojo.style(this.node,"opacity",0.5);
 this.node.style.zIndex=999;
 this.startY=this._pageY;
 this.startAbsoluteY=dojo._abs(dojo.byId(this.node),true).y;
-var A=window.navigator.userAgent.toLowerCase();
-if(A.indexOf("chrome")>-1||(dojo.isFF&&(dojo.isFF>=3.6))){this.startAbsoluteY+=window.scrollY
-}else{if(A.indexOf("safari")>-1){this.startAbsoluteY-=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop
+var E=window.navigator.userAgent.toLowerCase();
+if(E.indexOf("chrome")>-1||(dojo.isFF&&(dojo.isFF>=3.6))){this.startAbsoluteY+=window.scrollY
+}else{if(E.indexOf("safari")>-1){this.startAbsoluteY-=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop
 }}this.startHeight=parseInt(dojo.getComputedStyle(this.node).height);
 this.startTop=parseInt(dojo.getComputedStyle(this.node).top);
 if(this.startHeight-6<this.startY-this.startAbsoluteY){this.isResize=true
 }aipo.calendar.setGridArray(this.portletId,parseInt(ptConfig[this.portletId].scheduleDivDaySum));
 lastScroll=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop
-},onKeyPress:function(A){if(A.ctrlKey){dojo.style(this.tmpDraggable,"opacity",0.3)
+},onKeyPress:function(B){if(B.ctrlKey){dojo.style(this.tmpDraggable,"opacity",0.3)
 }else{dojo.style(this.tmpDraggable,"opacity",0)
-}},onMouseMove:function(H){if(this.dragSource.isDraggable==false){return 
+}},onMouseMove:function(Q){if(this.dragSource.isDraggable==false){return 
 }aimluck.dnd.DragMoveObject.prototype.onMouseMove.apply(this,arguments);
 this.dragSource.schedule.isDrag=true;
 if(this.dragSource.tmpHeight>3){dojo.style(this.node,"height",this.dragSource.tmpHeight+"px");
 this.dragSource.tmpHeight=3
-}var A=ptConfig[this.portletId].distance;
-var C=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop-lastScroll;
-this.leftTop.t=Math.floor((this.leftTop.t+C)/A)*A;
+}var N=ptConfig[this.portletId].distance;
+var L=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop-lastScroll;
+this.leftTop.t=Math.floor((this.leftTop.t+L)/N)*N;
 if(this.isResize){if(-this.startTop+this.leftTop.t+this.startHeight<0){dojo.style(this.node,"height","0px");
 this.leftTop.t+=this.startHeight
-}else{var J;
-if(this.leftTop.t+this.startHeight>864){J=864-this.startTop-3
-}else{J=-this.startTop+this.leftTop.t+this.startHeight
+}else{var O;
+if(this.leftTop.t+this.startHeight>864){O=864-this.startTop-3
+}else{O=-this.startTop+this.leftTop.t+this.startHeight
 }this.leftTop.t=this.startTop;
-this.leftTop.h=parseInt(J)-1
+this.leftTop.h=parseInt(O)-1
 }}else{if(!this.disableY){if(this.leftTop.t<0){this.leftTop.t=0
 }if(this.leftTop.t+this.startHeight>864){this.leftTop.t=864-this.startHeight-6
-}}}if(!this.disableX){mouseX=aipo.calendar.getCurrentMouseX(this.portletId,H);
+}}}if(!this.disableX){mouseX=aipo.calendar.getCurrentMouseX(this.portletId,Q);
 this.leftTop.l=mouseX.x;
 this.dragSource.schedule.index=mouseX.index
 }dojo.marginBox(this.node,this.leftTop);
-var I=parseInt(dojo.getComputedStyle(this.node).top);
-var G=parseInt(dojo.getComputedStyle(this.node).height)+1;
-var F=I/A;
-var E=Math.floor(F/12);
-var D=Math.floor(F%12);
-E=(E>9)?E:"0"+E;
-D=(D>1)?D*(60/12):"0"+D*(60/12);
-var B=this.dragSource.count;
-dojo.byId("scheduleDivStartTime-"+B+"-"+this.portletId).innerHTML=E+":"+D;
-this.dragSource.schedule.startDateHour=E;
-this.dragSource.schedule.startDateMinute=D;
-this.dragSource.schedule.startDate=E+":"+D;
-F+=G/A;
-E=Math.floor(F/12);
-D=Math.floor(F%12);
-E=(E>9)?E:"0"+E;
-D=(D>1)?D*(60/12):"0"+D*(60/12);
-dojo.byId("scheduleDivEndTime-"+B+"-"+this.portletId).innerHTML=E+":"+D;
-this.dragSource.schedule.endDateHour=E;
-this.dragSource.schedule.endDateMinute=D;
-this.dragSource.schedule.endDate=E+":"+D;
-dojo.byId("scheduleDivSepalater-"+B+"-"+this.portletId).innerHTML="-";
+var P=parseInt(dojo.getComputedStyle(this.node).top);
+var R=parseInt(dojo.getComputedStyle(this.node).height)+1;
+var S=P/N;
+var T=Math.floor(S/12);
+var K=Math.floor(S%12);
+T=(T>9)?T:"0"+T;
+K=(K>1)?K*(60/12):"0"+K*(60/12);
+var M=this.dragSource.count;
+dojo.byId("scheduleDivStartTime-"+M+"-"+this.portletId).innerHTML=T+":"+K;
+this.dragSource.schedule.startDateHour=T;
+this.dragSource.schedule.startDateMinute=K;
+this.dragSource.schedule.startDate=T+":"+K;
+S+=R/N;
+T=Math.floor(S/12);
+K=Math.floor(S%12);
+T=(T>9)?T:"0"+T;
+K=(K>1)?K*(60/12):"0"+K*(60/12);
+dojo.byId("scheduleDivEndTime-"+M+"-"+this.portletId).innerHTML=T+":"+K;
+this.dragSource.schedule.endDateHour=T;
+this.dragSource.schedule.endDateMinute=K;
+this.dragSource.schedule.endDate=T+":"+K;
+dojo.byId("scheduleDivSepalater-"+M+"-"+this.portletId).innerHTML="-";
 return 
-},onMouseUp:function(B){ptConfig[this.portletId].isTooltipEnable=true;
+},onMouseUp:function(F){ptConfig[this.portletId].isTooltipEnable=true;
 if(dojo.isIE){document.onkeydown="";
 document.onkeyup=""
 }if(this.dragSource.schedule.isDrag!=true){dojo.style(this.node,"opacity",1);
 aimluck.dnd.DragMoveObject.prototype.onMouseUp.apply(this,arguments);
 return 
-}var A=parseInt(dojo.getComputedStyle(this.node).height);
-if(A<ptConfig[this.portletId].rowHeight){dojo.style(this.node,"height",ptConfig[this.portletId].rowHeight+"px");
-this.dragSource.tmpHeight=A
+}var D=parseInt(dojo.getComputedStyle(this.node).height);
+if(D<ptConfig[this.portletId].rowHeight){dojo.style(this.node,"height",ptConfig[this.portletId].rowHeight+"px");
+this.dragSource.tmpHeight=D
 }else{this.dragSource.tmpHeight=-1
-}var C="";
-if(B.ctrlKey){C+="&mode=insert"
-}else{C+="&mode=update"
-}C+="&entityid="+this.dragSource.schedule.scheduleId;
-C+="&view_start="+ptConfig[this.portletId].jsonData.date[0].substring(0,10);
-if(this.dragSource.schedule.repeat){C+="&edit_repeat_flag=1";
-C+="&view_date="+ptConfig[this.portletId].jsonData.date[this.dragSource.tmpIndex].substring(0,10)
-}C+="&start_date="+ptConfig[this.portletId].jsonData.date[this.dragSource.schedule.index].substring(0,11)+this.dragSource.schedule.startDateHour+"-"+this.dragSource.schedule.startDateMinute;
-C+="&end_date="+ptConfig[this.portletId].jsonData.date[this.dragSource.schedule.index].substring(0,11)+this.dragSource.schedule.endDateHour+"-"+this.dragSource.schedule.endDateMinute;
-aipo.calendar.populateWeeklySchedule(this.portletId,C);
+}var E="";
+if(F.ctrlKey){E+="&mode=insert"
+}else{E+="&mode=update"
+}E+="&entityid="+this.dragSource.schedule.scheduleId;
+E+="&view_start="+ptConfig[this.portletId].jsonData.date[0].substring(0,10);
+if(this.dragSource.schedule.repeat){E+="&edit_repeat_flag=1";
+E+="&view_date="+ptConfig[this.portletId].jsonData.date[this.dragSource.tmpIndex].substring(0,10)
+}E+="&start_date="+ptConfig[this.portletId].jsonData.date[this.dragSource.schedule.index].substring(0,11)+this.dragSource.schedule.startDateHour+"-"+this.dragSource.schedule.startDateMinute;
+E+="&end_date="+ptConfig[this.portletId].jsonData.date[this.dragSource.schedule.index].substring(0,11)+this.dragSource.schedule.endDateHour+"-"+this.dragSource.schedule.endDateMinute;
+aipo.calendar.populateWeeklySchedule(this.portletId,E);
 aipo.portletReload("schedule",this.portletId);
 aimluck.dnd.DragMoveObject.prototype.onMouseUp.apply(this,arguments);
 this.dragSource.destroy()
 }});
-dojo.declare("aipo.calendar.WeeklyScheduleDraggable",[aimluck.dnd.Draggable],{DragMoveObject:aipo.calendar.WeeklyScheduleDragMoveObject,isDraggable:false,scheduleObjId:null,constructor:function(A,B){this.scheduleObjId=B.sid
-},onMouseDown:function(A){ptConfig[this.portletId].isTooltipEnable=false;
+dojo.declare("aipo.calendar.WeeklyScheduleDraggable",[aimluck.dnd.Draggable],{DragMoveObject:aipo.calendar.WeeklyScheduleDragMoveObject,isDraggable:false,scheduleObjId:null,constructor:function(C,D){this.scheduleObjId=D.sid
+},onMouseDown:function(B){ptConfig[this.portletId].isTooltipEnable=false;
 if(!!aipo.calendar.dummyDivObj&&!!aipo.calendar.dummyDivObj.TooltipObject){aipo.calendar.dummyDivObj.TooltipObject.close()
 }aimluck.dnd.Draggable.prototype.onMouseDown.apply(this,arguments)
-},onScheduleClick:function(B){if(this.schedule.isDrag||!this.isDraggable){return 
-}var A=this.schedule.ownerId;
-aipo.common.showDialog(ptConfig[this.portletId].detailUrl+"&entityId="+this.schedule.scheduleId+"&view_date="+ptConfig[this.portletId].jsonData.date[this.schedule.index]+"&userid="+A,this.portletId,aipo.schedule.onLoadScheduleDetail);
+},onScheduleClick:function(D){if(this.schedule.isDrag||!this.isDraggable){return 
+}var C=this.schedule.ownerId;
+aipo.common.showDialog(ptConfig[this.portletId].detailUrl+"&entityId="+this.schedule.scheduleId+"&view_date="+ptConfig[this.portletId].jsonData.date[this.schedule.index]+"&userid="+C,this.portletId,aipo.schedule.onLoadScheduleDetail);
 aipo.schedule.tmpScroll=parseInt(dojo.byId("weeklyScrollPane_"+this.portletId)["scrollTop"])
-},onScheduleOver:function(A){if(ptConfig[this.portletId].isTooltipEnable==false){return 
-}if(scheduleTooltipEnable){this.setupTooltip(A)
-}},setupTooltip:function(C){var A=this.schedule.scheduleId;
-var B=ptConfig[this.portletId].jsonData.endDate;
-if(!this.TooltipObject){this.TooltipObject=new aipo.widget.ToolTip({label:"<div class='indicator'>読み込み中...</div>",connectId:[this.node.id]},this.portletId,function(D,F){var E=ptConfig[this.portletId].jsonUrl.split("?")[0]+"?template=ScheduleDetailJSONScreen&view_date="+B+"&scheduleid="+A;
-aipo.calendar.showTooltip(E,this.portletId,D)
+},onScheduleOver:function(B){if(ptConfig[this.portletId].isTooltipEnable==false){return 
+}if(scheduleTooltipEnable){this.setupTooltip(B)
+}},setupTooltip:function(E){var D=this.schedule.scheduleId;
+var F=ptConfig[this.portletId].jsonData.endDate;
+if(!this.TooltipObject){this.TooltipObject=new aipo.widget.ToolTip({label:"<div class='indicator'>読み込み中...</div>",connectId:[this.node.id]},this.portletId,function(C,A){var B=ptConfig[this.portletId].jsonUrl.split("?")[0]+"?template=ScheduleDetailJSONScreen&view_date="+F+"&scheduleid="+D;
+aipo.calendar.showTooltip(B,this.portletId,C)
 });
-this.TooltipObject._onHover(C)
+this.TooltipObject._onHover(E)
 }aipo.calendar.objectlist.push(this.TooltipObject)
-},setDraggable:function(A){this.isDraggable=A
+},setDraggable:function(B){this.isDraggable=B
 }});
-dojo.declare("aipo.calendar.WeeklyTermScheduleDragMoveObject",[aimluck.dnd.DragMoveObject],{positionFrom:-1,positionTo:-1,moveIndex:0,onFirstMove:function(A){if(this.dragSource.TooltipObject!=null){this.dragSource.TooltipObject.uninitialize()
+dojo.declare("aipo.calendar.WeeklyTermScheduleDragMoveObject",[aimluck.dnd.DragMoveObject],{positionFrom:-1,positionTo:-1,moveIndex:0,onFirstMove:function(D){if(this.dragSource.TooltipObject!=null){this.dragSource.TooltipObject.uninitialize()
 }aimluck.dnd.DragMoveObject.prototype.onFirstMove.apply(this,arguments);
 dojo.style(this.node,"opacity",0.5);
 aipo.calendar.setGridArray(this.portletId,parseInt(ptConfig[this.portletId].scheduleDivDaySum));
-var C=dojo.clone(this.node);
-C.id="schedule-dummy-"+this.portletId;
-C.style.zIndex=998;
-dojo.style(C,"opacity",0);
-var B=dojo.byId(this.node.parentNode.id);
-B.appendChild(C);
-this.tmpDraggable=C;
-if(dojo.isIE){document.onkeydown=function(D){dojo.style(C,"opacity",0.3)
+var E=dojo.clone(this.node);
+E.id="schedule-dummy-"+this.portletId;
+E.style.zIndex=998;
+dojo.style(E,"opacity",0);
+var F=dojo.byId(this.node.parentNode.id);
+F.appendChild(E);
+this.tmpDraggable=E;
+if(dojo.isIE){document.onkeydown=function(A){dojo.style(E,"opacity",0.3)
 };
-document.onkeyup=function(D){dojo.style(C,"opacity",0)
+document.onkeyup=function(A){dojo.style(E,"opacity",0)
 }
 }else{dojo.connect(null,"onkeydown",this,"onKeyPress");
 dojo.connect(null,"onkeyup",this,"onKeyPress")
-}},onKeyPress:function(A){if(A.ctrlKey){dojo.style(this.tmpDraggable,"opacity",0.3)
+}},onKeyPress:function(B){if(B.ctrlKey){dojo.style(this.tmpDraggable,"opacity",0.3)
 }else{dojo.style(this.tmpDraggable,"opacity",0)
-}},onMouseMove:function(G){if(this.dragSource.isDraggable==false){return 
+}},onMouseMove:function(V){if(this.dragSource.isDraggable==false){return 
 }aimluck.dnd.DragMoveObject.prototype.onMouseMove.apply(this,arguments);
 this.dragSource.schedule.isDrag=true;
-var A=ptConfig[this.portletId].distance;
-var L=(dojo.byId("view_type_"+this.portletId)&&dojo.byId("top_form_"+this.portletId)&&dojo.byId("top_form_"+this.portletId).value=="simple")?dojo.byId("view_type_"+this.portletId).value:ptConfig[this.portletId].scheduleDivDaySum;
-var F=aipo.calendar.getCurrentMouseX(this.portletId,G);
-_tmpIndex=F.index;
-if(!this.disableX){var D=this.dragSource.schedule;
-var H=this.dragSource.termType;
-var J=this.dragSource.scheduleNode;
-var I,C;
-if(H=="center"){if(this.positionFrom==-1&&_tmpIndex!=-1){this.positionFrom=_tmpIndex;
+var P=ptConfig[this.portletId].distance;
+var Q=(dojo.byId("view_type_"+this.portletId)&&dojo.byId("top_form_"+this.portletId)&&dojo.byId("top_form_"+this.portletId).value=="simple")?dojo.byId("view_type_"+this.portletId).value:ptConfig[this.portletId].scheduleDivDaySum;
+var W=aipo.calendar.getCurrentMouseX(this.portletId,V);
+_tmpIndex=W.index;
+if(!this.disableX){var M=this.dragSource.schedule;
+var U=this.dragSource.termType;
+var S=this.dragSource.scheduleNode;
+var T,N;
+if(U=="center"){if(this.positionFrom==-1&&_tmpIndex!=-1){this.positionFrom=_tmpIndex;
 this.positionTo=this.positionFrom
 }if(this.positionTo!=-1&&_tmpIndex!=-1){this.positionTo=_tmpIndex
 }this.moveIndex=-this.positionFrom+this.positionTo;
-C=D.indexReal+this.moveIndex;
-I=D.colspanReal;
-var K=L;
-if(I+C>K){if(C<0){I=K
-}else{I=K-C
-}}else{if(C<0){I=I+C
-}}if(C<0){C=0
-}}else{if(H=="left"){if(this.positionFrom==-1){this.positionFrom=D.index;
-this.positionTo=D.index
+N=M.indexReal+this.moveIndex;
+T=M.colspanReal;
+var R=Q;
+if(T+N>R){if(N<0){T=R
+}else{T=R-N
+}}else{if(N<0){T=T+N
+}}if(N<0){N=0
+}}else{if(U=="left"){if(this.positionFrom==-1){this.positionFrom=M.index;
+this.positionTo=M.index
 }if(this.positionTo!=-1&&_tmpIndex!=-1){this.positionTo=_tmpIndex
 }this.moveIndex=-this.positionFrom+this.positionTo;
-if(this.positionTo>=this.positionFrom+D.colspanReal){C=D.indexReal+D.rowspan-1;
-I=this.positionTo-this.positionFrom-D.colspanReal+2
-}else{C=this.positionTo;
-I=D.rowspan+this.positionFrom-this.positionTo
-}}else{if(this.positionFrom==-1){this.positionFrom=D.index;
-this.positionTo=D.index
+if(this.positionTo>=this.positionFrom+M.colspanReal){N=M.indexReal+M.rowspan-1;
+T=this.positionTo-this.positionFrom-M.colspanReal+2
+}else{N=this.positionTo;
+T=M.rowspan+this.positionFrom-this.positionTo
+}}else{if(this.positionFrom==-1){this.positionFrom=M.index;
+this.positionTo=M.index
 }if(this.positionTo!=-1&&_tmpIndex!=-1&&this._tmpIndex!=-1){this.positionTo=_tmpIndex
-}this.moveIndex=-D.index-D.rowspan+this.positionTo+1;
-if(this.positionTo<=this.positionFrom){C=this.positionTo;
-I=this.positionFrom-this.positionTo+1
-}else{C=D.index;
-I=this.positionTo-D.index+1
-}}}var B=100/L*I;
-var E=100/L*C;
-dojo.style(J,"left",E+"%");
-dojo.style(J,"width",B+"%")
-}},onMouseUp:function(E){ptConfig[this.portletId].isTooltipEnable=true;
+}this.moveIndex=-M.index-M.rowspan+this.positionTo+1;
+if(this.positionTo<=this.positionFrom){N=this.positionTo;
+T=this.positionFrom-this.positionTo+1
+}else{N=M.index;
+T=this.positionTo-M.index+1
+}}}var O=100/Q*T;
+var X=100/Q*N;
+dojo.style(S,"left",X+"%");
+dojo.style(S,"width",O+"%")
+}},onMouseUp:function(M){ptConfig[this.portletId].isTooltipEnable=true;
 if(dojo.isIE){document.onkeydown="";
 document.onkeyup=""
 }if(this.dragSource.schedule.isDrag!=true){dojo.style(this.node,"opacity",1);
 aimluck.dnd.DragMoveObject.prototype.onMouseUp.apply(this,arguments);
 return 
-}var B=this.dragSource.schedule;
-var H=ptConfig[this.portletId].jsonData.date[0].substring(0,10);
-var C=this.dragSource.termType;
-var G=this.dragSource.scheduleNode;
-var A,D;
-if(dojo.byId("top_form_"+this.portletId).value=="simple"){A=ptConfig[this.portletId].jsonData.date[0];
-D=ptConfig[this.portletId].jsonData.date[0]
-}if(C=="center"){A=aipo.calendar.getDate(H,B.indexReal+this.moveIndex)+"-00-00";
-D=aipo.calendar.getDate(H,B.indexReal+this.moveIndex+B.colspanReal-1)+"-00-00"
-}else{if(C=="left"){if(B.colspanReal-this.moveIndex>0){A=aipo.calendar.getDate(H,B.indexReal+this.moveIndex)+"-00-00";
-D=aipo.calendar.getDate(H,B.indexReal+B.colspanReal-1)+"-00-00"
-}else{A=aipo.calendar.getDate(H,B.indexReal+B.colspanReal-1)+"-00-00";
-D=aipo.calendar.getDate(H,B.indexReal+this.moveIndex)+"-00-00"
-}}else{if(B.colspanReal+this.moveIndex>0){A=aipo.calendar.getDate(H,B.indexReal)+"-00-00";
-D=aipo.calendar.getDate(H,B.indexReal+B.colspanReal+this.moveIndex-1)+"-00-00"
-}else{A=aipo.calendar.getDate(H,B.indexReal+B.colspanReal+this.moveIndex-1)+"-00-00";
-D=aipo.calendar.getDate(H,B.indexReal)+"-00-00"
+}var P=this.dragSource.schedule;
+var J=ptConfig[this.portletId].jsonData.date[0].substring(0,10);
+var O=this.dragSource.termType;
+var K=this.dragSource.scheduleNode;
+var I,N;
+if(dojo.byId("top_form_"+this.portletId).value=="simple"){I=ptConfig[this.portletId].jsonData.date[0];
+N=ptConfig[this.portletId].jsonData.date[0]
+}if(O=="center"){I=aipo.calendar.getDate(J,P.indexReal+this.moveIndex)+"-00-00";
+N=aipo.calendar.getDate(J,P.indexReal+this.moveIndex+P.colspanReal-1)+"-00-00"
+}else{if(O=="left"){if(P.colspanReal-this.moveIndex>0){I=aipo.calendar.getDate(J,P.indexReal+this.moveIndex)+"-00-00";
+N=aipo.calendar.getDate(J,P.indexReal+P.colspanReal-1)+"-00-00"
+}else{I=aipo.calendar.getDate(J,P.indexReal+P.colspanReal-1)+"-00-00";
+N=aipo.calendar.getDate(J,P.indexReal+this.moveIndex)+"-00-00"
+}}else{if(P.colspanReal+this.moveIndex>0){I=aipo.calendar.getDate(J,P.indexReal)+"-00-00";
+N=aipo.calendar.getDate(J,P.indexReal+P.colspanReal+this.moveIndex-1)+"-00-00"
+}else{I=aipo.calendar.getDate(J,P.indexReal+P.colspanReal+this.moveIndex-1)+"-00-00";
+N=aipo.calendar.getDate(J,P.indexReal)+"-00-00"
 }}}this.positionFrom=-1;
 this.positionTo=-1;
 this.moveIndex=0;
 this.tmpIndex=0;
-var F="";
-if(E.ctrlKey){F+="&mode=insert"
-}else{F+="&mode=update"
-}F+="&is_span=TRUE";
-F+="&entityid="+this.dragSource.schedule.scheduleId;
-F+="&view_start="+H;
-F+="&start_date="+A;
-F+="&end_date="+D;
-aipo.calendar.populateWeeklySchedule(this.portletId,F);
+var L="";
+if(M.ctrlKey){L+="&mode=insert"
+}else{L+="&mode=update"
+}L+="&is_span=TRUE";
+L+="&entityid="+this.dragSource.schedule.scheduleId;
+L+="&view_start="+J;
+L+="&start_date="+I;
+L+="&end_date="+N;
+aipo.calendar.populateWeeklySchedule(this.portletId,L);
 aipo.portletReload("schedule",this.portletId);
 aimluck.dnd.DragMoveObject.prototype.onMouseUp.apply(this,arguments)
 }});
-dojo.declare("aipo.calendar.WeeklyTermScheduleDraggable",[aimluck.dnd.Draggable],{DragMoveObject:aipo.calendar.WeeklyTermScheduleDragMoveObject,isDraggable:false,TooltipObject:null,scheduleObjId:null,isDraggable:false,constructor:function(A,B){this.scheduleObjId=B.sid
-},onMouseDown:function(A){ptConfig[this.portletId].isTooltipEnable=false;
+dojo.declare("aipo.calendar.WeeklyTermScheduleDraggable",[aimluck.dnd.Draggable],{DragMoveObject:aipo.calendar.WeeklyTermScheduleDragMoveObject,isDraggable:false,TooltipObject:null,scheduleObjId:null,isDraggable:false,constructor:function(C,D){this.scheduleObjId=D.sid
+},onMouseDown:function(B){ptConfig[this.portletId].isTooltipEnable=false;
 if(this.TooltipObject){this.TooltipObject.close()
 }aimluck.dnd.Draggable.prototype.onMouseDown.apply(this,arguments)
-},onScheduleClick:function(B){if(this.schedule.isDrag||!this.isDraggable){return 
-}var A=this.schedule.ownerId;
-aipo.common.showDialog(ptConfig[this.portletId].detailUrl+"&entityId="+this.schedule.scheduleId+"&view_date="+ptConfig[this.portletId].jsonData.date[this.schedule.index]+"&userid="+A,this.portletId,aipo.schedule.onLoadScheduleDetail);
+},onScheduleClick:function(D){if(this.schedule.isDrag||!this.isDraggable){return 
+}var C=this.schedule.ownerId;
+aipo.common.showDialog(ptConfig[this.portletId].detailUrl+"&entityId="+this.schedule.scheduleId+"&view_date="+ptConfig[this.portletId].jsonData.date[this.schedule.index]+"&userid="+C,this.portletId,aipo.schedule.onLoadScheduleDetail);
 aipo.schedule.tmpScroll=parseInt(dojo.byId("weeklyScrollPane_"+this.portletId)["scrollTop"])
-},onScheduleOver:function(A){if(ptConfig[this.portletId].isTooltipEnable==false){return 
-}if(scheduleTooltipEnable){this.setupTooltip(A)
-}},setupTooltip:function(C){var A=this.schedule.scheduleId;
-var B=ptConfig[this.portletId].jsonData.endDate;
-if(!this.TooltipObject){this.TooltipObject=new aipo.widget.ToolTip({label:"<div class='indicator'>読み込み中...</div>",connectId:[this.node.id]},this.portletId,function(D,F){var E=ptConfig[this.portletId].jsonUrl.split("?")[0]+"?template=ScheduleDetailJSONScreen&view_date="+B+"&scheduleid="+A;
-aipo.calendar.showTooltip(E,this.portletId,D)
+},onScheduleOver:function(B){if(ptConfig[this.portletId].isTooltipEnable==false){return 
+}if(scheduleTooltipEnable){this.setupTooltip(B)
+}},setupTooltip:function(E){var D=this.schedule.scheduleId;
+var F=ptConfig[this.portletId].jsonData.endDate;
+if(!this.TooltipObject){this.TooltipObject=new aipo.widget.ToolTip({label:"<div class='indicator'>読み込み中...</div>",connectId:[this.node.id]},this.portletId,function(C,A){var B=ptConfig[this.portletId].jsonUrl.split("?")[0]+"?template=ScheduleDetailJSONScreen&view_date="+F+"&scheduleid="+D;
+aipo.calendar.showTooltip(B,this.portletId,C)
 });
-this.TooltipObject._onHover(C)
+this.TooltipObject._onHover(E)
 }aipo.calendar.objectlist.push(this.TooltipObject)
-},setDraggable:function(A){this.isDraggable=A
+},setDraggable:function(B){this.isDraggable=B
 }});
-dojo.declare("aipo.calendar.WeeklyScheduleAddDragMoveObject",[aimluck.dnd.DragMoveObject],{_rowHeight_:18,positionFrom:0,positionTo:0,_isDragging:false,lastScroll:0,_isLocked:false,onMouseDown:function(A){this._isDragging=false;
+dojo.declare("aipo.calendar.WeeklyScheduleAddDragMoveObject",[aimluck.dnd.DragMoveObject],{_rowHeight_:18,positionFrom:0,positionTo:0,_isDragging:false,lastScroll:0,_isLocked:false,onMouseDown:function(B){this._isDragging=false;
 aimluck.dnd.DragMoveObject.prototype.onMouseDown.apply(this,arguments)
-},onFirstMove:function(B){this.startY=this.dragSource._lastY;
+},onFirstMove:function(D){this.startY=this.dragSource._lastY;
 this.startAbsoluteY=dojo._abs(dojo.byId(this.node),true).y;
 this.startX=dojo.getComputedStyle(this.node).left;
-var A=window.navigator.userAgent.toLowerCase();
-if(A.indexOf("chrome")>-1||(dojo.isFF&&(dojo.isFF>=3.6))){this.startAbsoluteY+=window.scrollY
-}else{if(A.indexOf("safari")>-1){this.startAbsoluteY-=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop
+var C=window.navigator.userAgent.toLowerCase();
+if(C.indexOf("chrome")>-1||(dojo.isFF&&(dojo.isFF>=3.6))){this.startAbsoluteY+=window.scrollY
+}else{if(C.indexOf("safari")>-1){this.startAbsoluteY-=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop
 }}lastScroll=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop;
 aimluck.dnd.DragMoveObject.prototype.onFirstMove.apply(this,arguments)
-},onMouseMove:function(F){if(this._isLocked){return 
+},onMouseMove:function(H){if(this._isLocked){return 
 }aimluck.dnd.DragMoveObject.prototype.onMouseMove.apply(this,arguments);
 this._isDragging=true;
-var E=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop-lastScroll;
-var D=Math.floor((this.startY-this.startAbsoluteY)/this._rowHeight_);
-var A=Math.floor((this.startY+this.leftTop.t-this.startAbsoluteY+E)/this._rowHeight_);
-var B=0;
-var C=0;
-if(A<D){B=A*this._rowHeight_+1;
-C=(D-A+1)*this._rowHeight_;
-this.positionFrom=A;
-this.positionTo=D+1
-}else{B=D*this._rowHeight_+1;
-C=(A-D+1)*this._rowHeight_;
-this.positionTo=A+1;
-this.positionFrom=D
-}if(B+C>864){C=864-B-this._rowHeight_;
+var I=dojo.byId("weeklyScrollPane_"+this.portletId).scrollTop-lastScroll;
+var J=Math.floor((this.startY-this.startAbsoluteY)/this._rowHeight_);
+var G=Math.floor((this.startY+this.leftTop.t-this.startAbsoluteY+I)/this._rowHeight_);
+var L=0;
+var K=0;
+if(G<J){L=G*this._rowHeight_+1;
+K=(J-G+1)*this._rowHeight_;
+this.positionFrom=G;
+this.positionTo=J+1
+}else{L=J*this._rowHeight_+1;
+K=(G-J+1)*this._rowHeight_;
+this.positionTo=G+1;
+this.positionFrom=J
+}if(L+K>864){K=864-L-this._rowHeight_;
 this.positionTo=47
-}this.leftTop.t=B;
+}this.leftTop.t=L;
 this.leftTop.l=this.startX;
-this.leftTop.h=C;
+this.leftTop.h=K;
 dojo.marginBox(this.node,this.leftTop);
 dojo.style(this.node,"opacity",0.5)
-},onMouseUp:function(E){if(!this._isDragging){this.onFirstMove(E);
-this.onMouseMove(E)
-}var A=Math.floor(this.positionFrom/2);
-A=(A>9)?A:"0"+A;
-var F=Math.floor(this.positionFrom%2)*30;
-var C=ptConfig[this.portletId].jsonData.date[this.dragSource.index].substring(0,10);
-var D=C+"-"+A+"-"+F;
-A=Math.floor(this.positionTo/2);
-A=(A>9)?A:"0"+A;
-F=Math.floor(this.positionTo%2)*30;
-var B=C+"-"+A+"-"+F;
+},onMouseUp:function(I){if(!this._isDragging){this.onFirstMove(I);
+this.onMouseMove(I)
+}var G=Math.floor(this.positionFrom/2);
+G=(G>9)?G:"0"+G;
+var H=Math.floor(this.positionFrom%2)*30;
+var K=ptConfig[this.portletId].jsonData.date[this.dragSource.index].substring(0,10);
+var J=K+"-"+G+"-"+H;
+G=Math.floor(this.positionTo/2);
+G=(G>9)?G:"0"+G;
+H=Math.floor(this.positionTo%2)*30;
+var L=K+"-"+G+"-"+H;
 this.node.style.top="0px";
 this.node.style.height="864px";
 dojo.style(this.node,"opacity",0);
-if(this._isDragging==true){aipo.common.showDialog(ptConfig[this.portletId].formUrl+"&entityid=new&mode=form&form_start="+D+"&form_end="+B,this.portletId,aipo.schedule.onLoadScheduleDialog)
+if(this._isDragging==true){aipo.common.showDialog(ptConfig[this.portletId].formUrl+"&entityid=new&mode=form&form_start="+J+"&form_end="+L,this.portletId,aipo.schedule.onLoadScheduleDialog)
 }aipo.schedule.tmpScroll=parseInt(dojo.byId("weeklyScrollPane_"+this.portletId)["scrollTop"]);
 this._isDragging=false;
 aimluck.dnd.DragMoveObject.prototype.onMouseUp.apply(this,arguments);
@@ -944,46 +944,46 @@ this._isLocked=true;
 setTimeout(function(){this._isLocked=false
 },5000)
 }});
-dojo.declare("aipo.calendar.WeeklyScheduleAddDraggable",[aimluck.dnd.Draggable],{DragMoveObject:aipo.calendar.WeeklyScheduleAddDragMoveObject,constructor:function(A,B){this.index=B.idx
+dojo.declare("aipo.calendar.WeeklyScheduleAddDraggable",[aimluck.dnd.Draggable],{DragMoveObject:aipo.calendar.WeeklyScheduleAddDragMoveObject,constructor:function(C,D){this.index=D.idx
 }});
-dojo.declare("aipo.calendar.WeeklyTermScheduleAddDragMoveObject",[aimluck.dnd.DragMoveObject],{_rowHeight_:18,positionFrom:-1,positionTo:-1,_isDragging:false,scheduleObjId:null,onMouseDown:function(A){this._isDragging=false;
+dojo.declare("aipo.calendar.WeeklyTermScheduleAddDragMoveObject",[aimluck.dnd.DragMoveObject],{_rowHeight_:18,positionFrom:-1,positionTo:-1,_isDragging:false,scheduleObjId:null,onMouseDown:function(B){this._isDragging=false;
 aimluck.dnd.DragMoveObject.prototype.onMouseDown.apply(this,arguments)
-},onFirstMove:function(A){aimluck.dnd.DragMoveObject.prototype.onFirstMove.apply(this,arguments);
+},onFirstMove:function(B){aimluck.dnd.DragMoveObject.prototype.onFirstMove.apply(this,arguments);
 aipo.calendar.setGridArray(this.portletId,parseInt(ptConfig[this.portletId].scheduleDivDaySum))
-},onMouseMove:function(G){aimluck.dnd.DragMoveObject.prototype.onMouseMove.apply(this,arguments);
+},onMouseMove:function(K){aimluck.dnd.DragMoveObject.prototype.onMouseMove.apply(this,arguments);
 this._isDragging=true;
 dojo.style(this.node,"opacity",0.5);
-var C=aipo.calendar.getCurrentMouseX(this.portletId,G);
-var H=C.index;
-if(this.positionFrom==-1&&H!=-1){this.positionFrom=H;
+var O=aipo.calendar.getCurrentMouseX(this.portletId,K);
+var J=O.index;
+if(this.positionFrom==-1&&J!=-1){this.positionFrom=J;
 this.positionTo=this.positionFrom
-}if(this.positionTo!=-1&&H!=-1){this.positionTo=H
-}if(this.positionTo!=-1&&this.positionFrom!=-1){var B,A;
-if(this.positionTo>this.positionFrom){A=this.positionFrom;
-B=this.positionTo-this.positionFrom+1
-}else{A=this.positionTo;
-B=this.positionFrom-this.positionTo+1
-}var E;
-var F;
-if(dojo.byId("view_type_"+this.portletId)&&dojo.byId("top_form_"+this.portletId).value=="simple"){var D=parseInt(dojo.byId("view_type_"+this.portletId).value);
-E=100/D*B;
-F=100/D*A
-}else{E=100/ptConfig[this.portletId].scheduleDivDaySum*B;
-F=100/ptConfig[this.portletId].scheduleDivDaySum*A
-}dojo.style(this.node,"left",F+"%");
-dojo.style(this.node,"width",E+"%")
+}if(this.positionTo!=-1&&J!=-1){this.positionTo=J
+}if(this.positionTo!=-1&&this.positionFrom!=-1){var P,I;
+if(this.positionTo>this.positionFrom){I=this.positionFrom;
+P=this.positionTo-this.positionFrom+1
+}else{I=this.positionTo;
+P=this.positionFrom-this.positionTo+1
+}var M;
+var L;
+if(dojo.byId("view_type_"+this.portletId)&&dojo.byId("top_form_"+this.portletId).value=="simple"){var N=parseInt(dojo.byId("view_type_"+this.portletId).value);
+M=100/N*P;
+L=100/N*I
+}else{M=100/ptConfig[this.portletId].scheduleDivDaySum*P;
+L=100/ptConfig[this.portletId].scheduleDivDaySum*I
+}dojo.style(this.node,"left",L+"%");
+dojo.style(this.node,"width",M+"%")
 }else{dojo.style(this.node,"left",0+"%");
 dojo.style(this.node,"width",0+"%")
-}},onMouseUp:function(D){if(!this._isDragging){this.onFirstMove(D);
-this.onMouseMove(D)
-}var E,C;
-if(this.positionTo!=-1&&this.positionFrom!=-1){if(this.positionTo>this.positionFrom){E=this.positionFrom;
-C=this.positionTo
-}else{C=this.positionFrom;
-E=this.positionTo
-}var B=ptConfig[this.portletId].jsonData.date[E];
-var A=ptConfig[this.portletId].jsonData.date[C];
-if(this._isDragging==true){aipo.common.showDialog(ptConfig[this.portletId].formUrl+"&entityid=new&mode=form&is_span=TRUE&form_start="+B+"&form_end="+A,this.portletId,aipo.schedule.onLoadScheduleDialog)
+}},onMouseUp:function(H){if(!this._isDragging){this.onFirstMove(H);
+this.onMouseMove(H)
+}var G,I;
+if(this.positionTo!=-1&&this.positionFrom!=-1){if(this.positionTo>this.positionFrom){G=this.positionFrom;
+I=this.positionTo
+}else{I=this.positionFrom;
+G=this.positionTo
+}var J=ptConfig[this.portletId].jsonData.date[G];
+var F=ptConfig[this.portletId].jsonData.date[I];
+if(this._isDragging==true){aipo.common.showDialog(ptConfig[this.portletId].formUrl+"&entityid=new&mode=form&is_span=TRUE&form_start="+J+"&form_end="+F,this.portletId,aipo.schedule.onLoadScheduleDialog)
 }aipo.schedule.tmpScroll=parseInt(dojo.byId("weeklyScrollPane_"+this.portletId)["scrollTop"])
 }this.positionFrom=-1;
 this.positionTo=-1;
@@ -992,47 +992,47 @@ dojo.style(this.node,"width",100+"%");
 dojo.style(this.node,"opacity",0);
 aimluck.dnd.DragMoveObject.prototype.onMouseUp.apply(this,arguments)
 }});
-dojo.declare("aipo.calendar.WeeklyTermScheduleAddDraggable",[aimluck.dnd.Draggable],{DragMoveObject:aipo.calendar.WeeklyTermScheduleAddDragMoveObject,constructor:function(A,B){this.index=B.idx
+dojo.declare("aipo.calendar.WeeklyTermScheduleAddDraggable",[aimluck.dnd.Draggable],{DragMoveObject:aipo.calendar.WeeklyTermScheduleAddDragMoveObject,constructor:function(C,D){this.index=D.idx
 }});
-aipo.schedule.initCalendar=function(B){for(var A=0;
-A<ptConfig[B].scheduleDivDaySum;
-A++){tmpDraggable=new aipo.calendar.WeeklyScheduleAddDraggable("scheduleDivAdd0"+A+"_"+B,{idx:A});
-tmpDraggable.portletId=B;
-tmpDraggable.index=A
-}tmpDraggable=new aipo.calendar.WeeklyTermScheduleAddDraggable("termScheduleDivAdd_"+B,{idx:0});
-tmpDraggable.portletId=B;
-aipo.calendar.populateWeeklySchedule(B)
+aipo.schedule.initCalendar=function(D){for(var C=0;
+C<ptConfig[D].scheduleDivDaySum;
+C++){tmpDraggable=new aipo.calendar.WeeklyScheduleAddDraggable("scheduleDivAdd0"+C+"_"+D,{idx:C});
+tmpDraggable.portletId=D;
+tmpDraggable.index=C
+}tmpDraggable=new aipo.calendar.WeeklyTermScheduleAddDraggable("termScheduleDivAdd_"+D,{idx:0});
+tmpDraggable.portletId=D;
+aipo.calendar.populateWeeklySchedule(D)
 };
-aipo.schedule.groupSelectOnchange=function(D,F,G,A){var I=function(N,M){var L="";
-A.dropDown.removeMember(dojo.byId("member_to-"+G));
-for(var K=0;
-K<N.length;
-K++){var J=N[K].aliasName.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-if(K!=0){L+=" "
-}B+="&m_id="+N[K].name;
-L+='<span class="dispUser color'+K+'">'+J+"</span>";
-aimluck.io.addOption(dojo.byId("member_to-"+G),N[K].name,J,true)
-}dojo.byId("member_to_input-"+G).innerHTML=L
+aipo.schedule.groupSelectOnchange=function(J,Q,P,M){var N=function(D,E){var A="";
+M.dropDown.removeMember(dojo.byId("member_to-"+P));
+for(var B=0;
+B<D.length;
+B++){var C=D[B].aliasName.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+if(B!=0){A+=" "
+}L+="&m_id="+D[B].name;
+A+='<span class="dispUser color'+B+'">'+C+"</span>";
+aimluck.io.addOption(dojo.byId("member_to-"+P),D[B].name,C,true)
+}dojo.byId("member_to_input-"+P).innerHTML=A
 };
-var E=dojo.query("#adduser-"+G);
-switch(D.value.indexOf("pickup")){case -1:E.addClass("hide");
-var B="";
-dojo.xhrGet({portletId:G,url:D.value,encoding:"utf-8",handleAs:"json-comment-filtered",load:I,handle:function(){aipo.calendar.populateWeeklySchedule(G,B)
+var R=dojo.query("#adduser-"+P);
+switch(J.value.indexOf("pickup")){case -1:R.addClass("hide");
+var L="";
+dojo.xhrGet({portletId:P,url:J.value,encoding:"utf-8",handleAs:"json-comment-filtered",load:N,handle:function(){aipo.calendar.populateWeeklySchedule(P,L)
 }});
 break;
-default:E.removeClass("hide");
-A.dropDown.removeMember(dojo.byId("member_to-"+G));
-A.dropDown.removeMember(dojo.byId("tmp_member_to-"+G));
-var H=dojo.byId("picked_memberlist-"+G).options;
-for(var C=0;
-C<H.length;
-C++){(function(K,J){K.selected=true
-})(H[C],C)
-}A.dropDown.addMember(dojo.byId("picked_memberlist-"+G),dojo.byId("tmp_member_to-"+G));
-A.dropDown.addMember(dojo.byId("picked_memberlist-"+G),dojo.byId("member_to-"+G));
-A.inputMemberSync();
-aipo.calendar.populateWeeklySchedule(G);
-dojo.xhrGet({portletId:G,url:dojo.byId("groupselect-defaulturl-"+G).value,encoding:"utf-8",handleAs:"json-comment-filtered"});
+default:R.removeClass("hide");
+M.dropDown.removeMember(dojo.byId("member_to-"+P));
+M.dropDown.removeMember(dojo.byId("tmp_member_to-"+P));
+var O=dojo.byId("picked_memberlist-"+P).options;
+for(var K=0;
+K<O.length;
+K++){(function(A,B){A.selected=true
+})(O[K],K)
+}M.dropDown.addMember(dojo.byId("picked_memberlist-"+P),dojo.byId("tmp_member_to-"+P));
+M.dropDown.addMember(dojo.byId("picked_memberlist-"+P),dojo.byId("member_to-"+P));
+M.inputMemberSync();
+aipo.calendar.populateWeeklySchedule(P);
+dojo.xhrGet({portletId:P,url:dojo.byId("groupselect-defaulturl-"+P).value,encoding:"utf-8",handleAs:"json-comment-filtered"});
 break
 }}
 };

@@ -21,24 +21,24 @@ this._updateColor()
 },_setTimer:function(A){this._timer=setInterval(dojo.hitch(this,"_updateColor"),45)
 },_clearTimer:function(A){clearInterval(this._timer);
 this.onChange(this.value)
-},_setHue:function(B){var A=dojo.colorFromArray(this._hsv2rgb(B,1,1,{inputRange:1})).toHex();
-dojo.style(this.colorUnderlay,"backgroundColor",A)
-},_updateColor:function(){var D=Math.round((255+(this._offset))-((dojo.style(this.hueCursorNode,"top")+this._offset)*this._hueSc));
-var C=Math.round((dojo.style(this.cursorNode,"left")*this._sc)*100);
-var A=Math.round(100-(dojo.style(this.cursorNode,"top")*this._sc)*100);
-if(D!=this._hue){this._setHue(D)
-}var B=this._hsv2rgb(D,C/100,A/100,{inputRange:1});
-var E=(dojo.colorFromArray(B).toHex());
-this.previewNode.style.backgroundColor=E;
-if(this.webSafe){this.safePreviewNode.style.backgroundColor=E
-}if(this.showHex){this.hexCode.value=E
-}if(this.showRgb){this.Rval.value=B[0];
-this.Gval.value=B[1];
-this.Bval.value=B[2]
-}if(this.showHsv){this.Hval.value=Math.round((D*360)/255);
-this.Sval.value=C;
-this.Vval.value=A
-}this.value=E;
+},_setHue:function(A){var B=dojo.colorFromArray(this._hsv2rgb(A,1,1,{inputRange:1})).toHex();
+dojo.style(this.colorUnderlay,"backgroundColor",B)
+},_updateColor:function(){var C=Math.round((255+(this._offset))-((dojo.style(this.hueCursorNode,"top")+this._offset)*this._hueSc));
+var B=Math.round((dojo.style(this.cursorNode,"left")*this._sc)*100);
+var E=Math.round(100-(dojo.style(this.cursorNode,"top")*this._sc)*100);
+if(C!=this._hue){this._setHue(C)
+}var A=this._hsv2rgb(C,B/100,E/100,{inputRange:1});
+var D=(dojo.colorFromArray(A).toHex());
+this.previewNode.style.backgroundColor=D;
+if(this.webSafe){this.safePreviewNode.style.backgroundColor=D
+}if(this.showHex){this.hexCode.value=D
+}if(this.showRgb){this.Rval.value=A[0];
+this.Gval.value=A[1];
+this.Bval.value=A[2]
+}if(this.showHsv){this.Hval.value=Math.round((C*360)/255);
+this.Sval.value=B;
+this.Vval.value=E
+}this.value=D;
 if(!this._timer&&!(arguments[1])){this.setValue(this.value);
 this.onChange(this.value)
 }},_setHuePoint:function(A){if(this.animatePoint){dojo.fx.slideTo({node:this.hueCursorNode,duration:this.slideDuration,top:A.layerY,left:0,onEnd:dojo.hitch(this,"_updateColor")}).play()
@@ -48,72 +48,72 @@ this._updateColor(false)
 }else{dojo.style(this.cursorNode,"left",(A.layerX-this._offset)+"px");
 dojo.style(this.cursorNode,"top",(A.layerY-this._offset)+"px");
 this._updateColor(false)
-}},_hsv2rgb:function(G,M,K,N){if(dojo.isArray(G)){if(M){N=M
-}K=G[2]||0;
-M=G[1]||0;
-G=G[0]||0
-}var D={inputRange:(N&&N.inputRange)?N.inputRange:[255,255,255],outputRange:(N&&N.outputRange)?N.outputRange:255};
-switch(D.inputRange[0]){case 1:G=G*360;
+}},_hsv2rgb:function(A,G,E,H){if(dojo.isArray(A)){if(G){H=G
+}E=A[2]||0;
+G=A[1]||0;
+A=A[0]||0
+}var L={inputRange:(H&&H.inputRange)?H.inputRange:[255,255,255],outputRange:(H&&H.outputRange)?H.outputRange:255};
+switch(L.inputRange[0]){case 1:A=A*360;
 break;
-case 100:G=(G/100)*360;
+case 100:A=(A/100)*360;
 break;
-case 360:G=G;
+case 360:A=A;
 break;
-default:G=(G/255)*360
-}if(G==360){G=0
-}switch(D.inputRange[1]){case 100:M/=100;
+default:A=(A/255)*360
+}if(A==360){A=0
+}switch(L.inputRange[1]){case 100:G/=100;
 break;
-case 255:M/=255
-}switch(D.inputRange[2]){case 100:K/=100;
+case 255:G/=255
+}switch(L.inputRange[2]){case 100:E/=100;
 break;
-case 255:K/=255
-}var A=null;
-var H=null;
-var J=null;
-if(M==0){A=K;
-H=K;
-J=K
-}else{var E=G/60;
-var F=Math.floor(E);
-var I=E-F;
-var C=K*(1-M);
-var B=K*(1-(M*I));
-var L=K*(1-(M*(1-I)));
-switch(F){case 0:A=K;
-H=L;
-J=C;
+case 255:E/=255
+}var I=null;
+var B=null;
+var D=null;
+if(G==0){I=E;
+B=E;
+D=E
+}else{var M=A/60;
+var N=Math.floor(M);
+var C=M-N;
+var K=E*(1-G);
+var J=E*(1-(G*C));
+var F=E*(1-(G*(1-C)));
+switch(N){case 0:I=E;
+B=F;
+D=K;
 break;
-case 1:A=B;
-H=K;
-J=C;
+case 1:I=J;
+B=E;
+D=K;
 break;
-case 2:A=C;
-H=K;
-J=L;
+case 2:I=K;
+B=E;
+D=F;
 break;
-case 3:A=C;
-H=B;
-J=K;
+case 3:I=K;
+B=J;
+D=E;
 break;
-case 4:A=L;
-H=C;
-J=K;
+case 4:I=F;
+B=K;
+D=E;
 break;
-case 5:A=K;
-H=C;
-J=B;
+case 5:I=E;
+B=K;
+D=J;
 break
-}}switch(D.outputRange){case 1:A=dojo.math.round(A,2);
-H=dojo.math.round(H,2);
-J=dojo.math.round(J,2);
+}}switch(L.outputRange){case 1:I=dojo.math.round(I,2);
+B=dojo.math.round(B,2);
+D=dojo.math.round(D,2);
 break;
-case 100:A=Math.round(A*100);
-H=Math.round(H*100);
-J=Math.round(J*100);
+case 100:I=Math.round(I*100);
+B=Math.round(B*100);
+D=Math.round(D*100);
 break;
-default:A=Math.round(A*255);
-H=Math.round(H*255);
-J=Math.round(J*255)
-}return[A,H,J]
+default:I=Math.round(I*255);
+B=Math.round(B*255);
+D=Math.round(D*255)
+}return[I,B,D]
 }})
 };

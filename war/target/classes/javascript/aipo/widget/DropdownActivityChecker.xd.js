@@ -6,12 +6,12 @@ A.declare("aipo.widget.DropdownActivityChecker",[aimluck.widget.Dropdown],{initV
 this.dropDown=new aipo.widget.ActivityList({},"activityLiteList")
 },_openDropDown:function(){this.inherited(arguments);
 this.dropDown.reload()
-},onCheckActivity:function(C){var B=A.byId("activitychecker");
-if(C>99){B.innerHTML="99+";
+},onCheckActivity:function(B){var C=A.byId("activitychecker");
+if(B>99){C.innerHTML="99+";
 A.removeClass("activitychecker","zero")
-}else{if(C==0){B.innerHTML=C;
+}else{if(B==0){C.innerHTML=B;
 A.addClass("activitychecker","zero")
-}else{B.innerHTML=C;
+}else{C.innerHTML=B;
 A.removeClass("activitychecker","zero")
 }}},onCheckBlank:function(B){}})
 }}});

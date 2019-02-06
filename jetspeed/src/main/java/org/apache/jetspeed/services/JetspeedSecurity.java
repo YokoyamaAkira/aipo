@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -96,28 +96,118 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
    * Alphabet consisting of upper and lowercase letters A-Z and the digits 0-9
    * Used to make a random password.
    */
-  public static final char[] NUMBERS_AND_LETTERS_ALPHABET = { 'A', 'B', 'C',
-      'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
-      'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e',
-      'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-      't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6',
-      '7', '8', '9', };
+  public static final char[] NUMBERS_AND_LETTERS_ALPHABET = {
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9', };
 
   /**
    * Alphabet consisting of lowercase letters a-z and the digits 0-9 Used to
    * make a random password.
    */
-  public static final char[] LC_NUMBERS_AND_LETTERS_ALPHABET = { 'a', 'b', 'c',
-      'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-      'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4',
-      '5', '6', '7', '8', '9', };
+  public static final char[] LC_NUMBERS_AND_LETTERS_ALPHABET = {
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9', };
 
   /**
    * Commodity method for getting a reference to the service singleton
    */
   public static JetspeedSecurityService getService() {
     return (JetspeedSecurityService) TurbineServices.getInstance().getService(
-        JetspeedSecurityService.SERVICE_NAME);
+      JetspeedSecurityService.SERVICE_NAME);
   }
 
   // ////////////////////////////////////////////////////////////////////////
@@ -164,7 +254,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   public static boolean checkPermission(JetspeedUser user, Portlet portlet,
       String action) {
     return JetspeedPortalAccessController
-        .checkPermission(user, portlet, action);
+      .checkPermission(user, portlet, action);
   }
 
   /**
@@ -172,8 +262,10 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
    */
   public static boolean checkPermission(JetspeedUser user,
       PortalResource resource, String action) {
-    return JetspeedPortalAccessController.checkPermission(user, resource,
-        action);
+    return JetspeedPortalAccessController.checkPermission(
+      user,
+      resource,
+      action);
   }
 
   // ////////////////////////////////////////////////////////////////////////
@@ -191,7 +283,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   /**
    * @see UserManagement#getUsers
    */
-  public static Iterator getUsers() throws JetspeedSecurityException {
+  public static Iterator<?> getUsers() throws JetspeedSecurityException {
     return JetspeedUserManagement.getUsers();
   }
 
@@ -214,7 +306,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   /**
    * @see UserManagement#getUsers(String)
    */
-  public static Iterator getUsers(String filter)
+  public static Iterator<?> getUsers(String filter)
       throws JetspeedSecurityException {
     return JetspeedUserManagement.getUsers(filter);
   }
@@ -241,7 +333,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   public static JetspeedUser getUser(RunData rundata, String username)
       throws JetspeedSecurityException {
     return JetspeedUserManagement.getUser(rundata, new UserNamePrincipal(
-        username));
+      username));
   }
 
   /**
@@ -288,7 +380,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   /**
    * @see RoleManagement#getRoles(String)
    */
-  public static Iterator getRoles(String username)
+  public static Iterator<?> getRoles(String username)
       throws JetspeedSecurityException {
     return JetspeedRoleManagement.getRoles(username);
   }
@@ -296,7 +388,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   /**
    * @see RoleManagement#getRoles
    */
-  public static Iterator getRoles() throws JetspeedSecurityException {
+  public static Iterator<?> getRoles() throws JetspeedSecurityException {
     return JetspeedRoleManagement.getRoles();
   }
 
@@ -381,7 +473,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   /**
    * @see GroupManagement#getGroups(String)
    */
-  public static Iterator getGroups(String username)
+  public static Iterator<?> getGroups(String username)
       throws JetspeedSecurityException {
     return JetspeedGroupManagement.getGroups(username);
   }
@@ -389,7 +481,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   /**
    * @see GroupManagement#getGroups
    */
-  public static Iterator getGroups() throws JetspeedSecurityException {
+  public static Iterator<?> getGroups() throws JetspeedSecurityException {
     return JetspeedGroupManagement.getGroups();
   }
 
@@ -477,7 +569,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
    * @see JetspeedSecurityService#getUserInstance
    */
   public static JetspeedUser getUserInstance() {
-    return ((JetspeedSecurityService) getService()).getUserInstance();
+    return getService().getUserInstance();
   }
 
   // ////////////////////////////////////////////////////////////////////////
@@ -492,73 +584,70 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
    * @see JetspeedSecurityService#convertUserName
    */
   public static String convertUserName(String username) {
-    return ((JetspeedSecurityService) getService()).convertUserName(username);
+    return getService().convertUserName(username);
   }
 
   /**
    * @see JetspeedSecurityService#convertPassword
    */
   public static String convertPassword(String password) {
-    return ((JetspeedSecurityService) getService()).convertPassword(password);
+    return getService().convertPassword(password);
   }
 
   /**
    * @see JetspeedSecurityService#checkDisableAcccount
    */
   public static boolean checkDisableAccount(String username) {
-    return ((JetspeedSecurityService) getService())
-        .checkDisableAccount(username);
+    return getService().checkDisableAccount(username);
   }
 
   /**
    * @see JetspeedSecurityService#isDisableCountCheckEnabled
    */
   public static boolean isDisableAccountCheckEnabled() {
-    return ((JetspeedSecurityService) getService())
-        .isDisableAccountCheckEnabled();
+    return getService().isDisableAccountCheckEnabled();
   }
 
   /**
    * @see JetspeedSecurityService#resetDisableAccountCheck
    */
   public static void resetDisableAccountCheck(String username) {
-    ((JetspeedSecurityService) getService()).resetDisableAccountCheck(username);
+    getService().resetDisableAccountCheck(username);
   }
 
   /**
    * @see JetspeedSecurityService#areActionsDisabledForAnon
    */
   public static boolean areActionsDisabledForAnon() {
-    return ((JetspeedSecurityService) getService()).areActionsDisabledForAnon();
+    return getService().areActionsDisabledForAnon();
   }
 
   /**
    * @see JetspeedSecurityService#areActionsDisabledForAllUsers
    */
   public static boolean areActionsDisabledForAllUsers() {
-    return ((JetspeedSecurityService) getService())
-        .areActionsDisabledForAllUsers();
+    return getService().areActionsDisabledForAllUsers();
   }
 
   /*
    * @see JetspeedSecurityService#getAnonymousUserName
    */
   public static String getAnonymousUserName() {
-    return ((JetspeedSecurityService) getService()).getAnonymousUserName();
+    return getService().getAnonymousUserName();
   }
 
   /*
    * @see JetspeedSecurityService#getAdminRoles
    */
-  public static List getAdminRoles() {
-    return ((JetspeedSecurityService) getService()).getAdminRoles();
+  public static List<?> getAdminRoles() {
+    return getService().getAdminRoles();
   }
 
   /*
    * @see JetspeedSecurityService#hasAdminRole
    */
   public static boolean hasAdminRole(User user) {
-    return ((JetspeedSecurityService) getService()).hasAdminRole(user);
+    return getService().hasAdminRole(user);
   }
 
   // ////////////////////////////////////////////////////////////////////////
@@ -580,8 +669,10 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
    */
   public static boolean checkPermission(JetspeedRunData runData, String action,
       RegistryEntry entry) {
-    return checkPermission(runData.getJetspeedUser(),
-        new PortalResource(entry), action);
+    return checkPermission(
+      runData.getJetspeedUser(),
+      new PortalResource(entry),
+      action);
   }
 
   // ////////////////////////////////////////////////////////////////////////
@@ -591,7 +682,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   /**
    * @see PermissionManagement#getPermissions(String)
    */
-  public static Iterator getPermissions(String rolename)
+  public static Iterator<?> getPermissions(String rolename)
       throws JetspeedSecurityException {
     return JetspeedPermissionManagement.getPermissions(rolename);
   }
@@ -599,7 +690,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   /**
    * @see PermissionManagement#getPermissions
    */
-  public static Iterator getPermissions() throws JetspeedSecurityException {
+  public static Iterator<?> getPermissions() throws JetspeedSecurityException {
     return JetspeedPermissionManagement.getPermissions();
   }
 
@@ -674,7 +765,8 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
     String password = "";
     int randomNumber = 0;
     for (int ia = 0; ia < length; ia++) {
-      randomNumber = (int) (Math.random() * NUMBERS_AND_LETTERS_ALPHABET.length);
+      randomNumber =
+        (int) (Math.random() * NUMBERS_AND_LETTERS_ALPHABET.length);
       password += characters[randomNumber];
     }
     return password;
@@ -706,7 +798,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   public static String generateLowerCasePassword(int length)
       throws JetspeedSecurityException {
     return generatePassword(length, LC_NUMBERS_AND_LETTERS_ALPHABET)
-        .toLowerCase();
+      .toLowerCase();
   }
 
   /**
@@ -720,7 +812,7 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
   public static String generateUpperCasePassword(int length)
       throws JetspeedSecurityException {
     return generatePassword(length, LC_NUMBERS_AND_LETTERS_ALPHABET)
-        .toUpperCase();
+      .toUpperCase();
   }
 
   /**
@@ -731,8 +823,8 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
       JetspeedRunData rundata) {
     PortletEntry pEntry = null;
     if (entry != null) {
-      pEntry = (PortletEntry) Registry.getEntry(Registry.PORTLET, entry
-          .getParent());
+      pEntry =
+        (PortletEntry) Registry.getEntry(Registry.PORTLET, entry.getParent());
     }
     SecurityReference securityRef = null;
     // First, check the profile level security
@@ -758,17 +850,14 @@ abstract public class JetspeedSecurity /* extends TurbineSecurity */
    * 
    * @return int
    *         <ul>
-   *         <li><b>0 </b> if there is security assigned at the profile level.
-   *         </li>
-   *         <li><b>1 </b> if there is security assigned at the registry level.
-   *         </li>
-   *         <li><b>2 </b> if the 2 previous assertion are false (inheriting)
-   *         </li>
+   *         <li><b>0 </b> if there is security assigned at the profile level.</li>
+   *         <li><b>1 </b> if there is security assigned at the registry level.</li>
+   *         <li><b>2 </b> if the 2 previous assertion are false (inheriting)</li>
    *         </ul>
    */
   public static int getSecuritySource(Entry entry, JetspeedRunData rundata) {
-    PortletEntry pEntry = (PortletEntry) Registry.getEntry(Registry.PORTLET,
-        entry.getParent());
+    PortletEntry pEntry =
+      (PortletEntry) Registry.getEntry(Registry.PORTLET, entry.getParent());
     if (entry.getSecurityRef() != null) {
       return 0;
     }

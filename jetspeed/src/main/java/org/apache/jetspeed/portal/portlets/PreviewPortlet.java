@@ -2,13 +2,13 @@ package org.apache.jetspeed.portal.portlets;
 
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,9 +39,9 @@ import org.apache.velocity.context.Context;
 /**
  * Preview portlet. Displays content of potlet
  * defined in parameter "previewedPortletName".
- * 
- * @version $Id: PreviewPortlet.java,v 1.5 2004/02/23 04:03:33 jford Exp $ 
- * @author <a href="mailto:taylor@apache.org">David Sean Taylor</a> 
+ *
+ * @version $Id: PreviewPortlet.java,v 1.5 2004/02/23 04:03:33 jford Exp $
+ * @author <a href="mailto:taylor@apache.org">David Sean Taylor</a>
  * @author <a href="mailto:mark_orciuch@ngsltd.com">Mark Orciuch</a>
  */
 public class PreviewPortlet extends AbstractPortlet
@@ -49,9 +49,9 @@ public class PreviewPortlet extends AbstractPortlet
 
     /**
      * Static initialization of the logger for this class
-     */    
+     */
     private static final JetspeedLogger logger = JetspeedLogFactoryService.getLogger(PreviewPortlet.class.getName());
-    
+
     /**
      * @param rundata The RunData object for the current request
      */
@@ -100,13 +100,14 @@ public class PreviewPortlet extends AbstractPortlet
             control = null;
             if ( control != null )
             {
+                @SuppressWarnings("unused")
                 JetspeedRunData jdata = (JetspeedRunData)rundata;
                 // Use the profile's skin
                 //portlet.getPortletConfig().setSkin(PortalToolkit.getSkin(jdata.getProfile().getDocument().getPortlets().getSkin()));
                 control.setPortlet(portlet);
                 control.init();
                 result = control.getContent(rundata);
-            } 
+            }
             else if ( portlet != null )
             {
                 result = portlet.getContent(rundata);
@@ -119,14 +120,14 @@ public class PreviewPortlet extends AbstractPortlet
                 Log.debug("PreviewPortlet: currentURL = " + currentURL + " reader value = " + html);
                 PreviewRewriter rewriter = new PreviewRewriter(currentURL, currentURL , currentURL, portletName);
                 result = new JetspeedClearElement(rewriter.rewrite(new StringReader(html)));*/
-            } 
+            }
             else
             {
                 // The portlet already streamed its content - return a stub
                 result = new JetspeedClearElement("");
             }
 
-        } 
+        }
         catch ( Exception e )
         {
             logger.error("Exception",  e);

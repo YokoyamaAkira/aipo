@@ -10,10 +10,10 @@ dojo.setSelectable(this.titleNode,false);
 this.inherited("postCreate",arguments);
 dijit.setWaiState(this.containerNode,"labelledby",this.titleNode.id);
 dijit.setWaiState(this.focusNode,"haspopup","true");
-var B=this.hideNode,A=this.wipeNode;
-this._wipeIn=dojo.fx.wipeIn({node:this.wipeNode,duration:this.duration,beforeBegin:function(){B.style.display=""
+var A=this.hideNode,B=this.wipeNode;
+this._wipeIn=dojo.fx.wipeIn({node:this.wipeNode,duration:this.duration,beforeBegin:function(){A.style.display=""
 }});
-this._wipeOut=dojo.fx.wipeOut({node:this.wipeNode,duration:this.duration,onEnd:function(){B.style.display="none"
+this._wipeOut=dojo.fx.wipeOut({node:this.wipeNode,duration:this.duration,onEnd:function(){A.style.display="none"
 }})
 },setContent:function(A){if(this._wipeOut.status()=="playing"){this.inherited("setContent",arguments)
 }else{if(this._wipeIn.status()=="playing"){this._wipeIn.stop()
@@ -26,10 +26,10 @@ this[this.open?"_wipeOut":"_wipeIn"].play();
 this.open=!this.open;
 this._loadCheck();
 this._setCss()
-},_setCss:function(){var A=["dijitClosed","dijitOpen"];
-var B=this.open;
-dojo.removeClass(this.focusNode,A[!B+0]);
-this.focusNode.className+=" "+A[B+0];
+},_setCss:function(){var B=["dijitClosed","dijitOpen"];
+var A=this.open;
+dojo.removeClass(this.focusNode,B[!A+0]);
+this.focusNode.className+=" "+B[A+0];
 this.arrowNodeInner.innerHTML=this.open?"-":"+"
 },_onTitleKey:function(A){if(A.keyCode==dojo.keys.ENTER||A.charCode==dojo.keys.SPACE){this.toggle()
 }else{if(A.keyCode==dojo.keys.DOWN_ARROW){if(this.open){this.containerNode.focus();

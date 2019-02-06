@@ -516,8 +516,9 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
     // if (portlets.getController() instanceof PanedPortletController) {
     // controller = (PanedPortletController) portlets.getController();
     // }
+    @SuppressWarnings("unused")
     int count = 0;
-    for (Iterator en = portlets.getPortletsIterator(); en.hasNext();) {
+    for (Iterator<?> en = portlets.getPortletsIterator(); en.hasNext();) {
       Portlets p = (Portlets) en.next();
       // ここからtabs
       String pane = p.getId();
@@ -588,6 +589,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
 
     JetspeedRunData jdata = (JetspeedRunData) rundata;
 
+    @SuppressWarnings("unused")
     int count = 0;
     for (Enumeration<?> en = portlets.getPortlets(); en.hasMoreElements(); count++) {
       Portlet p = (Portlet) en.nextElement();
@@ -746,6 +748,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
    */
   private boolean containsPeid(RunData rundata, PortletSet portlets,
       String selectedPeid) {
+    @SuppressWarnings("unused")
     int count = 0;
     for (Enumeration<?> en = portlets.getPortlets(); en.hasMoreElements(); count++) {
       Portlet p = (Portlet) en.nextElement();

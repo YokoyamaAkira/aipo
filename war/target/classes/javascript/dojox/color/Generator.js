@@ -1,128 +1,128 @@
 if(!dojo._hasResource["dojox.color.Generator"]){dojo._hasResource["dojox.color.Generator"]=true;
 dojo.provide("dojox.color.Generator");
-dojox.color.Generator=new (function(){var B=dojox.color;
-var A=function(F,G){if(!F){console.warn("dojox.color.Generator::",G,": no base color was passed. ",F);
+dojox.color.Generator=new (function(){var A=dojox.color;
+var E=function(G,F){if(!G){console.warn("dojox.color.Generator::",F,": no base color was passed. ",G);
 return null
-}if(!F.toHsv){F=new B.Color(F)
-}return F
-};
-var D=function(L,J,F){var G=[];
-var H,I=(J-F)/L,K=J;
-for(H=0;
-H<L;
-H++,K-=I){G.push(K)
+}if(!G.toHsv){G=new A.Color(G)
 }return G
 };
-var C=function(G,I,L){var K=L.length-1,N=[],F,J,M;
-for(var H=0;
-H<I;
-H++){if(H<L.length){F=G.r+(255-G.r)*L[H],J=G.g+(255-G.g)*L[H],M=G.b+(255-G.b)*L[H];
-N.push(new B.Color({r:F,g:J,b:M}))
-}else{if(H==L.length){N.push(G)
-}else{if(K<0){K=L.length-1
-}F=G.r*(1-L[K]),J=G.g*(1-L[K]),M=G.b*(1-L[K--]);
-N.push(new B.Color({r:F,g:J,b:M}))
-}}}return N
+var C=function(F,J,I){var L=[];
+var G,H=(J-I)/F,K=J;
+for(G=0;
+G<F;
+G++,K-=H){L.push(K)
+}return L
 };
-var E=function(H,F,G){var J=[];
-for(var K=0;
-K<H[0].length;
-K++){for(var I=0;
-I<H.length;
-I++){J.push(H[I][K])
-}}J.length=F;
-return J
+var B=function(K,M,G){var F=G.length-1,I=[],J,N,H;
+for(var L=0;
+L<M;
+L++){if(L<G.length){J=K.r+(255-K.r)*G[L],N=K.g+(255-K.g)*G[L],H=K.b+(255-K.b)*G[L];
+I.push(new A.Color({r:J,g:N,b:H}))
+}else{if(L==G.length){I.push(K)
+}else{if(F<0){F=G.length-1
+}J=K.r*(1-G[F]),N=K.g*(1-G[F]),H=K.b*(1-G[F--]);
+I.push(new A.Color({r:J,g:N,b:H}))
+}}}return I
 };
-this.analogous=function(I){I=dojo.mixin({series:4,num:32,order:"bottom up",angle:30,high:0.5,low:0.15},I||{});
-var F=A(I.base,"analogous");
+var D=function(I,G,H){var K=[];
+for(var F=0;
+F<I[0].length;
+F++){for(var J=0;
+J<I.length;
+J++){K.push(I[J][F])
+}}K.length=G;
+return K
+};
+this.analogous=function(M){M=dojo.mixin({series:4,num:32,order:"bottom up",angle:30,high:0.5,low:0.15},M||{});
+var J=E(M.base,"analogous");
+if(!J){return[]
+}var N=M.num,O=J.toHsv();
+var I=M.series+1,G=Math.ceil(N/I);
+var F=C(Math.floor(G/2),M.high,M.low);
+var K=[],H=O.h-(M.angle*(M.series/2));
+for(var L=0;
+L<I;
+L++,H+=M.angle){if(H<0){H+=360
+}if(H>=360){H-=360
+}K.push(B(A.fromHsv({h:H,s:O.s,v:O.v}),G,F))
+}return D(K,N,M.order)
+};
+this.monochromatic=function(I){I=dojo.mixin({num:32,high:0.5,low:0.15},I||{});
+var F=E(I.base,"monochromatic");
 if(!F){return[]
-}var J=I.num,K=F.toHsv();
-var O=I.series+1,M=Math.ceil(J/O);
-var L=D(Math.floor(M/2),I.high,I.low);
-var G=[],N=K.h-(I.angle*(I.series/2));
-for(var H=0;
-H<O;
-H++,N+=I.angle){if(N<0){N+=360
-}if(N>=360){N-=360
-}G.push(C(B.fromHsv({h:N,s:K.s,v:K.v}),M,L))
-}return E(G,J,I.order)
+}var G=C(Math.floor(I.num/2),I.high,I.low);
+var H=B(F,I.num,G);
+return H
 };
-this.monochromatic=function(H){H=dojo.mixin({num:32,high:0.5,low:0.15},H||{});
-var I=A(H.base,"monochromatic");
-if(!I){return[]
-}var F=D(Math.floor(H.num/2),H.high,H.low);
-var G=C(I,H.num,F);
-return G
-};
-this.triadic=function(H){H=dojo.mixin({num:32,order:"bottom up",high:0.5,low:0.15},H||{});
-var F=A(H.base,"triadic");
-if(!F){return[]
-}var I=H.num,R=3,N=Math.ceil(I/R),K=D(Math.floor(N/2),H.high,H.low);
-var G=[],J=F.toHsv();
-var M=J.h+57,L=J.h-157;
-if(M>360){M-=360
-}if(L<0){L+=360
-}var Q=(J.s>=20)?J.s-10:J.s+10;
-var P=(J.s>=95)?J.s-5:J.s+5;
-var O=(J.v>=70)?J.v-30:J.v+30;
-G.push(C(dojox.color.fromHsv({h:M,s:Q,v:J.v}),N,K));
-G.push(C(F,N,K));
-G.push(C(dojox.color.fromHsv({h:L,s:P,v:O}),N,K));
-return E(G,I,H.order)
-};
-this.complementary=function(I){I=dojo.mixin({num:32,order:"bottom up",high:0.5,low:0.15},I||{});
-var G=A(I.base,"complimentary");
-if(!G){return[]
-}var J=I.num,N=2,M=Math.ceil(J/N),L=D(Math.floor(M/2),I.high,I.low);
-var H=[],K=G.toHsv();
-var F=(K.h+120)%360;
-H.push(C(G,M,L));
-H.push(C(dojox.color.fromHsv({h:F,s:K.s,v:K.v}),M,L));
-return E(H,J,I.order)
-};
-this.splitComplementary=function(J){J=dojo.mixin({num:32,order:"bottom up",angle:30,high:0.5,low:0.15},J||{});
-var H=A(J.base,"splitComplementary");
+this.triadic=function(K){K=dojo.mixin({num:32,order:"bottom up",high:0.5,low:0.15},K||{});
+var H=E(K.base,"triadic");
 if(!H){return[]
-}var K=J.num,P=3,N=Math.ceil(K/P),M=D(Math.floor(N/2),J.high,J.low);
-var I=[],L=H.toHsv();
-var G=(L.h+120)%360;
-var F=G-J.angle,O=(G+J.angle)%360;
-if(F<0){F+=360
-}I.push(C(H,N,M));
-I.push(C(dojox.color.fromHsv({h:F,s:L.s,v:L.v}),N,M));
-I.push(C(dojox.color.fromHsv({h:O,s:L.s,v:L.v}),N,M));
-return E(I,K,J.order)
+}var M=K.num,L=3,R=Math.ceil(M/L),O=C(Math.floor(R/2),K.high,K.low);
+var J=[],N=H.toHsv();
+var Q=N.h+57,P=N.h-157;
+if(Q>360){Q-=360
+}if(P<0){P+=360
+}var I=(N.s>=20)?N.s-10:N.s+10;
+var G=(N.s>=95)?N.s-5:N.s+5;
+var F=(N.v>=70)?N.v-30:N.v+30;
+J.push(B(dojox.color.fromHsv({h:Q,s:I,v:N.v}),R,O));
+J.push(B(H,R,O));
+J.push(B(dojox.color.fromHsv({h:P,s:G,v:F}),R,O));
+return D(J,M,K.order)
 };
-this.compound=function(H){H=dojo.mixin({num:32,order:"bottom up",angle:30,high:0.5,low:0.15},H||{});
-var F=A(H.base,"compound");
-if(!F){return[]
-}var I=H.num,U=4,P=Math.ceil(I/U),L=D(Math.floor(P/2),H.high,H.low);
-var G=[],J=F.toHsv();
-var K=(J.h+120)%360;
-var O=(J.h+H.angle)%360,N=K-H.angle,M=K-(H.angle/2);
-if(N<0){N+=360
-}if(M<0){M+=360
-}var T=(J.s>=90&&J.s<=100)?J.s-10:J.s+10;
-var S=(J.s<=35)?J.s+25:J.s-25;
-var R=J.v-20;
-var Q=J.v;
-G.push(C(F,P,L));
-G.push(C(dojox.color.fromHsv({h:O,s:T,v:R}),P,L));
-G.push(C(dojox.color.fromHsv({h:N,s:T,v:R}),P,L));
-G.push(C(dojox.color.fromHsv({h:M,s:S,v:Q}),P,L));
-return E(G,I,H.order)
+this.complementary=function(M){M=dojo.mixin({num:32,order:"bottom up",high:0.5,low:0.15},M||{});
+var K=E(M.base,"complimentary");
+if(!K){return[]
+}var N=M.num,I=2,H=Math.ceil(N/I),G=C(Math.floor(H/2),M.high,M.low);
+var L=[],F=K.toHsv();
+var J=(F.h+120)%360;
+L.push(B(K,H,G));
+L.push(B(dojox.color.fromHsv({h:J,s:F.s,v:F.v}),H,G));
+return D(L,N,M.order)
 };
-this.shades=function(J){J=dojo.mixin({num:32,high:1.5,low:0.5},J||{});
-var L=A(J.base,"shades");
+this.splitComplementary=function(N){N=dojo.mixin({num:32,order:"bottom up",angle:30,high:0.5,low:0.15},N||{});
+var L=E(N.base,"splitComplementary");
 if(!L){return[]
-}var H=J.num,G=L.toHsv();
-var K=(J.high-J.low)/H,M=J.low;
-var F=[];
+}var O=N.num,I=3,G=Math.ceil(O/I),F=C(Math.floor(G/2),N.high,N.low);
+var M=[],P=L.toHsv();
+var K=(P.h+120)%360;
+var J=K-N.angle,H=(K+N.angle)%360;
+if(J<0){J+=360
+}M.push(B(L,G,F));
+M.push(B(dojox.color.fromHsv({h:J,s:P.s,v:P.v}),G,F));
+M.push(B(dojox.color.fromHsv({h:H,s:P.s,v:P.v}),G,F));
+return D(M,O,N.order)
+};
+this.compound=function(Q){Q=dojo.mixin({num:32,order:"bottom up",angle:30,high:0.5,low:0.15},Q||{});
+var O=E(Q.base,"compound");
+if(!O){return[]
+}var R=Q.num,L=4,N=Math.ceil(R/L),H=C(Math.floor(N/2),Q.high,Q.low);
+var P=[],S=O.toHsv();
+var T=(S.h+120)%360;
+var M=(S.h+Q.angle)%360,K=T-Q.angle,J=T-(Q.angle/2);
+if(K<0){K+=360
+}if(J<0){J+=360
+}var I=(S.s>=90&&S.s<=100)?S.s-10:S.s+10;
+var G=(S.s<=35)?S.s+25:S.s-25;
+var F=S.v-20;
+var U=S.v;
+P.push(B(O,N,H));
+P.push(B(dojox.color.fromHsv({h:M,s:I,v:F}),N,H));
+P.push(B(dojox.color.fromHsv({h:K,s:I,v:F}),N,H));
+P.push(B(dojox.color.fromHsv({h:J,s:G,v:U}),N,H));
+return D(P,R,Q.order)
+};
+this.shades=function(L){L=dojo.mixin({num:32,high:1.5,low:0.5},L||{});
+var F=E(L.base,"shades");
+if(!F){return[]
+}var H=L.num,K=F.toHsv();
+var M=(L.high-L.low)/H,G=L.low;
+var J=[];
 for(var I=0;
 I<H;
-I++,M+=K){F.push(B.fromHsv({h:G.h,s:G.s,v:Math.min(Math.round(G.v*M),100)}))
-}console.log("generated color list from shades: ",F);
-return F
+I++,G+=M){J.push(A.fromHsv({h:K.h,s:K.s,v:Math.min(Math.round(K.v*G),100)}))
+}console.log("generated color list from shades: ",J);
+return J
 }
 })()
 };

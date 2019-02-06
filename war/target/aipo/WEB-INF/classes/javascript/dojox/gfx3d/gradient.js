@@ -2,16 +2,16 @@ if(!dojo._hasResource["dojox.gfx3d.gradient"]){dojo._hasResource["dojox.gfx3d.gr
 dojo.provide("dojox.gfx3d.gradient");
 dojo.require("dojox.gfx3d.vector");
 dojo.require("dojox.gfx3d.matrix");
-(function(){var B=function(D,C){return Math.sqrt(Math.pow(C.x-D.x,2)+Math.pow(C.y-D.y,2))
+(function(){var A=function(C,D){return Math.sqrt(Math.pow(D.x-C.x,2)+Math.pow(D.y-C.y,2))
 };
-var A=32;
-dojox.gfx3d.gradient=function(D,I,W,E,Q,C,R){var P=dojox.gfx3d.matrix,H=dojox.gfx3d.vector,K=P.normalize(R),T=P.multiplyPoint(K,E*Math.cos(Q)+W.x,E*Math.sin(Q)+W.y,W.z),J=P.multiplyPoint(K,E*Math.cos(C)+W.x,E*Math.sin(C)+W.y,W.z),V=P.multiplyPoint(K,W.x,W.y,W.z),F=(C-Q)/A,M=B(T,J)/2,Y=D[I.type],S=I.finish,N=I.color,G=[{offset:0,color:Y.call(D,H.substract(T,V),S,N)}];
-for(var X=Q+F;
-X<C;
-X+=F){var O=P.multiplyPoint(K,E*Math.cos(X)+W.x,E*Math.sin(X)+W.y,W.z),U=B(T,O),L=B(J,O);
-G.push({offset:U/(U+L),color:Y.call(D,H.substract(O,V),S,N)})
-}G.push({offset:1,color:Y.call(D,H.substract(J,V),S,N)});
-return{type:"linear",x1:0,y1:-M,x2:0,y2:M,colors:G}
+var B=32;
+dojox.gfx3d.gradient=function(E,L,C,F,T,D,U){var S=dojox.gfx3d.matrix,K=dojox.gfx3d.vector,N=S.normalize(U),W=S.multiplyPoint(N,F*Math.cos(T)+C.x,F*Math.sin(T)+C.y,C.z),M=S.multiplyPoint(N,F*Math.cos(D)+C.x,F*Math.sin(D)+C.y,C.z),Y=S.multiplyPoint(N,C.x,C.y,C.z),H=(D-T)/B,P=A(W,M)/2,J=E[L.type],V=L.finish,Q=L.color,I=[{offset:0,color:J.call(E,K.substract(W,Y),V,Q)}];
+for(var G=T+H;
+G<D;
+G+=H){var R=S.multiplyPoint(N,F*Math.cos(G)+C.x,F*Math.sin(G)+C.y,C.z),X=A(W,R),O=A(M,R);
+I.push({offset:X/(X+O),color:J.call(E,K.substract(R,Y),V,Q)})
+}I.push({offset:1,color:J.call(E,K.substract(M,Y),V,Q)});
+return{type:"linear",x1:0,y1:-P,x2:0,y2:P,colors:I}
 }
 })()
 };

@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -63,7 +63,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
   /**
    * Map used to store all URL Information.
    */
-  private Map urls = new HashMap();
+  private Map<String, URLInfo> urls = new HashMap<String, URLInfo>();
 
   /**
    * Path to the properties file used for persisting the data
@@ -73,7 +73,8 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
   /**
    * Hashtable to store proxy configuration in
    */
-  private final Hashtable proxies = new Hashtable();
+  private final Hashtable<String, Object> proxies =
+    new Hashtable<String, Object>();
 
   /**
    * Late init. Don't return control until early init says we're done.
@@ -112,7 +113,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
       // JetspeedResource.properties.
       // Get a list of settings and store them in the hashtable
       String prefix = "services." + URLManagerService.SERVICE_NAME + ".proxy.";
-      Iterator resourceKeys = JetspeedResources.getKeys(prefix);
+      Iterator<?> resourceKeys = JetspeedResources.getKeys(prefix);
 
       String key, hashKey;
       Object hashValue = null;
@@ -188,6 +189,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * @param url
    *          the url to register
    */
+  @Override
   public void register(String url) {
     if (url != null) {
       URLInfo info = getInfo(url);
@@ -206,6 +208,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * @param status
    *          the status of this url
    */
+  @Override
   public void register(String url, int status) {
     if (url != null) {
       URLInfo info = getInfo(url);
@@ -228,6 +231,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * @param message
    *          a descriptive message of the status
    */
+  @Override
   public void register(String url, int status, String message) {
     if (url != null) {
       URLInfo info = getInfo(url);
@@ -247,6 +251,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * @param info
    *          the info record to store
    */
+  @Override
   public void register(URLInfo info) {
     if (info != null) {
       synchronized (urls) {
@@ -263,6 +268,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * @param url
    *          the url to remove
    */
+  @Override
   public void unregister(String url) {
     if (url != null) {
       synchronized (urls) {
@@ -278,12 +284,13 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    *          the url whose record is sought
    * @return the description record found in the repository or null.
    */
+  @Override
   public URLInfo getInfo(String url) {
     URLInfo info = null;
 
     if (url != null) {
       synchronized (urls) {
-        info = (URLInfo) urls.get(url.intern());
+        info = urls.get(url.intern());
       }
     }
 
@@ -298,6 +305,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * @return false is the url is known by this repository and has a status
    *         indicating an error, true otherwise.
    */
+  @Override
   public boolean isOK(String url) {
     URLInfo info = getInfo(url);
 
@@ -314,9 +322,10 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * 
    * @return a List of URL strings known to this repository
    */
-  public List list() {
+  @Override
+  public List<String> list() {
     synchronized (urls) {
-      return new Vector(urls.keySet());
+      return new Vector<String>(urls.keySet());
     }
   }
 
@@ -329,11 +338,12 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    *          {@link URLManagerService#STATUS_ANY} to indicate any status
    * @return a List of URL strings known to this repository with this status
    */
-  public List list(int status) {
-    Vector result = new Vector();
+  @Override
+  public List<Object> list(int status) {
+    Vector<Object> result = new Vector<Object>();
 
     synchronized (urls) {
-      Iterator i = urls.entrySet().iterator();
+      Iterator<?> i = urls.entrySet().iterator();
       while (i.hasNext()) {
         Map.Entry entry = (Map.Entry) i.next();
         URLInfo info = (URLInfo) entry.getValue();
@@ -351,7 +361,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    */
   private synchronized void load() {
 
-    Map store = new HashMap();
+    Map<String, URLInfo> store = new HashMap<String, URLInfo>();
     // Configuration config = null;
 
     logger.info("Restoring the URLs from disk: " + path);
@@ -374,7 +384,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
             count++;
         }
 
-        logger.info( "URLManager loaded " + count + " urls" );                    
+        logger.info( "URLManager loaded " + count + " urls" );
        */
     } catch (Exception e) {
       logger.error("Could not restore URLManager state", e);
@@ -400,10 +410,10 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
 
       pw = new PrintWriter(new BufferedWriter(new FileWriter(propfile)));
       synchronized (urls) {
-        Iterator i = urls.values().iterator();
+        Iterator<URLInfo> i = urls.values().iterator();
         int entryNum = 1;
         while (i.hasNext()) {
-          URLInfo info = (URLInfo) i.next();
+          URLInfo info = i.next();
           pw.print("entry.");
           pw.print(entryNum);
           pw.print(".url=");
@@ -434,6 +444,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * @return The port number (1-65535), or -1 if no port was specified (= use
    *         default)
    */
+  @Override
   public int getProxyPort(String protocol) {
     Integer proxyPort =
       (Integer) proxies.get((protocol + ".port").toLowerCase());
@@ -453,6 +464,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * @return The hostname of the proxy, or <code>null</code> if no proxy is
    *         specified for this protocol
    */
+  @Override
   public String getProxyHost(String protocol) {
     String proxyHost = (String) proxies.get((protocol + ".host").toLowerCase());
 

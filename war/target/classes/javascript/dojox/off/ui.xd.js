@@ -15,8 +15,8 @@ if(this.autoEmbed){this._doAutoEmbed()
 B=B.message||B;
 alert("Error loading the Dojo Offline Widget from "+this.htmlTemplatePath+": "+B)
 },load:A.hitch(this,this._templateLoaded)})
-},_templateLoaded:function(D){var B=A.byId(this.autoEmbedID);
-if(B){B.innerHTML=D
+},_templateLoaded:function(B){var C=A.byId(this.autoEmbedID);
+if(C){C.innerHTML=B
 }this._initImages();
 this._updateNetIndicator();
 this._initLearnHow();
@@ -25,8 +25,8 @@ if(!dojox.off.hasOfflineCache){this._showNeedsOfflineCache();
 return 
 }if(dojox.off.hasOfflineCache&&dojox.off.browserRestart){this._needsBrowserRestart();
 return 
-}else{var C=A.byId("dot-widget-browser-restart");
-if(C){C.style.display="none"
+}else{var D=A.byId("dot-widget-browser-restart");
+if(D){D.style.display="none"
 }}this._updateSyncUI();
 this._initMainEvtHandlers();
 this._setOfflineEnabled(dojox.off.enabled);
@@ -35,122 +35,122 @@ this._testNet()
 },_testNet:function(){dojox.off.goOnline(A.hitch(this,function(B){this._onNetwork(B?"online":"offline");
 this.onLoad()
 }))
-},_updateNetIndicator:function(){var D=A.byId("dot-widget-network-indicator-online");
-var B=A.byId("dot-widget-network-indicator-offline");
-var C=A.byId("dot-widget-title-text");
-if(D&&B){if(dojox.off.isOnline==true){D.style.display="inline";
-B.style.display="none"
-}else{D.style.display="none";
-B.style.display="inline"
-}}if(C){if(dojox.off.isOnline){C.innerHTML="Online"
-}else{C.innerHTML="Offline"
-}}},_initLearnHow:function(){var D=A.byId("dot-widget-learn-how-link");
-if(!D){return 
-}if(!this.customLearnHowPath){var C=djConfig.baseRelativePath;
-this.learnHowPath+="?appName="+encodeURIComponent(this.appName)+"&hasOfflineCache="+dojox.off.hasOfflineCache+"&runLink="+encodeURIComponent(this.runLink)+"&runLinkText="+encodeURIComponent(this.runLinkText)+"&baseRelativePath="+encodeURIComponent(C);
+},_updateNetIndicator:function(){var B=A.byId("dot-widget-network-indicator-online");
+var C=A.byId("dot-widget-network-indicator-offline");
+var D=A.byId("dot-widget-title-text");
+if(B&&C){if(dojox.off.isOnline==true){B.style.display="inline";
+C.style.display="none"
+}else{B.style.display="none";
+C.style.display="inline"
+}}if(D){if(dojox.off.isOnline){D.innerHTML="Online"
+}else{D.innerHTML="Offline"
+}}},_initLearnHow:function(){var B=A.byId("dot-widget-learn-how-link");
+if(!B){return 
+}if(!this.customLearnHowPath){var D=djConfig.baseRelativePath;
+this.learnHowPath+="?appName="+encodeURIComponent(this.appName)+"&hasOfflineCache="+dojox.off.hasOfflineCache+"&runLink="+encodeURIComponent(this.runLink)+"&runLinkText="+encodeURIComponent(this.runLinkText)+"&baseRelativePath="+encodeURIComponent(D);
 dojox.off.files.cache(this.learnHowJSPath);
 dojox.off.files.cache(this.learnHowPath)
-}D.setAttribute("href",this.learnHowPath);
-var B=A.byId("dot-widget-learn-how-app-name");
-if(!B){return 
-}B.innerHTML="";
-B.appendChild(document.createTextNode(this.appName))
+}B.setAttribute("href",this.learnHowPath);
+var C=A.byId("dot-widget-learn-how-app-name");
+if(!C){return 
+}C.innerHTML="";
+C.appendChild(document.createTextNode(this.appName))
 },_validateAppName:function(B){if(!B){return false
 }return(/^[a-z0-9 ]*$/i.test(B))
-},_updateSyncUI:function(){var E=A.byId("dot-roller");
-var F=A.byId("dot-success-checkmark");
-var C=A.byId("dot-sync-messages");
-var B=A.byId("dot-sync-details");
-var D=A.byId("dot-sync-cancel");
+},_updateSyncUI:function(){var F=A.byId("dot-roller");
+var B=A.byId("dot-success-checkmark");
+var D=A.byId("dot-sync-messages");
+var C=A.byId("dot-sync-details");
+var E=A.byId("dot-sync-cancel");
 if(dojox.off.sync.isSyncing){this._clearSyncMessage();
-if(E){E.style.display="inline"
-}if(F){F.style.display="none"
-}if(C){A.removeClass(C,"dot-sync-error")
+if(F){F.style.display="inline"
 }if(B){B.style.display="none"
-}if(D){D.style.display="inline"
-}}else{if(E){E.style.display="none"
-}if(D){D.style.display="none"
-}if(C){A.removeClass(C,"dot-sync-error")
-}}},_setSyncMessage:function(B){var C=A.byId("dot-sync-messages");
-if(C){while(C.firstChild){C.removeChild(C.firstChild)
-}C.appendChild(document.createTextNode(B))
+}if(D){A.removeClass(D,"dot-sync-error")
+}if(C){C.style.display="none"
+}if(E){E.style.display="inline"
+}}else{if(F){F.style.display="none"
+}if(E){E.style.display="none"
+}if(D){A.removeClass(D,"dot-sync-error")
+}}},_setSyncMessage:function(C){var B=A.byId("dot-sync-messages");
+if(B){while(B.firstChild){B.removeChild(B.firstChild)
+}B.appendChild(document.createTextNode(C))
 }},_clearSyncMessage:function(){this._setSyncMessage("")
-},_initImages:function(){var E=A.byId("dot-widget-network-indicator-online");
-if(E){E.setAttribute("src",this.onlineImagePath)
-}var B=A.byId("dot-widget-network-indicator-offline");
-if(B){B.setAttribute("src",this.offlineImagePath)
-}var C=A.byId("dot-roller");
-if(C){C.setAttribute("src",this.rollerImagePath)
-}var D=A.byId("dot-success-checkmark");
-if(D){D.setAttribute("src",this.checkmarkImagePath)
-}},_showDetails:function(C){C.preventDefault();
-C.stopPropagation();
+},_initImages:function(){var B=A.byId("dot-widget-network-indicator-online");
+if(B){B.setAttribute("src",this.onlineImagePath)
+}var C=A.byId("dot-widget-network-indicator-offline");
+if(C){C.setAttribute("src",this.offlineImagePath)
+}var D=A.byId("dot-roller");
+if(D){D.setAttribute("src",this.rollerImagePath)
+}var E=A.byId("dot-success-checkmark");
+if(E){E.setAttribute("src",this.checkmarkImagePath)
+}},_showDetails:function(D){D.preventDefault();
+D.stopPropagation();
 if(!dojox.off.sync.details.length){return 
-}var E="";
-E+="<html><head><title>Sync Details</title><head><body>";
-E+="<h1>Sync Details</h1>\n";
-E+="<ul>\n";
-for(var D=0;
-D<dojox.off.sync.details.length;
-D++){E+="<li>";
-E+=dojox.off.sync.details[D];
-E+="</li>"
-}E+="</ul>\n";
-E+="<a href='javascript:window.close()' style='text-align: right; padding-right: 2em;'>Close Window</a>\n";
-E+="</body></html>";
-var F="height=400,width=600,resizable=true,scrollbars=true,toolbar=no,menubar=no,location=no,directories=no,dependent=yes";
-var B=window.open("","SyncDetails",F);
-if(!B){alert("Please allow popup windows for this domain; can't display sync details window");
+}var F="";
+F+="<html><head><title>Sync Details</title><head><body>";
+F+="<h1>Sync Details</h1>\n";
+F+="<ul>\n";
+for(var E=0;
+E<dojox.off.sync.details.length;
+E++){F+="<li>";
+F+=dojox.off.sync.details[E];
+F+="</li>"
+}F+="</ul>\n";
+F+="<a href='javascript:window.close()' style='text-align: right; padding-right: 2em;'>Close Window</a>\n";
+F+="</body></html>";
+var B="height=400,width=600,resizable=true,scrollbars=true,toolbar=no,menubar=no,location=no,directories=no,dependent=yes";
+var C=window.open("","SyncDetails",B);
+if(!C){alert("Please allow popup windows for this domain; can't display sync details window");
 return 
-}B.document.open();
-B.document.write(E);
-B.document.close();
-if(B.focus){B.focus()
+}C.document.open();
+C.document.write(F);
+C.document.close();
+if(C.focus){C.focus()
 }},_cancel:function(B){B.preventDefault();
 B.stopPropagation();
 dojox.off.sync.cancel()
-},_needsBrowserRestart:function(){var D=A.byId("dot-widget-browser-restart");
-if(D){A.addClass(D,"dot-needs-browser-restart")
-}var B=A.byId("dot-widget-browser-restart-app-name");
-if(B){B.innerHTML="";
-B.appendChild(document.createTextNode(this.appName))
-}var C=A.byId("dot-sync-status");
-if(C){C.style.display="none"
+},_needsBrowserRestart:function(){var B=A.byId("dot-widget-browser-restart");
+if(B){A.addClass(B,"dot-needs-browser-restart")
+}var C=A.byId("dot-widget-browser-restart-app-name");
+if(C){C.innerHTML="";
+C.appendChild(document.createTextNode(this.appName))
+}var D=A.byId("dot-sync-status");
+if(D){D.style.display="none"
 }},_showNeedsOfflineCache:function(){var B=A.byId("dot-widget-container");
 if(B){A.addClass(B,"dot-needs-offline-cache")
 }},_hideNeedsOfflineCache:function(){var B=A.byId("dot-widget-container");
 if(B){A.removeClass(B,"dot-needs-offline-cache")
-}},_initMainEvtHandlers:function(){var C=A.byId("dot-sync-details-button");
-if(C){A.connect(C,"onclick",this,this._showDetails)
-}var B=A.byId("dot-sync-cancel-button");
-if(B){A.connect(B,"onclick",this,this._cancel)
-}},_setOfflineEnabled:function(C){var B=[];
-B.push(A.byId("dot-sync-status"));
-for(var D=0;
-D<B.length;
-D++){if(B[D]){B[D].style.visibility=(C?"visible":"hidden")
+}},_initMainEvtHandlers:function(){var B=A.byId("dot-sync-details-button");
+if(B){A.connect(B,"onclick",this,this._showDetails)
+}var C=A.byId("dot-sync-cancel-button");
+if(C){A.connect(C,"onclick",this,this._cancel)
+}},_setOfflineEnabled:function(D){var C=[];
+C.push(A.byId("dot-sync-status"));
+for(var B=0;
+B<C.length;
+B++){if(C[B]){C[B].style.visibility=(D?"visible":"hidden")
 }}},_syncFinished:function(){this._updateSyncUI();
-var D=A.byId("dot-success-checkmark");
-var B=A.byId("dot-sync-details");
+var B=A.byId("dot-success-checkmark");
+var C=A.byId("dot-sync-details");
 if(dojox.off.sync.successful==true){this._setSyncMessage("Sync Successful");
-if(D){D.style.display="inline"
+if(B){B.style.display="inline"
 }}else{if(dojox.off.sync.cancelled==true){this._setSyncMessage("Sync Cancelled");
-if(D){D.style.display="none"
+if(B){B.style.display="none"
 }}else{this._setSyncMessage("Sync Error");
-var C=A.byId("dot-sync-messages");
-if(C){A.addClass(C,"dot-sync-error")
-}if(D){D.style.display="none"
-}}}if(dojox.off.sync.details.length&&B){B.style.display="inline"
-}},_onFrameworkEvent:function(D,B){if(D=="save"){if(B.status==dojox.storage.FAILED&&!B.isCoreSave){alert("Please increase the amount of local storage available to this application");
+var D=A.byId("dot-sync-messages");
+if(D){A.addClass(D,"dot-sync-error")
+}if(B){B.style.display="none"
+}}}if(dojox.off.sync.details.length&&C){C.style.display="inline"
+}},_onFrameworkEvent:function(B,C){if(B=="save"){if(C.status==dojox.storage.FAILED&&!C.isCoreSave){alert("Please increase the amount of local storage available to this application");
 if(dojox.storage.hasSettingsUI()){dojox.storage.showSettingsUI()
-}}}else{if(D=="coreOperationFailed"){console.log("Application does not have permission to use Dojo Offline");
+}}}else{if(B=="coreOperationFailed"){console.log("Application does not have permission to use Dojo Offline");
 if(!this._userInformed){alert("This application will not work if Google Gears is not allowed to run");
 this._userInformed=true
-}}else{if(D=="offlineCacheInstalled"){this._hideNeedsOfflineCache();
+}}else{if(B=="offlineCacheInstalled"){this._hideNeedsOfflineCache();
 if(dojox.off.hasOfflineCache==true&&dojox.off.browserRestart==true){this._needsBrowserRestart();
 return 
-}else{var C=A.byId("dot-widget-browser-restart");
-if(C){C.style.display="none"
+}else{var D=A.byId("dot-widget-browser-restart");
+if(D){D.style.display="none"
 }}this._updateSyncUI();
 this._initMainEvtHandlers();
 this._setOfflineEnabled(dojox.off.enabled);
@@ -169,11 +169,11 @@ case"cancel":this._setSyncMessage("Canceling Sync...");
 break;
 default:A.warn("Programming error: Unknown sync type in dojox.off.ui: "+B);
 break
-}},_onNetwork:function(C){if(!this._initialized){return 
+}},_onNetwork:function(B){if(!this._initialized){return 
 }this._updateNetIndicator();
-if(C=="offline"){this._setSyncMessage("You are working offline");
-var B=A.byId("dot-sync-details");
-if(B){B.style.display="none"
+if(B=="offline"){this._setSyncMessage("You are working offline");
+var C=A.byId("dot-sync-details");
+if(C){C.style.display="none"
 }this._updateSyncUI()
 }else{if(dojox.off.sync.autoSync){window.setTimeout("dojox.off.sync.synchronize()",1000)
 }}}});

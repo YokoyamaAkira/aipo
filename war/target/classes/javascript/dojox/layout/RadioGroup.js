@@ -12,22 +12,22 @@ this._buttons=this._children.length;
 this._size=dojo.coords(this.containerNode);
 if(this.hasButtons){dojo.style(this.buttonHolder,"display","block");
 dojo.forEach(this._children,this._makeButton,this)
-}},_makeButton:function(D){dojo.style(D.domNode,"position","absolute");
-var B=document.createElement("td");
-this.buttonNode.appendChild(B);
-var C=B.appendChild(document.createElement("div"));
-var A=new dojox.layout._RadioButton({label:D.title,page:D},C);
-A.startup()
-},_transition:function(B,A){this._showChild(B);
-if(A){this._hideChild(A)
-}if(this.doLayout&&B.resize){B.resize(this._containerContentBox||this._contentBox)
-}},_showChild:function(B){var A=this.getChildren();
-B.isFirstChild=(B==A[0]);
-B.isLastChild=(B==A[A.length-1]);
-B.selected=true;
-B.domNode.style.display="";
-if(B._loadCheck){B._loadCheck()
-}if(B.onShow){B.onShow()
+}},_makeButton:function(C){dojo.style(C.domNode,"position","absolute");
+var A=document.createElement("td");
+this.buttonNode.appendChild(A);
+var B=A.appendChild(document.createElement("div"));
+var D=new dojox.layout._RadioButton({label:C.title,page:C},B);
+D.startup()
+},_transition:function(A,B){this._showChild(A);
+if(B){this._hideChild(B)
+}if(this.doLayout&&A.resize){A.resize(this._containerContentBox||this._contentBox)
+}},_showChild:function(A){var B=this.getChildren();
+A.isFirstChild=(A==B[0]);
+A.isLastChild=(A==B[B.length-1]);
+A.selected=true;
+A.domNode.style.display="";
+if(A._loadCheck){A._loadCheck()
+}if(A.onShow){A.onShow()
 }},_hideChild:function(A){A.selected=false;
 A.domNode.style.display="none";
 if(A.onHide){A.onHide()
@@ -39,9 +39,9 @@ dojo.fadeIn({node:A.domNode,duration:this.duration}).play()
 }});
 dojo.declare("dojox.layout.RadioGroupSlide",dojox.layout.RadioGroup,{easing:dojox.fx.easing.easeOut,startup:function(){this.inherited("startup",arguments);
 dojo.forEach(this._children,this._positionChild,this)
-},_positionChild:function(B){var C=Math.round(Math.random());
-var A=Math.round(Math.random());
-dojo.style(B.domNode,C?"top":"left",(A?"-":"")+this._size[C?"h":"w"]+"px")
+},_positionChild:function(A){var B=Math.round(Math.random());
+var C=Math.round(Math.random());
+dojo.style(A.domNode,B?"top":"left",(C?"-":"")+this._size[B?"h":"w"]+"px")
 },_showChild:function(A){this.inherited("_showChild",arguments);
 if(this._anim&&this._anim.status()=="playing"){this._anim.gotoPercent(100,true)
 }this._anim=dojo.animateProperty({node:A.domNode,properties:{left:{end:0,unit:"px"},top:{end:0,unit:"px"}},duration:this.duration,easing:this.easing});

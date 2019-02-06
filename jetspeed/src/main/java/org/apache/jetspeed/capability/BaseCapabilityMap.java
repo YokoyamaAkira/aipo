@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,223 +17,208 @@
 package org.apache.jetspeed.capability;
 
 //standard Jetspeed stuff
-import org.apache.jetspeed.util.MimeType;
+import java.util.Enumeration;
+import java.util.Iterator;
+//standard Java stuff
+import java.util.Vector;
+
 import org.apache.jetspeed.om.registry.ClientEntry;
 import org.apache.jetspeed.om.registry.MediaTypeEntry;
 import org.apache.jetspeed.om.registry.MediaTypeRegistry;
 import org.apache.jetspeed.services.Registry;
-
-//standard Java stuff
-import java.util.Vector;
-import java.util.Iterator;
-import java.util.Enumeration;
+import org.apache.jetspeed.util.MimeType;
 
 /**
- * Read only wrapper around a ClientEntry registry entry that
- * implements the CapabilityMap interface
- *
- * @author <a href="mailto:raphael@apache.org">Raphaël Luta</a>
+ * Read only wrapper around a ClientEntry registry entry that implements the
+ * CapabilityMap interface
+ * 
+ * @author <a href="mailto:raphael@apache.org">Raphaï¿½l Luta</a>
  * @version $Id: BaseCapabilityMap.java,v 1.8 2004/02/23 02:46:39 jford Exp $
  */
-public class BaseCapabilityMap implements CapabilityMap
-{
+public class BaseCapabilityMap implements CapabilityMap {
 
-    private String      useragent;
-    private ClientEntry entry;
+  private final String useragent;
 
-    protected BaseCapabilityMap(String agent, ClientEntry entry)
-    {
-        this.useragent = agent;
-        this.entry = entry;
+  private final ClientEntry entry;
+
+  protected BaseCapabilityMap(String agent, ClientEntry entry) {
+    this.useragent = agent;
+    this.entry = entry;
+  }
+
+  /**
+   * @see CapabilityMap#getPreferredType
+   */
+  @Override
+  public MimeType getPreferredType() {
+    return entry.getMimetypeMap().getPreferredMimetype();
+  }
+
+  /**
+   * Returns the preferred media type for the current user-agent
+   */
+  @Override
+  public String getPreferredMediaType() {
+    Iterator<String> i = listMediaTypes();
+
+    if (i.hasNext()) {
+      return i.next();
     }
 
-    /**
-    @see CapabilityMap#getPreferredType
-    */
-    public MimeType getPreferredType()
-    {
-        return entry.getMimetypeMap().getPreferredMimetype();
+    return null;
+  }
+
+  /**
+   * Returns an ordered list of supported media-types, from most preferred to
+   * least preferred
+   */
+  @Override
+  public Iterator<String> listMediaTypes() {
+    Vector<String> results = new Vector<String>();
+    Vector<Object> types = new Vector<Object>();
+
+    // first copy the current media type list, ordered by global preference
+    Enumeration<?> en =
+      ((MediaTypeRegistry) Registry.get(Registry.MEDIA_TYPE)).getEntries();
+    while (en.hasMoreElements()) {
+      types.add(en.nextElement());
     }
 
-    /**
-    Returns the preferred media type for the current user-agent
-    */
-    public String getPreferredMediaType()
-    {
-        Iterator i = listMediaTypes();
+    // then retrieve a list of supported mime-types, ordered by
+    // preference
 
-        if (i.hasNext())
-        {
-            return (String)i.next();
+    Iterator<?> mimes = entry.getMimetypeMap().getMimetypes();
+
+    // now, for each mime-type test if the media is supported
+    while (mimes.hasNext()) {
+      String mime = ((MimeType) mimes.next()).getContentType();
+      Iterator<Object> i = types.iterator();
+
+      while (i.hasNext()) {
+        MediaTypeEntry mte = (MediaTypeEntry) i.next();
+
+        if (mime.equals(mte.getMimeType())) {
+          if (entry.getCapabilityMap().containsAll(mte.getCapabilityMap())) {
+            results.add(mte.getName());
+          }
         }
-
-        return null;
+      }
     }
 
-    /**
-     * Returns an ordered list of supported media-types, from most preferred
-     * to least preferred
-     */
-    public Iterator listMediaTypes()
-    {
-        Vector results = new Vector();
-        Vector types = new Vector();
+    return results.iterator();
+  }
 
-        // first copy the current media type list, ordered by global preference
-        Enumeration en = ((MediaTypeRegistry)Registry.get(Registry.MEDIA_TYPE)).getEntries();
-        while (en.hasMoreElements())
-        {
-            types.add(en.nextElement());
-        }
+  /**
+   * @see CapabilityMap#getAgent
+   */
+  @Override
+  public String getAgent() {
+    return this.useragent;
+  }
 
-        //then retrieve a list of supported mime-types, ordered by
-        //preference
+  /**
+   * @see CapabilityMap#hasCapability
+   */
+  @Override
+  public boolean hasCapability(int cap) {
+    return false;
+  }
 
-        Iterator mimes = entry.getMimetypeMap().getMimetypes();
+  /**
+   * @see CapabilityMap#hasCapability
+   */
+  @Override
+  public boolean hasCapability(String capability) {
+    Iterator<?> i = entry.getCapabilityMap().getCapabilities();
 
-        //now, for each mime-type test if the media is supported
-        while(mimes.hasNext())
-        {
-            String mime = ((MimeType)mimes.next()).getContentType();
-            Iterator i = types.iterator();
+    while (i.hasNext()) {
+      String cap = (String) i.next();
 
-            while(i.hasNext())
-            {
-                MediaTypeEntry mte = (MediaTypeEntry)i.next();
-
-                if (mime.equals(mte.getMimeType()))
-                {
-                    if (entry.getCapabilityMap().containsAll(mte.getCapabilityMap()))
-                    {
-                        results.add(mte.getName());
-                    }
-                }
-            }
-        }
-
-        return results.iterator();
+      if (cap.equals(capability)) {
+        return true;
+      }
     }
 
-    /**
-    @see CapabilityMap#getAgent
-    */
-    public String getAgent()
-    {
-        return this.useragent;
+    return false;
+  }
+
+  /**
+   * @see CapabilityMap#getMimeTypes
+   */
+  @Override
+  public MimeType[] getMimeTypes() {
+    Vector<MimeType> v = new Vector<MimeType>();
+    Iterator<?> i = entry.getMimetypeMap().getMimetypes();
+
+    while (i.hasNext()) {
+      MimeType mime = (MimeType) i.next();
+      v.add(mime);
     }
 
-    /**
-    @see CapabilityMap#hasCapability
-    */
-    public boolean hasCapability( int cap )
-    {
-        return false;
+    return (MimeType[]) v.toArray();
+  }
+
+  /**
+   * @see CapabilityMap#supportsMimeType
+   */
+  @Override
+  public boolean supportsMimeType(MimeType mimeType) {
+    Iterator<?> i = entry.getMimetypeMap().getMimetypes();
+
+    while (i.hasNext()) {
+      MimeType mime = (MimeType) i.next();
+
+      if (mime.equals(mimeType)) {
+        return true;
+      }
     }
 
-    /**
-    @see CapabilityMap#hasCapability
-    */
-    public boolean hasCapability( String capability )
-    {
-        Iterator i = entry.getCapabilityMap().getCapabilities();
+    return false;
 
-        while (i.hasNext())
-        {
-            String cap = (String)i.next();
+  }
 
-            if (cap.equals(capability))
-            {
-                return true;
-            }
-        }
-
-        return false;
+  /**
+   * @see CapabilityMap#supportsMimeType
+   */
+  @Override
+  public boolean supportsMediaType(String media) {
+    if (media == null) {
+      return true;
     }
 
-    /**
-    @see CapabilityMap#getMimeTypes
-    */
-    public MimeType[] getMimeTypes()
-    {
-        Vector v = new Vector();
-        Iterator i = entry.getMimetypeMap().getMimetypes();
+    MediaTypeEntry mte =
+      (MediaTypeEntry) Registry.getEntry(Registry.MEDIA_TYPE, media);
 
-        while (i.hasNext())
-        {
-            MimeType mime = (MimeType)i.next();
-            v.add(mime);
-        }
-
-        return (MimeType[])v.toArray();
+    if (!supportsMimeType(new MimeType(mte.getMimeType()))) {
+      return false;
     }
 
-    /**
-    @see CapabilityMap#supportsMimeType
-    */
-    public boolean supportsMimeType( MimeType mimeType )
-    {
-        Iterator i = entry.getMimetypeMap().getMimetypes();
+    return entry.getCapabilityMap().containsAll(mte.getCapabilityMap());
 
-        while (i.hasNext())
-        {
-            MimeType mime = (MimeType)i.next();
+  }
 
-            if (mime.equals(mimeType))
-            {
-                return true;
-            }
-        }
+  /**
+   * Create a map string representation
+   */
+  @Override
+  public String toString() {
+    StringBuffer desc = new StringBuffer(entry.getName());
 
-        return false;
+    Iterator<?> i = entry.getMimetypeMap().getMimetypes();
 
+    while (i.hasNext()) {
+      MimeType mime = (MimeType) i.next();
+      desc.append(mime).append("-");
     }
 
-    /**
-    @see CapabilityMap#supportsMimeType
-    */
-    public boolean supportsMediaType( String media )
-    {
-        if (media == null)
-        {
-            return true;
-        }
+    i = entry.getCapabilityMap().getCapabilities();
 
-        MediaTypeEntry mte = (MediaTypeEntry)Registry.getEntry(Registry.MEDIA_TYPE, media);
-
-        if (!supportsMimeType(new MimeType(mte.getMimeType())))
-        {
-            return false;
-        }
-
-        return entry.getCapabilityMap().containsAll(mte.getCapabilityMap());
-
+    while (i.hasNext()) {
+      String capa = (String) i.next();
+      desc.append(capa).append("/");
     }
 
-    /**
-    Create a map string representation
-    */
-    public String toString()
-    {
-        StringBuffer desc = new StringBuffer(entry.getName());
-
-        Iterator i = entry.getMimetypeMap().getMimetypes();
-
-        while (i.hasNext())
-        {
-            MimeType mime = (MimeType)i.next();
-            desc.append( mime ).append("-");
-        }
-
-        i = entry.getCapabilityMap().getCapabilities();
-
-        while ( i.hasNext() )
-        {
-          String capa = (String)i.next();
-          desc.append(capa).append("/");
-        }
-
-        return desc.toString();
-    }
+    return desc.toString();
+  }
 
 }
-

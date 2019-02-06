@@ -1,12 +1,5 @@
-dojo._xdResourceLoaded({
-depends: [["require", "dojox.gfx.canvas"]],
-defineResource: function(dojo){dojo.require("dojox.gfx.canvas");
-
-dojo.experimental("dojox.gfx.canvas_attach");
-
-// not implemented
-dojox.gfx.attachNode = function(){
-	return null;	// for now
-};
-
+dojo._xdResourceLoaded({depends:[["require","dojox.gfx.canvas"]],defineResource:function(A){A.require("dojox.gfx.canvas");
+A.experimental("dojox.gfx.canvas_attach");
+dojox.gfx.attachNode=function(){return null
+}
 }});

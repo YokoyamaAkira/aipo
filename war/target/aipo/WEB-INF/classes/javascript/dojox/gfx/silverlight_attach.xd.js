@@ -17,26 +17,26 @@ break;
 case dojox.gfx.Image.nodeType:G=new dojox.gfx.Image(H);
 break;
 case dojox.gfx.Text.nodeType:G=new dojox.gfx.Text(H);
-E(G);
+F(G);
 break;
 default:return null
-}B(G);
-if(!(G instanceof dojox.gfx.Image)){C(G);
-F(G)
-}D(G);
+}C(G);
+if(!(G instanceof dojox.gfx.Image)){D(G);
+B(G)
+}E(G);
 return G
 };
 dojox.gfx.attachSurface=function(G){return null
 };
-var C=function(G){return null
-};
-var F=function(G){return null
-};
 var D=function(G){return null
+};
+var B=function(G){return null
 };
 var E=function(G){return null
 };
-var B=function(G){return null
+var F=function(G){return null
+};
+var C=function(G){return null
 }
 })()
 }});

@@ -1,131 +1,48 @@
-if(!dojo._hasResource["dojox.dtl.filter.lists"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.dtl.filter.lists"] = true;
-dojo.provide("dojox.dtl.filter.lists")
-
+if(!dojo._hasResource["dojox.dtl.filter.lists"]){dojo._hasResource["dojox.dtl.filter.lists"]=true;
+dojo.provide("dojox.dtl.filter.lists");
 dojo.require("dojox.dtl._base");
-
-dojo.mixin(dojox.dtl.filter.lists, {
-	_dictsort: function(a, b){
-		if(a[0] == b[0]) return 0;
-		return (a[0] < b[0]) ? -1 : 1;
-	},
-	dictsort: function(value, arg){
-		// summary: Takes a list of dicts, returns that list sorted by the property given in the argument.
-		if(!arg) return value;
-
-		var items = [];
-		for(var key in value){
-			items.push([dojox.dtl.resolveVariable('var.' + arg, new dojox.dtl.Context({ 'var' : value[key]})), value[key]]);
-		}
-		items.sort(dojox.dtl.filter.lists._dictsort);
-		var output = [];
-		for(var i = 0, item; item = items[i]; i++){
-			output.push(item[1]);
-		}
-		return output;
-	},
-	dictsortreversed: function(value, arg){
-		// summary: Takes a list of dicts, returns that list sorted in reverse order by the property given in the argument.
-		if(!arg) return value;
-
-		var dictsort = dojox.dtl.filter.lists.dictsort(value, arg);
-		return dictsort.reverse();
-	},
-	first: function(value){
-		// summary: Returns the first item in a list
-		return (value.length) ? value[0] : "";
-	},
-	join: function(value, arg){
-		// summary: Joins a list with a string, like Python's ``str.join(list)``
-		// description:
-		//		Django throws a compile error, but JS can't do arg checks
-		//		so we're left with run time errors, which aren't wise for something
-		//		as trivial here as an empty arg.
-		return value.join(arg || ",");
-	},
-	length: function(value){
-		// summary: Returns the length of the value - useful for lists
-		return (isNaN(value.length)) ? (value + "").length : value.length;
-	},
-	length_is: function(value, arg){
-		// summary: Returns a boolean of whether the value's length is the argument
-		return value.length == parseInt(arg);
-	},
-	random: function(value){
-		// summary: Returns a random item from the list
-		return value[Math.floor(Math.random() * value.length)];
-	},
-	slice: function(value, arg){
-		// summary: Returns a slice of the list.
-		// description:
-		//		Uses the same syntax as Python's list slicing; see
-		//		http://diveintopython.org/native_data_types/lists.html#odbchelper.list.slice
-		//		for an introduction.
-		//		Also uses the optional third value to denote every X item.
-		arg = arg || "";
-		var parts = arg.split(":");
-		var bits = [];
-		for(var i = 0; i < parts.length; i++){
-			if(!parts[i].length){
-				bits.push(null);
-			}else{
-				bits.push(parseInt(parts[i]));
-			}
-		}
-
-		if(bits[0] === null){
-			bits[0] = 0;
-		}
-		if(bits[0] < 0){
-			bits[0] = value.length + bits[0];
-		}
-		if(bits.length < 2 || bits[1] === null){
-			bits[1] = value.length;
-		}
-		if(bits[1] < 0){
-			bits[1] = value.length + bits[1];
-		}
-		
-		return value.slice(bits[0], bits[1]);
-	},
-	_unordered_list: function(value, tabs){
-		var ddl = dojox.dtl.filter.lists;
-		var indent = "";
-		for(var i = 0; i < tabs; i++){
-			indent += "\t";
-		}
-		if(value[1] && value[1].length){
-			var recurse = [];
-			for(var i = 0; i < value[1].length; i++){
-				recurse.push(ddl._unordered_list(value[1][i], tabs + 1))
-			}
-			return indent + "<li>" + value[0] + "\n" + indent + "<ul>\n" + recurse.join("\n") + "\n" + indent + "</ul>\n" + indent + "</li>";
-		}else{
-			return indent + "<li>" + value[0] + "</li>";
-		}
-	},
-	unordered_list: function(value){
-		// summary:
-		//		Recursively takes a self-nested list and returns an HTML unordered list --
-		//		WITHOUT opening and closing <ul> tags.
-		//	description:
-		//		The list is assumed to be in the proper format. For example, if ``var`` contains
-		//		``['States', [['Kansas', [['Lawrence', []], ['Topeka', []]]], ['Illinois', []]]]``,
-		//		then ``{{ var|unordered_list }}`` would return::
-		//
-		//		<li>States
-		//		<ul>
-		//			<li>Kansas
-		//			<ul>
-		//				<li>Lawrence</li>
-		//				<li>Topeka</li>
-		//			</ul>
-		//			</li>
-		//			<li>Illinois</li>
-		//		</ul>
-		//		</li>
-		return dojox.dtl.filter.lists._unordered_list(value, 1);
-	}
-});
-
-}
+dojo.mixin(dojox.dtl.filter.lists,{_dictsort:function(B,A){if(B[0]==A[0]){return 0
+}return(B[0]<A[0])?-1:1
+},dictsort:function(G,A){if(!A){return G
+}var C=[];
+for(var E in G){C.push([dojox.dtl.resolveVariable("var."+A,new dojox.dtl.Context({"var":G[E]})),G[E]])
+}C.sort(dojox.dtl.filter.lists._dictsort);
+var B=[];
+for(var D=0,F;
+F=C[D];
+D++){B.push(F[1])
+}return B
+},dictsortreversed:function(C,A){if(!A){return C
+}var B=dojox.dtl.filter.lists.dictsort(C,A);
+return B.reverse()
+},first:function(A){return(A.length)?A[0]:""
+},join:function(B,A){return B.join(A||",")
+},length:function(A){return(isNaN(A.length))?(A+"").length:A.length
+},length_is:function(B,A){return B.length==parseInt(A)
+},random:function(A){return A[Math.floor(Math.random()*A.length)]
+},slice:function(D,A){A=A||"";
+var E=A.split(":");
+var C=[];
+for(var B=0;
+B<E.length;
+B++){if(!E[B].length){C.push(null)
+}else{C.push(parseInt(E[B]))
+}}if(C[0]===null){C[0]=0
+}if(C[0]<0){C[0]=D.length+C[0]
+}if(C.length<2||C[1]===null){C[1]=D.length
+}if(C[1]<0){C[1]=D.length+C[1]
+}return D.slice(C[0],C[1])
+},_unordered_list:function(E,C){var F=dojox.dtl.filter.lists;
+var A="";
+for(var B=0;
+B<C;
+B++){A+="\t"
+}if(E[1]&&E[1].length){var D=[];
+for(var B=0;
+B<E[1].length;
+B++){D.push(F._unordered_list(E[1][B],C+1))
+}return A+"<li>"+E[0]+"\n"+A+"<ul>\n"+D.join("\n")+"\n"+A+"</ul>\n"+A+"</li>"
+}else{return A+"<li>"+E[0]+"</li>"
+}},unordered_list:function(A){return dojox.dtl.filter.lists._unordered_list(A,1)
+}})
+};

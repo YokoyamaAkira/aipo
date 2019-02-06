@@ -1,18 +1,18 @@
 if(!dojo._hasResource["dojo.cookie"]){dojo._hasResource["dojo.cookie"]=true;
 dojo.provide("dojo.cookie");
-dojo.cookie=function(C,E,D){var H=document.cookie;
-if(arguments.length==1){var A=H.lastIndexOf(C+"=");
-if(A==-1){return null
-}var G=A+C.length+1;
-var B=H.indexOf(";",A+C.length+1);
-if(B==-1){B=H.length
-}return decodeURIComponent(H.substring(G,B))
-}else{D=D||{};
-E=encodeURIComponent(E);
-if(typeof (D.expires)=="number"){var F=new Date();
-F.setTime(F.getTime()+(D.expires*24*60*60*1000));
-D.expires=F
-}document.cookie=C+"="+E+(D.expires?"; expires="+D.expires.toUTCString():"")+(D.path?"; path="+D.path:"")+(D.domain?"; domain="+D.domain:"")+(D.secure?"; secure":"");
+dojo.cookie=function(F,H,G){var C=document.cookie;
+if(arguments.length==1){var D=C.lastIndexOf(F+"=");
+if(D==-1){return null
+}var B=D+F.length+1;
+var E=C.indexOf(";",D+F.length+1);
+if(E==-1){E=C.length
+}return decodeURIComponent(C.substring(B,E))
+}else{G=G||{};
+H=encodeURIComponent(H);
+if(typeof (G.expires)=="number"){var A=new Date();
+A.setTime(A.getTime()+(G.expires*24*60*60*1000));
+G.expires=A
+}document.cookie=F+"="+H+(G.expires?"; expires="+G.expires.toUTCString():"")+(G.path?"; path="+G.path:"")+(G.domain?"; domain="+G.domain:"")+(G.secure?"; secure":"");
 return null
 }}
 };

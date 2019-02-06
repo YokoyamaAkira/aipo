@@ -15,9 +15,9 @@ A.addClass(this.domNode,this["class"])
 if(this._singleChild){this._singleChild.startup()
 }this._loadCheck();
 this._started=true
-},_checkIfSingleChild:function(){var C=A.query(">",this.containerNode||this.domNode),B=C.filter("[widgetId]");
-if(C.length==1&&B.length==1){this.isContainer=true;
-this._singleChild=dijit.byNode(B[0])
+},_checkIfSingleChild:function(){var B=A.query(">",this.containerNode||this.domNode),C=B.filter("[widgetId]");
+if(B.length==1&&C.length==1){this.isContainer=true;
+this._singleChild=dijit.byNode(C[0])
 }else{delete this.isContainer;
 delete this._singleChild
 }},refresh:function(){return this._prepareLoad(true)
@@ -37,30 +37,30 @@ if(this._singleChild&&this._singleChild.resize){this._singleChild.resize(this._c
 }this._onUnloadHandler();
 this._beingDestroyed=true;
 this.inherited("destroy",arguments)
-},resize:function(B){A.marginBox(this.domNode,B);
-var C=this.containerNode||this.domNode,D=A.mixin(A.marginBox(C),B||{});
-this._contentBox=dijit.layout.marginBox2contentBox(C,D);
+},resize:function(C){A.marginBox(this.domNode,C);
+var D=this.containerNode||this.domNode,B=A.mixin(A.marginBox(D),C||{});
+this._contentBox=dijit.layout.marginBox2contentBox(D,B);
 if(this._singleChild&&this._singleChild.resize){this._singleChild.resize(this._contentBox)
 }},_prepareLoad:function(B){this.cancel();
 this.isLoaded=false;
 this._loadCheck(B)
-},_loadCheck:function(C){var B=((this.open!==false)&&(this.domNode.style.display!="none"));
-if(this.href&&(C||(this.preload&&!this._xhrDfd)||(this.refreshOnShow&&B&&!this._xhrDfd)||(!this.isLoaded&&B&&!this._xhrDfd))){this._downloadExternalContent()
+},_loadCheck:function(B){var C=((this.open!==false)&&(this.domNode.style.display!="none"));
+if(this.href&&(B||(this.preload&&!this._xhrDfd)||(this.refreshOnShow&&C&&!this._xhrDfd)||(!this.isLoaded&&C&&!this._xhrDfd))){this._downloadExternalContent()
 }},_downloadExternalContent:function(){this._onUnloadHandler();
 this._setContent(this.onDownloadStart.call(this));
-var C=this;
-var D={preventCache:(this.preventCache||this.refreshOnShow),url:this.href,handleAs:"text"};
-if(A.isObject(this.ioArgs)){A.mixin(D,this.ioArgs)
-}var B=this._xhrDfd=(this.ioMethod||A.xhrGet)(D);
-B.addCallback(function(E){try{C.onDownloadEnd.call(C);
-C._isDownloaded=true;
-C.setContent.call(C,E)
-}catch(F){C._onError.call(C,"Content",F)
-}delete C._xhrDfd;
+var D=this;
+var B={preventCache:(this.preventCache||this.refreshOnShow),url:this.href,handleAs:"text"};
+if(A.isObject(this.ioArgs)){A.mixin(B,this.ioArgs)
+}var C=this._xhrDfd=(this.ioMethod||A.xhrGet)(B);
+C.addCallback(function(E){try{D.onDownloadEnd.call(D);
+D._isDownloaded=true;
+D.setContent.call(D,E)
+}catch(F){D._onError.call(D,"Content",F)
+}delete D._xhrDfd;
 return E
 });
-B.addErrback(function(E){if(!B.cancelled){C._onError.call(C,"Download",E)
-}delete C._xhrDfd;
+C.addErrback(function(E){if(!C.cancelled){D._onError.call(D,"Download",E)
+}delete D._xhrDfd;
 return E
 })
 },_onLoadHandler:function(){this.isLoaded=true;
@@ -70,24 +70,24 @@ try{this.onLoad.call(this)
 this.cancel();
 try{this.onUnload.call(this)
 }catch(B){console.error("Error "+this.widgetId+" running custom onUnload code")
-}},_setContent:function(B){this.destroyDescendants();
-try{var C=this.containerNode||this.domNode;
-while(C.firstChild){A._destroyElement(C.firstChild)
-}if(typeof B=="string"){if(this.extractContent){match=B.match(/<body[^>]*>\s*([\s\S]+)\s*<\/body>/im);
-if(match){B=match[1]
-}}C.innerHTML=B
-}else{if(B.nodeType){C.appendChild(B)
-}else{A.forEach(B,function(F){C.appendChild(F.cloneNode(true))
+}},_setContent:function(C){this.destroyDescendants();
+try{var D=this.containerNode||this.domNode;
+while(D.firstChild){A._destroyElement(D.firstChild)
+}if(typeof C=="string"){if(this.extractContent){match=C.match(/<body[^>]*>\s*([\s\S]+)\s*<\/body>/im);
+if(match){C=match[1]
+}}D.innerHTML=C
+}else{if(C.nodeType){D.appendChild(C)
+}else{A.forEach(C,function(F){D.appendChild(F.cloneNode(true))
 })
-}}}catch(E){var D=this.onContentError(E);
-try{C.innerHTML=D
-}catch(E){console.error("Fatal "+this.id+" could not change content due to "+E.message,E)
-}}},_onError:function(C,E,B){var D=this["on"+C+"Error"].call(this,E);
-if(B){console.error(B,E)
-}else{if(D){this._setContent.call(this,D)
-}}},_createSubWidgets:function(){var B=this.containerNode||this.domNode;
-try{A.parser.parse(B,true)
-}catch(C){this._onError("Content",C,"Couldn't create widgets in "+this.id+(this.href?" from "+this.href:""))
+}}}catch(B){var E=this.onContentError(B);
+try{D.innerHTML=E
+}catch(B){console.error("Fatal "+this.id+" could not change content due to "+B.message,B)
+}}},_onError:function(D,B,C){var E=this["on"+D+"Error"].call(this,B);
+if(C){console.error(C,B)
+}else{if(E){this._setContent.call(this,E)
+}}},_createSubWidgets:function(){var C=this.containerNode||this.domNode;
+try{A.parser.parse(C,true)
+}catch(B){this._onError("Content",B,"Couldn't create widgets in "+this.id+(this.href?" from "+this.href:""))
 }},onLoad:function(B){},onUnload:function(B){},onDownloadStart:function(){return this.loadingMessage
 },onContentError:function(B){},onDownloadError:function(B){return this.errorMessage
 },onDownloadEnd:function(){}})

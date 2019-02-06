@@ -117,7 +117,7 @@ public class TimelineSelectData extends
   private List<ALEipUser> userList = null;
 
   /** <code>userid</code> ユーザーID */
-  private String userid;
+  // akr private String userid;
 
   private final List<Integer> useridList = new ArrayList<Integer>();
 
@@ -898,7 +898,9 @@ public class TimelineSelectData extends
   protected void setupLists(RunData rundata, Context context) {
 
     target_group_name = getTargetGroupName(rundata, context);
+    @SuppressWarnings("unused")
     boolean fgroup_flag = false;
+    @SuppressWarnings("unused")
     String target_group_id = "";
     current_filter = target_group_name;
     String[] target = target_group_name.split(";");

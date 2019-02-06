@@ -16,37 +16,37 @@ this.parentMatrix=null
 },getStroke:function(){return this.strokeStyle
 },getParent:function(){return this.parent
 },getBoundingBox:function(){return this.bbox
-},getTransformedBoundingBox:function(){var B=this.getBoundingBox();
-if(!B){return null
-}var A=this._getRealMatrix();
-var D=[];
-var C=dojox.gfx.matrix;
-D.push(C.multiplyPoint(A,B.x,B.y));
-D.push(C.multiplyPoint(A,B.x+B.width,B.y));
-D.push(C.multiplyPoint(A,B.x+B.width,B.y+B.height));
-D.push(C.multiplyPoint(A,B.x,B.y+B.height));
-return D
+},getTransformedBoundingBox:function(){var A=this.getBoundingBox();
+if(!A){return null
+}var D=this._getRealMatrix();
+var C=[];
+var B=dojox.gfx.matrix;
+C.push(B.multiplyPoint(D,A.x,A.y));
+C.push(B.multiplyPoint(D,A.x+A.width,A.y));
+C.push(B.multiplyPoint(D,A.x+A.width,A.y+A.height));
+C.push(B.multiplyPoint(D,A.x,A.y+A.height));
+return C
 },getEventSource:function(){return this.rawNode
 },setShape:function(A){this.shape=dojox.gfx.makeParameters(this.shape,A);
 this.bbox=null;
 return this
-},setFill:function(B){if(!B){this.fillStyle=null;
+},setFill:function(A){if(!A){this.fillStyle=null;
 return this
-}var A=null;
-if(typeof (B)=="object"&&"type" in B){switch(B.type){case"linear":A=dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient,B);
+}var B=null;
+if(typeof (A)=="object"&&"type" in A){switch(A.type){case"linear":B=dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient,A);
 break;
-case"radial":A=dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient,B);
+case"radial":B=dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient,A);
 break;
-case"pattern":A=dojox.gfx.makeParameters(dojox.gfx.defaultPattern,B);
+case"pattern":B=dojox.gfx.makeParameters(dojox.gfx.defaultPattern,A);
 break
-}}else{A=dojox.gfx.normalizeColor(B)
-}this.fillStyle=A;
+}}else{B=dojox.gfx.normalizeColor(A)
+}this.fillStyle=B;
 return this
-},setStroke:function(B){if(!B){this.strokeStyle=null;
+},setStroke:function(A){if(!A){this.strokeStyle=null;
 return this
-}if(typeof B=="string"){B={color:B}
-}var A=this.strokeStyle=dojox.gfx.makeParameters(dojox.gfx.defaultStroke,B);
-A.color=dojox.gfx.normalizeColor(A.color);
+}if(typeof A=="string"){A={color:A}
+}var B=this.strokeStyle=dojox.gfx.makeParameters(dojox.gfx.defaultStroke,A);
+B.color=dojox.gfx.normalizeColor(B.color);
 return this
 },setTransform:function(A){this.matrix=dojox.gfx.matrix.clone(A?dojox.gfx.matrix.normalize(A):dojox.gfx.matrix.identity);
 return this._applyTransform()
@@ -64,43 +64,43 @@ this._moveToBack()
 },applyTransform:function(A){return A?this.setTransform([this.matrix,A]):this
 },removeShape:function(A){if(this.parent){this.parent.remove(this,A)
 }return this
-},_setParent:function(B,A){this.parent=B;
-return this._updateParentMatrix(A)
+},_setParent:function(A,B){this.parent=A;
+return this._updateParentMatrix(B)
 },_updateParentMatrix:function(A){this.parentMatrix=A?dojox.gfx.matrix.clone(A):null;
 return this._applyTransform()
-},_getRealMatrix:function(){var A=this.matrix;
-var B=this.parent;
-while(B){if(B.matrix){A=dojox.gfx.matrix.multiply(B.matrix,A)
-}B=B.parent
-}return A
+},_getRealMatrix:function(){var B=this.matrix;
+var A=this.parent;
+while(A){if(A.matrix){B=dojox.gfx.matrix.multiply(A.matrix,B)
+}A=A.parent
+}return B
 }});
-dojox.gfx.shape._eventsProcessing={connect:function(B,A,C){return arguments.length>2?dojo.connect(this.getEventSource(),B,A,C):dojo.connect(this.getEventSource(),B,A)
+dojox.gfx.shape._eventsProcessing={connect:function(A,C,B){return arguments.length>2?dojo.connect(this.getEventSource(),A,C,B):dojo.connect(this.getEventSource(),A,C)
 },disconnect:function(A){dojo.disconnect(A)
 }};
 dojo.extend(dojox.gfx.Shape,dojox.gfx.shape._eventsProcessing);
 dojox.gfx.shape.Container={_init:function(){this.children=[]
-},add:function(A){var B=A.getParent();
-if(B){B.remove(A,true)
-}this.children.push(A);
-return A._setParent(this,this._getRealMatrix())
-},remove:function(A,C){for(var B=0;
-B<this.children.length;
-++B){if(this.children[B]==A){if(C){}else{A._setParent(null,null)
-}this.children.splice(B,1);
+},add:function(B){var A=B.getParent();
+if(A){A.remove(B,true)
+}this.children.push(B);
+return B._setParent(this,this._getRealMatrix())
+},remove:function(C,B){for(var A=0;
+A<this.children.length;
+++A){if(this.children[A]==C){if(B){}else{C._setParent(null,null)
+}this.children.splice(A,1);
 break
 }}return this
 },clear:function(){this.children=[];
 return this
-},_moveChildToFront:function(A){for(var B=0;
-B<this.children.length;
-++B){if(this.children[B]==A){this.children.splice(B,1);
-this.children.push(A);
+},_moveChildToFront:function(B){for(var A=0;
+A<this.children.length;
+++A){if(this.children[A]==B){this.children.splice(A,1);
+this.children.push(B);
 break
 }}return this
-},_moveChildToBack:function(A){for(var B=0;
-B<this.children.length;
-++B){if(this.children[B]==A){this.children.splice(B,1);
-this.children.unshift(A);
+},_moveChildToBack:function(B){for(var A=0;
+A<this.children.length;
+++A){if(this.children[A]==B){this.children.splice(A,1);
+this.children.unshift(B);
 break
 }}return this
 }};
@@ -135,22 +135,22 @@ this.bbox={x:Math.min(A.x1,A.x2),y:Math.min(A.y1,A.y2),width:Math.abs(A.x2-A.x1)
 }});
 dojo.declare("dojox.gfx.shape.Polyline",dojox.gfx.Shape,{constructor:function(A){this.shape=dojo.clone(dojox.gfx.defaultPolyline);
 this.rawNode=A
-},setShape:function(B,A){if(B&&B instanceof Array){dojox.gfx.Shape.prototype.setShape.call(this,{points:B});
-if(A&&this.shape.points.length){this.shape.points.push(this.shape.points[0])
-}}else{dojox.gfx.Shape.prototype.setShape.call(this,B)
+},setShape:function(A,B){if(A&&A instanceof Array){dojox.gfx.Shape.prototype.setShape.call(this,{points:A});
+if(B&&this.shape.points.length){this.shape.points.push(this.shape.points[0])
+}}else{dojox.gfx.Shape.prototype.setShape.call(this,A)
 }return this
-},getBoundingBox:function(){if(!this.bbox&&this.shape.points.length){var D=this.shape.points;
-var A=D.length;
-var C=D[0];
-var E={l:C.x,t:C.y,r:C.x,b:C.y};
-for(var B=1;
-B<A;
-++B){C=D[B];
-if(E.l>C.x){E.l=C.x
-}if(E.r<C.x){E.r=C.x
-}if(E.t>C.y){E.t=C.y
-}if(E.b<C.y){E.b=C.y
-}}this.bbox={x:E.l,y:E.t,width:E.r-E.l,height:E.b-E.t}
+},getBoundingBox:function(){if(!this.bbox&&this.shape.points.length){var C=this.shape.points;
+var E=C.length;
+var B=C[0];
+var D={l:B.x,t:B.y,r:B.x,b:B.y};
+for(var A=1;
+A<E;
+++A){B=C[A];
+if(D.l>B.x){D.l=B.x
+}if(D.r<B.x){D.r=B.x
+}if(D.t>B.y){D.t=B.y
+}if(D.b<B.y){D.b=B.y
+}}this.bbox={x:D.l,y:D.t,width:D.r-D.l,height:D.b-D.t}
 }return this.bbox
 }});
 dojo.declare("dojox.gfx.shape.Image",dojox.gfx.Shape,{constructor:function(A){this.shape=dojo.clone(dojox.gfx.defaultImage);
@@ -186,6 +186,6 @@ case dojox.gfx.defaultTextPath.type:return this.createTextPath(A)
 },createText:function(A){return this.createObject(dojox.gfx.Text,A)
 },createPath:function(A){return this.createObject(dojox.gfx.Path,A)
 },createTextPath:function(A){return this.createObject(dojox.gfx.TextPath,{}).setText(A)
-},createObject:function(B,A){return null
+},createObject:function(A,B){return null
 }}
 };

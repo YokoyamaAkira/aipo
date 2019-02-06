@@ -1,144 +1,43 @@
-if(!dojo._hasResource["dojo._base.json"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo._base.json"] = true;
+if(!dojo._hasResource["dojo._base.json"]){dojo._hasResource["dojo._base.json"]=true;
 dojo.provide("dojo._base.json");
-
-dojo.fromJson = function(/*String*/ json){
-	// summary:
-	// 		evaluates the passed string-form of a JSON object
-	// json: 
-	//		a string literal of a JSON item, for instance:
-	//			'{ "foo": [ "bar", 1, { "baz": "thud" } ] }'
-	// return:
-	//		An object, the result of the evaluation
-
-	// FIXME: should this accept mozilla's optional second arg?
-	try {
-		return eval("(" + json + ")");
-	}catch(e){
-		console.debug(e);
-		return json;
-	}
+dojo.fromJson=function(json){try{return eval("("+json+")")
+}catch(e){console.debug(e);
+return json
+}};
+dojo._escapeString=function(A){return('"'+A.replace(/(["\\])/g,"\\$1")+'"').replace(/[\f]/g,"\\f").replace(/[\b]/g,"\\b").replace(/[\n]/g,"\\n").replace(/[\t]/g,"\\t").replace(/[\r]/g,"\\r")
+};
+dojo.toJsonIndentStr="\t";
+dojo.toJson=function(H,E,L){L=L||"";
+var K=(E?L+dojo.toJsonIndentStr:"");
+var I=(E?"\n":"");
+var M=typeof (H);
+if(M=="undefined"){return"undefined"
+}else{if((M=="number")||(M=="boolean")){return H+""
+}else{if(H===null){return"null"
+}}}if(dojo.isString(H)){return dojo._escapeString(H)
+}if(H.nodeType&&H.cloneNode){return""
+}var A=arguments.callee;
+var F;
+if(typeof H.__json__=="function"){F=H.__json__();
+if(H!==F){return A(F,E,K)
+}}if(typeof H.json=="function"){F=H.json();
+if(H!==F){return A(F,E,K)
+}}if(dojo.isArray(H)){var J=[];
+for(var G=0;
+G<H.length;
+G++){var D=A(H[G],E,K);
+if(typeof (D)!="string"){D="undefined"
+}J.push(I+K+D)
+}return"["+J.join(", ")+I+L+"]"
+}if(M=="function"){return null
+}var C=[];
+for(var N in H){var B;
+if(typeof (N)=="number"){B='"'+N+'"'
+}else{if(typeof (N)=="string"){B=dojo._escapeString(N)
+}else{continue
+}}D=A(H[N],E,K);
+if(typeof (D)!="string"){continue
+}C.push(I+K+B+": "+D)
+}return"{"+C.join(", ")+I+L+"}"
 }
-
-dojo._escapeString = function(/*String*/str){
-	//summary:
-	//		Adds escape sequences for non-visual characters, double quote and
-	//		backslash and surrounds with double quotes to form a valid string
-	//		literal.
-	return ('"' + str.replace(/(["\\])/g, '\\$1') + '"'
-		).replace(/[\f]/g, "\\f"
-		).replace(/[\b]/g, "\\b"
-		).replace(/[\n]/g, "\\n"
-		).replace(/[\t]/g, "\\t"
-		).replace(/[\r]/g, "\\r"); // string
-}
-
-dojo.toJsonIndentStr = "\t";
-dojo.toJson = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*String?*/ _indentStr){
-	// summary:
-	//		Create a JSON serialization of an object. 
-	//		Note that this doesn't check for infinite recursion, so don't do that!
-	//
-	// it:
-	//		an object to be serialized. Objects may define their own
-	//		serialization via a special "__json__" or "json" function
-	//		property. If a specialized serializer has been defined, it will
-	//		be used as a fallback.
-	//
-	// prettyPrint:
-	//		if true, we indent objects and arrays to make the output prettier.
-	//		The variable dojo.toJsonIndentStr is used as the indent string 
-	//		-- to use something other than the default (tab), 
-	//		change that variable before calling dojo.toJson().
-	//
-	// _indentStr:
-	//		private variable for recursive calls when pretty printing, do not use.
-	//		
-	// return:
-	//		a String representing the serialized version of the passed object.
-
-	_indentStr = _indentStr || "";
-	var nextIndent = (prettyPrint ? _indentStr + dojo.toJsonIndentStr : "");
-	var newLine = (prettyPrint ? "\n" : "");
-	var objtype = typeof(it);
-	if(objtype == "undefined"){
-		return "undefined";
-	}else if((objtype == "number")||(objtype == "boolean")){
-		return it + "";
-	}else if(it === null){
-		return "null";
-	}
-	if(dojo.isString(it)){ 
-		return dojo._escapeString(it); 
-	}
-	if(it.nodeType && it.cloneNode){ // isNode
-		return ""; // FIXME: would something like outerHTML be better here?
-	}
-	// recurse
-	var recurse = arguments.callee;
-	// short-circuit for objects that support "json" serialization
-	// if they return "self" then just pass-through...
-	var newObj;
-	if(typeof it.__json__ == "function"){
-		newObj = it.__json__();
-		if(it !== newObj){
-			return recurse(newObj, prettyPrint, nextIndent);
-		}
-	}
-	if(typeof it.json == "function"){
-		newObj = it.json();
-		if(it !== newObj){
-			return recurse(newObj, prettyPrint, nextIndent);
-		}
-	}
-	// array
-	if(dojo.isArray(it)){
-		var res = [];
-		for(var i = 0; i < it.length; i++){
-			var val = recurse(it[i], prettyPrint, nextIndent);
-			if(typeof(val) != "string"){
-				val = "undefined";
-			}
-			res.push(newLine + nextIndent + val);
-		}
-		return "[" + res.join(", ") + newLine + _indentStr + "]";
-	}
-	/*
-	// look in the registry
-	try {
-		window.o = it;
-		newObj = dojo.json.jsonRegistry.match(it);
-		return recurse(newObj, prettyPrint, nextIndent);
-	}catch(e){
-		// console.debug(e);
-	}
-	// it's a function with no adapter, skip it
-	*/
-	if(objtype == "function"){
-		return null;
-	}
-	// generic object code path
-	var output = [];
-	for(var key in it){
-		var keyStr;
-		if(typeof(key) == "number"){
-			keyStr = '"' + key + '"';
-		}else if(typeof(key) == "string"){
-			keyStr = dojo._escapeString(key);
-		}else{
-			// skip non-string or number keys
-			continue;
-		}
-		val = recurse(it[key], prettyPrint, nextIndent);
-		if(typeof(val) != "string"){
-			// skip non-serializable values
-			continue;
-		}
-		// FIXME: use += on Moz!!
-		//	 MOW NOTE: using += is a pain because you have to account for the dangling comma...
-		output.push(newLine + nextIndent + keyStr + ": " + val);
-	}
-	return "{" + output.join(", ") + newLine + _indentStr + "}";
-}
-
-}
+};

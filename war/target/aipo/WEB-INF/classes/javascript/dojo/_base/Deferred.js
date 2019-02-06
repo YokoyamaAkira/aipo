@@ -12,14 +12,14 @@ this.silentlyCancelled=false
 dojo.extend(dojo.Deferred,{_nextId:(function(){var A=1;
 return function(){return A++
 }
-})(),cancel:function(){var B;
-if(this.fired==-1){if(this.canceller){B=this.canceller(this)
+})(),cancel:function(){var A;
+if(this.fired==-1){if(this.canceller){A=this.canceller(this)
 }else{this.silentlyCancelled=true
-}if(this.fired==-1){if(!(B instanceof Error)){var A=B;
-B=new Error("Deferred Cancelled");
-B.dojoType="cancel";
-B.cancelResult=A
-}this.errback(B)
+}if(this.fired==-1){if(!(A instanceof Error)){var B=A;
+A=new Error("Deferred Cancelled");
+A.dojoType="cancel";
+A.cancelResult=B
+}this.errback(A)
 }}else{if((this.fired==0)&&(this.results[0] instanceof dojo.Deferred)){this.results[0].cancel()
 }}},_resback:function(A){this.fired=((A instanceof Error)?1:0);
 this.results[this.fired]=A;
@@ -32,37 +32,37 @@ this._resback(A)
 },errback:function(A){this._check();
 if(!(A instanceof Error)){A=new Error(A)
 }this._resback(A)
-},addBoth:function(A,B){var C=dojo.hitch(A,B);
-if(arguments.length>2){C=dojo.partial(C,arguments,2)
-}return this.addCallbacks(C,C)
-},addCallback:function(A,B){var C=dojo.hitch(A,B);
-if(arguments.length>2){C=dojo.partial(C,arguments,2)
-}return this.addCallbacks(C,null)
-},addErrback:function(A,B){var C=dojo.hitch(A,B);
-if(arguments.length>2){C=dojo.partial(C,arguments,2)
-}return this.addCallbacks(null,C)
-},addCallbacks:function(A,B){this.chain.push([A,B]);
+},addBoth:function(C,A){var B=dojo.hitch(C,A);
+if(arguments.length>2){B=dojo.partial(B,arguments,2)
+}return this.addCallbacks(B,B)
+},addCallback:function(C,A){var B=dojo.hitch(C,A);
+if(arguments.length>2){B=dojo.partial(B,arguments,2)
+}return this.addCallbacks(B,null)
+},addErrback:function(C,A){var B=dojo.hitch(C,A);
+if(arguments.length>2){B=dojo.partial(B,arguments,2)
+}return this.addCallbacks(null,B)
+},addCallbacks:function(B,A){this.chain.push([B,A]);
 if(this.fired>=0){this._fire()
 }return this
-},_fire:function(){var D=this.chain;
-var G=this.fired;
-var C=this.results[G];
-var B=this;
-var A=null;
-while((D.length>0)&&(this.paused==0)){var F=D.shift()[G];
-if(!F){continue
-}try{C=F(C);
-G=((C instanceof Error)?1:0);
-if(C instanceof dojo.Deferred){A=function(H){B._resback(H);
-B.paused--;
-if((B.paused==0)&&(B.fired>=0)){B._fire()
+},_fire:function(){var A=this.chain;
+var D=this.fired;
+var G=this.results[D];
+var F=this;
+var E=null;
+while((A.length>0)&&(this.paused==0)){var C=A.shift()[D];
+if(!C){continue
+}try{G=C(G);
+D=((G instanceof Error)?1:0);
+if(G instanceof dojo.Deferred){E=function(H){F._resback(H);
+F.paused--;
+if((F.paused==0)&&(F.fired>=0)){F._fire()
 }};
 this.paused++
-}}catch(E){console.debug(E);
-G=1;
-C=E
-}}this.fired=G;
-this.results[G]=C;
-if((A)&&(this.paused)){C.addBoth(A)
+}}catch(B){console.debug(B);
+D=1;
+G=B
+}}this.fired=D;
+this.results[D]=G;
+if((E)&&(this.paused)){G.addBoth(E)
 }}})
 };

@@ -128,11 +128,10 @@ public class GadgetsAction extends ALBaseAction {
     context.put("gadgetContext", gadgetContext);
     context.put("isActive", isActive);
 
-    @SuppressWarnings("unchecked")
-    Iterator<String> names = portlet.getPortletConfig().getInitParameterNames();
+    Iterator<?> names = portlet.getPortletConfig().getInitParameterNames();
     Map<String, Object> maps = new HashMap<String, Object>();
     while (names.hasNext()) {
-      String next = names.next();
+      String next = (String) names.next();
       if (next != null && next.startsWith("pref-")) {
         String value = portlet.getPortletConfig().getInitParameter(next);
         String key = next.substring(5);

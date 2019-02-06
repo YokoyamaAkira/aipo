@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -71,7 +71,7 @@ public class Profiler {
    */
   private static ProfilerService getService() {
     return (ProfilerService) TurbineServices.getInstance().getService(
-        ProfilerService.SERVICE_NAME);
+      ProfilerService.SERVICE_NAME);
   }
 
   /**
@@ -79,9 +79,9 @@ public class Profiler {
    * the mapping functionality of the profiler
    * 
    * @param rundata
-   *            The rundata object for the current request.
+   *          The rundata object for the current request.
    * @param cm
-   *            The device capability map for the current request.
+   *          The device capability map for the current request.
    * @return a Profile object if found by the manager or null
    */
   public static Profile getProfile(RunData rundata, CapabilityMap cm)
@@ -100,6 +100,7 @@ public class Profiler {
    * @see ProfilerService#getProfile
    * @deprecated Do not use a profiler method based on MimeType
    */
+  @Deprecated
   public static Profile getProfile(RunData data, MimeType mt)
       throws ProfileException {
     return getService().getProfile(data, mt);
@@ -109,7 +110,7 @@ public class Profiler {
    * get the Profile object using a profile locator
    * 
    * @param locator
-   *            The locator containing criteria describing the profile.
+   *          The locator containing criteria describing the profile.
    * @return a new Profile object
    */
   public static Profile getProfile(ProfileLocator locator)
@@ -181,7 +182,7 @@ public class Profiler {
   /**
    * @see ProfilerService#query
    */
-  public static Iterator query(QueryLocator locator) {
+  public static Iterator<?> query(QueryLocator locator) {
     return getService().query(locator);
   }
 

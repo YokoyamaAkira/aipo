@@ -2,16 +2,16 @@ dojo._xdResourceLoaded({depends:[["provide","dojo.data.api.Write"],["require","d
 A.provide("dojo.data.api.Write");
 A.require("dojo.data.api.Read");
 A.declare("dojo.data.api.Write",A.data.api.Read,{getFeatures:function(){return{"dojo.data.api.Read":true,"dojo.data.api.Write":true}
-},newItem:function(C,B){var D;
+},newItem:function(D,C){var B;
 throw new Error("Unimplemented API: dojo.data.api.Write.newItem");
-return D
+return B
 },deleteItem:function(B){throw new Error("Unimplemented API: dojo.data.api.Write.deleteItem");
 return false
-},setValue:function(C,B,D){throw new Error("Unimplemented API: dojo.data.api.Write.setValue");
+},setValue:function(D,C,B){throw new Error("Unimplemented API: dojo.data.api.Write.setValue");
 return false
-},setValues:function(D,C,B){throw new Error("Unimplemented API: dojo.data.api.Write.setValues");
+},setValues:function(B,D,C){throw new Error("Unimplemented API: dojo.data.api.Write.setValues");
 return false
-},unsetAttribute:function(C,B){throw new Error("Unimplemented API: dojo.data.api.Write.clear");
+},unsetAttribute:function(B,C){throw new Error("Unimplemented API: dojo.data.api.Write.clear");
 return false
 },save:function(B){throw new Error("Unimplemented API: dojo.data.api.Write.save")
 },revert:function(){throw new Error("Unimplemented API: dojo.data.api.Write.revert");

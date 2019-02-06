@@ -1,126 +1,47 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.math._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.math._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.math._base"] = true;
-dojo.provide("dojox.math._base");
-
-dojo.mixin(dojox.math, {
-	degreesToRadians: function(/* Number */n){
-		//	summary
-		//	Convert the passed number to radians.
-		return (n*Math.PI)/180;	// Number
-	},
-	radiansToDegrees: function(/* Number */n){
-		//	summary
-		//	Convert the passed number to degrees.
-		return (n*180)/Math.PI;	//	Number
-	},
-
-	factoral: function(/* Number */n){
-		//	summary
-		//	Return the factoral of n.
-		if(n<1){ 
-			return 0;	// Number
-		}
-		var ret=1;
-		for(var i=1; i<=n; i++){
-			ret*=i;
-		}
-		return ret;	// Number
-	},
-	permutations: function(/* Number */n, /* Number */k){
-		//	summary
-		//	TODO
-		if(n==0 || k==0){ 
-			return 1; 	// Number
-		}
-		return (this.factoral(n)/this.factoral(n-k));
-	},
-	combinations: function(/* Number */n, /* Number */r){
-		//	summary
-		//	TODO
-		if(n==0 || r==0){ 
-			return 1; 	//	Number
-		}
-		return (this.factoral(n)/(this.factoral(n-r)*this.factoral(r)));	// Number
-	},
-	bernstein: function(/* Number */t, /* Number */n, /* Number */ i){
-		//	summary
-		//	TODO
-		return (this.combinations(n, i)*Math.pow(t, i)*Math.pow(1-t, n-i));	//	Number
-	},
-	gaussian: function(){
-		//	summary
-		//	Return a random number based on the Gaussian algo.
-		var k=2;
-		do{
-			var i=2*Math.random()-1;
-			var j=2*Math.random()-1;
-			k = i*i+j*j;
-		}while(k>=1);
-		return (i * Math.sqrt((-2*Math.log(k))/k));	//	Number
-	},
-
-	//	basic statistics
-	sd: function(/* Array */a){
-		//	summary
-		//	Returns the standard deviation of the passed arguments.
-		return Math.sqrt(this.variance(a));	//	Number
-	},
-	variance: function(/* Array */a){
-		//	summary
-		//	Find the variance in the passed array of numbers.
-		var mean=0, squares=0;
-		dojo.forEach(a, function(item){
-			mean+=item;
-			squares+=Math.pow(item,2);
-		});
-		return (squares/a.length)-Math.pow(mean/a.length, 2);	//	Number
-	},
-
-	//	create a range of numbers
-	range: function(/* Number */a, /* Number? */b, /* Number? */step){
-		//	summary
-		//	Create a range of numbers based on the parameters.
-		if(arguments.length<2){
-			b=a,a=0;
-		}
-		var s=step||1;
-		var range=[];
-		if(s>0){
-			for(var i=a; i<b; i+=s){
-				range.push(i);
-			}
-		}else{
-			if(s<0){
-				for(var i=a; i>b; i+=s){
-					range.push(i);
-				}
-			}else{
-				throw new Error("dojox.math.range: step must not be zero.");
-			}
-		}
-		return range; 	// Array
-	},
-	distance: function(/* Array */a, /* Array */b){
-		//	summary
-		//	Calculate the distance between point A and point B
-		return Math.sqrt(Math.pow(b[0]-a[0],2)+Math.pow(b[1]-a[1],2));	//	Number
-	},
-	midpoint: function(/* Array */a, /* Array */b){
-		//	summary
-		//	Calculate the midpoint between points A and B.  A and B may be multidimensional.
-		if(a.length!=b.length){
-			console.error("dojox.math.midpoint: Points A and B are not the same dimensionally.", a, b);
-		}
-		var m=[];
-		for(var i=0; i<a.length; i++){
-			m[i]=(a[i]+b[i])/2;
-		}
-		return m;	//	Array
-	}
+dojo._xdResourceLoaded({depends:[["provide","dojox.math._base"]],defineResource:function(A){if(!A._hasResource["dojox.math._base"]){A._hasResource["dojox.math._base"]=true;
+A.provide("dojox.math._base");
+A.mixin(dojox.math,{degreesToRadians:function(B){return(B*Math.PI)/180
+},radiansToDegrees:function(B){return(B*180)/Math.PI
+},factoral:function(D){if(D<1){return 0
+}var B=1;
+for(var C=1;
+C<=D;
+C++){B*=C
+}return B
+},permutations:function(C,B){if(C==0||B==0){return 1
+}return(this.factoral(C)/this.factoral(C-B))
+},combinations:function(C,B){if(C==0||B==0){return 1
+}return(this.factoral(C)/(this.factoral(C-B)*this.factoral(B)))
+},bernstein:function(C,D,B){return(this.combinations(D,B)*Math.pow(C,B)*Math.pow(1-C,D-B))
+},gaussian:function(){var B=2;
+do{var D=2*Math.random()-1;
+var C=2*Math.random()-1;
+B=D*D+C*C
+}while(B>=1);
+return(D*Math.sqrt((-2*Math.log(B))/B))
+},sd:function(B){return Math.sqrt(this.variance(B))
+},variance:function(C){var B=0,D=0;
+A.forEach(C,function(E){B+=E;
+D+=Math.pow(E,2)
 });
-
-}
-
-}});
+return(D/C.length)-Math.pow(B/C.length,2)
+},range:function(C,B,G){if(arguments.length<2){B=C,C=0
+}var F=G||1;
+var D=[];
+if(F>0){for(var E=C;
+E<B;
+E+=F){D.push(E)
+}}else{if(F<0){for(var E=C;
+E>B;
+E+=F){D.push(E)
+}}else{throw new Error("dojox.math.range: step must not be zero.")
+}}return D
+},distance:function(C,B){return Math.sqrt(Math.pow(B[0]-C[0],2)+Math.pow(B[1]-C[1],2))
+},midpoint:function(D,C){if(D.length!=C.length){console.error("dojox.math.midpoint: Points A and B are not the same dimensionally.",D,C)
+}var B=[];
+for(var E=0;
+E<D.length;
+E++){B[E]=(D[E]+C[E])/2
+}return B
+}})
+}}});

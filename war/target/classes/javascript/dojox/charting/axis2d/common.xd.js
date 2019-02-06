@@ -2,33 +2,33 @@ dojo._xdResourceLoaded({depends:[["provide","dojox.charting.axis2d.common"],["re
 A.provide("dojox.charting.axis2d.common");
 A.require("dojox.gfx");
 (function(){var B=dojox.gfx;
-A.mixin(dojox.charting.axis2d.common,{createText:{gfx:function(F,E,C,J,I,H,D,G){return E.createText({x:C,y:J,text:H,align:I}).setFont(D).setFill(G)
-},html:function(I,E,L,K,G,N,D,H){var C=A.doc.createElement("div"),P=C.style;
-P.marginLeft="0px";
-P.marginTop="0px";
-P.marginRight="0px";
-P.marginBottom="0px";
-P.paddingLeft="0px";
-P.paddingTop="0px";
-P.paddingRight="0px";
-P.paddingBottom="0px";
-P.borderLeftWidth="0px";
-P.borderTopWidth="0px";
-P.borderRightWidth="0px";
-P.borderBottomWidth="0px";
-P.position="absolute";
-P.font=D;
-C.innerHTML=N;
-P.color=H;
-I.node.appendChild(C);
-var M=I.getCoords(),F=A.marginBox(C),O=B.normalizedLength(B.splitFontString(D).size),J=M.y+Math.floor(K-O);
-switch(G){case"middle":A.marginBox(C,{l:M.x+Math.floor(L-F.w/2),t:J});
+A.mixin(dojox.charting.axis2d.common,{createText:{gfx:function(H,G,E,D,C,J,F,I){return G.createText({x:E,y:D,text:J,align:C}).setFont(F).setFill(I)
+},html:function(C,M,F,E,O,H,L,P){var K=A.doc.createElement("div"),J=K.style;
+J.marginLeft="0px";
+J.marginTop="0px";
+J.marginRight="0px";
+J.marginBottom="0px";
+J.paddingLeft="0px";
+J.paddingTop="0px";
+J.paddingRight="0px";
+J.paddingBottom="0px";
+J.borderLeftWidth="0px";
+J.borderTopWidth="0px";
+J.borderRightWidth="0px";
+J.borderBottomWidth="0px";
+J.position="absolute";
+J.font=L;
+K.innerHTML=H;
+J.color=P;
+C.node.appendChild(K);
+var G=C.getCoords(),N=A.marginBox(K),I=B.normalizedLength(B.splitFontString(L).size),D=G.y+Math.floor(E-I);
+switch(O){case"middle":A.marginBox(K,{l:G.x+Math.floor(F-N.w/2),t:D});
 break;
-case"end":A.marginBox(C,{l:M.x+Math.floor(L-F.w),t:J});
+case"end":A.marginBox(K,{l:G.x+Math.floor(F-N.w),t:D});
 break;
-default:A.marginBox(C,{l:M.x+Math.floor(L),t:J});
+default:A.marginBox(K,{l:G.x+Math.floor(F),t:D});
 break
-}return C
+}return K
 }}})
 })()
 }}});

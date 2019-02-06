@@ -1,318 +1,117 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.charting.axis2d.Default"],
-["require", "dojox.charting.scaler"],
-["require", "dojox.charting.axis2d.common"],
-["require", "dojox.charting.axis2d.Base"],
-["require", "dojo.colors"],
-["require", "dojox.gfx"],
-["require", "dojox.lang.functional"],
-["require", "dojox.lang.utils"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.charting.axis2d.Default"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.charting.axis2d.Default"] = true;
-dojo.provide("dojox.charting.axis2d.Default");
-
-dojo.require("dojox.charting.scaler");
-dojo.require("dojox.charting.axis2d.common");
-dojo.require("dojox.charting.axis2d.Base");
-
-dojo.require("dojo.colors");
-dojo.require("dojox.gfx");
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.utils");
-
-(function(){
-	var dc = dojox.charting, 
-		df = dojox.lang.functional, 
-		du = dojox.lang.utils, 
-		g = dojox.gfx,
-		labelGap = 4,				// in pixels
-		labelFudgeFactor = 0.8;		// in percents (to convert font's heigth to label width)
-		
-	var eq = function(/* Number */ a, /* Number */ b){
-		// summary: compare two FP numbers for equality
-		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
-	};
-
-	dojo.declare("dojox.charting.axis2d.Default", dojox.charting.axis2d.Base, {
-		 defaultParams: {
-			vertical:    false,		// true for vertical axis
-			fixUpper:    "none",	// align the upper on ticks: "major", "minor", "micro", "none"
-			fixLower:    "none",	// align the lower on ticks: "major", "minor", "micro", "none"
-			natural:     false,		// all tick marks should be made on natural numbers
-			leftBottom:  true,		// position of the axis, used with "vertical"
-			includeZero: false,		// 0 should be included
-			fixed:       true,		// all labels are fixed numbers
-			majorLabels: true,		// draw major labels
-			minorTicks:  true,		// draw minor ticks
-			minorLabels: true,		// draw minor labels
-			microTicks:  false,		// draw micro ticks
-			htmlLabels:  true		// use HTML to draw labels
-		},
-		optionalParams: {
-			"min":           0,		// minimal value on this axis
-			"max":           1,		// maximal value on this axis
-			"majorTickStep": 4,		// major tick step
-			"minorTickStep": 2,		// minor tick step
-			"microTickStep": 1,		// micro tick step
-			"labels":        [],	// array of labels for major ticks
-									// with corresponding numeric values
-									// ordered by values
-			// theme components
-			"stroke":        {},	// stroke for an axis
-			"majorTick":     {},	// stroke + length for a tick
-			"minorTick":     {},	// stroke + length for a tick
-			"font":          "",	// font for labels
-			"fontColor":     ""		// color for labels as a string
-		},
-
-		constructor: function(chart, kwArgs){
-			this.opt = dojo.clone(this.defaultParams);
-			du.updateWithObject(this.opt, kwArgs);
-			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-		},
-		dependOnData: function(){
-			return !("min" in this.opt) || !("max" in this.opt);
-		},
-		clear: function(){
-			delete this.scaler;
-			this.dirty = true;
-			return this;
-		},
-		initialized: function(){
-			return "scaler" in this;
-		},
-		calculate: function(min, max, span, labels){
-			if(this.initialized()){ return this; }
-			this.labels = "labels" in this.opt ? this.opt.labels : labels;
-			if("min" in this.opt){ min = this.opt.min; }
-			if("max" in this.opt){ max = this.opt.max; }
-			if(this.opt.includeZero){
-				if(min > 0){ min = 0; }
-				if(max < 0){ max = 0; }
-			}
-			var minMinorStep = 0, ta = this.chart.theme.axis, 
-				taFont = "font" in this.opt ? this.opt.font : ta.font,
-				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
-			if(this.vertical){
-				if(size){
-					minMinorStep = size + labelGap;
-				}
-			}else{
-				if(size){
-					var labelLength = Math.ceil(Math.log(Math.max(Math.abs(min), Math.abs(max))) / Math.LN10);
-					if(min < 0 || max < 0){ ++labelLength; }
-					var precision = Math.floor(Math.log(max - min) / Math.LN10);
-					if(precision > 0){ labelLength += precision; }
-					if(this.labels){
-						labelLength = df.foldl(df.map(this.labels, "x.text.length"), "Math.max(a, b)", labelLength);
-					}
-					minMinorStep = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
-				}
-			}
-			var kwArgs = {
-				fixUpper: this.opt.fixUpper, 
-				fixLower: this.opt.fixLower, 
-				natural:  this.opt.natural
-			};
-			if("majorTickStep" in this.opt){ kwArgs.majorTick = this.opt.majorTickStep; }
-			if("minorTickStep" in this.opt){ kwArgs.minorTick = this.opt.minorTickStep; }
-			if("microTickStep" in this.opt){ kwArgs.microTick = this.opt.microTickStep; }
-			this.scaler = dojox.charting.scaler(min, max, span, kwArgs);
-			this.scaler.minMinorStep = minMinorStep;
-			return this;
-		},
-		getScaler: function(){
-			return this.scaler;
-		},
-		getOffsets: function(){
-			var offsets = {l: 0, r: 0, t: 0, b: 0};
-			var offset = 0, ta = this.chart.theme.axis,
-				taFont = "font" in this.opt ? this.opt.font : ta.font,
-				taMajorTick = "majorTick" in this.opt ? this.opt.majorTick : ta.majorTick,
-				taMinorTick = "minorTick" in this.opt ? this.opt.minorTick : ta.minorTick,
-				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
-			if(this.vertical){
-				if(size){
-					var s = this.scaler,
-						a = this._getLabel(s.major.start, s.major.prec).length,
-						b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
-						c = this._getLabel(s.minor.start, s.minor.prec).length,
-						d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length,
-						labelLength = Math.max(a, b, c, d);
-					if(this.labels){
-						labelLength = df.foldl(df.map(this.labels, "x.text.length"), "Math.max(a, b)", labelLength);
-					}
-					offset = Math.floor(size * labelLength * labelFudgeFactor) + labelGap;
-				}
-				offset += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
-				offsets[this.opt.leftBottom ? "l" : "r"] = offset;
-				offsets.t = offsets.b = size / 2;
-			}else{
-				if(size){
-					offset = size + labelGap;
-				}
-				offset += labelGap + Math.max(taMajorTick.length, taMinorTick.length);
-				offsets[this.opt.leftBottom ? "b" : "t"] = offset;
-				if(size){
-					var s = this.scaler,
-						a = this._getLabel(s.major.start, s.major.prec).length,
-						b = this._getLabel(s.major.start + s.major.count * s.major.tick, s.major.prec).length,
-						c = this._getLabel(s.minor.start, s.minor.prec).length,
-						d = this._getLabel(s.minor.start + s.minor.count * s.minor.tick, s.minor.prec).length,
-						labelLength = Math.max(a, b, c, d);
-					if(this.labels){
-						labelLength = df.foldl(df.map(this.labels, "x.text.length"), "Math.max(a, b)", labelLength);
-					}
-					offsets.l = offsets.r = Math.floor(size * labelLength * labelFudgeFactor) / 2;
-				}
-			}
-			return offsets;
-		},
-		render: function(dim, offsets){
-			if(!this.dirty){ return this; }
-			// prepare variable
-			var start, stop, axisVector, tickVector, labelOffset, labelAlign,
-				ta = this.chart.theme.axis, 
-				taStroke = "stroke" in this.opt ? this.opt.stroke : ta.stroke,
-				taMajorTick = "majorTick" in this.opt ? this.opt.majorTick : ta.majorTick,
-				taMinorTick = "minorTick" in this.opt ? this.opt.minorTick : ta.minorTick,
-				taFont = "font" in this.opt ? this.opt.font : ta.font,
-				taFontColor = "fontColor" in this.opt ? this.opt.fontColor : ta.fontColor,
-				tickSize = Math.max(taMajorTick.length, taMinorTick.length),
-				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
-			if(this.vertical){
-				start = {y: dim.height - offsets.b};
-				stop  = {y: offsets.t};
-				axisVector = {x: 0, y: -1};
-				if(this.opt.leftBottom){
-					start.x = stop.x = offsets.l;
-					tickVector = {x: -1, y: 0};
-					labelAlign = "end";
-				}else{
-					start.x = stop.x = dim.width - offsets.r;
-					tickVector = {x: 1, y: 0};
-					labelAlign = "start";
-				}
-				labelOffset = {x: tickVector.x * (tickSize + labelGap), y: size * 0.4};
-			}else{
-				start = {x: offsets.l};
-				stop  = {x: dim.width - offsets.r};
-				axisVector = {x: 1, y: 0};
-				labelAlign = "middle";
-				if(this.opt.leftBottom){
-					start.y = stop.y = dim.height - offsets.b;
-					tickVector = {x: 0, y: 1};
-					labelOffset = {y: tickSize + labelGap + size};
-				}else{
-					start.y = stop.y = offsets.t;
-					tickVector = {x: 0, y: -1};
-					labelOffset = {y: -tickSize - labelGap};
-				}
-				labelOffset.x = 0;
-			}
-			
-			// render shapes
-			this.cleanGroup();
-			var s = this.group, c = this.scaler, step, next,
-				nextMajor = c.major.start, nextMinor = c.minor.start, nextMicro = c.micro.start;
-			s.createLine({x1: start.x, y1: start.y, x2: stop.x, y2: stop.y}).setStroke(taStroke);
-			if(this.opt.microTicks && c.micro.tick){
-				step = c.micro.tick, next = nextMicro;
-			}else if(this.opt.minorTicks && c.minor.tick){
-				step = c.minor.tick, next = nextMinor;
-			}else if(c.major.tick){
-				step = c.major.tick, next = nextMajor;
-			}else{
-				// don't draw anything
-				return this;
-			}
-			while(next <= c.bounds.upper + 1/c.scale){
-				var offset = (next - c.bounds.lower) * c.scale,
-					x = start.x + axisVector.x * offset,
-					y = start.y + axisVector.y * offset;
-				if(Math.abs(nextMajor - next) < step / 2){
-					// major tick
-					s.createLine({
-						x1: x, y1: y,
-						x2: x + tickVector.x * taMajorTick.length,
-						y2: y + tickVector.y * taMajorTick.length
-					}).setStroke(taMajorTick);
-					if(this.opt.majorLabels){
-						var elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
-										(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
-											this._getLabel(nextMajor, c.major.prec), taFont, taFontColor);
-						if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
-					}
-					nextMajor += c.major.tick;
-					nextMinor += c.minor.tick;
-					nextMicro += c.micro.tick;
-				}else if(Math.abs(nextMinor - next) < step / 2){
-					// minor tick
-					if(this.opt.minorTicks){
-						s.createLine({
-							x1: x, y1: y,
-							x2: x + tickVector.x * taMinorTick.length,
-							y2: y + tickVector.y * taMinorTick.length
-						}).setStroke(taMinorTick);
-						if(this.opt.minorLabels && (c.minMinorStep <= c.minor.tick * c.scale)){
-							var elem = dc.axis2d.common.createText[this.opt.htmlLabels ? "html" : "gfx"]
-											(this.chart, s, x + labelOffset.x, y + labelOffset.y, labelAlign,
-												this._getLabel(nextMinor, c.minor.prec), taFont, taFontColor);
-							if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
-						}
-					}
-					nextMinor += c.minor.tick;
-					nextMicro += c.micro.tick;
-				}else{
-					// micro tick
-					if(this.opt.microTicks){
-						s.createLine({
-							x1: x, y1: y,
-							// use minor ticks for now
-							x2: x + tickVector.x * taMinorTick.length,
-							y2: y + tickVector.y * taMinorTick.length
-						}).setStroke(taMinorTick);
-					}
-					nextMicro += c.micro.tick;
-				}
-				next += step;
-			}
-			this.dirty = false;
-			return this;
-		},
-		
-		// utilities
-		_getLabel: function(number, precision){
-			if(this.opt.labels){
-				// classic binary search
-				var l = this.opt.labels, lo = 0, hi = l.length;
-				while(lo < hi){
-					var mid = Math.floor((lo + hi) / 2), val = l[mid].value;
-					if(val < number){
-						lo = mid + 1;
-					}else{
-						hi = mid;
-					}
-				}
-				// lets take into account FP errors
-				if(lo < l.length && eq(l[lo].value, number)){
-					return l[lo].text;
-				}
-				--lo;
-				if(lo < l.length && eq(l[lo].value, number)){
-					return l[lo].text;
-				}
-				lo += 2;
-				if(lo < l.length && eq(l[lo].value, number)){
-					return l[lo].text;
-				}
-				// otherwise we will produce a number
-			}
-			return this.opt.fixed ? number.toFixed(precision < 0 ? -precision : 0) : number.toString();
-		}
-	});
-})();
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.charting.axis2d.Default"],["require","dojox.charting.scaler"],["require","dojox.charting.axis2d.common"],["require","dojox.charting.axis2d.Base"],["require","dojo.colors"],["require","dojox.gfx"],["require","dojox.lang.functional"],["require","dojox.lang.utils"]],defineResource:function(A){if(!A._hasResource["dojox.charting.axis2d.Default"]){A._hasResource["dojox.charting.axis2d.Default"]=true;
+A.provide("dojox.charting.axis2d.Default");
+A.require("dojox.charting.scaler");
+A.require("dojox.charting.axis2d.common");
+A.require("dojox.charting.axis2d.Base");
+A.require("dojo.colors");
+A.require("dojox.gfx");
+A.require("dojox.lang.functional");
+A.require("dojox.lang.utils");
+(function(){var D=dojox.charting,H=dojox.lang.functional,E=dojox.lang.utils,F=dojox.gfx,G=4,C=0.8;
+var B=function(J,I){return Math.abs(J-I)<=0.000001*(Math.abs(J)+Math.abs(I))
+};
+A.declare("dojox.charting.axis2d.Default",dojox.charting.axis2d.Base,{defaultParams:{vertical:false,fixUpper:"none",fixLower:"none",natural:false,leftBottom:true,includeZero:false,fixed:true,majorLabels:true,minorTicks:true,minorLabels:true,microTicks:false,htmlLabels:true},optionalParams:{min:0,max:1,majorTickStep:4,minorTickStep:2,microTickStep:1,labels:[],stroke:{},majorTick:{},minorTick:{},font:"",fontColor:""},constructor:function(J,I){this.opt=A.clone(this.defaultParams);
+E.updateWithObject(this.opt,I);
+E.updateWithPattern(this.opt,I,this.optionalParams)
+},dependOnData:function(){return !("min" in this.opt)||!("max" in this.opt)
+},clear:function(){delete this.scaler;
+this.dirty=true;
+return this
+},initialized:function(){return"scaler" in this
+},calculate:function(J,Q,R,N){if(this.initialized()){return this
+}this.labels="labels" in this.opt?this.opt.labels:N;
+if("min" in this.opt){J=this.opt.min
+}if("max" in this.opt){Q=this.opt.max
+}if(this.opt.includeZero){if(J>0){J=0
+}if(Q<0){Q=0
+}}var I=0,K=this.chart.theme.axis,P="font" in this.opt?this.opt.font:K.font,S=P?F.normalizedLength(F.splitFontString(P).size):0;
+if(this.vertical){if(S){I=S+G
+}}else{if(S){var O=Math.ceil(Math.log(Math.max(Math.abs(J),Math.abs(Q)))/Math.LN10);
+if(J<0||Q<0){++O
+}var M=Math.floor(Math.log(Q-J)/Math.LN10);
+if(M>0){O+=M
+}if(this.labels){O=H.foldl(H.map(this.labels,"x.text.length"),"Math.max(a, b)",O)
+}I=Math.floor(S*O*C)+G
+}}var L={fixUpper:this.opt.fixUpper,fixLower:this.opt.fixLower,natural:this.opt.natural};
+if("majorTickStep" in this.opt){L.majorTick=this.opt.majorTickStep
+}if("minorTickStep" in this.opt){L.minorTick=this.opt.minorTickStep
+}if("microTickStep" in this.opt){L.microTick=this.opt.microTickStep
+}this.scaler=dojox.charting.scaler(J,Q,R,L);
+this.scaler.minMinorStep=I;
+return this
+},getScaler:function(){return this.scaler
+},getOffsets:function(){var I={l:0,r:0,t:0,b:0};
+var J=0,K=this.chart.theme.axis,P="font" in this.opt?this.opt.font:K.font,S="majorTick" in this.opt?this.opt.majorTick:K.majorTick,L="minorTick" in this.opt?this.opt.minorTick:K.minorTick,U=P?F.normalizedLength(F.splitFontString(P).size):0;
+if(this.vertical){if(U){var T=this.scaler,R=this._getLabel(T.major.start,T.major.prec).length,Q=this._getLabel(T.major.start+T.major.count*T.major.tick,T.major.prec).length,O=this._getLabel(T.minor.start,T.minor.prec).length,N=this._getLabel(T.minor.start+T.minor.count*T.minor.tick,T.minor.prec).length,M=Math.max(R,Q,O,N);
+if(this.labels){M=H.foldl(H.map(this.labels,"x.text.length"),"Math.max(a, b)",M)
+}J=Math.floor(U*M*C)+G
+}J+=G+Math.max(S.length,L.length);
+I[this.opt.leftBottom?"l":"r"]=J;
+I.t=I.b=U/2
+}else{if(U){J=U+G
+}J+=G+Math.max(S.length,L.length);
+I[this.opt.leftBottom?"b":"t"]=J;
+if(U){var T=this.scaler,R=this._getLabel(T.major.start,T.major.prec).length,Q=this._getLabel(T.major.start+T.major.count*T.major.tick,T.major.prec).length,O=this._getLabel(T.minor.start,T.minor.prec).length,N=this._getLabel(T.minor.start+T.minor.count*T.minor.tick,T.minor.prec).length,M=Math.max(R,Q,O,N);
+if(this.labels){M=H.foldl(H.map(this.labels,"x.text.length"),"Math.max(a, b)",M)
+}I.l=I.r=Math.floor(U*M*C)/2
+}}return I
+},render:function(b,P){if(!this.dirty){return this
+}var N,a,S,I,d,j,T=this.chart.theme.axis,i="stroke" in this.opt?this.opt.stroke:T.stroke,V="majorTick" in this.opt?this.opt.majorTick:T.majorTick,M="minorTick" in this.opt?this.opt.minorTick:T.minorTick,h="font" in this.opt?this.opt.font:T.font,J="fontColor" in this.opt?this.opt.fontColor:T.fontColor,Y=Math.max(V.length,M.length),X=h?F.normalizedLength(F.splitFontString(h).size):0;
+if(this.vertical){N={y:b.height-P.b};
+a={y:P.t};
+S={x:0,y:-1};
+if(this.opt.leftBottom){N.x=a.x=P.l;
+I={x:-1,y:0};
+j="end"
+}else{N.x=a.x=b.width-P.r;
+I={x:1,y:0};
+j="start"
+}d={x:I.x*(Y+G),y:X*0.4}
+}else{N={x:P.l};
+a={x:b.width-P.r};
+S={x:1,y:0};
+j="middle";
+if(this.opt.leftBottom){N.y=a.y=b.height-P.b;
+I={x:0,y:1};
+d={y:Y+G+X}
+}else{N.y=a.y=P.t;
+I={x:0,y:-1};
+d={y:-Y-G}
+}d.x=0
+}this.cleanGroup();
+var W=this.group,g=this.scaler,Q,Z,e=g.major.start,L=g.minor.start,K=g.micro.start;
+W.createLine({x1:N.x,y1:N.y,x2:a.x,y2:a.y}).setStroke(i);
+if(this.opt.microTicks&&g.micro.tick){Q=g.micro.tick,Z=K
+}else{if(this.opt.minorTicks&&g.minor.tick){Q=g.minor.tick,Z=L
+}else{if(g.major.tick){Q=g.major.tick,Z=e
+}else{return this
+}}}while(Z<=g.bounds.upper+1/g.scale){var O=(Z-g.bounds.lower)*g.scale,U=N.x+S.x*O,R=N.y+S.y*O;
+if(Math.abs(e-Z)<Q/2){W.createLine({x1:U,y1:R,x2:U+I.x*V.length,y2:R+I.y*V.length}).setStroke(V);
+if(this.opt.majorLabels){var f=D.axis2d.common.createText[this.opt.htmlLabels?"html":"gfx"](this.chart,W,U+d.x,R+d.y,j,this._getLabel(e,g.major.prec),h,J);
+if(this.opt.htmlLabels){this.htmlElements.push(f)
+}}e+=g.major.tick;
+L+=g.minor.tick;
+K+=g.micro.tick
+}else{if(Math.abs(L-Z)<Q/2){if(this.opt.minorTicks){W.createLine({x1:U,y1:R,x2:U+I.x*M.length,y2:R+I.y*M.length}).setStroke(M);
+if(this.opt.minorLabels&&(g.minMinorStep<=g.minor.tick*g.scale)){var f=D.axis2d.common.createText[this.opt.htmlLabels?"html":"gfx"](this.chart,W,U+d.x,R+d.y,j,this._getLabel(L,g.minor.prec),h,J);
+if(this.opt.htmlLabels){this.htmlElements.push(f)
+}}}L+=g.minor.tick;
+K+=g.micro.tick
+}else{if(this.opt.microTicks){W.createLine({x1:U,y1:R,x2:U+I.x*M.length,y2:R+I.y*M.length}).setStroke(M)
+}K+=g.micro.tick
+}}Z+=Q
+}this.dirty=false;
+return this
+},_getLabel:function(N,J){if(this.opt.labels){var I=this.opt.labels,M=0,L=I.length;
+while(M<L){var K=Math.floor((M+L)/2),O=I[K].value;
+if(O<N){M=K+1
+}else{L=K
+}}if(M<I.length&&B(I[M].value,N)){return I[M].text
+}--M;
+if(M<I.length&&B(I[M].value,N)){return I[M].text
+}M+=2;
+if(M<I.length&&B(I[M].value,N)){return I[M].text
+}}return this.opt.fixed?N.toFixed(J<0?-J:0):N.toString()
+}})
+})()
+}}});

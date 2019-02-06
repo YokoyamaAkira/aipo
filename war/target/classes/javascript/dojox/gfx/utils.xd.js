@@ -1,40 +1,40 @@
 dojo._xdResourceLoaded({depends:[["provide","dojox.gfx.utils"],["require","dojox.gfx"]],defineResource:function(A){if(!A._hasResource["dojox.gfx.utils"]){A._hasResource["dojox.gfx.utils"]=true;
 A.provide("dojox.gfx.utils");
 A.require("dojox.gfx");
-dojox.gfx.utils.serialize=function(D){var F={},C,B=D instanceof dojox.gfx.Surface;
-if(B||D instanceof dojox.gfx.Group){F.children=[];
-for(var E=0;
-E<D.children.length;
-++E){F.children.push(dojox.gfx.utils.serialize(D.children[E]))
-}if(B){return F.children
-}}else{F.shape=D.getShape()
-}if(D.getTransform){C=D.getTransform();
-if(C){F.transform=C
-}}if(D.getStroke){C=D.getStroke();
-if(C){F.stroke=C
-}}if(D.getFill){C=D.getFill();
-if(C){F.fill=C
-}}if(D.getFont){C=D.getFont();
-if(C){F.font=C
-}}return F
-};
-dojox.gfx.utils.toJson=function(B,C){return A.toJson(dojox.gfx.utils.serialize(B),C)
-};
-dojox.gfx.utils.deserialize=function(F,C){if(C instanceof Array){var E=[];
-for(var D=0;
-D<C.length;
-++D){E.push(dojox.gfx.utils.deserialize(F,C[D]))
-}return E
-}var B=("shape" in C)?F.createShape(C.shape):F.createGroup();
-if("transform" in C){B.setTransform(C.transform)
-}if("stroke" in C){B.setStroke(C.stroke)
-}if("fill" in C){B.setFill(C.fill)
-}if("font" in C){B.setFont(C.font)
-}if("children" in C){for(var D=0;
-D<C.children.length;
-++D){dojox.gfx.utils.deserialize(B,C.children[D])
+dojox.gfx.utils.serialize=function(E){var B={},D,C=E instanceof dojox.gfx.Surface;
+if(C||E instanceof dojox.gfx.Group){B.children=[];
+for(var F=0;
+F<E.children.length;
+++F){B.children.push(dojox.gfx.utils.serialize(E.children[F]))
+}if(C){return B.children
+}}else{B.shape=E.getShape()
+}if(E.getTransform){D=E.getTransform();
+if(D){B.transform=D
+}}if(E.getStroke){D=E.getStroke();
+if(D){B.stroke=D
+}}if(E.getFill){D=E.getFill();
+if(D){B.fill=D
+}}if(E.getFont){D=E.getFont();
+if(D){B.font=D
 }}return B
 };
-dojox.gfx.utils.fromJson=function(C,B){return dojox.gfx.utils.deserialize(C,A.fromJson(B))
+dojox.gfx.utils.toJson=function(C,B){return A.toJson(dojox.gfx.utils.serialize(C),B)
+};
+dojox.gfx.utils.deserialize=function(B,D){if(D instanceof Array){var F=[];
+for(var E=0;
+E<D.length;
+++E){F.push(dojox.gfx.utils.deserialize(B,D[E]))
+}return F
+}var C=("shape" in D)?B.createShape(D.shape):B.createGroup();
+if("transform" in D){C.setTransform(D.transform)
+}if("stroke" in D){C.setStroke(D.stroke)
+}if("fill" in D){C.setFill(D.fill)
+}if("font" in D){C.setFont(D.font)
+}if("children" in D){for(var E=0;
+E<D.children.length;
+++E){dojox.gfx.utils.deserialize(C,D.children[E])
+}}return C
+};
+dojox.gfx.utils.fromJson=function(B,C){return dojox.gfx.utils.deserialize(B,A.fromJson(C))
 }
 }}});

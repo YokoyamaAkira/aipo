@@ -1,15 +1,15 @@
 if(!dojo._hasResource["dojo.dnd.Moveable"]){dojo._hasResource["dojo.dnd.Moveable"]=true;
 dojo.provide("dojo.dnd.Moveable");
 dojo.require("dojo.dnd.Mover");
-dojo.declare("dojo.dnd.Moveable",null,{handle:"",delay:0,skip:false,constructor:function(A,B){this.node=dojo.byId(A);
-if(!B){B={}
-}this.handle=B.handle?dojo.byId(B.handle):null;
+dojo.declare("dojo.dnd.Moveable",null,{handle:"",delay:0,skip:false,constructor:function(B,A){this.node=dojo.byId(B);
+if(!A){A={}
+}this.handle=A.handle?dojo.byId(A.handle):null;
 if(!this.handle){this.handle=this.node
-}this.delay=B.delay>0?B.delay:0;
-this.skip=B.skip;
-this.mover=B.mover?B.mover:dojo.dnd.Mover;
+}this.delay=A.delay>0?A.delay:0;
+this.skip=A.skip;
+this.mover=A.mover?A.mover:dojo.dnd.Mover;
 this.events=[dojo.connect(this.handle,"onmousedown",this,"onMouseDown"),dojo.connect(this.handle,"ondragstart",this,"onSelectStart"),dojo.connect(this.handle,"onselectstart",this,"onSelectStart")]
-},markupFactory:function(B,A){return new dojo.dnd.Moveable(A,B)
+},markupFactory:function(A,B){return new dojo.dnd.Moveable(B,A)
 },destroy:function(){dojo.forEach(this.events,dojo.disconnect);
 this.events=this.node=this.handle=null
 },onMouseDown:function(A){if(this.skip&&dojo.dnd.isFormElement(A)){return 
@@ -31,8 +31,8 @@ dojo.addClass(this.node,"dojoMoveItem")
 },onMoveStop:function(A){dojo.publish("/dnd/move/stop",[A]);
 dojo.removeClass(dojo.body(),"dojoMove");
 dojo.removeClass(this.node,"dojoMoveItem")
-},onFirstMove:function(A){},onMove:function(B,A){this.onMoving(B,A);
-dojo.marginBox(B.node,A);
-this.onMoved(B,A)
-},onMoving:function(B,A){},onMoved:function(B,A){}})
+},onFirstMove:function(A){},onMove:function(A,B){this.onMoving(A,B);
+dojo.marginBox(A.node,B);
+this.onMoved(A,B)
+},onMoving:function(A,B){},onMoved:function(A,B){}})
 };

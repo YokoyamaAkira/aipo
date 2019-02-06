@@ -15,40 +15,40 @@ this.invalidMessage=dojo.i18n.getLocalization("dijit._editor","LinkDialog",this.
 },getValue:function(){if(!/^(https?|ftps?)/.test(this.textbox.value)){this.textbox.value="http://"+this.textbox.value
 }return this.textbox.value
 }});
-dojo.declare("dijit._editor.plugins.LinkDialog",dijit._editor._Plugin,{buttonClass:dijit._editor.plugins.DualStateDropDownButton,useDefaultCommand:false,command:"createLink",linkDialogTemplate:["<label for='urlInput'>${url}&nbsp;</label>","<input dojoType=dijit._editor.plugins.UrlTextBox name='urlInput'><br>","<label for='textInput'>${text}&nbsp;</label>","<input dojoType=dijit.form.TextBox name='textInput'>","<br>","<button dojoType=dijit.form.Button type='submit'>${set}</button>"].join(""),constructor:function(){var B=this;
-var A=dojo.i18n.getLocalization("dijit._editor","LinkDialog",this.lang);
-this.dropDown=new dijit.TooltipDialog({title:A.title,execute:dojo.hitch(this,"setValue"),onOpen:function(){B._onOpenDialog();
+dojo.declare("dijit._editor.plugins.LinkDialog",dijit._editor._Plugin,{buttonClass:dijit._editor.plugins.DualStateDropDownButton,useDefaultCommand:false,command:"createLink",linkDialogTemplate:["<label for='urlInput'>${url}&nbsp;</label>","<input dojoType=dijit._editor.plugins.UrlTextBox name='urlInput'><br>","<label for='textInput'>${text}&nbsp;</label>","<input dojoType=dijit.form.TextBox name='textInput'>","<br>","<button dojoType=dijit.form.Button type='submit'>${set}</button>"].join(""),constructor:function(){var A=this;
+var B=dojo.i18n.getLocalization("dijit._editor","LinkDialog",this.lang);
+this.dropDown=new dijit.TooltipDialog({title:B.title,execute:dojo.hitch(this,"setValue"),onOpen:function(){A._onOpenDialog();
 dijit.TooltipDialog.prototype.onOpen.apply(this,arguments)
-},onCancel:function(){setTimeout(dojo.hitch(B,"_onCloseDialog"),0)
+},onCancel:function(){setTimeout(dojo.hitch(A,"_onCloseDialog"),0)
 },onClose:dojo.hitch(this,"_onCloseDialog")});
-this.dropDown.setContent(dojo.string.substitute(this.linkDialogTemplate,A));
+this.dropDown.setContent(dojo.string.substitute(this.linkDialogTemplate,B));
 this.dropDown.startup()
-},setValue:function(B){this._onCloseDialog();
-if(dojo.isIE){var A=dojo.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,["a"]);
-if(A){dojo.withGlobal(this.editor.window,"selectElement",dijit._editor.selection,[A])
-}}var C='href="'+B.urlInput+'" _djrealurl="'+B.urlInput+'"';
-this.editor.execCommand("inserthtml","<a "+C+">"+B.textInput+"</a>")
-},_onCloseDialog:function(){if(dojo.isIE){if(this._savedSelection){var A=this._savedSelection;
+},setValue:function(A){this._onCloseDialog();
+if(dojo.isIE){var C=dojo.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,["a"]);
+if(C){dojo.withGlobal(this.editor.window,"selectElement",dijit._editor.selection,[C])
+}}var B='href="'+A.urlInput+'" _djrealurl="'+A.urlInput+'"';
+this.editor.execCommand("inserthtml","<a "+B+">"+A.textInput+"</a>")
+},_onCloseDialog:function(){if(dojo.isIE){if(this._savedSelection){var B=this._savedSelection;
 this._savedSelection=null;
 this.editor.focus();
-var B=this.editor.document.selection.createRange();
-B.moveToBookmark(A);
-B.select()
+var A=this.editor.document.selection.createRange();
+A.moveToBookmark(B);
+A.select()
 }}else{this.editor.focus()
-}},_onOpenDialog:function(){var A=dojo.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,["a"]);
-var C="",D="";
-if(A){C=A.getAttribute("_djrealurl");
-D=A.textContent||A.innerText;
-dojo.withGlobal(this.editor.window,"selectElement",dijit._editor.selection,[A,true])
-}else{D=dojo.withGlobal(this.editor.window,dijit._editor.selection.getSelectedText)
-}if(dojo.isIE){var B=this.editor.document.selection.createRange();
-this._savedSelection=B.getBookmark()
-}this.dropDown.setValues({urlInput:C,textInput:D})
-},updateState:function(){var A=this.editor;
-if(!A){return 
-}if(!A.isLoaded){return 
-}if(this.button){try{var B=dojo.withGlobal(this.editor.window,"hasAncestorElement",dijit._editor.selection,["a"]);
-this.button.setChecked(B)
-}catch(C){console.debug(C)
+}},_onOpenDialog:function(){var D=dojo.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,["a"]);
+var B="",C="";
+if(D){B=D.getAttribute("_djrealurl");
+C=D.textContent||D.innerText;
+dojo.withGlobal(this.editor.window,"selectElement",dijit._editor.selection,[D,true])
+}else{C=dojo.withGlobal(this.editor.window,dijit._editor.selection.getSelectedText)
+}if(dojo.isIE){var A=this.editor.document.selection.createRange();
+this._savedSelection=A.getBookmark()
+}this.dropDown.setValues({urlInput:B,textInput:C})
+},updateState:function(){var C=this.editor;
+if(!C){return 
+}if(!C.isLoaded){return 
+}if(this.button){try{var A=dojo.withGlobal(this.editor.window,"hasAncestorElement",dijit._editor.selection,["a"]);
+this.button.setChecked(A)
+}catch(B){console.debug(B)
 }}}})
 };

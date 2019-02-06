@@ -91,7 +91,6 @@ public class ALVelocityPortletSetControl extends ALVelocityPortletControl {
    * @param portlet
    *          the base portlet to explore for children @
    */
-  @SuppressWarnings("finally")
   private Collection<PortletTab> getTabs(PortletSet portlets, RunData rundata,
       Context context) {
     TreeSet<PortletTab> tabs =
@@ -124,6 +123,7 @@ public class ALVelocityPortletSetControl extends ALVelocityPortletControl {
       }
     }
 
+    @SuppressWarnings("unused")
     int count = 0;
     for (Enumeration<?> en = portlets.getPortlets(); en.hasMoreElements(); count++) {
       Portlet p = (Portlet) en.nextElement();

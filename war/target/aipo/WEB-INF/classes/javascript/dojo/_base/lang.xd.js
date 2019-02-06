@@ -12,59 +12,59 @@ return A.isSafari?function(C){if(typeof C=="function"&&C=="[object NodeList]"){r
 })();
 A.isObject=function(B){return B!==undefined&&(B===null||typeof B=="object"||A.isArray(B)||A.isFunction(B))
 };
-A.isArrayLike=function(B){var C=A;
-return B&&B!==undefined&&!C.isString(B)&&!C.isFunction(B)&&!(B.tagName&&B.tagName.toLowerCase()=="form")&&(C.isArray(B)||isFinite(B.length))
+A.isArrayLike=function(C){var B=A;
+return C&&C!==undefined&&!B.isString(C)&&!B.isFunction(C)&&!(C.tagName&&C.tagName.toLowerCase()=="form")&&(B.isArray(C)||isFinite(C.length))
 };
 A.isAlien=function(B){return B&&!A.isFunction(B)&&/\{\s*\[native code\]\s*\}/.test(String(B))
 };
-A.extend=function(E,D){for(var C=1,B=arguments.length;
-C<B;
-C++){A._mixin(E.prototype,arguments[C])
-}return E
+A.extend=function(B,E){for(var D=1,C=arguments.length;
+D<C;
+D++){A._mixin(B.prototype,arguments[D])
+}return B
 };
-A._hitchArgs=function(C,E){var D=A._toArray(arguments,2);
-var B=A.isString(E);
+A._hitchArgs=function(D,B){var E=A._toArray(arguments,2);
+var C=A.isString(B);
 return function(){var F=A._toArray(arguments);
-var G=B?(C||A.global)[E]:E;
-return G&&G.apply(C||this,D.concat(F))
+var G=C?(D||A.global)[B]:B;
+return G&&G.apply(D||this,E.concat(F))
 }
 };
-A.hitch=function(B,C){if(arguments.length>2){return A._hitchArgs.apply(A,arguments)
-}if(!C){C=B;
-B=null
-}if(A.isString(C)){B=B||A.global;
-if(!B[C]){throw (['dojo.hitch: scope["',C,'"] is null (scope="',B,'")'].join(""))
-}return function(){return B[C].apply(B,arguments||[])
+A.hitch=function(C,B){if(arguments.length>2){return A._hitchArgs.apply(A,arguments)
+}if(!B){B=C;
+C=null
+}if(A.isString(B)){C=C||A.global;
+if(!C[B]){throw (['dojo.hitch: scope["',B,'"] is null (scope="',C,'")'].join(""))
+}return function(){return C[B].apply(C,arguments||[])
 }
-}return !B?C:function(){return C.apply(B,arguments||[])
+}return !C?B:function(){return B.apply(C,arguments||[])
 }
 };
-A.delegate=A._delegate=function(E,D){function B(){}B.prototype=E;
-var C=new B();
-if(D){A.mixin(C,D)
-}return C
+A.delegate=A._delegate=function(B,E){function C(){}C.prototype=B;
+var D=new C();
+if(E){A.mixin(D,E)
+}return D
 };
-A.partial=function(C){var B=[null];
-return A.hitch.apply(A,B.concat(A._toArray(arguments)))
+A.partial=function(B){var C=[null];
+return A.hitch.apply(A,C.concat(A._toArray(arguments)))
 };
-A._toArray=function(E,F,D){var C=D||[];
-for(var B=F||0;
-B<E.length;
-B++){C.push(E[B])
-}return C
+A._toArray=function(F,B,E){var D=E||[];
+for(var C=B||0;
+C<F.length;
+C++){D.push(F[C])
+}return D
 };
-A.clone=function(D){if(!D){return D
-}if(A.isArray(D)){var C=[];
-for(var B=0;
-B<D.length;
-++B){C.push(A.clone(D[B]))
-}return C
-}if(!A.isObject(D)){return D
-}if(D.nodeType&&D.cloneNode){return D.cloneNode(true)
-}if(D instanceof Date){return new Date(D.getTime())
-}var C=new D.constructor();
-for(var B in D){if(!(B in C)||C[B]!=D[B]){C[B]=A.clone(D[B])
-}}return C
+A.clone=function(B){if(!B){return B
+}if(A.isArray(B)){var D=[];
+for(var C=0;
+C<B.length;
+++C){D.push(A.clone(B[C]))
+}return D
+}if(!A.isObject(B)){return B
+}if(B.nodeType&&B.cloneNode){return B.cloneNode(true)
+}if(B instanceof Date){return new Date(B.getTime())
+}var D=new B.constructor();
+for(var C in B){if(!(C in D)||D[C]!=B[C]){D[C]=A.clone(B[C])
+}}return D
 };
 A.trim=function(B){return B.replace(/^\s\s*/,"").replace(/\s\s*$/,"")
 }

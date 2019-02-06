@@ -6,71 +6,71 @@ dojox.fx.combine=A.fx.combine;
 dojox.fx.wipeIn=A.fx.wipeIn;
 dojox.fx.wipeOut=A.fx.wipeOut;
 dojox.fx.slideTo=A.fx.slideTo;
-dojox.fx.sizeTo=function(I){var E=(I.node=A.byId(I.node));
-var L=A.getComputedStyle;
-var B=I.method||"chain";
-if(B=="chain"){I.duration=Math.floor(I.duration/2)
-}var K,J,D,M,C,N=null;
-var O=(function(){var P=E;
-return function(){var R=L(P).position;
-K=(R=="absolute"?E.offsetTop:parseInt(L(E).top)||0);
-D=(R=="absolute"?E.offsetLeft:parseInt(L(E).left)||0);
-C=parseInt(A.style(E,"width"));
-N=parseInt(A.style(E,"height"));
-M=D-Math.floor((I.width-C)/2);
-J=K-Math.floor((I.height-N)/2);
+dojox.fx.sizeTo=function(D){var N=(D.node=A.byId(D.node));
+var H=A.getComputedStyle;
+var L=D.method||"chain";
+if(L=="chain"){D.duration=Math.floor(D.duration/2)
+}var G,F,E,I,M,J=null;
+var K=(function(){var P=N;
+return function(){var R=H(P).position;
+G=(R=="absolute"?N.offsetTop:parseInt(H(N).top)||0);
+E=(R=="absolute"?N.offsetLeft:parseInt(H(N).left)||0);
+M=parseInt(A.style(N,"width"));
+J=parseInt(A.style(N,"height"));
+I=E-Math.floor((D.width-M)/2);
+F=G-Math.floor((D.height-J)/2);
 if(R!="absolute"&&R!="relative"){var Q=A.coords(P,true);
-K=Q.y;
-D=Q.x;
+G=Q.y;
+E=Q.x;
 P.style.position="absolute";
-P.style.top=K+"px";
-P.style.left=D+"px"
+P.style.top=G+"px";
+P.style.left=E+"px"
 }}
 })();
-O();
-var H=A.animateProperty(A.mixin({properties:{height:{start:N,end:I.height||0,unit:"px"},top:{start:K,end:J}}},I));
-var G=A.animateProperty(A.mixin({properties:{width:{start:C,end:I.width||0,unit:"px"},left:{start:D,end:M}}},I));
-var F=A.fx[((I.method=="combine")?"combine":"chain")]([H,G]);
-A.connect(F,"beforeBegin",F,O);
-return F
+K();
+var C=A.animateProperty(A.mixin({properties:{height:{start:J,end:D.height||0,unit:"px"},top:{start:G,end:F}}},D));
+var B=A.animateProperty(A.mixin({properties:{width:{start:M,end:D.width||0,unit:"px"},left:{start:E,end:I}}},D));
+var O=A.fx[((D.method=="combine")?"combine":"chain")]([C,B]);
+A.connect(O,"beforeBegin",O,K);
+return O
 };
-dojox.fx.slideBy=function(B){var D=(B.node=A.byId(B.node));
-var G=A.getComputedStyle;
-var F=null;
+dojox.fx.slideBy=function(G){var C=(G.node=A.byId(G.node));
+var F=A.getComputedStyle;
 var E=null;
-var H=(function(){var I=D;
-return function(){var K=G(I,"position");
-F=(K=="absolute"?D.offsetTop:parseInt(G(D,"top"))||0);
-E=(K=="absolute"?D.offsetLeft:parseInt(G(D,"left"))||0);
+var D=null;
+var B=(function(){var I=C;
+return function(){var K=F(I,"position");
+E=(K=="absolute"?C.offsetTop:parseInt(F(C,"top"))||0);
+D=(K=="absolute"?C.offsetLeft:parseInt(F(C,"left"))||0);
 if(K!="absolute"&&K!="relative"){var J=A.coords(I,true);
-F=J.y;
-E=J.x;
+E=J.y;
+D=J.x;
 I.style.position="absolute";
-I.style.top=F+"px";
-I.style.left=E+"px"
+I.style.top=E+"px";
+I.style.left=D+"px"
 }}
 })();
-H();
-var C=A.animateProperty(A.mixin({properties:{top:{end:F+(B.top||0)},left:{end:E+(B.left||0)}}},B));
-A.connect(C,"beforeBegin",C,H);
-return C
+B();
+var H=A.animateProperty(A.mixin({properties:{top:{end:E+(G.top||0)},left:{end:D+(G.left||0)}}},G));
+A.connect(H,"beforeBegin",H,B);
+return H
 };
-dojox.fx.crossFade=function(D){if(A.isArray(D.nodes)){var C=D.nodes[0]=A.byId(D.nodes[0]);
-var G=A.style(C,"opacity");
-var B=D.nodes[1]=A.byId(D.nodes[1]);
-var E=A.style(B,"opacity");
-var F=A.fx.combine([A[((G==0)?"fadeIn":"fadeOut")](A.mixin({node:C},D)),A[((G==0)?"fadeOut":"fadeIn")](A.mixin({node:B},D))]);
-return F
+dojox.fx.crossFade=function(E){if(A.isArray(E.nodes)){var D=E.nodes[0]=A.byId(E.nodes[0]);
+var C=A.style(D,"opacity");
+var B=E.nodes[1]=A.byId(E.nodes[1]);
+var F=A.style(B,"opacity");
+var G=A.fx.combine([A[((C==0)?"fadeIn":"fadeOut")](A.mixin({node:D},E)),A[((C==0)?"fadeOut":"fadeIn")](A.mixin({node:B},E))]);
+return G
 }else{return false
 }};
-dojox.fx.highlight=function(B){var E=(B.node=A.byId(B.node));
-B.duration=B.duration||400;
-var G=B.color||"#ffff99";
-var D=A.style(E,"backgroundColor");
-var C=(D=="transparent"||D=="rgba(0, 0, 0, 0)");
-var F=A.animateProperty(A.mixin({properties:{backgroundColor:{start:G,end:D}}},B));
-A.connect(F,"onEnd",F,function(){if(C){E.style.backgroundColor="transparent"
+dojox.fx.highlight=function(C){var F=(C.node=A.byId(C.node));
+C.duration=C.duration||400;
+var B=C.color||"#ffff99";
+var E=A.style(F,"backgroundColor");
+var D=(E=="transparent"||E=="rgba(0, 0, 0, 0)");
+var G=A.animateProperty(A.mixin({properties:{backgroundColor:{start:B,end:E}}},C));
+A.connect(G,"onEnd",G,function(){if(D){F.style.backgroundColor="transparent"
 }});
-return F
+return G
 }
 }}});

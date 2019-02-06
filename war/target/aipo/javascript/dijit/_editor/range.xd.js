@@ -1,570 +1,273 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dijit._editor.range"]],
-defineResource: function(dojo){if(!dojo._hasResource["dijit._editor.range"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit._editor.range"] = true;
-dojo.provide("dijit._editor.range");
-
+dojo._xdResourceLoaded({depends:[["provide","dijit._editor.range"]],defineResource:function(A){if(!A._hasResource["dijit._editor.range"]){A._hasResource["dijit._editor.range"]=true;
+A.provide("dijit._editor.range");
 dijit.range={};
-
-dijit.range.getIndex=function(/*DomNode*/node, /*DomNode*/parent){
-//	dojo.profile.start("dijit.range.getIndex");
-	var ret=[], retR=[];
-	var stop = parent;
-	var onode = node;
-
-	while(node != stop){
-		var i = 0;
-		var pnode = node.parentNode, n;
-		while(n=pnode.childNodes[i++]){
-			if(n===node){
-				--i;
-				break;
-			}
-		}
-		if(i>=pnode.childNodes.length){
-			dojo.debug("Error finding index of a node in dijit.range.getIndex");
-		}
-		ret.unshift(i);
-		retR.unshift(i-pnode.childNodes.length);
-		node = pnode;
-	}
-
-	//normalized() can not be called so often to prevent
-	//invalidating selection/range, so we have to detect
-	//here that any text nodes in a row
-	if(ret.length>0 && onode.nodeType==3){
-		var n = onode.previousSibling;
-		while(n && n.nodeType==3){
-			ret[ret.length-1]--;
-			n = n.previousSibling;
-		}
-		n = onode.nextSibling;
-		while(n && n.nodeType==3){
-			retR[retR.length-1]++;
-			n = n.nextSibling;
-		}
-	}
-//	dojo.profile.end("dijit.range.getIndex");
-	return {o: ret, r:retR};
-}
-
-dijit.range.getNode = function(/*Array*/index, /*DomNode*/parent){
-	if(!dojo.isArray(index) || index.length==0){
-		return parent;
-	}
-	var node = parent;
-//	if(!node)debugger
-	dojo.every(index, function(i){
-		if(i>=0&&i< node.childNodes.length){
-			node = node.childNodes[i];
-		}else{
-			node = null;
-			console.debug('Error: can not find node with index',index,'under parent node',parent );
-			return false; //terminate dojo.every
-		}
-		return true; //carry on the every loop
-	});
-
-	return node;
-}
-
-dijit.range.getCommonAncestor = function(n1,n2,root){
-	var getAncestors = function(n,root){
-		var as=[];
-		while(n){
-			as.unshift(n);
-			if(n!=root && n.tagName!='BODY'){
-				n = n.parentNode;
-			}else{
-				break;
-			}
-		}
-		return as;
-	};
-	var n1as = getAncestors(n1,root);
-	var n2as = getAncestors(n2,root);
-
-	var m = Math.min(n1as.length,n2as.length);
-	var com = n1as[0]; //at least, one element should be in the array: the root (BODY by default)
-	for(var i=1;i<m;i++){
-		if(n1as[i]===n2as[i]){
-			com = n1as[i]
-		}else{
-			break;
-		}
-	}
-	return com;
-}
-
-dijit.range.getAncestor = function(/*DomNode*/node, /*RegEx?*/regex, /*DomNode?*/root){
-	root = root || node.ownerDocument.body;
-	while(node && node !== root){
-		var name = node.nodeName.toUpperCase() ;
-		if(regex.test(name)){
-			return node;
-		}
-
-		node = node.parentNode;
-	}
-	return null;
-}
-
-dijit.range.BlockTagNames = /^(?:P|DIV|H1|H2|H3|H4|H5|H6|ADDRESS|PRE|OL|UL|LI|DT|DE)$/;
-dijit.range.getBlockAncestor = function(/*DomNode*/node, /*RegEx?*/regex, /*DomNode?*/root){
-	root = root || node.ownerDocument.body;
-	regex = regex || dijit.range.BlockTagNames;
-	var block=null, blockContainer;
-	while(node && node !== root){
-		var name = node.nodeName.toUpperCase() ;
-		if(!block && regex.test(name)){
-			block = node;
-		}
-		if(!blockContainer && (/^(?:BODY|TD|TH|CAPTION)$/).test(name)){
-			blockContainer = node;
-		}
-
-		node = node.parentNode;
-	}
-	return {blockNode:block, blockContainer:blockContainer || node.ownerDocument.body};
-}
-
-dijit.range.atBeginningOfContainer = function(/*DomNode*/container, /*DomNode*/node, /*Int*/offset){
-	var atBeginning = false;
-	var offsetAtBeginning = (offset == 0);
-	if(!offsetAtBeginning && node.nodeType==3){ //if this is a text node, check whether the left part is all space
-		if(dojo.trim(node.nodeValue.substr(0,offset))==0){
-			offsetAtBeginning = true;
-		}
-	}
-	if(offsetAtBeginning){
-		var cnode = node;
-		atBeginning = true;
-		while(cnode && cnode !== container){
-			if(cnode.previousSibling){
-				atBeginning = false;
-				break;
-			}
-			cnode = cnode.parentNode;
-		}
-	}
-	return atBeginning;
-}
-
-dijit.range.atEndOfContainer = function(/*DomNode*/container, /*DomNode*/node, /*Int*/offset){
-	var atEnd = false;
-	var offsetAtEnd = (offset == (node.length || node.childNodes.length));
-	if(!offsetAtEnd && node.nodeType==3){ //if this is a text node, check whether the right part is all space
-		if(dojo.trim(node.nodeValue.substr(offset))==0){
-			offsetAtEnd = true;
-		}
-	}
-	if(offsetAtEnd){
-		var cnode = node;
-		atEnd = true;
-		while(cnode && cnode !== container){
-			if(cnode.nextSibling){
-				atEnd = false;
-				break;
-			}
-			cnode = cnode.parentNode;
-		}
-	}
-	return atEnd;
-}
-
-dijit.range.adjacentNoneTextNode=function(startnode, next){
-	var node = startnode;
-	var len = (0-startnode.length) || 0;
-	var prop = next?'nextSibling':'previousSibling';
-	while(node){
-		if(node.nodeType!=3){
-			break;
-		}
-		len += node.length
-		node = node[prop];
-	}
-	return [node,len];
-}
-
-dijit.range._w3c = Boolean(window['getSelection']);
-dijit.range.create = function(){
-	if(dijit.range._w3c){
-		return document.createRange();
-	}else{//IE
-		return new dijit.range.W3CRange;
-	}
-}
-
-dijit.range.getSelection = function(win, /*Boolean?*/ignoreUpdate){
-	if(dijit.range._w3c){
-		return win.getSelection();
-	}else{//IE
-		var id=win.__W3CRange;
-		if(!id || !dijit.range.ie.cachedSelection[id]){
-			var s = new dijit.range.ie.selection(win);
-			//use win as the key in an object is not reliable, which
-			//can leads to quite odd behaviors. thus we generate a
-			//string and use it as a key in the cache
-			id=(new Date).getTime();
-			while(id in dijit.range.ie.cachedSelection){
-				id=id+1;
-			}
-			id=String(id);
-			dijit.range.ie.cachedSelection[id] = s;
-		}else{
-			var s = dijit.range.ie.cachedSelection[id];
-		}
-		if(!ignoreUpdate){
-			s._getCurrentSelection();
-		}
-		return s;
-	}
-}
-
-if(!dijit.range._w3c){
-	dijit.range.ie={
-		cachedSelection: {},
-		selection: function(win){
-			this._ranges = [];
-			this.addRange = function(r, /*boolean*/internal){
-				this._ranges.push(r);
-				if(!internal){
-					r._select();
-				}
-				this.rangeCount = this._ranges.length;
-			};
-			this.removeAllRanges = function(){
-				//don't detach, the range may be used later
-//				for(var i=0;i<this._ranges.length;i++){
-//					this._ranges[i].detach();
-//				}
-				this._ranges = [];
-				this.rangeCount = 0;
-			};
-			var _initCurrentRange = function(){
-				var r = win.document.selection.createRange();
-				var type=win.document.selection.type.toUpperCase();
-				if(type == "CONTROL"){
-					//TODO: multiple range selection(?)
-					return new dijit.range.W3CRange(dijit.range.ie.decomposeControlRange(r));
-				}else{
-					return new dijit.range.W3CRange(dijit.range.ie.decomposeTextRange(r));
-				}
-			};
-			this.getRangeAt = function(i){
-				return this._ranges[i];
-			};
-			this._getCurrentSelection = function(){
-				this.removeAllRanges();
-				var r=_initCurrentRange();
-				if(r){
-					this.addRange(r, true);
-				}
-			};
-		},
-		decomposeControlRange: function(range){
-			var firstnode = range.item(0), lastnode = range.item(range.length-1)
-			var startContainer = firstnode.parentNode, endContainer = lastnode.parentNode;
-			var startOffset = dijit.range.getIndex(firstnode, startContainer).o;
-			var endOffset = dijit.range.getIndex(lastnode, endContainer).o+1;
-			return [[startContainer, startOffset],[endContainer, endOffset]];
-		},
-		getEndPoint: function(range, end){
-			var atmrange = range.duplicate();
-			atmrange.collapse(!end);
-			var cmpstr = 'EndTo' + (end?'End':'Start');
-			var parentNode = atmrange.parentElement();
-
-			var startnode, startOffset, lastNode;
-			if(parentNode.childNodes.length>0){
-				dojo.every(parentNode.childNodes, function(node,i){
-					var calOffset;
-					if(node.nodeType != 3){
-						atmrange.moveToElementText(node);
-
-						if(atmrange.compareEndPoints(cmpstr,range) > 0){
-							startnode = node.previousSibling;
-							if(lastNode && lastNode.nodeType == 3){
-								//where share we put the start? in the text node or after?
-								startnode = lastNode;
-								calOffset = true;
-							}else{
-								startnode = parentNode;
-								startOffset = i;
-								return false;
-							}
-						}else{
-							if(i==parentNode.childNodes.length-1){
-								startnode = parentNode;
-								startOffset = parentNode.childNodes.length;
-								return false;
-							}
-						}
-					}else{
-						if(i==parentNode.childNodes.length-1){//at the end of this node
-							startnode = node;
-							calOffset = true;
-						}
-					}
-		//			try{
-						if(calOffset && startnode){
-							var prevnode = dijit.range.adjacentNoneTextNode(startnode)[0];
-							if(prevnode){
-								startnode = prevnode.nextSibling;
-							}else{
-								startnode = parentNode.firstChild; //firstChild must be a text node
-							}
-							var prevnodeobj = dijit.range.adjacentNoneTextNode(startnode);
-							prevnode = prevnodeobj[0];
-							var lenoffset = prevnodeobj[1];
-							if(prevnode){
-								atmrange.moveToElementText(prevnode);
-								atmrange.collapse(false);
-							}else{
-								atmrange.moveToElementText(parentNode);
-							}
-							atmrange.setEndPoint(cmpstr, range);
-							startOffset = atmrange.text.length-lenoffset;
-
-							return false;
-						}
-		//			}catch(e){ debugger }
-					lastNode = node;
-					return true;
-				});
-			}else{
-				startnode = parentNode;
-				startOffset = 0;
-			}
-
-			//if at the end of startnode and we are dealing with start container, then
-			//move the startnode to nextSibling if it is a text node
-			//TODO: do this for end container?
-			if(!end && startnode.nodeType!=3 && startOffset == startnode.childNodes.length){
-				if(startnode.nextSibling && startnode.nextSibling.nodeType==3){
-					startnode = startnode.nextSibling;
-					startOffset = 0;
-				}
-			}
-			return [startnode, startOffset];
-		},
-		setEndPoint: function(range, container, offset){
-			//text node
-			var atmrange = range.duplicate();
-			if(container.nodeType!=3){ //normal node
-				atmrange.moveToElementText(container);
-				atmrange.collapse(true);
-				if(offset == container.childNodes.length){
-					if(offset > 0){
-						//a simple atmrange.collapse(false); won't work here:
-						//although moveToElementText(node) is supposed to encompass the content of the node,
-						//but when collapse to end, it is in fact after the ending tag of node (collapse to start
-						//is after the begining tag of node as expected)
-						var node = container.lastChild;
-						var len = 0;
-						while(node && node.nodeType == 3){
-							len += node.length;
-							container = node; //pass through
-							node = node.previousSibling;
-						}
-						if(node){
-							atmrange.moveToElementText(node);
-						}
-						atmrange.collapse(false);
-						offset = len; //pass through
-					}else{ //no childNodes
-						atmrange.moveToElementText(container);
-						atmrange.collapse(true);
-					}
-				}else{
-					if(offset > 0){
-						var node = container.childNodes[offset-1];
-						if(node.nodeType==3){
-							container = node;
-							offset = node.length;
-							//pass through
-						}else{
-							atmrange.moveToElementText(node);
-							atmrange.collapse(false);
-						}
-					}
-				}
-			}
-			if(container.nodeType==3){
-				var prevnodeobj = dijit.range.adjacentNoneTextNode(container);
-				var prevnode = prevnodeobj[0], len = prevnodeobj[1];
-				if(prevnode){
-					atmrange.moveToElementText(prevnode);
-					atmrange.collapse(false);
-					//if contentEditable is not inherit, the above collapse won't make the end point
-					//in the correctly position: it always has a -1 offset, so compensate it
-					if(prevnode.contentEditable!='inherit'){
-						len++;
-					}
-				}else{
-					atmrange.moveToElementText(container.parentNode);
-					atmrange.collapse(true);
-				}
-
-				offset += len;
-				if(offset>0){
-					if(atmrange.moveEnd('character',offset) != offset){
-						alert('Error when moving!');
-					}
-					atmrange.collapse(false);
-				}
-			}
-
-			return atmrange;
-		},
-		decomposeTextRange: function(range){
-			var tmpary = dijit.range.ie.getEndPoint(range);
-			var startContainter = tmpary[0], startOffset = tmpary[1];
-			var endContainter = tmpary[0], endOffset = tmpary[1];
-
-			if(range.htmlText.length){
-				if(range.htmlText == range.text){ //in the same text node
-					endOffset = startOffset+range.text.length;
-				}else{
-					tmpary = dijit.range.ie.getEndPoint(range,true);
-					endContainter = tmpary[0], endOffset = tmpary[1];
-				}
-			}
-			return [[startContainter, startOffset],[endContainter, endOffset], range.parentElement()];
-		},
-		setRange: function(range, startContainter,
-			startOffset, endContainter, endOffset, check){
-			var startrange = dijit.range.ie.setEndPoint(range, startContainter, startOffset);
-			range.setEndPoint('StartToStart', startrange);
-			if(!this.collapsed){
-				var endrange = dijit.range.ie.setEndPoint(range, endContainter, endOffset);
-				range.setEndPoint('EndToEnd', endrange);
-			}
-
-			return range;
-		}
-	}
-
-dojo.declare("dijit.range.W3CRange",null, {
-	constructor: function(){
-		if(arguments.length>0){
-			this.setStart(arguments[0][0][0],arguments[0][0][1]);
-			this.setEnd(arguments[0][1][0],arguments[0][1][1],arguments[0][2]);
-		}else{
-			this.commonAncestorContainer = null;
-			this.startContainer = null;
-			this.startOffset = 0;
-			this.endContainer = null;
-			this.endOffset = 0;
-			this.collapsed = true;
-		}
-	},
-	_simpleSetEndPoint: function(node, range, end){
-		var r = (this._body||node.ownerDocument.body).createTextRange();
-		if(node.nodeType!=1){
-			r.moveToElementText(node.parentNode);
-		}else{
-			r.moveToElementText(node);
-		}
-		r.collapse(true);
-		range.setEndPoint(end?'EndToEnd':'StartToStart',r);
-	},
-	_updateInternal: function(__internal_common){
-		if(this.startContainer !== this.endContainer){
-			if(!__internal_common){
-				var r = (this._body||this.startContainer.ownerDocument.body).createTextRange();
-				this._simpleSetEndPoint(this.startContainer,r);
-				this._simpleSetEndPoint(this.endContainer,r,true);
-				__internal_common = r.parentElement();
-			}
-			this.commonAncestorContainer = dijit.range.getCommonAncestor(this.startContainer, this.endContainer, __internal_common);
-		}else{
-			this.commonAncestorContainer = this.startContainer;
-		}
-		this.collapsed = (this.startContainer === this.endContainer) && (this.startOffset == this.endOffset);
-	},
-	setStart: function(node, offset, __internal_common){
-		if(this.startContainer === node && this.startOffset == offset){
-			return;
-		}
-		delete this._cachedBookmark;
-
-		this.startContainer = node;
-		this.startOffset = offset;
-		if(!this.endContainer){
-			this.setEnd(node, offset, __internal_common);
-		}else{
-			this._updateInternal(__internal_common);
-		}
-	},
-	setEnd: function(node, offset, __internal_common){
-		if(this.endContainer === node && this.endOffset == offset){
-			return;
-		}
-		delete this._cachedBookmark;
-
-		this.endContainer = node;
-		this.endOffset = offset;
-		if(!this.startContainer){
-			this.setStart(node, offset, __internal_common);
-		}else{
-			this._updateInternal(__internal_common);
-		}
-	},
-	setStartAfter: function(node, offset){
-		this._setPoint('setStart', node, offset, 1);
-	},
-	setStartBefore: function(node, offset){
-		this._setPoint('setStart', node, offset, 0);
-	},
-	setEndAfter: function(node, offset){
-		this._setPoint('setEnd', node, offset, 1);
-	},
-	setEndBefore: function(node, offset){
-		this._setPoint('setEnd', node, offset, 0);
-	},
-	_setPoint: function(what, node, offset, ext){
-		var index = dijit.range.getIndex(node, node.parentNode).o;
-		this[what](node.parentNode, index.pop()+ext);
-	},
-	_getIERange: function(){
-		var r=(this._body||this.endContainer.ownerDocument.body).createTextRange();
-		dijit.range.ie.setRange(r, this.startContainer, this.startOffset, this.endContainer, this.endOffset);
-		return r;
-	},
-	getBookmark: function(body){
-		this._getIERange();
-		return this._cachedBookmark;
-	},
-	_select: function(){
-		var r = this._getIERange();
-		r.select();
-	},
-	deleteContents: function(){
-		var r = this._getIERange();
-		r.pasteHTML('');
-		this.endContainer = this.startContainer;
-		this.endOffset = this.startOffset;
-		this.collapsed = true;
-	},
-	cloneRange: function(){
-		var r = new dijit.range.W3CRange([[this.startContainer,this.startOffset],
-			[this.endContainer,this.endOffset]]);
-		r._body = this._body;
-		return r;
-	},
-	detach: function(){
-		this._body = null;
-		this.commonAncestorContainer = null;
-		this.startContainer = null;
-		this.startOffset = 0;
-		this.endContainer = null;
-		this.endOffset = 0;
-		this.collapsed = true;
-}
+dijit.range.getIndex=function(C,J){var G=[],D=[];
+var I=J;
+var H=C;
+while(C!=I){var E=0;
+var F=C.parentNode,B;
+while(B=F.childNodes[E++]){if(B===C){--E;
+break
+}}if(E>=F.childNodes.length){A.debug("Error finding index of a node in dijit.range.getIndex")
+}G.unshift(E);
+D.unshift(E-F.childNodes.length);
+C=F
+}if(G.length>0&&H.nodeType==3){var B=H.previousSibling;
+while(B&&B.nodeType==3){G[G.length-1]--;
+B=B.previousSibling
+}B=H.nextSibling;
+while(B&&B.nodeType==3){D[D.length-1]++;
+B=B.nextSibling
+}}return{o:G,r:D}
+};
+dijit.range.getNode=function(B,C){if(!A.isArray(B)||B.length==0){return C
+}var D=C;
+A.every(B,function(E){if(E>=0&&E<D.childNodes.length){D=D.childNodes[E]
+}else{D=null;
+console.debug("Error: can not find node with index",B,"under parent node",C);
+return false
+}return true
 });
-} //if(!dijit.range._w3c)
-
-}
-
-}});
+return D
+};
+dijit.range.getCommonAncestor=function(I,G,J){var H=function(M,L){var K=[];
+while(M){K.unshift(M);
+if(M!=L&&M.tagName!="BODY"){M=M.parentNode
+}else{break
+}}return K
+};
+var C=H(I,J);
+var F=H(G,J);
+var D=Math.min(C.length,F.length);
+var B=C[0];
+for(var E=1;
+E<D;
+E++){if(C[E]===F[E]){B=C[E]
+}else{break
+}}return B
+};
+dijit.range.getAncestor=function(E,D,B){B=B||E.ownerDocument.body;
+while(E&&E!==B){var C=E.nodeName.toUpperCase();
+if(D.test(C)){return E
+}E=E.parentNode
+}return null
+};
+dijit.range.BlockTagNames=/^(?:P|DIV|H1|H2|H3|H4|H5|H6|ADDRESS|PRE|OL|UL|LI|DT|DE)$/;
+dijit.range.getBlockAncestor=function(F,E,B){B=B||F.ownerDocument.body;
+E=E||dijit.range.BlockTagNames;
+var G=null,D;
+while(F&&F!==B){var C=F.nodeName.toUpperCase();
+if(!G&&E.test(C)){G=F
+}if(!D&&(/^(?:BODY|TD|TH|CAPTION)$/).test(C)){D=F
+}F=F.parentNode
+}return{blockNode:G,blockContainer:D||F.ownerDocument.body}
+};
+dijit.range.atBeginningOfContainer=function(B,D,G){var F=false;
+var E=(G==0);
+if(!E&&D.nodeType==3){if(A.trim(D.nodeValue.substr(0,G))==0){E=true
+}}if(E){var C=D;
+F=true;
+while(C&&C!==B){if(C.previousSibling){F=false;
+break
+}C=C.parentNode
+}}return F
+};
+dijit.range.atEndOfContainer=function(D,F,G){var C=false;
+var B=(G==(F.length||F.childNodes.length));
+if(!B&&F.nodeType==3){if(A.trim(F.nodeValue.substr(G))==0){B=true
+}}if(B){var E=F;
+C=true;
+while(E&&E!==D){if(E.nextSibling){C=false;
+break
+}E=E.parentNode
+}}return C
+};
+dijit.range.adjacentNoneTextNode=function(E,C){var D=E;
+var B=(0-E.length)||0;
+var F=C?"nextSibling":"previousSibling";
+while(D){if(D.nodeType!=3){break
+}B+=D.length;
+D=D[F]
+}return[D,B]
+};
+dijit.range._w3c=Boolean(window.getSelection);
+dijit.range.create=function(){if(dijit.range._w3c){return document.createRange()
+}else{return new dijit.range.W3CRange
+}};
+dijit.range.getSelection=function(D,C){if(dijit.range._w3c){return D.getSelection()
+}else{var E=D.__W3CRange;
+if(!E||!dijit.range.ie.cachedSelection[E]){var B=new dijit.range.ie.selection(D);
+E=(new Date).getTime();
+while(E in dijit.range.ie.cachedSelection){E=E+1
+}E=String(E);
+dijit.range.ie.cachedSelection[E]=B
+}else{var B=dijit.range.ie.cachedSelection[E]
+}if(!C){B._getCurrentSelection()
+}return B
+}};
+if(!dijit.range._w3c){dijit.range.ie={cachedSelection:{},selection:function(C){this._ranges=[];
+this.addRange=function(E,D){this._ranges.push(E);
+if(!D){E._select()
+}this.rangeCount=this._ranges.length
+};
+this.removeAllRanges=function(){this._ranges=[];
+this.rangeCount=0
+};
+var B=function(){var E=C.document.selection.createRange();
+var D=C.document.selection.type.toUpperCase();
+if(D=="CONTROL"){return new dijit.range.W3CRange(dijit.range.ie.decomposeControlRange(E))
+}else{return new dijit.range.W3CRange(dijit.range.ie.decomposeTextRange(E))
+}};
+this.getRangeAt=function(D){return this._ranges[D]
+};
+this._getCurrentSelection=function(){this.removeAllRanges();
+var D=B();
+if(D){this.addRange(D,true)
+}}
+},decomposeControlRange:function(D){var C=D.item(0),H=D.item(D.length-1);
+var F=C.parentNode,G=H.parentNode;
+var B=dijit.range.getIndex(C,F).o;
+var E=dijit.range.getIndex(H,G).o+1;
+return[[F,B],[G,E]]
+},getEndPoint:function(F,E){var D=F.duplicate();
+D.collapse(!E);
+var I="EndTo"+(E?"End":"Start");
+var C=D.parentElement();
+var H,B,G;
+if(C.childNodes.length>0){A.every(C.childNodes,function(O,N){var K;
+if(O.nodeType!=3){D.moveToElementText(O);
+if(D.compareEndPoints(I,F)>0){H=O.previousSibling;
+if(G&&G.nodeType==3){H=G;
+K=true
+}else{H=C;
+B=N;
+return false
+}}else{if(N==C.childNodes.length-1){H=C;
+B=C.childNodes.length;
+return false
+}}}else{if(N==C.childNodes.length-1){H=O;
+K=true
+}}if(K&&H){var M=dijit.range.adjacentNoneTextNode(H)[0];
+if(M){H=M.nextSibling
+}else{H=C.firstChild
+}var L=dijit.range.adjacentNoneTextNode(H);
+M=L[0];
+var J=L[1];
+if(M){D.moveToElementText(M);
+D.collapse(false)
+}else{D.moveToElementText(C)
+}D.setEndPoint(I,F);
+B=D.text.length-J;
+return false
+}G=O;
+return true
+})
+}else{H=C;
+B=0
+}if(!E&&H.nodeType!=3&&B==H.childNodes.length){if(H.nextSibling&&H.nextSibling.nodeType==3){H=H.nextSibling;
+B=0
+}}return[H,B]
+},setEndPoint:function(F,E,I){var C=F.duplicate();
+if(E.nodeType!=3){C.moveToElementText(E);
+C.collapse(true);
+if(I==E.childNodes.length){if(I>0){var H=E.lastChild;
+var B=0;
+while(H&&H.nodeType==3){B+=H.length;
+E=H;
+H=H.previousSibling
+}if(H){C.moveToElementText(H)
+}C.collapse(false);
+I=B
+}else{C.moveToElementText(E);
+C.collapse(true)
+}}else{if(I>0){var H=E.childNodes[I-1];
+if(H.nodeType==3){E=H;
+I=H.length
+}else{C.moveToElementText(H);
+C.collapse(false)
+}}}}if(E.nodeType==3){var D=dijit.range.adjacentNoneTextNode(E);
+var G=D[0],B=D[1];
+if(G){C.moveToElementText(G);
+C.collapse(false);
+if(G.contentEditable!="inherit"){B++
+}}else{C.moveToElementText(E.parentNode);
+C.collapse(true)
+}I+=B;
+if(I>0){if(C.moveEnd("character",I)!=I){alert("Error when moving!")
+}C.collapse(false)
+}}return C
+},decomposeTextRange:function(C){var G=dijit.range.ie.getEndPoint(C);
+var F=G[0],B=G[1];
+var E=G[0],D=G[1];
+if(C.htmlText.length){if(C.htmlText==C.text){D=B+C.text.length
+}else{G=dijit.range.ie.getEndPoint(C,true);
+E=G[0],D=G[1]
+}}return[[F,B],[E,D],C.parentElement()]
+},setRange:function(F,I,C,H,G,D){var E=dijit.range.ie.setEndPoint(F,I,C);
+F.setEndPoint("StartToStart",E);
+if(!this.collapsed){var B=dijit.range.ie.setEndPoint(F,H,G);
+F.setEndPoint("EndToEnd",B)
+}return F
+}};
+A.declare("dijit.range.W3CRange",null,{constructor:function(){if(arguments.length>0){this.setStart(arguments[0][0][0],arguments[0][0][1]);
+this.setEnd(arguments[0][1][0],arguments[0][1][1],arguments[0][2])
+}else{this.commonAncestorContainer=null;
+this.startContainer=null;
+this.startOffset=0;
+this.endContainer=null;
+this.endOffset=0;
+this.collapsed=true
+}},_simpleSetEndPoint:function(E,C,B){var D=(this._body||E.ownerDocument.body).createTextRange();
+if(E.nodeType!=1){D.moveToElementText(E.parentNode)
+}else{D.moveToElementText(E)
+}D.collapse(true);
+C.setEndPoint(B?"EndToEnd":"StartToStart",D)
+},_updateInternal:function(C){if(this.startContainer!==this.endContainer){if(!C){var B=(this._body||this.startContainer.ownerDocument.body).createTextRange();
+this._simpleSetEndPoint(this.startContainer,B);
+this._simpleSetEndPoint(this.endContainer,B,true);
+C=B.parentElement()
+}this.commonAncestorContainer=dijit.range.getCommonAncestor(this.startContainer,this.endContainer,C)
+}else{this.commonAncestorContainer=this.startContainer
+}this.collapsed=(this.startContainer===this.endContainer)&&(this.startOffset==this.endOffset)
+},setStart:function(B,D,C){if(this.startContainer===B&&this.startOffset==D){return 
+}delete this._cachedBookmark;
+this.startContainer=B;
+this.startOffset=D;
+if(!this.endContainer){this.setEnd(B,D,C)
+}else{this._updateInternal(C)
+}},setEnd:function(B,D,C){if(this.endContainer===B&&this.endOffset==D){return 
+}delete this._cachedBookmark;
+this.endContainer=B;
+this.endOffset=D;
+if(!this.startContainer){this.setStart(B,D,C)
+}else{this._updateInternal(C)
+}},setStartAfter:function(B,C){this._setPoint("setStart",B,C,1)
+},setStartBefore:function(B,C){this._setPoint("setStart",B,C,0)
+},setEndAfter:function(B,C){this._setPoint("setEnd",B,C,1)
+},setEndBefore:function(B,C){this._setPoint("setEnd",B,C,0)
+},_setPoint:function(E,D,F,C){var B=dijit.range.getIndex(D,D.parentNode).o;
+this[E](D.parentNode,B.pop()+C)
+},_getIERange:function(){var B=(this._body||this.endContainer.ownerDocument.body).createTextRange();
+dijit.range.ie.setRange(B,this.startContainer,this.startOffset,this.endContainer,this.endOffset);
+return B
+},getBookmark:function(B){this._getIERange();
+return this._cachedBookmark
+},_select:function(){var B=this._getIERange();
+B.select()
+},deleteContents:function(){var B=this._getIERange();
+B.pasteHTML("");
+this.endContainer=this.startContainer;
+this.endOffset=this.startOffset;
+this.collapsed=true
+},cloneRange:function(){var B=new dijit.range.W3CRange([[this.startContainer,this.startOffset],[this.endContainer,this.endOffset]]);
+B._body=this._body;
+return B
+},detach:function(){this._body=null;
+this.commonAncestorContainer=null;
+this.startContainer=null;
+this.startOffset=0;
+this.endContainer=null;
+this.endOffset=0;
+this.collapsed=true
+}})
+}}}});

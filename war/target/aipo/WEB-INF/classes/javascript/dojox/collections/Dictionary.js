@@ -1,30 +1,30 @@
 if(!dojo._hasResource["dojox.collections.Dictionary"]){dojo._hasResource["dojox.collections.Dictionary"]=true;
 dojo.provide("dojox.collections.Dictionary");
 dojo.require("dojox.collections._base");
-dojox.collections.Dictionary=function(D){var A={};
+dojox.collections.Dictionary=function(C){var D={};
 this.count=0;
-var B={};
-this.add=function(G,F){var E=(G in A);
-A[G]=new dojox.collections.DictionaryEntry(G,F);
-if(!E){this.count++
+var A={};
+this.add=function(E,G){var F=(E in D);
+D[E]=new dojox.collections.DictionaryEntry(E,G);
+if(!F){this.count++
 }};
-this.clear=function(){A={};
+this.clear=function(){D={};
 this.count=0
 };
 this.clone=function(){return new dojox.collections.Dictionary(this)
 };
-this.contains=this.containsKey=function(E){if(B[E]){return false
-}return(A[E]!=null)
+this.contains=this.containsKey=function(E){if(A[E]){return false
+}return(D[E]!=null)
 };
-this.containsValue=function(E){var F=this.getIterator();
-while(F.get()){if(F.element.value==E){return true
+this.containsValue=function(F){var E=this.getIterator();
+while(E.get()){if(E.element.value==F){return true
 }}return false
 };
-this.entry=function(E){return A[E]
+this.entry=function(E){return D[E]
 };
-this.forEach=function(G,F){var E=[];
-for(var H in A){if(!B[H]){E.push(A[H])
-}}dojo.forEach(E,G,F)
+this.forEach=function(H,G){var F=[];
+for(var E in D){if(!A[E]){F.push(D[E])
+}}dojo.forEach(F,H,G)
 };
 this.getKeyList=function(){return(this.getIterator()).map(function(E){return E.key
 })
@@ -32,17 +32,17 @@ this.getKeyList=function(){return(this.getIterator()).map(function(E){return E.k
 this.getValueList=function(){return(this.getIterator()).map(function(E){return E.value
 })
 };
-this.item=function(E){if(E in A){return A[E].valueOf()
+this.item=function(E){if(E in D){return D[E].valueOf()
 }return undefined
 };
-this.getIterator=function(){return new dojox.collections.DictionaryIterator(A)
+this.getIterator=function(){return new dojox.collections.DictionaryIterator(D)
 };
-this.remove=function(E){if(E in A&&!B[E]){delete A[E];
+this.remove=function(E){if(E in D&&!A[E]){delete D[E];
 this.count--;
 return true
 }return false
 };
-if(D){var C=D.getIterator();
-while(C.get()){this.add(C.element.key,C.element.value)
+if(C){var B=C.getIterator();
+while(B.get()){this.add(B.element.key,B.element.value)
 }}}
 };

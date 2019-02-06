@@ -1,246 +1,107 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.gfx3d.lighting"],
-["require", "dojox.gfx._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.gfx3d.lighting"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.gfx3d.lighting"] = true;
-dojo.provide("dojox.gfx3d.lighting");
-dojo.require("dojox.gfx._base");
-
-(function(){
-	var lite = dojox.gfx3d.lighting;
-
-	dojo.mixin(dojox.gfx3d.lighting, {
-		// color utilities
-		black: function(){
-			return {r: 0, g: 0, b: 0, a: 1};
-		},
-		white: function(){
-			return {r: 1, g: 1, b: 1, a: 1};
-		},
-		toStdColor: function(c){
-			c = dojox.gfx.normalizeColor(c);
-			return {r: c.r / 255, g: c.g / 255, b: c.b / 255, a: c.a};
-		},
-		fromStdColor: function(c){
-			return new dojo.Color([Math.round(255 * c.r), Math.round(255 * c.g), Math.round(255 * c.b), c.a]);
-		},
-		scaleColor: function(s, c){
-			return {r: s * c.r, g: s * c.g, b: s * c.b, a: s * c.a};
-		},
-		addColor: function(a, b){
-			return {r: a.r + b.r, g: a.g + b.g, b: a.b + b.b, a: a.a + b.a};
-		},
-		multiplyColor: function(a, b){
-			return {r: a.r * b.r, g: a.g * b.g, b: a.b * b.b, a: a.a * b.a};
-		},
-		saturateColor: function(c){
-			return {
-				r: c.r < 0 ? 0 : c.r > 1 ? 1 : c.r,
-				g: c.g < 0 ? 0 : c.g > 1 ? 1 : c.g,
-				b: c.b < 0 ? 0 : c.b > 1 ? 1 : c.b,
-				a: c.a < 0 ? 0 : c.a > 1 ? 1 : c.a
-			};
-		},
-		mixColor: function(c1, c2, s){
-			return lite.addColor(lite.scaleColor(s, c1), lite.scaleColor(1 - s, c2));
-		},
-		diff2Color: function(c1, c2){
-			var r = c1.r - c2.r;
-			var g = c1.g - c2.g;
-			var b = c1.b - c2.b;
-			var a = c1.a - c2.a;
-			return r * r + g * g + b * b + a * a;
-		},
-		length2Color: function(c){
-			return c.r * c.r + c.g * c.g + c.b * c.b + c.a * c.a;
-		},
-		
-		// vector utilities
-		//TODO: move vector utilities from this file to vector.js
-		dot: function(a, b){
-			return a.x * b.x + a.y * b.y + a.z * b.z;
-		},
-		scale: function(s, v){
-			return {x: s * v.x, y: s * v.y, z: s * v.z};
-		},
-		add: function(a, b){
-			return {x: a.x + b.x, y: a.y + b.y, z: a.z + b.z};
-		},
-		saturate: function(v){
-			return Math.min(Math.max(v, 0), 1);
-		},
-		length: function(v){
-			return Math.sqrt(dojox.gfx3d.lighting.dot(v, v));
-		},
-		normalize: function(v){
-			return lite.scale(1 / lite.length(v), v);
-		},
-		faceforward: function(n, i){
-			var p = dojox.gfx3d.lighting;
-			var s = p.dot(i, n) < 0 ? 1 : -1;
-			return p.scale(s, n);
-		},
-		reflect: function(i, n){
-			var p = dojox.gfx3d.lighting;
-			return p.add(i, p.scale(-2 * p.dot(i, n), n));
-		},
-		
-		// lighting utilities
-		diffuse: function(normal, lights){
-			var c = lite.black();
-			for(var i = 0; i < lights.length; ++i){
-				var l = lights[i],
-					d = lite.dot(lite.normalize(l.direction), normal);
-				c = lite.addColor(c, lite.scaleColor(d, l.color));
-			}
-			return lite.saturateColor(c);
-		},
-		specular: function(normal, v, roughness, lights){
-			var c = lite.black();
-			for(var i = 0; i < lights.length; ++i){
-				var l = lights[i], 
-					h = lite.normalize(lite.add(lite.normalize(l.direction), v)),
-					s = Math.pow(Math.max(0, lite.dot(normal, h)), 1 / roughness);
-				c = lite.addColor(c, lite.scaleColor(s, l.color));
-			}
-			return lite.saturateColor(c);
-		},
-		phong: function(normal, v, size, lights){
-			normal = lite.normalize(normal);
-			var c = lite.black();
-			for(var i = 0; i < lights.length; ++i){
-				var l = lights[i],
-					r = lite.reflect(lite.scale(-1, lite.normalize(v)), normal),
-					s = Math.pow(Math.max(0, lite.dot(r, lite.normalize(l.direction))), size);
-				c = lite.addColor(c, lite.scaleColor(s, l.color));
-			}
-			return lite.saturateColor(c);
-		}
-	});
-
-	// this lighting model is derived from RenderMan Interface Specification Version 3.2
-
-	dojo.declare("dojox.gfx3d.lighting.Model", null, {
-		constructor: function(incident, lights, ambient, specular){
-			this.incident = lite.normalize(incident);
-			this.lights = [];
-			for(var i = 0; i < lights.length; ++i){
-				var l = lights[i];
-				this.lights.push({direction: lite.normalize(l.direction), color: lite.toStdColor(l.color)});
-			}
-			this.ambient = lite.toStdColor(ambient.color ? ambient.color : "white");
-			this.ambient = lite.scaleColor(ambient.intensity, this.ambient);
-			this.ambient = lite.scaleColor(this.ambient.a, this.ambient);
-			this.ambient.a = 1;
-			this.specular = lite.toStdColor(specular ? specular : "white");
-			this.specular = lite.scaleColor(this.specular.a, this.specular);
-			this.specular.a = 1;
-			this.npr_cool = {r: 0,   g: 0,   b: 0.4, a: 1};
-			this.npr_warm = {r: 0.4, g: 0.4, b: 0.2, a: 1};
-			this.npr_alpha = 0.2;
-			this.npr_beta  = 0.6;
-			this.npr_scale = 0.6;
-		},
-		constant: function(normal, finish, pigment){
-			pigment   = lite.toStdColor(pigment);
-			var alpha = pigment.a, color = lite.scaleColor(alpha, pigment);
-			color.a   = alpha;
-			return lite.fromStdColor(lite.saturateColor(color));
-		},
-		matte: function(normal, finish, pigment){
-			if(typeof finish == "string"){ finish = lite.finish[finish]; }
-			pigment = lite.toStdColor(pigment);
-			normal  = lite.faceforward(lite.normalize(normal), this.incident);
-			var ambient = lite.scaleColor(finish.Ka, this.ambient),
-				shadow  = lite.saturate(-4 * lite.dot(normal, this.incident)),
-				diffuse = lite.scaleColor(shadow * finish.Kd, lite.diffuse(normal, this.lights)),
-				color   = lite.scaleColor(pigment.a, lite.multiplyColor(pigment, lite.addColor(ambient, diffuse)));
-			color.a = pigment.a;
-			return lite.fromStdColor(lite.saturateColor(color));
-		},
-		metal: function(normal, finish, pigment){
-			if(typeof finish == "string"){ finish = lite.finish[finish]; }
-			pigment = lite.toStdColor(pigment);
-			normal  = lite.faceforward(lite.normalize(normal), this.incident);
-			var v = lite.scale(-1, this.incident), specular, color,
-				ambient = lite.scaleColor(finish.Ka, this.ambient),
-				shadow  = lite.saturate(-4 * lite.dot(normal, this.incident));
-			if("phong" in finish){
-				specular = lite.scaleColor(shadow * finish.Ks * finish.phong, lite.phong(normal, v, finish.phong_size, this.lights));
-			}else{
-				specular = lite.scaleColor(shadow * finish.Ks, lite.specular(normal, v, finish.roughness, this.lights));
-			}
-			color = lite.scaleColor(pigment.a, lite.addColor(lite.multiplyColor(pigment, ambient), lite.multiplyColor(this.specular, specular)));
-			color.a = pigment.a;
-			return lite.fromStdColor(lite.saturateColor(color));
-		},
-		plastic: function(normal, finish, pigment){
-			if(typeof finish == "string"){ finish = lite.finish[finish]; }
-			pigment = lite.toStdColor(pigment);
-			normal  = lite.faceforward(lite.normalize(normal), this.incident);
-			var v = lite.scale(-1, this.incident), specular, color,
-				ambient = lite.scaleColor(finish.Ka, this.ambient),
-				shadow  = lite.saturate(-4 * lite.dot(normal, this.incident)),
-				diffuse = lite.scaleColor(shadow * finish.Kd, lite.diffuse(normal, this.lights));
-			if("phong" in finish){
-				specular = lite.scaleColor(shadow * finish.Ks * finish.phong, lite.phong(normal, v, finish.phong_size, this.lights));
-			}else{
-				specular = lite.scaleColor(shadow * finish.Ks, lite.specular(normal, v, finish.roughness, this.lights));
-			}
-			color = lite.scaleColor(pigment.a, lite.addColor(lite.multiplyColor(pigment, lite.addColor(ambient, diffuse)), lite.multiplyColor(this.specular, specular)));
-			color.a = pigment.a;
-			return lite.fromStdColor(lite.saturateColor(color));
-		},
-		npr: function(normal, finish, pigment){
-			if(typeof finish == "string"){ finish = lite.finish[finish]; }
-			pigment = lite.toStdColor(pigment);
-			normal  = lite.faceforward(lite.normalize(normal), this.incident);
-			var ambient  = lite.scaleColor(finish.Ka, this.ambient),
-				shadow   = lite.saturate(-4 * lite.dot(normal, this.incident)),
-				diffuse  = lite.scaleColor(shadow * finish.Kd, lite.diffuse(normal, this.lights)),
-				color = lite.scaleColor(pigment.a, lite.multiplyColor(pigment, lite.addColor(ambient, diffuse))),
-				cool = lite.addColor(this.npr_cool, lite.scaleColor(this.npr_alpha, color)),
-				warm = lite.addColor(this.npr_warm, lite.scaleColor(this.npr_beta,  color)),
-				d = (1 + lite.dot(this.incident, normal)) / 2,
-				color = lite.scaleColor(this.npr_scale, lite.addColor(color, lite.mixColor(cool, warm, d)));
-			color.a = pigment.a;
-			return lite.fromStdColor(lite.saturateColor(color));
-		}
-	});
-})();
-
-// POV-Ray basic finishes
-
-dojox.gfx3d.lighting.finish = {
-
-	// Default
-	
-	defaults: {Ka: 0.1, Kd: 0.6, Ks: 0.0, roughness: 0.05},
-	
-	dull:     {Ka: 0.1, Kd: 0.6, Ks: 0.5, roughness: 0.15},
-	shiny:    {Ka: 0.1, Kd: 0.6, Ks: 1.0, roughness: 0.001},
-	glossy:   {Ka: 0.1, Kd: 0.6, Ks: 1.0, roughness: 0.0001},
-	
-	phong_dull:   {Ka: 0.1, Kd: 0.6, Ks: 0.5, phong: 0.5, phong_size: 1},
-	phong_shiny:  {Ka: 0.1, Kd: 0.6, Ks: 1.0, phong: 1.0, phong_size: 200},
-	phong_glossy: {Ka: 0.1, Kd: 0.6, Ks: 1.0, phong: 1.0, phong_size: 300},
-
-	luminous: {Ka: 1.0, Kd: 0.0, Ks: 0.0, roughness: 0.05},
-
-	// Metals
-
-	// very soft and dull
-	metalA: {Ka: 0.35, Kd: 0.3, Ks: 0.8, roughness: 1/20},
-	// fairly soft and dull
-	metalB: {Ka: 0.30, Kd: 0.4, Ks: 0.7, roughness: 1/60},
-	// medium reflectivity, holds color well
-	metalC: {Ka: 0.25, Kd: 0.5, Ks: 0.8, roughness: 1/80},
-	// highly hard and polished, high reflectivity
-	metalD: {Ka: 0.15, Kd: 0.6, Ks: 0.8, roughness: 1/100},
-	// very highly polished and reflective
-	metalE: {Ka: 0.10, Kd: 0.7, Ks: 0.8, roughness: 1/120}
-};
-
-}
-
+dojo._xdResourceLoaded({depends:[["provide","dojox.gfx3d.lighting"],["require","dojox.gfx._base"]],defineResource:function(A){if(!A._hasResource["dojox.gfx3d.lighting"]){A._hasResource["dojox.gfx3d.lighting"]=true;
+A.provide("dojox.gfx3d.lighting");
+A.require("dojox.gfx._base");
+(function(){var B=dojox.gfx3d.lighting;
+A.mixin(dojox.gfx3d.lighting,{black:function(){return{r:0,g:0,b:0,a:1}
+},white:function(){return{r:1,g:1,b:1,a:1}
+},toStdColor:function(C){C=dojox.gfx.normalizeColor(C);
+return{r:C.r/255,g:C.g/255,b:C.b/255,a:C.a}
+},fromStdColor:function(C){return new A.Color([Math.round(255*C.r),Math.round(255*C.g),Math.round(255*C.b),C.a])
+},scaleColor:function(C,D){return{r:C*D.r,g:C*D.g,b:C*D.b,a:C*D.a}
+},addColor:function(D,C){return{r:D.r+C.r,g:D.g+C.g,b:D.b+C.b,a:D.a+C.a}
+},multiplyColor:function(D,C){return{r:D.r*C.r,g:D.g*C.g,b:D.b*C.b,a:D.a*C.a}
+},saturateColor:function(C){return{r:C.r<0?0:C.r>1?1:C.r,g:C.g<0?0:C.g>1?1:C.g,b:C.b<0?0:C.b>1?1:C.b,a:C.a<0?0:C.a>1?1:C.a}
+},mixColor:function(E,C,D){return B.addColor(B.scaleColor(D,E),B.scaleColor(1-D,C))
+},diff2Color:function(F,E){var H=F.r-E.r;
+var G=F.g-E.g;
+var C=F.b-E.b;
+var D=F.a-E.a;
+return H*H+G*G+C*C+D*D
+},length2Color:function(C){return C.r*C.r+C.g*C.g+C.b*C.b+C.a*C.a
+},dot:function(D,C){return D.x*C.x+D.y*C.y+D.z*C.z
+},scale:function(D,C){return{x:D*C.x,y:D*C.y,z:D*C.z}
+},add:function(D,C){return{x:D.x+C.x,y:D.y+C.y,z:D.z+C.z}
+},saturate:function(C){return Math.min(Math.max(C,0),1)
+},length:function(C){return Math.sqrt(dojox.gfx3d.lighting.dot(C,C))
+},normalize:function(C){return B.scale(1/B.length(C),C)
+},faceforward:function(F,C){var E=dojox.gfx3d.lighting;
+var D=E.dot(C,F)<0?1:-1;
+return E.scale(D,F)
+},reflect:function(C,E){var D=dojox.gfx3d.lighting;
+return D.add(C,D.scale(-2*D.dot(C,E),E))
+},diffuse:function(F,D){var H=B.black();
+for(var E=0;
+E<D.length;
+++E){var C=D[E],G=B.dot(B.normalize(C.direction),F);
+H=B.addColor(H,B.scaleColor(G,C.color))
+}return B.saturateColor(H)
+},specular:function(H,J,G,D){var I=B.black();
+for(var E=0;
+E<D.length;
+++E){var C=D[E],F=B.normalize(B.add(B.normalize(C.direction),J)),K=Math.pow(Math.max(0,B.dot(H,F)),1/G);
+I=B.addColor(I,B.scaleColor(K,C.color))
+}return B.saturateColor(I)
+},phong:function(G,I,K,E){G=B.normalize(G);
+var H=B.black();
+for(var F=0;
+F<E.length;
+++F){var D=E[F],C=B.reflect(B.scale(-1,B.normalize(I)),G),J=Math.pow(Math.max(0,B.dot(C,B.normalize(D.direction))),K);
+H=B.addColor(H,B.scaleColor(J,D.color))
+}return B.saturateColor(H)
 }});
+A.declare("dojox.gfx3d.lighting.Model",null,{constructor:function(F,D,G,H){this.incident=B.normalize(F);
+this.lights=[];
+for(var E=0;
+E<D.length;
+++E){var C=D[E];
+this.lights.push({direction:B.normalize(C.direction),color:B.toStdColor(C.color)})
+}this.ambient=B.toStdColor(G.color?G.color:"white");
+this.ambient=B.scaleColor(G.intensity,this.ambient);
+this.ambient=B.scaleColor(this.ambient.a,this.ambient);
+this.ambient.a=1;
+this.specular=B.toStdColor(H?H:"white");
+this.specular=B.scaleColor(this.specular.a,this.specular);
+this.specular.a=1;
+this.npr_cool={r:0,g:0,b:0.4,a:1};
+this.npr_warm={r:0.4,g:0.4,b:0.2,a:1};
+this.npr_alpha=0.2;
+this.npr_beta=0.6;
+this.npr_scale=0.6
+},constant:function(G,D,E){E=B.toStdColor(E);
+var F=E.a,C=B.scaleColor(F,E);
+C.a=F;
+return B.fromStdColor(B.saturateColor(C))
+},matte:function(H,E,F){if(typeof E=="string"){E=B.finish[E]
+}F=B.toStdColor(F);
+H=B.faceforward(B.normalize(H),this.incident);
+var G=B.scaleColor(E.Ka,this.ambient),I=B.saturate(-4*B.dot(H,this.incident)),D=B.scaleColor(I*E.Kd,B.diffuse(H,this.lights)),C=B.scaleColor(F.a,B.multiplyColor(F,B.addColor(G,D)));
+C.a=F.a;
+return B.fromStdColor(B.saturateColor(C))
+},metal:function(H,E,F){if(typeof E=="string"){E=B.finish[E]
+}F=B.toStdColor(F);
+H=B.faceforward(B.normalize(H),this.incident);
+var D=B.scale(-1,this.incident),J,C,G=B.scaleColor(E.Ka,this.ambient),I=B.saturate(-4*B.dot(H,this.incident));
+if("phong" in E){J=B.scaleColor(I*E.Ks*E.phong,B.phong(H,D,E.phong_size,this.lights))
+}else{J=B.scaleColor(I*E.Ks,B.specular(H,D,E.roughness,this.lights))
+}C=B.scaleColor(F.a,B.addColor(B.multiplyColor(F,G),B.multiplyColor(this.specular,J)));
+C.a=F.a;
+return B.fromStdColor(B.saturateColor(C))
+},plastic:function(E,G,C){if(typeof G=="string"){G=B.finish[G]
+}C=B.toStdColor(C);
+E=B.faceforward(B.normalize(E),this.incident);
+var J=B.scale(-1,this.incident),H,D,F=B.scaleColor(G.Ka,this.ambient),I=B.saturate(-4*B.dot(E,this.incident)),K=B.scaleColor(I*G.Kd,B.diffuse(E,this.lights));
+if("phong" in G){H=B.scaleColor(I*G.Ks*G.phong,B.phong(E,J,G.phong_size,this.lights))
+}else{H=B.scaleColor(I*G.Ks,B.specular(E,J,G.roughness,this.lights))
+}D=B.scaleColor(C.a,B.addColor(B.multiplyColor(C,B.addColor(F,K)),B.multiplyColor(this.specular,H)));
+D.a=C.a;
+return B.fromStdColor(B.saturateColor(D))
+},npr:function(E,I,C){if(typeof I=="string"){I=B.finish[I]
+}C=B.toStdColor(C);
+E=B.faceforward(B.normalize(E),this.incident);
+var H=B.scaleColor(I.Ka,this.ambient),J=B.saturate(-4*B.dot(E,this.incident)),K=B.scaleColor(J*I.Kd,B.diffuse(E,this.lights)),D=B.scaleColor(C.a,B.multiplyColor(C,B.addColor(H,K))),L=B.addColor(this.npr_cool,B.scaleColor(this.npr_alpha,D)),G=B.addColor(this.npr_warm,B.scaleColor(this.npr_beta,D)),F=(1+B.dot(this.incident,E))/2,D=B.scaleColor(this.npr_scale,B.addColor(D,B.mixColor(L,G,F)));
+D.a=C.a;
+return B.fromStdColor(B.saturateColor(D))
+}})
+})();
+dojox.gfx3d.lighting.finish={defaults:{Ka:0.1,Kd:0.6,Ks:0,roughness:0.05},dull:{Ka:0.1,Kd:0.6,Ks:0.5,roughness:0.15},shiny:{Ka:0.1,Kd:0.6,Ks:1,roughness:0.001},glossy:{Ka:0.1,Kd:0.6,Ks:1,roughness:0.0001},phong_dull:{Ka:0.1,Kd:0.6,Ks:0.5,phong:0.5,phong_size:1},phong_shiny:{Ka:0.1,Kd:0.6,Ks:1,phong:1,phong_size:200},phong_glossy:{Ka:0.1,Kd:0.6,Ks:1,phong:1,phong_size:300},luminous:{Ka:1,Kd:0,Ks:0,roughness:0.05},metalA:{Ka:0.35,Kd:0.3,Ks:0.8,roughness:1/20},metalB:{Ka:0.3,Kd:0.4,Ks:0.7,roughness:1/60},metalC:{Ka:0.25,Kd:0.5,Ks:0.8,roughness:1/80},metalD:{Ka:0.15,Kd:0.6,Ks:0.8,roughness:1/100},metalE:{Ka:0.1,Kd:0.7,Ks:0.8,roughness:1/120}}
+}}});

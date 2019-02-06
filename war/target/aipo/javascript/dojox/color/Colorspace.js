@@ -1,556 +1,281 @@
-if(!dojo._hasResource["dojox.color.Colorspace"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.color.Colorspace"] = true;
+if(!dojo._hasResource["dojox.color.Colorspace"]){dojo._hasResource["dojox.color.Colorspace"]=true;
 dojo.provide("dojox.color.Colorspace");
 dojo.require("dojox.math.matrix");
-
-dojox.color.Colorspace=new (function(){
-	var dxc=dojox.color;
-	var dxm=dojox.math.matrix;
-	var self=this;
-	var wpMap={
-		"2":{
-			"E":	{ x:1/3,     y:1/3,     t:5400 },
-			"D50":	{ x:0.34567, y:0.3585,  t:5000 },
-			"D55":	{ x:0.33242, y:0.34743, t:5500 },
-			"D65":	{ x:0.31271, y:0.32902, t:6500 },
-			"D75":	{ x:0.29902, y:0.31485, t:7500 },
-			"A":	{ x:0.44757, y:0.40745, t:2856 },
-			"B":	{ x:0.34842, y:0.35161, t:4874 },
-			"C":	{ x:0.31006, y:0.31616, t:6774 },
-			"9300":	{ x:0.2848,  y:0.2932,  t:9300 },
-			"F2":	{ x:0.37207, y:0.37512, t:4200 },
-			"F7":	{ x:0.31285, y:0.32918, t:6500 },
-			"F11":	{ x:0.38054, y:0.37691, t:4000 }
-		},
-		"10":{
-			"E":	{ x:1/3,     y:1/3,     t:5400 },
-			"D50":	{ x:0.34773, y:0.35952, t:5000 },
-			"D55":	{ x:0.33411, y:0.34877, t:5500 },
-			"D65":	{ x:0.31382, y:0.331,   t:6500 },
-			"D75":	{ x:0.29968, y:0.3174,  t:7500 },
-			"A":	{ x:0.45117, y:0.40594, t:2856 },
-			"B":	{ x:0.3498,  y:0.3527,  t:4874 },
-			"C":	{ x:0.31039, y:0.31905, t:6774 },
-			"F2":	{ x:0.37928, y:0.36723, t:4200 },
-			"F7":	{ x:0.31565, y:0.32951, t:6500 },
-			"F11":	{ x:0.38543, y:0.3711,  t:4000 }
-		}
-	};
-
-	var profiles={
-		"Adobe RGB 98":[2.2, "D65", 0.64, 0.33, 0.297361, 0.21, 0.71, 0.627355, 0.15, 0.06, 0.075285],
-		"Apple RGB":[1.8, "D65", 0.625, 0.34, 0.244634, 0.28, 0.595, 0.672034, 0.155, 0.07, 0.083332],
-		"Best RGB":[2.2, "D50", 0.7347, 0.2653, 0.228457, 0.215, 0.775, 0.737352, 0.13, 0.035, 0.034191],
-		"Beta RGB":[2.2, "D50", 0.6888, 0.3112, 0.303273, 0.1986, 0.7551, 0.663786, 0.1265, 0.0352, 0.032941],
-		"Bruce RGB":[2.2, "D65", 0.64, 0.33, 0.240995, 0.28, 0.65, 0.683554, 0.15, 0.06, 0.075452],
-		"CIE RGB":[2.2, "E", 0.735, 0.265, 0.176204, 0.274, 0.717, 0.812985, 0.167, 0.009, 0.010811],
-		"ColorMatch RGB":[1.8, "D50", 0.63, 0.34, 0.274884, 0.295, 0.605, 0.658132, 0.15, 0.075, 0.066985],
-		"DON RGB 4":[2.2, "D50", 0.696, 0.3, 0.27835, 0.215, 0.765, 0.68797, 0.13, 0.035, 0.03368],
-		"ECI RGB":[1.8, "D50", 0.67, 0.33, 0.32025, 0.21, 0.71, 0.602071, 0.14, 0.08, 0.077679],
-		"EktaSpace PS5":[2.2, "D50", 0.695, 0.305, 0.260629, 0.26, 0.7, 0.734946, 0.11, 0.005, 0.004425],
-		"NTSC RGB":[2.2, "C", 0.67, 0.33, 0.298839, 0.21, 0.71, 0.586811, 0.14, 0.08, 0.11435],
-		"PAL/SECAM RGB":[2.2, "D65", 0.64, 0.33, 0.222021, 0.29, 0.6, 0.706645, 0.15, 0.06, 0.071334],
-		"Pro Photo RGB":[1.8, "D50", 0.7347, 0.2653, 0.28804, 0.1596, 0.8404, 0.711874, 0.0366, 0.0001, 0.000086],
-		"SMPTE/C RGB":[2.2, "D65", 0.63, 0.34, 0.212395, 0.31, 0.595, 0.701049, 0.155, 0.07, 0.086556],
-		"sRGB":[2.2, "D65", 0.64, 0.33, 0.212656, 0.3, 0.6, 0.715158, 0.15, 0.06, 0.072186],
-		"Wide Gamut RGB":[2.2, "D50", 0.735, 0.265, 0.258187, 0.115, 0.826, 0.724938, 0.157, 0.018, 0.016875]
-	};
-
-	var adaptors={
-		"XYZ scaling":{
-			ma:  [[1,0,0], [0,1,0], [0,0,1]],
-			mai: [[1,0,0], [0,1,0], [0,0,1]]
-		},
-		"Bradford":{
-			ma:  [[0.8951, -0.7502, 0.0389], [0.2664, 1.7135, -0.0685], [-0.1614, 0.0367, 1.0296]],
-			mai: [[0.986993, 0.432305, -0.008529], [-0.147054, 0.51836, 0.040043], [0.159963, 0.049291, 0.968487]]
-		},
-		"Von Kries":{
-			ma:  [[0.40024, -0.2263, 0], [0.7076, 1.16532, 0], [-0.08081, 0.0457, 0.91822]],
-			mai: [[1.859936, 0.361191, 0], [-1.129382, 0.638812, 0], [0.219897, -0.000006, 1.089064]]
-		}
-	};
-
-	var cMaps={
-		"XYZ":{
-			"xyY":function(xyz, kwArgs){
-				kwArgs=dojo.mixin({
-					whitepoint:"D65",
-					observer:"10",
-					useApproximation:true
-				}, kwArgs||{});
-				var wp=self.whitepoint(kwArgs.whitepoint, kwArgs.observer);
-				var sum=xyz.X+xyz.Y+xyz.Z;
-				if(sum==0){ var x=wp.x, y=wp.y; }
-				else{ var x=xyz.X/sum, y=xyz.Y/sum; }
-				return { x:x, y:y, Y:xyz.Y };
-			},
-			"Lab":function(xyz, kwArgs){
-				kwArgs=dojo.mixin({
-					whitepoint:"D65",
-					observer:"10",
-					useApproximation:true
-				}, kwArgs||{});
-
-				var kappa=self.kappa(kwArgs.useApproximation), epsilon=self.epsilon(kwArgs.useApproximation);
-				var wp=self.whitepoint(kwArgs.whitepoint, kwArgs.observer);
-				var xr=xyz.X/wp.x, yr=xyz.Y/wp.y, zr=xyz.z/wp.z;
-				var fx=(xr>epsilon)?Math.pow(xr,1/3):(kappa*xr+16)/116;
-				var fy=(yr>epsilon)?Math.pow(yr,1/3):(kappa*yr+16)/116;
-				var fz=(zr>epsilon)?Math.pow(zr,1/3):(kappa*zr+16)/116;
-				var L=116*fy-16, a=500*(fx-fy), b=200*(fy-fz);
-				return { L:L, a:a, b:b };
-			},
-			"Luv": function(xyz, kwArgs){
-				kwArgs=dojo.mixin({
-					whitepoint:"D65",
-					observer:"10",
-					useApproximation:true
-				}, kwArgs||{});
-
-				var kappa=self.kappa(kwArgs.useApproximation), epsilon=self.epsilon(kwArgs.useApproximation);
-				var wp=self.whitepoint(kwArgs.whitepoint, kwArgs.observer);
-				var ud=(4*xyz.X)/(xyz.X+15*xyz.Y+3*xyz.Z);
-				var vd=(9*xyz.Y)/(xyz.X+15*xyz.Y+3*xyz.Z);
-				var udr=(4*wp.x)/(wp.x+15*wp.y+3*wp.z);
-				var vdr=(9*wp.y)/(wp.x+15*wp.y+3*wp.z);
-				var yr=xyz.Y/wp.y;
-				var L=(yr>epsilon)?116*Math.pow(yr, 1/3)-16:kappa*yr;
-				var u=13*L*(ud-udr);
-				var v=13*L*(vd-vdr);
-				return { L:L, u:u, v:v };
-			}
-		},
-		"xyY":{
-			"XYZ":function(xyY){
-				if(xyY.y==0){ var X=0, Y=0, Z=0; }
-				else{
-					var X=(xyY.x*xyY.Y)/xyY.y;
-					var Y=xyY.Y;
-					var Z=((1-xyY.x-xyY.y)*xyY.Y)/xyY.y;
-				}
-				return { X:X, Y:Y, Z:Z };
-			}
-		},
-		"Lab":{
-			"XYZ": function(lab, kwArgs){
-				kwArgs=dojo.mixin({
-					whitepoint:"D65",
-					observer:"10",
-					useApproximation:true
-				}, kwArgs||{});
-
-				var b=kwArgs.useApproximation, kappa=self.kappa(b), epsilon=self.epsilon(b);
-				var wp=self.whitepoint(kwArgs.whitepoint, kwArgs.observer);
-				var yr=(lab.L>(kappa*epsilon))?Math.pow((lab.L+16)/116, 3):lab.L/kappa;
-				var fy=(yr>epsilon)?(lab.L+16)/116:(kappa*yr+16)/116;
-				var fx=(lab.a/500)+fy;
-				var fz=fy-(lab.b/200);
-				var fxcube=Math.pow(fx, 3), fzcube=Math.pow(fz, 3);
-				var xr=(fxcube>epsilon)?fxcube:(116*fx-16)/kappa;
-				var zr=(fzcube>epsilon)?fzcube:(116*fz-16)/kappa;
-				return { X: xr*wp.x, Y: yr*wp.y, Z: zr*wp.z };
-			},
-			"LCHab": function(lab){
-				var L=lab.L, C=Math.pow(lab.a*lab.a+lab.b*lab.b, 0.5), H=Math.atan(lab.b, lab.a)*(180/Math.PI);
-				if(H<0){ H+=360; }
-				if(H<360){ H-=360; }
-				return { L:L, C:C, H:H };
-			}
-		},
-		"LCHab":{
-			"Lab":function(lch){
-				var hRad=lch.H*(Math.PI/180), L=lch.L, a=lch.C/Math.pow(Math.pow(Math.tan(hRad),2)+1, 0.5);
-				if(90<lchH && lch.H<270){ a = -a; }
-				var b=Math.pow(Math.pow(lch.C,2)-Math.pow(a, 2), 0.5);
-				if(lch.H>180){ b = -b; }
-				return { L: L, a:a, b:b };
-			}
-		},
-		"Luv":{
-			"XYZ": function(Luv, kwArgs){
-				kwArgs=dojo.mixin({
-					whitepoint:"D65",
-					observer:"10",
-					useApproximation:true
-				}, kwArgs||{});
-
-				var b=kwArgs.useApproximation, kappa=self.kappa(b), epsilon=self.epsilon(b);
-				var wp=self.whitepoint(kwArgs.whitepoint, kwArgs.observer);
-				var uz=(4*wp.x)/(wp.x+15*wp.y+3*wp.z);
-				var vz=(9*wp.y)/(wp.x+15*wp.y+3*wp.z);
-				var Y=(Luv.L>kappa*epsilon)?Math.pow((Luv.L+16)/116, 3):Luv.L/kappa;
-				var a=(1/3)*(((52*Luv.L)/(Luv.u+13*Luv.L*uz))-1);
-				var b=-5*Y, c=-(1/3), d=Y*(((39*Luv.L)/(Luv.v+13*Luv.L*vz))-5);
-				var X=(d-b)/(a-c), Z=X*a+b;
-				return { X:X, Y:Y, Z:Z };
-			},
-			"LCHuv": function(Luv){
-				var L=Luv.L, C=Math.pow(Luv.u*Luv.u+Luv.v*Luv*v, 0.5), H=Math.atan(Luv.v, Luv.u)*(180/Math.PI);
-				if(H<0){ H+=360; }
-				if(H>360){ H-=360; }
-				return { L:L, C:C, H:H };
-			}
-		},
-		"LCHuv":{
-			"Luv": function(LCH){
-				var hRad=LCH.H*(Math.PI/180);
-				var L=LCH.L, u=LCH.C/Math.pow(Math.pow(Math.tan(hRad),2)+1, 0.5);
-				var v=Math.pow(LCH.C*LCH.C-u*u, 0.5);
-				if(90<LCH.H && LCH.H>270){ u*=-1; }
-				if(LCH.H>180){ v*=-1; }
-				return { L:L, u:u, v:v };
-			}
-		}
-	};
-	var converters={
-		"CMY":{ 
-			"CMYK":function(obj, kwArgs){ return dxc.fromCmy(obj).toCmyk(); },
-			"HSL":function(obj, kwArgs){ return dxc.fromCmy(obj).toHsl(); },
-			"HSV":function(obj, kwArgs){ return dxc.fromCmy(obj).toHsv(); },
-			"Lab":function(obj, kwArgs){ return cMaps["XYZ"]["Lab"](dxc.fromCmy(obj).toXYZ(kwArgs)); },
-			"LCHab":function(obj, kwArgs){ return cMaps["Lab"]["LCHab"](converters["CMY"]["Lab"](obj)); },
-			"LCHuv":function(obj, kwArgs){ return cMaps["LCHuv"]["Luv"](cMaps["Luv"]["XYZ"](dxc.fromCmy(obj).toXYZ(kwArgs))); },
-			"Luv":function(obj, kwArgs){ return cMaps["Luv"]["XYZ"](dxc.fromCmy(obj).toXYZ(kwArgs)); },
-			"RGB":function(obj, kwArgs){ return dxc.fromCmy(obj); },
-			"XYZ":function(obj, kwArgs){ return dxc.fromCmy(obj).toXYZ(kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](dxc.fromCmy(obj).toXYZ(kwArgs)); }
-		},
-		"CMYK":{ 
-			"CMY":function(obj, kwArgs){ return dxc.fromCmyk(obj).toCmy(); },
-			"HSL":function(obj, kwArgs){ return dxc.fromCmyk(obj).toHsl(); },
-			"HSV":function(obj, kwArgs){ return dxc.fromCmyk(obj).toHsv(); },
-			"Lab":function(obj, kwArgs){ return cMaps["XYZ"]["Lab"](dxc.fromCmyk(obj).toXYZ(kwArgs)); },
-			"LCHab":function(obj, kwArgs){ return cMaps["Lab"]["LCHab"](converters["CMYK"]["Lab"](obj)); },
-			"LCHuv":function(obj, kwArgs){ return cMaps["LCHuv"]["Luv"](cMaps["Luv"]["XYZ"](dxc.fromCmyk(obj).toXYZ(kwArgs))); },
-			"Luv":function(obj, kwArgs){ return cMaps["Luv"]["XYZ"](dxc.fromCmyk(obj).toXYZ(kwArgs)); },
-			"RGB":function(obj, kwArgs){ return dxc.fromCmyk(obj); },
-			"XYZ":function(obj, kwArgs){ return dxc.fromCmyk(obj).toXYZ(kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](dxc.fromCmyk(obj).toXYZ(kwArgs)); }
-		},
-		"HSL":{ 
-			"CMY":function(obj, kwArgs){ return dxc.fromHsl(obj).toCmy(); },
-			"CMYK":function(obj, kwArgs){ return dxc.fromHsl(obj).toCmyk(); },
-			"HSV":function(obj, kwArgs){ return dxc.fromHsl(obj).toHsv(); },
-			"Lab":function(obj, kwArgs){ return cMaps["XYZ"]["Lab"](dxc.fromHsl(obj).toXYZ(kwArgs)); },
-			"LCHab":function(obj, kwArgs){ return cMaps["Lab"]["LCHab"](converters["CMYK"]["Lab"](obj)); },
-			"LCHuv":function(obj, kwArgs){ return cMaps["LCHuv"]["Luv"](cMaps["Luv"]["XYZ"](dxc.fromHsl(obj).toXYZ(kwArgs))); },
-			"Luv":function(obj, kwArgs){ return cMaps["Luv"]["XYZ"](dxc.fromHsl(obj).toXYZ(kwArgs)); },
-			"RGB":function(obj, kwArgs){ return dxc.fromHsl(obj); },
-			"XYZ":function(obj, kwArgs){ return dxc.fromHsl(obj).toXYZ(kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](dxc.fromHsl(obj).toXYZ(kwArgs)); }
-		},
-		"HSV":{ 
-			"CMY":function(obj, kwArgs){ return dxc.fromHsv(obj).toCmy(); },
-			"CMYK":function(obj, kwArgs){ return dxc.fromHsv(obj).toCmyk(); },
-			"HSL":function(obj, kwArgs){ return dxc.fromHsv(obj).toHsl(); },
-			"Lab":function(obj, kwArgs){ return cMaps["XYZ"]["Lab"](dxc.fromHsv(obj).toXYZ(kwArgs)); },
-			"LCHab":function(obj, kwArgs){ return cMaps["Lab"]["LCHab"](converters["CMYK"]["Lab"](obj)); },
-			"LCHuv":function(obj, kwArgs){ return cMaps["LCHuv"]["Luv"](cMaps["Luv"]["XYZ"](dxc.fromHsv(obj).toXYZ(kwArgs))); },
-			"Luv":function(obj, kwArgs){ return cMaps["Luv"]["XYZ"](dxc.fromHsv(obj).toXYZ(kwArgs)); },
-			"RGB":function(obj, kwArgs){ return dxc.fromHsv(obj); },
-			"XYZ":function(obj, kwArgs){ return dxc.fromHsv(obj).toXYZ(kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](dxc.fromHsv(obj).toXYZ(kwArgs)); }
-		},
-		"Lab":{ 
-			"CMY":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](obj, kwArgs)).toCmy(); },
-			"CMYK":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](obj, kwArgs)).toCmyk(); },
-			"HSL":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](obj, kwArgs)).toHsl(); },
-			"HSV":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](obj, kwArgs)).toHsv(); },
-			"LCHab":function(obj, kwArgs){ return cMaps["Lab"]["LCHab"](obj, kwArgs); },
-			"LCHuv":function(obj, kwArgs){ return cMaps["Luv"]["LCHuv"](cMaps["Lab"]["XYZ"](obj, kwArgs), kwArgs); },
-			"Luv":function(obj, kwArgs){ return cMaps["XYZ"]["Luv"](cMaps["Lab"]["XYZ"](obj, kwArgs), kwArgs); },
-			"RGB":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](obj, kwArgs)); },
-			"XYZ":function(obj, kwArgs){ return cMaps["Lab"]["XYZ"](obj, kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](cMaps["Lab"]["XYZ"](obj, kwArgs), kwArgs); }
-		},
-		"LCHab":{ 
-			"CMY":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](cMaps["LCHab"]["Lab"](obj), kwArgs), kwArgs).toCmy(); },
-			"CMYK":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](cMaps["LCHab"]["Lab"](obj), kwArgs), kwArgs).toCmyk(); },
-			"HSL":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](cMaps["LCHab"]["Lab"](obj), kwArgs), kwArgs).toHsl(); },
-			"HSV":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](cMaps["LCHab"]["Lab"](obj), kwArgs), kwArgs).toHsv(); },
-			"Lab":function(obj, kwArgs){ return cMaps["Lab"]["LCHab"](obj, kwArgs); },
-			"LCHuv":function(obj, kwArgs){ return cMaps["Luv"]["LCHuv"](cMaps["XYZ"]["Luv"](cMaps["Lab"]["XYZ"](cMaps["LCHab"]["Lab"](obj), kwArgs), kwArgs), kwArgs);},
-			"Luv":function(obj, kwArgs){ return cMaps["XYZ"]["Luv"](cMaps["Lab"]["XYZ"](cMaps["LCHab"]["Lab"](obj), kwArgs), kwArgs);},
-			"RGB":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Lab"]["XYZ"](cMaps["LCHab"]["Lab"](obj), kwArgs), kwArgs); },
-			"XYZ":function(obj, kwArgs){ return cMaps["Lab"]["XYZ"](cMaps["LCHab"]["Lab"](obj, kwArgs), kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](cMaps["Lab"]["XYZ"](cMaps["LCHab"]["Lab"](obj), kwArgs), kwArgs); }
-		},
-		"LCHuv":{ 
-			"CMY":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs).toCmy(); },
-			"CMYK":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs).toCmyk(); },
-			"HSL":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs).toHsl(); },
-			"HSV":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs).toHsv(); },
-			"Lab":function(obj, kwArgs){ return cMaps["XYZ"]["Lab"](cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs); },
-			"LCHab":function(obj, kwArgs){ return cMaps["Lab"]["LCHab"](cMaps["XYZ"]["Lab"](cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs), kwArgs); },
-			"Luv":function(obj, kwArgs){ return cMaps["LCHuv"]["Luv"](obj, kwArgs); },
-			"RGB":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs); },
-			"XYZ":function(obj, kwArgs){ return cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](cMaps["Luv"]["XYZ"](cMaps["LCHuv"]["Luv"](obj), kwArgs), kwArgs); },
-		},
-		"Luv":{ 
-			"CMY":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs).toCmy(); },
-			"CMYK":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs).toCmyk(); },
-			"HSL":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs).toHsl(); },
-			"HSV":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs).toHsv(); },
-			"Lab":function(obj, kwArgs){ return cMaps["XYZ"]["Lab"](cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs); },
-			"LCHab":function(obj, kwArgs){ return cMaps["Lab"]["LCHab"](cMaps["XYZ"]["Lab"](cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs), kwArgs); },
-			"LCHuv":function(obj, kwArgs){ return cMaps["Luv"]["LCHuv"](obj, kwArgs); },
-			"RGB":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs); },
-			"XYZ":function(obj, kwArgs){ return cMaps["Luv"]["XYZ"](obj, kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](cMaps["Luv"]["XYZ"](obj, kwArgs), kwArgs); },
-		},
-		"RGB":{ 
-			"CMY":function(obj, kwArgs){ return obj.toCmy(); },
-			"CMYK":function(obj, kwArgs){ return obj.toCmyk(); },
-			"HSL":function(obj, kwArgs){ return obj.toHsl(); },
-			"HSV":function(obj, kwArgs){ return obj.toHsv(); },
-			"Lab":function(obj, kwArgs){ return cMaps["XYZ"]["Lab"](obj.toXYZ(kwArgs), kwArgs); },
-			"LCHab":function(obj, kwArgs){ return cMaps["LCHab"]["Lab"](cMaps["XYZ"]["Lab"](obj.toXYZ(kwArgs), kwArgs), kwArgs);},
-			"LCHuv":function(obj, kwArgs){ return cMaps["LCHuv"]["Luv"](cMaps["XYZ"]["Luv"](obj.toXYZ(kwArgs), kwArgs), kwArgs);},
-			"Luv":function(obj, kwArgs){ return cMaps["XYZ"]["Luv"](obj.toXYZ(kwArgs), kwArgs); },
-			"XYZ":function(obj, kwArgs){ return obj.toXYZ(kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](obj.toXYZ(kwArgs), kwArgs); }
-		},
-		"XYZ":{ 
-			"CMY":function(obj, kwArgs){ return dxc.fromXYZ(obj, kwArgs).toCmy(); },
-			"CMYK":function(obj, kwArgs){ return dxc.fromXYZ(obj, kwArgs).toCmyk(); },
-			"HSL":function(obj, kwArgs){ return dxc.fromXYZ(obj, kwArgs).toHsl(); },
-			"HSV":function(obj, kwArgs){ return dxc.fromXYZ(obj, kwArgs).toHsv(); },
-			"Lab":function(obj, kwArgs){ return cMaps["XYZ"]["Lab"](obj, kwArgs); },
-			"LCHab":function(obj, kwArgs){ return cMaps["Lab"]["LCHab"](cMaps["XYZ"]["Lab"](obj, kwArgs), kwArgs); },
-			"LCHuv":function(obj, kwArgs){ return cMaps["Luv"]["LCHuv"](cMaps["XYZ"]["Luv"](obj, kwArgs), kwArgs); },
-			"Luv":function(obj, kwArgs){ return cMaps["XYZ"]["Luv"](obj, kwArgs); },
-			"RGB":function(obj, kwArgs){ return dxc.fromXYZ(obj, kwArgs); },
-			"xyY":function(obj, kwArgs){ return cMaps["XYZ"]["xyY"](dxc.fromXYZ(obj, kwArgs), kwArgs); }
-		},
-		// TODO: revisit this. xyY represents a single color, not a spectrum of colors.
-		"xyY":{ 
-			"CMY":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["xyY"]["XYZ"](obj, kwArgs), kwArgs).toCmy(); },
-			"CMYK":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["xyY"]["XYZ"](obj, kwArgs), kwArgs).toCmyk(); },
-			"HSL":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["xyY"]["XYZ"](obj, kwArgs), kwArgs).toHsl(); },
-			"HSV":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["xyY"]["XYZ"](obj, kwArgs), kwArgs).toHsv(); },
-			"Lab":function(obj, kwArgs){ return cMaps["Lab"]["XYZ"](cMaps["xyY"]["XYZ"](obj, kwArgs), kwArgs); },
-			"LCHab":function(obj, kwArgs){ return cMaps["LCHab"]["Lab"](cMaps["Lab"]["XYZ"](cMaps["xyY"]["XYZ"](obj, kwArgs), kwArgs), kwArgs); },
-			"LCHuv":function(obj, kwArgs){ return cMaps["LCHuv"]["Luv"](cMaps["Luv"]["XYZ"](cMaps["xyY"]["XYZ"](obj, kwArgs), kwArgs), kwArgs); },
-			"Luv":function(obj, kwArgs){ return cMaps["Luv"]["XYZ"](cMaps["xyY"]["XYZ"](obj, kwArgs), kwArgs); },
-			"RGB":function(obj, kwArgs){ return dxc.fromXYZ(cMaps["xyY"]["XYZ"](obj, kwArgs), kwArgs); },
-			"XYZ":function(obj, kwArgs){ return cMaps["xyY"]["XYZ"](obj, kwArgs); }
-		}
-	};
-
-	this.whitepoint=function(/* String */wpName, /* String? */observer){
-		observer=observer||"10";
-		var x=0, y=0, t=0;
-		if(wpMap[observer] && wpMap[observer][wpName]){
-			x=wpMap[observer][wpName].x;
-			y=wpMap[observer][wpName].y;
-			t=wpMap[observer][wpName].t;
-		} else {
-			console.warn(
-				"dojox.color.Colorspace::whitepoint: either the observer or the whitepoint name was not found. ", 
-				observer, wpName
-			);
-		}
-		var wp={ x:x, y:y, z:(1-x-y), t:t, Y:1 };
-		return this.convert(wp, "xyY", "XYZ");
-	};
-
-	this.tempToWhitepoint=function(/* Number */t){
-		if(t<4000){
-			console.warn("dojox.color.Colorspace::tempToWhitepoint: can't find a white point for temperatures less than 4000K. (Passed ", t, ").");
-			return { x:0, y:0 };
-		}
-		if(t>25000){
-			console.warn("dojox.color.Colorspace::tempToWhitepoint: can't find a white point for temperatures greater than 25000K. (Passed ", t, ").");
-			return { x:0, y:0 };
-		}
-		var t1=t, t2=t*t, t3=t2*t;
-		var ten9=Math.pow(10, 9), ten6=Math.pow(10, 6), ten3=Math.pow(10,3);
-		if(t<=7000){
-			var x=(-4.607*ten9/t3)+(2.9678*ten6/t2)+(0.09911*ten3/t)+0.2444063;
-		} else {
-			var x=(-2.0064*ten9/t3)+(1.9018*ten6/t2)+(0.24748*ten3/t)+0.23704;
-		}
-		var y=-3*x*x+2.87*x-0.275;
-		return { x:x, y:y };
-	};
-
-	this.primaries=function(/* Object */kwArgs){
-		//	mix in the defaults.
-		kwArgs=dojo.mixin({
-			profile:"sRGB",
-			whitepoint:"D65",
-			observer:"10",
-			adaptor:"Bradford"
-		}, kwArgs||{});
-
-		var m=[];
-		if(profiles[kwArgs.profile]){
-			m=profiles[kwArgs.profile].slice(0);
-		} else {
-			console.warn(
-				"dojox.color.Colorspace::primaries: the passed profile was not found.  ",
-				"Available profiles include: ", profiles, 
-				".  The profile passed was ", kwArgs.profile
-			);
-		}
-		var primary={
-			name:kwArgs.profile,
-			gamma:m[0], whitepoint:m[1], 
-			xr:m[2], yr:m[3], Yr:m[4],
-			xg:m[5], yg:m[6], Yg:m[7],
-			xb:m[8], yb:m[9], Yb:m[10]
-		};
-		
-		//	convert for the whitepoint
-		if(kwArgs.whitepoint!=primary.whitepoint){
-			var r=this.convert(
-				this.adapt({
-					color:this.convert({ x:xr, y:yr, Y:Yr }, "xyY", "XYZ"),
-					adaptor:kwArgs.adaptor, 
-					source:primary.whitepoint, 
-					destination:kwArgs.whitepoint
-				}),
-				"XYZ",
-				"xyY"
-			);
-			var g=this.convert(
-				this.adapt({
-					color:this.convert({ x:xg, y:yg, Y:Yg }, "xyY", "XYZ"),
-					adaptor:kwArgs.adaptor, 
-					source:primary.whitepoint, 
-					destination:kwArgs.whitepoint
-				}),
-				"XYZ",
-				"xyY"
-			);
-			var b=this.convert(
-				this.adapt({
-					color:this.convert({ x:xb, y:yb, Y:Yb }, "xyY", "XYZ"),
-					adaptor:kwArgs.adaptor, 
-					source:primary.whitepoint, 
-					destination:kwArgs.whitepoint
-				}),
-				"XYZ",
-				"xyY"
-			);
-			primary=dojo.mixin(primary, {
-				xr: r.x, yr: r.y, Yr: r.Y,
-				xg: g.x, yg: g.y, Yg: g.Y,
-				xb: b.x, yb: b.y, Yb: b.Y,
-				whitepoint: kwArgs.whitepoint
-			});
-		}
-		return dojo.mixin(primary, {
-			zr: 1-primary.xr-primary.yr,
-			zg: 1-primary.xg-primary.yg,
-			zb: 1-primary.xb-primary.yb
-		});		//	Object
-	};
-
-	this.adapt=function(/* Object */kwArgs){
-		//	color is required in the form of XYZ, source whitepoint name is required.
-		if(!kwArgs.color || !kwArgs.source){
-			console.error("dojox.color.Colorspace::adapt: color and source arguments are required. ", kwArgs);
-		}
-
-		//	defaults
-		kwArgs=dojo.mixin({
-			adaptor:"Bradford",
-			destination:"D65"
-		}, kwArgs);
-
-		//	adapt
-		var swp = this.whitepoint(kwArgs.source);
-		var dwp = this.whitepoint(kwArgs.destination);
-		if(adaptors[kwArgs.adaptor]){
-			var ma=adaptors[kwArgs.adaptor].ma;
-			var mai=adaptors[kwArgs.adaptor].mai;
-		}else{
-			console.warn("dojox.color.Colorspace::adapt: the passed adaptor '", kwArgs.adaptor, "' was not found.");
-		}
-		var dSrc=dxm.multiply([[swp.x, swp.y, swp.z]], ma);
-		var dDest=dxm.multiply([[dwp.x, dwp.y, dwp.z]], ma);
-		var center=[
-			[dDest[0][0]/dSrc[0][0], 0, 0],
-			[0, dDest[0][1]/dSrc[0][1], 0],
-			[0, 0, dDest[0][2]/dSrc[0][2]]
-		];
-		var m=dxm.multiply(dxm.multiply(ma, center), mai);
-		var r=dxm.multiply([[ kwArgs.color.X, kwArgs.color.Y, kwArgs.color.Z ]], m)[0];
-		return { X:r[0], Y:r[1], Z:r[2] };
-	};
-
-	this.matrix=function(/* String */to, /* Object */primary){
-		var wp=this.whitepoint(primary.whitepoint);
-		var Xr = p.xr/p.yr, Yr = 1, Zr = (1-p.xr-p.yr)/p.yr;
-		var Xg = p.xg/p.yg, Yg = 1, Zg = (1-p.xg-p.yg)/p.yg;
-		var Xb = p.xb/p.yb, Yb = 1, Zr = (1-p.xb-p.yb)/p.yb;
-
-		var m1 = [[ Xr, Yr, Zr ], [ Xg, Yg, Zg ], [ Xb, Yb, Zb ]];
-		var m2 = [[ wp.X, wp.Y, wp.Z ]];
-		var sm = dojox.math.matrix.multiply(m2, dojox.math.matrix.inverse(m1));
-		var Sr = sm[0][0], Sg = sm[0][1], Sb = sm[0][2];
-		var result=[
-			[Sr*Xr, Sr*Yr, Sr*Zr],
-			[Sg*Xg, Sg*Yg, Sg*Zg],
-			[Sb*Xb, Sb*Yb, Sb*Zb]
-		];
-		if(to=="RGB"){ return dojox.math.inverse(result); }
-		return result;
-	};
-
-	this.epsilon=function(/* bool? */useApprox){
-		return (useApprox || typeof(useApprox)=="undefined")? 0.008856: 216/24289;
-	};
-	this.kappa=function(/* bool? */useApprox){
-		return (useApprox || typeof(useApprox)=="undefined")? 903.3: 24389/27;
-	};
-
-	this.convert=function(/* Object */color, /* string */from, /* string */to, /* Object? */kwArgs){
-		if(converters[from] && converters[from][to]){
-			return converters[from][to](obj, kwArgs);
-		}
-		console.warn("dojox.color.Colorspace::convert: Can't convert ", color, " from ", from, " to ", to, ".");
-	};
-})();
-
-//	More dojox.color and dojox.color.Color extensions
-dojo.mixin(dojox.color, {
-	fromXYZ: function(/* Object */xyz, /* Object?*/kwArgs){
-		kwArgs=kwArgs||{};
-		var p=dojox.color.Colorspace.primaries(kwArgs);
-		var m=dojox.color.Colorspace.matrix("RGB", p);
-		var rgb=dojox.math.matrix.mutliply([[ xyz.X, xyz.Y, xyz.Z ]], m);
-		var r=rgb[0][0], g=rgb[0][1], b=rgb[0][2];
-		if(p.profile=="sRGB"){
-			var R = (r>0.0031308)?(1.055*Math.pow(r, 1/2.4))-0.055: 12.92*r;
-			var G = (g>0.0031308)?(1.055*Math.pow(g, 1/2.4))-0.055: 12.92*g;
-			var B = (b>0.0031308)?(1.055*Math.pow(b, 1/2.4))-0.055: 12.92*b;
-		}else{
-			var R=Math.pow(r, 1/p.gamma), G=Math.pow(g, 1/p.gamma), B=Math.pow(b, 1/p.gamma);
-		}
-		return new dojox.color.Color({ r:Math.floor(R*255), g:Math.floor(G*255), b:Math.floor(B*255) });
-	}
-});
-
-dojo.extend(dojox.color.Color, {
-	toXYZ: function(/* Object */kwArgs){
-		kwArgs=kwArgs||{};
-		var p=dojox.color.Colorspace.primaries(kwArgs);
-		var m=dojox.color.Colorspace.matrix("XYZ", p);
-		var _r=this.r/255, _g=this.g/255, _b=this.b/255;
-		if(p.profile=="sRGB"){
-			var r=(_r>0.04045) ? Math.pow(((_r+0.055)/1.055), 2.4):_r/12.92;
-			var g=(_g>0.04045) ? Math.pow(((_g+0.055)/1.055), 2.4):_g/12.92;
-			var b=(_b>0.04045) ? Math.pow(((_b+0.055)/1.055), 2.4):_b/12.92;
-		} else {
-			var r=Math.pow(_r, p.gamma), g=Math.pow(_g, p.gamma), b=Math.pow(_b, p.gamma);
-		}
-		var xyz=dojox.math.matrix([[ r, g, b ]], m);
-		return { X: xyz[0][0], Y: xyz[0][1], Z: xyz[0][2] };	//	Object
-	}
-});
-
+dojox.color.Colorspace=new (function(){var D=dojox.color;
+var E=dojox.math.matrix;
+var C=this;
+var G={"2":{E:{x:1/3,y:1/3,t:5400},D50:{x:0.34567,y:0.3585,t:5000},D55:{x:0.33242,y:0.34743,t:5500},D65:{x:0.31271,y:0.32902,t:6500},D75:{x:0.29902,y:0.31485,t:7500},A:{x:0.44757,y:0.40745,t:2856},B:{x:0.34842,y:0.35161,t:4874},C:{x:0.31006,y:0.31616,t:6774},"9300":{x:0.2848,y:0.2932,t:9300},F2:{x:0.37207,y:0.37512,t:4200},F7:{x:0.31285,y:0.32918,t:6500},F11:{x:0.38054,y:0.37691,t:4000}},"10":{E:{x:1/3,y:1/3,t:5400},D50:{x:0.34773,y:0.35952,t:5000},D55:{x:0.33411,y:0.34877,t:5500},D65:{x:0.31382,y:0.331,t:6500},D75:{x:0.29968,y:0.3174,t:7500},A:{x:0.45117,y:0.40594,t:2856},B:{x:0.3498,y:0.3527,t:4874},C:{x:0.31039,y:0.31905,t:6774},F2:{x:0.37928,y:0.36723,t:4200},F7:{x:0.31565,y:0.32951,t:6500},F11:{x:0.38543,y:0.3711,t:4000}}};
+var B={"Adobe RGB 98":[2.2,"D65",0.64,0.33,0.297361,0.21,0.71,0.627355,0.15,0.06,0.075285],"Apple RGB":[1.8,"D65",0.625,0.34,0.244634,0.28,0.595,0.672034,0.155,0.07,0.083332],"Best RGB":[2.2,"D50",0.7347,0.2653,0.228457,0.215,0.775,0.737352,0.13,0.035,0.034191],"Beta RGB":[2.2,"D50",0.6888,0.3112,0.303273,0.1986,0.7551,0.663786,0.1265,0.0352,0.032941],"Bruce RGB":[2.2,"D65",0.64,0.33,0.240995,0.28,0.65,0.683554,0.15,0.06,0.075452],"CIE RGB":[2.2,"E",0.735,0.265,0.176204,0.274,0.717,0.812985,0.167,0.009,0.010811],"ColorMatch RGB":[1.8,"D50",0.63,0.34,0.274884,0.295,0.605,0.658132,0.15,0.075,0.066985],"DON RGB 4":[2.2,"D50",0.696,0.3,0.27835,0.215,0.765,0.68797,0.13,0.035,0.03368],"ECI RGB":[1.8,"D50",0.67,0.33,0.32025,0.21,0.71,0.602071,0.14,0.08,0.077679],"EktaSpace PS5":[2.2,"D50",0.695,0.305,0.260629,0.26,0.7,0.734946,0.11,0.005,0.004425],"NTSC RGB":[2.2,"C",0.67,0.33,0.298839,0.21,0.71,0.586811,0.14,0.08,0.11435],"PAL/SECAM RGB":[2.2,"D65",0.64,0.33,0.222021,0.29,0.6,0.706645,0.15,0.06,0.071334],"Pro Photo RGB":[1.8,"D50",0.7347,0.2653,0.28804,0.1596,0.8404,0.711874,0.0366,0.0001,0.000086],"SMPTE/C RGB":[2.2,"D65",0.63,0.34,0.212395,0.31,0.595,0.701049,0.155,0.07,0.086556],sRGB:[2.2,"D65",0.64,0.33,0.212656,0.3,0.6,0.715158,0.15,0.06,0.072186],"Wide Gamut RGB":[2.2,"D50",0.735,0.265,0.258187,0.115,0.826,0.724938,0.157,0.018,0.016875]};
+var A={"XYZ scaling":{ma:[[1,0,0],[0,1,0],[0,0,1]],mai:[[1,0,0],[0,1,0],[0,0,1]]},Bradford:{ma:[[0.8951,-0.7502,0.0389],[0.2664,1.7135,-0.0685],[-0.1614,0.0367,1.0296]],mai:[[0.986993,0.432305,-0.008529],[-0.147054,0.51836,0.040043],[0.159963,0.049291,0.968487]]},"Von Kries":{ma:[[0.40024,-0.2263,0],[0.7076,1.16532,0],[-0.08081,0.0457,0.91822]],mai:[[1.859936,0.361191,0],[-1.129382,0.638812,0],[0.219897,-0.000006,1.089064]]}};
+var F={XYZ:{xyY:function(J,L){L=dojo.mixin({whitepoint:"D65",observer:"10",useApproximation:true},L||{});
+var K=C.whitepoint(L.whitepoint,L.observer);
+var M=J.X+J.Y+J.Z;
+if(M==0){var I=K.x,N=K.y
+}else{var I=J.X/M,N=J.Y/M
+}return{x:I,y:N,Y:J.Y}
+},Lab:function(R,N){N=dojo.mixin({whitepoint:"D65",observer:"10",useApproximation:true},N||{});
+var O=C.kappa(N.useApproximation),V=C.epsilon(N.useApproximation);
+var T=C.whitepoint(N.whitepoint,N.observer);
+var M=R.X/T.x,W=R.Y/T.y,P=R.z/T.z;
+var K=(M>V)?Math.pow(M,1/3):(O*M+16)/116;
+var J=(W>V)?Math.pow(W,1/3):(O*W+16)/116;
+var I=(P>V)?Math.pow(P,1/3):(O*P+16)/116;
+var Q=116*J-16,U=500*(K-J),S=200*(J-I);
+return{L:Q,a:U,b:S}
+},Luv:function(N,I){I=dojo.mixin({whitepoint:"D65",observer:"10",useApproximation:true},I||{});
+var J=C.kappa(I.useApproximation),T=C.epsilon(I.useApproximation);
+var P=C.whitepoint(I.whitepoint,I.observer);
+var V=(4*N.X)/(N.X+15*N.Y+3*N.Z);
+var K=(9*N.Y)/(N.X+15*N.Y+3*N.Z);
+var O=(4*P.x)/(P.x+15*P.y+3*P.z);
+var S=(9*P.y)/(P.x+15*P.y+3*P.z);
+var U=N.Y/P.y;
+var M=(U>T)?116*Math.pow(U,1/3)-16:J*U;
+var R=13*M*(V-O);
+var Q=13*M*(K-S);
+return{L:M,u:R,v:Q}
+}},xyY:{XYZ:function(I){if(I.y==0){var L=0,K=0,J=0
+}else{var L=(I.x*I.Y)/I.y;
+var K=I.Y;
+var J=((1-I.x-I.y)*I.Y)/I.y
+}return{X:L,Y:K,Z:J}
+}},Lab:{XYZ:function(M,N){N=dojo.mixin({whitepoint:"D65",observer:"10",useApproximation:true},N||{});
+var R=N.useApproximation,O=C.kappa(R),T=C.epsilon(R);
+var Q=C.whitepoint(N.whitepoint,N.observer);
+var U=(M.L>(O*T))?Math.pow((M.L+16)/116,3):M.L/O;
+var J=(U>T)?(M.L+16)/116:(O*U+16)/116;
+var L=(M.a/500)+J;
+var I=J-(M.b/200);
+var V=Math.pow(L,3),S=Math.pow(I,3);
+var K=(V>T)?V:(116*L-16)/O;
+var P=(S>T)?S:(116*I-16)/O;
+return{X:K*Q.x,Y:U*Q.y,Z:P*Q.z}
+},LCHab:function(K){var I=K.L,M=Math.pow(K.a*K.a+K.b*K.b,0.5),J=Math.atan(K.b,K.a)*(180/Math.PI);
+if(J<0){J+=360
+}if(J<360){J-=360
+}return{L:I,C:M,H:J}
+}},LCHab:{Lab:function(M){var N=M.H*(Math.PI/180),J=M.L,K=M.C/Math.pow(Math.pow(Math.tan(N),2)+1,0.5);
+if(90<lchH&&M.H<270){K=-K
+}var I=Math.pow(Math.pow(M.C,2)-Math.pow(K,2),0.5);
+if(M.H>180){I=-I
+}return{L:J,a:K,b:I}
+}},Luv:{XYZ:function(Q,L){L=dojo.mixin({whitepoint:"D65",observer:"10",useApproximation:true},L||{});
+var S=L.useApproximation,M=C.kappa(S),U=C.epsilon(S);
+var R=C.whitepoint(L.whitepoint,L.observer);
+var V=(4*R.x)/(R.x+15*R.y+3*R.z);
+var O=(9*R.y)/(R.x+15*R.y+3*R.z);
+var J=(Q.L>M*U)?Math.pow((Q.L+16)/116,3):Q.L/M;
+var T=(1/3)*(((52*Q.L)/(Q.u+13*Q.L*V))-1);
+var S=-5*J,P=-(1/3),N=J*(((39*Q.L)/(Q.v+13*Q.L*O))-5);
+var K=(N-S)/(T-P),I=K*T+S;
+return{X:K,Y:J,Z:I}
+},LCHuv:function(M){var I=M.L,K=Math.pow(M.u*M.u+M.v*M*v,0.5),J=Math.atan(M.v,M.u)*(180/Math.PI);
+if(J<0){J+=360
+}if(J>360){J-=360
+}return{L:I,C:K,H:J}
+}},LCHuv:{Luv:function(N){var M=N.H*(Math.PI/180);
+var I=N.L,K=N.C/Math.pow(Math.pow(Math.tan(M),2)+1,0.5);
+var J=Math.pow(N.C*N.C-K*K,0.5);
+if(90<N.H&&N.H>270){K*=-1
+}if(N.H>180){J*=-1
+}return{L:I,u:K,v:J}
+}}};
+var H={CMY:{CMYK:function(J,I){return D.fromCmy(J).toCmyk()
+},HSL:function(J,I){return D.fromCmy(J).toHsl()
+},HSV:function(J,I){return D.fromCmy(J).toHsv()
+},Lab:function(J,I){return F.XYZ["Lab"](D.fromCmy(J).toXYZ(I))
+},LCHab:function(J,I){return F.Lab["LCHab"](H.CMY["Lab"](J))
+},LCHuv:function(J,I){return F.LCHuv["Luv"](F.Luv["XYZ"](D.fromCmy(J).toXYZ(I)))
+},Luv:function(J,I){return F.Luv["XYZ"](D.fromCmy(J).toXYZ(I))
+},RGB:function(J,I){return D.fromCmy(J)
+},XYZ:function(J,I){return D.fromCmy(J).toXYZ(I)
+},xyY:function(J,I){return F.XYZ["xyY"](D.fromCmy(J).toXYZ(I))
+}},CMYK:{CMY:function(J,I){return D.fromCmyk(J).toCmy()
+},HSL:function(J,I){return D.fromCmyk(J).toHsl()
+},HSV:function(J,I){return D.fromCmyk(J).toHsv()
+},Lab:function(J,I){return F.XYZ["Lab"](D.fromCmyk(J).toXYZ(I))
+},LCHab:function(J,I){return F.Lab["LCHab"](H.CMYK["Lab"](J))
+},LCHuv:function(J,I){return F.LCHuv["Luv"](F.Luv["XYZ"](D.fromCmyk(J).toXYZ(I)))
+},Luv:function(J,I){return F.Luv["XYZ"](D.fromCmyk(J).toXYZ(I))
+},RGB:function(J,I){return D.fromCmyk(J)
+},XYZ:function(J,I){return D.fromCmyk(J).toXYZ(I)
+},xyY:function(J,I){return F.XYZ["xyY"](D.fromCmyk(J).toXYZ(I))
+}},HSL:{CMY:function(J,I){return D.fromHsl(J).toCmy()
+},CMYK:function(J,I){return D.fromHsl(J).toCmyk()
+},HSV:function(J,I){return D.fromHsl(J).toHsv()
+},Lab:function(J,I){return F.XYZ["Lab"](D.fromHsl(J).toXYZ(I))
+},LCHab:function(J,I){return F.Lab["LCHab"](H.CMYK["Lab"](J))
+},LCHuv:function(J,I){return F.LCHuv["Luv"](F.Luv["XYZ"](D.fromHsl(J).toXYZ(I)))
+},Luv:function(J,I){return F.Luv["XYZ"](D.fromHsl(J).toXYZ(I))
+},RGB:function(J,I){return D.fromHsl(J)
+},XYZ:function(J,I){return D.fromHsl(J).toXYZ(I)
+},xyY:function(J,I){return F.XYZ["xyY"](D.fromHsl(J).toXYZ(I))
+}},HSV:{CMY:function(J,I){return D.fromHsv(J).toCmy()
+},CMYK:function(J,I){return D.fromHsv(J).toCmyk()
+},HSL:function(J,I){return D.fromHsv(J).toHsl()
+},Lab:function(J,I){return F.XYZ["Lab"](D.fromHsv(J).toXYZ(I))
+},LCHab:function(J,I){return F.Lab["LCHab"](H.CMYK["Lab"](J))
+},LCHuv:function(J,I){return F.LCHuv["Luv"](F.Luv["XYZ"](D.fromHsv(J).toXYZ(I)))
+},Luv:function(J,I){return F.Luv["XYZ"](D.fromHsv(J).toXYZ(I))
+},RGB:function(J,I){return D.fromHsv(J)
+},XYZ:function(J,I){return D.fromHsv(J).toXYZ(I)
+},xyY:function(J,I){return F.XYZ["xyY"](D.fromHsv(J).toXYZ(I))
+}},Lab:{CMY:function(J,I){return D.fromXYZ(F.Lab["XYZ"](J,I)).toCmy()
+},CMYK:function(J,I){return D.fromXYZ(F.Lab["XYZ"](J,I)).toCmyk()
+},HSL:function(J,I){return D.fromXYZ(F.Lab["XYZ"](J,I)).toHsl()
+},HSV:function(J,I){return D.fromXYZ(F.Lab["XYZ"](J,I)).toHsv()
+},LCHab:function(J,I){return F.Lab["LCHab"](J,I)
+},LCHuv:function(J,I){return F.Luv["LCHuv"](F.Lab["XYZ"](J,I),I)
+},Luv:function(J,I){return F.XYZ["Luv"](F.Lab["XYZ"](J,I),I)
+},RGB:function(J,I){return D.fromXYZ(F.Lab["XYZ"](J,I))
+},XYZ:function(J,I){return F.Lab["XYZ"](J,I)
+},xyY:function(J,I){return F.XYZ["xyY"](F.Lab["XYZ"](J,I),I)
+}},LCHab:{CMY:function(J,I){return D.fromXYZ(F.Lab["XYZ"](F.LCHab["Lab"](J),I),I).toCmy()
+},CMYK:function(J,I){return D.fromXYZ(F.Lab["XYZ"](F.LCHab["Lab"](J),I),I).toCmyk()
+},HSL:function(J,I){return D.fromXYZ(F.Lab["XYZ"](F.LCHab["Lab"](J),I),I).toHsl()
+},HSV:function(J,I){return D.fromXYZ(F.Lab["XYZ"](F.LCHab["Lab"](J),I),I).toHsv()
+},Lab:function(J,I){return F.Lab["LCHab"](J,I)
+},LCHuv:function(J,I){return F.Luv["LCHuv"](F.XYZ["Luv"](F.Lab["XYZ"](F.LCHab["Lab"](J),I),I),I)
+},Luv:function(J,I){return F.XYZ["Luv"](F.Lab["XYZ"](F.LCHab["Lab"](J),I),I)
+},RGB:function(J,I){return D.fromXYZ(F.Lab["XYZ"](F.LCHab["Lab"](J),I),I)
+},XYZ:function(J,I){return F.Lab["XYZ"](F.LCHab["Lab"](J,I),I)
+},xyY:function(J,I){return F.XYZ["xyY"](F.Lab["XYZ"](F.LCHab["Lab"](J),I),I)
+}},LCHuv:{CMY:function(J,I){return D.fromXYZ(F.Luv["XYZ"](F.LCHuv["Luv"](J),I),I).toCmy()
+},CMYK:function(J,I){return D.fromXYZ(F.Luv["XYZ"](F.LCHuv["Luv"](J),I),I).toCmyk()
+},HSL:function(J,I){return D.fromXYZ(F.Luv["XYZ"](F.LCHuv["Luv"](J),I),I).toHsl()
+},HSV:function(J,I){return D.fromXYZ(F.Luv["XYZ"](F.LCHuv["Luv"](J),I),I).toHsv()
+},Lab:function(J,I){return F.XYZ["Lab"](F.Luv["XYZ"](F.LCHuv["Luv"](J),I),I)
+},LCHab:function(J,I){return F.Lab["LCHab"](F.XYZ["Lab"](F.Luv["XYZ"](F.LCHuv["Luv"](J),I),I),I)
+},Luv:function(J,I){return F.LCHuv["Luv"](J,I)
+},RGB:function(J,I){return D.fromXYZ(F.Luv["XYZ"](F.LCHuv["Luv"](J),I),I)
+},XYZ:function(J,I){return F.Luv["XYZ"](F.LCHuv["Luv"](J),I)
+},xyY:function(J,I){return F.XYZ["xyY"](F.Luv["XYZ"](F.LCHuv["Luv"](J),I),I)
+},},Luv:{CMY:function(J,I){return D.fromXYZ(F.Luv["XYZ"](J,I),I).toCmy()
+},CMYK:function(J,I){return D.fromXYZ(F.Luv["XYZ"](J,I),I).toCmyk()
+},HSL:function(J,I){return D.fromXYZ(F.Luv["XYZ"](J,I),I).toHsl()
+},HSV:function(J,I){return D.fromXYZ(F.Luv["XYZ"](J,I),I).toHsv()
+},Lab:function(J,I){return F.XYZ["Lab"](F.Luv["XYZ"](J,I),I)
+},LCHab:function(J,I){return F.Lab["LCHab"](F.XYZ["Lab"](F.Luv["XYZ"](J,I),I),I)
+},LCHuv:function(J,I){return F.Luv["LCHuv"](J,I)
+},RGB:function(J,I){return D.fromXYZ(F.Luv["XYZ"](J,I),I)
+},XYZ:function(J,I){return F.Luv["XYZ"](J,I)
+},xyY:function(J,I){return F.XYZ["xyY"](F.Luv["XYZ"](J,I),I)
+},},RGB:{CMY:function(J,I){return J.toCmy()
+},CMYK:function(J,I){return J.toCmyk()
+},HSL:function(J,I){return J.toHsl()
+},HSV:function(J,I){return J.toHsv()
+},Lab:function(J,I){return F.XYZ["Lab"](J.toXYZ(I),I)
+},LCHab:function(J,I){return F.LCHab["Lab"](F.XYZ["Lab"](J.toXYZ(I),I),I)
+},LCHuv:function(J,I){return F.LCHuv["Luv"](F.XYZ["Luv"](J.toXYZ(I),I),I)
+},Luv:function(J,I){return F.XYZ["Luv"](J.toXYZ(I),I)
+},XYZ:function(J,I){return J.toXYZ(I)
+},xyY:function(J,I){return F.XYZ["xyY"](J.toXYZ(I),I)
+}},XYZ:{CMY:function(J,I){return D.fromXYZ(J,I).toCmy()
+},CMYK:function(J,I){return D.fromXYZ(J,I).toCmyk()
+},HSL:function(J,I){return D.fromXYZ(J,I).toHsl()
+},HSV:function(J,I){return D.fromXYZ(J,I).toHsv()
+},Lab:function(J,I){return F.XYZ["Lab"](J,I)
+},LCHab:function(J,I){return F.Lab["LCHab"](F.XYZ["Lab"](J,I),I)
+},LCHuv:function(J,I){return F.Luv["LCHuv"](F.XYZ["Luv"](J,I),I)
+},Luv:function(J,I){return F.XYZ["Luv"](J,I)
+},RGB:function(J,I){return D.fromXYZ(J,I)
+},xyY:function(J,I){return F.XYZ["xyY"](D.fromXYZ(J,I),I)
+}},xyY:{CMY:function(J,I){return D.fromXYZ(F.xyY["XYZ"](J,I),I).toCmy()
+},CMYK:function(J,I){return D.fromXYZ(F.xyY["XYZ"](J,I),I).toCmyk()
+},HSL:function(J,I){return D.fromXYZ(F.xyY["XYZ"](J,I),I).toHsl()
+},HSV:function(J,I){return D.fromXYZ(F.xyY["XYZ"](J,I),I).toHsv()
+},Lab:function(J,I){return F.Lab["XYZ"](F.xyY["XYZ"](J,I),I)
+},LCHab:function(J,I){return F.LCHab["Lab"](F.Lab["XYZ"](F.xyY["XYZ"](J,I),I),I)
+},LCHuv:function(J,I){return F.LCHuv["Luv"](F.Luv["XYZ"](F.xyY["XYZ"](J,I),I),I)
+},Luv:function(J,I){return F.Luv["XYZ"](F.xyY["XYZ"](J,I),I)
+},RGB:function(J,I){return D.fromXYZ(F.xyY["XYZ"](J,I),I)
+},XYZ:function(J,I){return F.xyY["XYZ"](J,I)
+}}};
+this.whitepoint=function(M,J){J=J||"10";
+var I=0,N=0,L=0;
+if(G[J]&&G[J][M]){I=G[J][M].x;
+N=G[J][M].y;
+L=G[J][M].t
+}else{console.warn("dojox.color.Colorspace::whitepoint: either the observer or the whitepoint name was not found. ",J,M)
+}var K={x:I,y:N,z:(1-I-N),t:L,Y:1};
+return this.convert(K,"xyY","XYZ")
+};
+this.tempToWhitepoint=function(P){if(P<4000){console.warn("dojox.color.Colorspace::tempToWhitepoint: can't find a white point for temperatures less than 4000K. (Passed ",P,").");
+return{x:0,y:0}
+}if(P>25000){console.warn("dojox.color.Colorspace::tempToWhitepoint: can't find a white point for temperatures greater than 25000K. (Passed ",P,").");
+return{x:0,y:0}
+}var M=P,L=P*P,K=L*P;
+var Q=Math.pow(10,9),I=Math.pow(10,6),J=Math.pow(10,3);
+if(P<=7000){var O=(-4.607*Q/K)+(2.9678*I/L)+(0.09911*J/P)+0.2444063
+}else{var O=(-2.0064*Q/K)+(1.9018*I/L)+(0.24748*J/P)+0.23704
+}var N=-3*O*O+2.87*O-0.275;
+return{x:O,y:N}
+};
+this.primaries=function(K){K=dojo.mixin({profile:"sRGB",whitepoint:"D65",observer:"10",adaptor:"Bradford"},K||{});
+var J=[];
+if(B[K.profile]){J=B[K.profile].slice(0)
+}else{console.warn("dojox.color.Colorspace::primaries: the passed profile was not found.  ","Available profiles include: ",B,".  The profile passed was ",K.profile)
+}var L={name:K.profile,gamma:J[0],whitepoint:J[1],xr:J[2],yr:J[3],Yr:J[4],xg:J[5],yg:J[6],Yg:J[7],xb:J[8],yb:J[9],Yb:J[10]};
+if(K.whitepoint!=L.whitepoint){var N=this.convert(this.adapt({color:this.convert({x:xr,y:yr,Y:Yr},"xyY","XYZ"),adaptor:K.adaptor,source:L.whitepoint,destination:K.whitepoint}),"XYZ","xyY");
+var M=this.convert(this.adapt({color:this.convert({x:xg,y:yg,Y:Yg},"xyY","XYZ"),adaptor:K.adaptor,source:L.whitepoint,destination:K.whitepoint}),"XYZ","xyY");
+var I=this.convert(this.adapt({color:this.convert({x:xb,y:yb,Y:Yb},"xyY","XYZ"),adaptor:K.adaptor,source:L.whitepoint,destination:K.whitepoint}),"XYZ","xyY");
+L=dojo.mixin(L,{xr:N.x,yr:N.y,Yr:N.Y,xg:M.x,yg:M.y,Yg:M.Y,xb:I.x,yb:I.y,Yb:I.Y,whitepoint:K.whitepoint})
+}return dojo.mixin(L,{zr:1-L.xr-L.yr,zg:1-L.xg-L.yg,zb:1-L.xb-L.yb})
+};
+this.adapt=function(N){if(!N.color||!N.source){console.error("dojox.color.Colorspace::adapt: color and source arguments are required. ",N)
+}N=dojo.mixin({adaptor:"Bradford",destination:"D65"},N);
+var P=this.whitepoint(N.source);
+var O=this.whitepoint(N.destination);
+if(A[N.adaptor]){var Q=A[N.adaptor].ma;
+var L=A[N.adaptor].mai
+}else{console.warn("dojox.color.Colorspace::adapt: the passed adaptor '",N.adaptor,"' was not found.")
+}var R=E.multiply([[P.x,P.y,P.z]],Q);
+var M=E.multiply([[O.x,O.y,O.z]],Q);
+var J=[[M[0][0]/R[0][0],0,0],[0,M[0][1]/R[0][1],0],[0,0,M[0][2]/R[0][2]]];
+var K=E.multiply(E.multiply(Q,J),L);
+var I=E.multiply([[N.color.X,N.color.Y,N.color.Z]],K)[0];
+return{X:I[0],Y:I[1],Z:I[2]}
+};
+this.matrix=function(M,U){var N=this.whitepoint(U.whitepoint);
+var T=p.xr/p.yr,Z=1,Q=(1-p.xr-p.yr)/p.yr;
+var V=p.xg/p.yg,L=1,R=(1-p.xg-p.yg)/p.yg;
+var Y=p.xb/p.yb,P=1,Q=(1-p.xb-p.yb)/p.yb;
+var J=[[T,Z,Q],[V,L,R],[Y,P,Zb]];
+var I=[[N.X,N.Y,N.Z]];
+var W=dojox.math.matrix.multiply(I,dojox.math.matrix.inverse(J));
+var X=W[0][0],K=W[0][1],O=W[0][2];
+var S=[[X*T,X*Z,X*Q],[K*V,K*L,K*R],[O*Y,O*P,O*Zb]];
+if(M=="RGB"){return dojox.math.inverse(S)
+}return S
+};
+this.epsilon=function(I){return(I||typeof (I)=="undefined")?0.008856:216/24289
+};
+this.kappa=function(I){return(I||typeof (I)=="undefined")?903.3:24389/27
+};
+this.convert=function(I,L,K,J){if(H[L]&&H[L][K]){return H[L][K](obj,J)
+}console.warn("dojox.color.Colorspace::convert: Can't convert ",I," from ",L," to ",K,".")
 }
+})();
+dojo.mixin(dojox.color,{fromXYZ:function(K,H){H=H||{};
+var D=dojox.color.Colorspace.primaries(H);
+var E=dojox.color.Colorspace.matrix("RGB",D);
+var J=dojox.math.matrix.mutliply([[K.X,K.Y,K.Z]],E);
+var A=J[0][0],I=J[0][1],L=J[0][2];
+if(D.profile=="sRGB"){var F=(A>0.0031308)?(1.055*Math.pow(A,1/2.4))-0.055:12.92*A;
+var M=(I>0.0031308)?(1.055*Math.pow(I,1/2.4))-0.055:12.92*I;
+var C=(L>0.0031308)?(1.055*Math.pow(L,1/2.4))-0.055:12.92*L
+}else{var F=Math.pow(A,1/D.gamma),M=Math.pow(I,1/D.gamma),C=Math.pow(L,1/D.gamma)
+}return new dojox.color.Color({r:Math.floor(F*255),g:Math.floor(M*255),b:Math.floor(C*255)})
+}});
+dojo.extend(dojox.color.Color,{toXYZ:function(E){E=E||{};
+var B=dojox.color.Colorspace.primaries(E);
+var C=dojox.color.Colorspace.matrix("XYZ",B);
+var J=this.r/255,D=this.g/255,H=this.b/255;
+if(B.profile=="sRGB"){var A=(J>0.04045)?Math.pow(((J+0.055)/1.055),2.4):J/12.92;
+var F=(D>0.04045)?Math.pow(((D+0.055)/1.055),2.4):D/12.92;
+var I=(H>0.04045)?Math.pow(((H+0.055)/1.055),2.4):H/12.92
+}else{var A=Math.pow(J,B.gamma),F=Math.pow(D,B.gamma),I=Math.pow(H,B.gamma)
+}var G=dojox.math.matrix([[A,F,I]],C);
+return{X:G[0][0],Y:G[0][1],Z:G[0][2]}
+}})
+};

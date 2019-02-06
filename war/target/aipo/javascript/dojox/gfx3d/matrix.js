@@ -1,339 +1,98 @@
-if(!dojo._hasResource["dojox.gfx3d.matrix"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.gfx3d.matrix"] = true;
+if(!dojo._hasResource["dojox.gfx3d.matrix"]){dojo._hasResource["dojox.gfx3d.matrix"]=true;
 dojo.provide("dojox.gfx3d.matrix");
-
-// candidates for dojox.math:
-dojox.gfx3d.matrix._degToRad = function(degree){ return Math.PI * degree / 180; };
-dojox.gfx3d.matrix._radToDeg = function(radian){ return radian / Math.PI * 180; };
-
-dojox.gfx3d.matrix.Matrix3D = function(arg){
-	// summary: a 3D matrix object
-	// description: Normalizes a 3D matrix-like object. If arrays is passed, 
-	//		all objects of the array are normalized and multiplied sequentially.
-	// arg: Object
-	//		a 3D matrix-like object, a number, or an array of such objects
-	if(arg){
-		if(typeof arg == "number"){
-			this.xx = this.yy = this.zz = arg;
-		}else if(arg instanceof Array){
-			if(arg.length > 0){
-				var m = dojox.gfx3d.matrix.normalize(arg[0]);
-				// combine matrices
-				for(var i = 1; i < arg.length; ++i){
-					var l = m;
-					var r = dojox.gfx3d.matrix.normalize(arg[i]);
-					m = new dojox.gfx3d.matrix.Matrix3D();
-					m.xx = l.xx * r.xx + l.xy * r.yx + l.xz * r.zx;
-					m.xy = l.xx * r.xy + l.xy * r.yy + l.xz * r.zy;
-					m.xz = l.xx * r.xz + l.xy * r.yz + l.xz * r.zz;
-					m.yx = l.yx * r.xx + l.yy * r.yx + l.yz * r.zx;
-					m.yy = l.yx * r.xy + l.yy * r.yy + l.yz * r.zy;
-					m.yz = l.yx * r.xz + l.yy * r.yz + l.yz * r.zz;
-					m.zx = l.zx * r.xx + l.zy * r.yx + l.zz * r.zx;
-					m.zy = l.zx * r.xy + l.zy * r.yy + l.zz * r.zy;
-					m.zz = l.zx * r.xz + l.zy * r.yz + l.zz * r.zz;
-					m.dx = l.xx * r.dx + l.xy * r.dy + l.xz * r.dz + l.dx;
-					m.dy = l.yx * r.dx + l.yy * r.dy + l.yz * r.dz + l.dy;
-					m.dz = l.zx * r.dx + l.zy * r.dy + l.zz * r.dz + l.dz;
-				}
-				dojo.mixin(this, m);
-			}
-		}else{
-			dojo.mixin(this, arg);
-		}
-	}
+dojox.gfx3d.matrix._degToRad=function(A){return Math.PI*A/180
 };
-
-// the default (identity) matrix, which is used to fill in missing values
-dojo.extend(dojox.gfx3d.matrix.Matrix3D, {xx: 1, xy: 0, xz: 0, yx: 0, yy: 1, yz: 0, zx: 0, zy: 0, zz: 1, dx: 0, dy: 0, dz: 0});
-
-dojo.mixin(dojox.gfx3d.matrix, {
-	// summary: class constants, and methods of dojox.gfx3d.matrix
-	
-	// matrix constants
-	
-	// identity: dojox.gfx3d.matrix.Matrix3D
-	//		an identity matrix constant: identity * (x, y, z) == (x, y, z)
-	identity: new dojox.gfx3d.matrix.Matrix3D(),
-	
-	// matrix creators
-	
-	translate: function(a, b, c){
-		// summary: forms a translation matrix
-		// description: The resulting matrix is used to translate (move) points by specified offsets.
-		// a: Number: an x coordinate value
-		// b: Number: a y coordinate value
-		// c: Number: a z coordinate value
-		if(arguments.length > 1){
-			return new dojox.gfx3d.matrix.Matrix3D({dx: a, dy: b, dz: c}); // dojox.gfx3d.matrix.Matrix3D
-		}
-		// branch
-		// a: Object: a point-like object, which specifies offsets for 3 dimensions
-		// b: null
-		return new dojox.gfx3d.matrix.Matrix3D({dx: a.x, dy: a.y, dz: a.z}); // dojox.gfx3d.matrix.Matrix3D
-	},
-	scale: function(a, b, c){
-		// summary: forms a scaling matrix
-		// description: The resulting matrix is used to scale (magnify) points by specified offsets.
-		// a: Number: a scaling factor used for the x coordinate
-		// b: Number: a scaling factor used for the y coordinate
-		// c: Number: a scaling factor used for the z coordinate
-		if(arguments.length > 1){
-			return new dojox.gfx3d.matrix.Matrix3D({xx: a, yy: b, zz: c}); // dojox.gfx3d.matrix.Matrix3D
-		}
-		if(typeof a == "number"){
-			// branch
-			// a: Number: a uniform scaling factor used for the all coordinates
-			// b: null
-			return new dojox.gfx3d.matrix.Matrix3D({xx: a, yy: a, zz: a}); // dojox.gfx3d.matrix.Matrix3D
-		}
-		// branch
-		// a: Object: a point-like object, which specifies scale factors for 3 dimensions
-		// b: null
-		return new dojox.gfx3d.matrix.Matrix3D({xx: a.x, yy: a.y, zz: a.z}); // dojox.gfx3d.matrix.Matrix3D
-	},
-	rotateX: function(angle){
-		// summary: forms a rotating matrix (about the x axis)
-		// description: The resulting matrix is used to rotate points 
-		//		around the origin of coordinates (0, 0) by specified angle.
-		// angle: Number: an angle of rotation in radians (>0 for CW)
-		var c = Math.cos(angle);
-		var s = Math.sin(angle);
-		return new dojox.gfx3d.matrix.Matrix3D({yy: c, yz: -s, zy: s, zz: c}); // dojox.gfx3d.matrix.Matrix3D
-	},
-	rotateXg: function(degree){
-		// summary: forms a rotating matrix (about the x axis)
-		// description: The resulting matrix is used to rotate points
-		//		around the origin of coordinates (0, 0) by specified degree.
-		//		See dojox.gfx3d.matrix.rotateX() for comparison.
-		// degree: Number: an angle of rotation in degrees (>0 for CW)
-		return dojox.gfx3d.matrix.rotateX(dojox.gfx3d.matrix._degToRad(degree)); // dojox.gfx3d.matrix.Matrix3D
-	},
-	rotateY: function(angle){
-		// summary: forms a rotating matrix (about the y axis)
-		// description: The resulting matrix is used to rotate points 
-		//		around the origin of coordinates (0, 0) by specified angle.
-		// angle: Number: an angle of rotation in radians (>0 for CW)
-		var c = Math.cos(angle);
-		var s = Math.sin(angle);
-		return new dojox.gfx3d.matrix.Matrix3D({xx: c, xz: s, zx: -s, zz: c}); // dojox.gfx3d.matrix.Matrix3D
-	},
-	rotateYg: function(degree){
-		// summary: forms a rotating matrix (about the y axis)
-		// description: The resulting matrix is used to rotate points
-		//		around the origin of coordinates (0, 0) by specified degree.
-		//		See dojox.gfx3d.matrix.rotateY() for comparison.
-		// degree: Number: an angle of rotation in degrees (>0 for CW)
-		return dojox.gfx3d.matrix.rotateY(dojox.gfx3d.matrix._degToRad(degree)); // dojox.gfx3d.matrix.Matrix3D
-	},
-	rotateZ: function(angle){
-		// summary: forms a rotating matrix (about the z axis)
-		// description: The resulting matrix is used to rotate points 
-		//		around the origin of coordinates (0, 0) by specified angle.
-		// angle: Number: an angle of rotation in radians (>0 for CW)
-		var c = Math.cos(angle);
-		var s = Math.sin(angle);
-		return new dojox.gfx3d.matrix.Matrix3D({xx: c, xy: -s, yx: s, yy: c}); // dojox.gfx3d.matrix.Matrix3D
-	},
-	rotateZg: function(degree){
-		// summary: forms a rotating matrix (about the z axis)
-		// description: The resulting matrix is used to rotate points
-		//		around the origin of coordinates (0, 0) by specified degree.
-		//		See dojox.gfx3d.matrix.rotateZ() for comparison.
-		// degree: Number: an angle of rotation in degrees (>0 for CW)
-		return dojox.gfx3d.matrix.rotateZ(dojox.gfx3d.matrix._degToRad(degree)); // dojox.gfx3d.matrix.Matrix3D
-	},
-
-	// camera transformation
-	cameraTranslate: function(a, b, c){
-		// summary: forms a translation matrix
-		// description: The resulting matrix is used to translate (move) points by specified offsets.
-		// a: Number: an x coordinate value
-		// b: Number: a y coordinate value
-		// c: Number: a z coordinate value
-		if(arguments.length > 1){
-			return new dojox.gfx3d.matrix.Matrix3D({dx: -a, dy: -b, dz: -c}); // dojox.gfx3d.matrix.Matrix3D
-		}
-		// branch
-		// a: Object: a point-like object, which specifies offsets for 3 dimensions
-		// b: null
-		return new dojox.gfx3d.matrix.Matrix3D({dx: -a.x, dy: -a.y, dz: -a.z}); // dojox.gfx3d.matrix.Matrix3D
-	},
-	cameraRotateX: function(angle){
-		// summary: forms a rotating matrix (about the x axis) in cameraTransform manner
-		// description: The resulting matrix is used to rotate points 
-		//		around the origin of coordinates (0, 0) by specified angle.
-		// angle: Number: an angle of rotation in radians (>0 for CW)
-		var c = Math.cos(-angle);
-		var s = Math.sin(-angle);
-		return new dojox.gfx3d.matrix.Matrix3D({yy: c, yz: -s, zy: s, zz: c}); // dojox.gfx3d.matrix.Matrix3D
-	},
-	cameraRotateXg: function(degree){
-		// summary: forms a rotating matrix (about the x axis)in cameraTransform manner
-		// description: The resulting matrix is used to rotate points
-		//		around the origin of coordinates (0, 0) by specified degree.
-		//		See dojox.gfx3d.matrix.rotateX() for comparison.
-		// degree: Number: an angle of rotation in degrees (>0 for CW)
-		return dojox.gfx3d.matrix.rotateX(dojox.gfx3d.matrix._degToRad(degree)); // dojox.gfx3d.matrix.Matrix3D
-	},
-	cameraRotateY: function(angle){
-		// summary: forms a rotating matrix (about the y axis) in cameraTransform manner
-		// description: The resulting matrix is used to rotate points 
-		//		around the origin of coordinates (0, 0) by specified angle.
-		// angle: Number: an angle of rotation in radians (>0 for CW)
-		var c = Math.cos(-angle);
-		var s = Math.sin(-angle);
-		return new dojox.gfx3d.matrix.Matrix3D({xx: c, xz: s, zx: -s, zz: c}); // dojox.gfx3d.matrix.Matrix3D
-	},
-	cameraRotateYg: function(degree){
-		// summary: forms a rotating matrix (about the y axis) in cameraTransform manner
-		// description: The resulting matrix is used to rotate points
-		//		around the origin of coordinates (0, 0) by specified degree.
-		//		See dojox.gfx3d.matrix.rotateY() for comparison.
-		// degree: Number: an angle of rotation in degrees (>0 for CW)
-		return dojox.gfx3d.matrix.rotateY(dojox.gfx3d.matrix._degToRad(degree)); // dojox.gfx3d.matrix.Matrix3D
-	},
-	cameraRotateZ: function(angle){
-		// summary: forms a rotating matrix (about the z axis) in cameraTransform manner
-		// description: The resulting matrix is used to rotate points 
-		//		around the origin of coordinates (0, 0) by specified angle.
-		// angle: Number: an angle of rotation in radians (>0 for CW)
-		var c = Math.cos(-angle);
-		var s = Math.sin(-angle);
-		return new dojox.gfx3d.matrix.Matrix3D({xx: c, xy: -s, yx: s, yy: c}); // dojox.gfx3d.matrix.Matrix3D
-	},
-	cameraRotateZg: function(degree){
-		// summary: forms a rotating matrix (about the z axis) in cameraTransform manner
-		// description: The resulting matrix is used to rotate points
-		//		around the origin of coordinates (0, 0) by specified degree.
-		//		See dojox.gfx3d.matrix.rotateZ() for comparison.
-		// degree: Number: an angle of rotation in degrees (>0 for CW)
-		return dojox.gfx3d.matrix.rotateZ(dojox.gfx3d.matrix._degToRad(degree)); // dojox.gfx3d.matrix.Matrix3D
-	},
-
-	// ensure matrix 3D conformance
-	normalize: function(matrix){
-		// summary: converts an object to a matrix, if necessary
-		// description: Converts any 3D matrix-like object or an array of
-		//		such objects to a valid dojox.gfx3d.matrix.Matrix3D object.
-		// matrix: Object: an object, which is converted to a matrix, if necessary
-		return (matrix instanceof dojox.gfx3d.matrix.Matrix3D) ? matrix : new dojox.gfx3d.matrix.Matrix3D(matrix); // dojox.gfx3d.matrix.Matrix3D
-	},
-	
-	// common operations
-	
-	clone: function(matrix){
-		// summary: creates a copy of a 3D matrix
-		// matrix: dojox.gfx3d.matrix.Matrix3D: a 3D matrix-like object to be cloned
-		var obj = new dojox.gfx3d.matrix.Matrix3D();
-		for(var i in matrix){
-			if(typeof(matrix[i]) == "number" && typeof(obj[i]) == "number" && obj[i] != matrix[i]) obj[i] = matrix[i];
-		}
-		return obj; // dojox.gfx3d.matrix.Matrix3D
-	},
-	invert: function(matrix){
-		// summary: inverts a 2D matrix
-		// matrix: dojox.gfx.matrix.Matrix3D: a 2D matrix-like object to be inverted
-		var m = dojox.gfx3d.matrix.normalize(matrix);
-		var D = m.xx * m.yy * m.zz + m.xy * m.yz * m.zx + m.xz * m.yx * m.zy - m.xx * m.yz * m.zy - m.xy * m.yx * m.zz - m.xz * m.yy * m.zx;
-		var M = new dojox.gfx3d.matrix.Matrix3D({
-			xx: (m.yy * m.zz - m.yz * m.zy) / D,
-			xy: (m.xz * m.zy - m.xy * m.zz) / D,
-			xz: (m.xy * m.yz - m.xz * m.yy) / D,
-			yx: (m.yz * m.zx - m.yx * m.zz) / D,
-			yy: (m.xx * m.zz - m.xz * m.zx) / D,
-			yz: (m.xz * m.yx - m.xx * m.yz) / D,
-			zx: (m.yx * m.zy - m.yy * m.zx) / D,
-			zy: (m.xy * m.zx - m.xx * m.zy) / D,
-			zz: (m.xx * m.yy - m.xy * m.yx) / D,
-			dx: -1 * (m.xy * m.yz * m.dz + m.xz * m.dy * m.zy + m.dx * m.yy * m.zz - m.xy * m.dy * m.zz - m.xz * m.yy * m.dz - m.dx * m.yz * m.zy) / D,
-			dy: (m.xx * m.yz * m.dz + m.xz * m.dy * m.zx + m.dx * m.yx * m.zz - m.xx * m.dy * m.zz - m.xz * m.yx * m.dz - m.dx * m.yz * m.zx) / D,
-			dz: -1 * (m.xx * m.yy * m.dz + m.xy * m.dy * m.zx + m.dx * m.yx * m.zy - m.xx * m.dy * m.zy - m.xy * m.yx * m.dz - m.dx * m.yy * m.zx) / D
-		});
-		return M; // dojox.gfx3d.matrix.Matrix3D
-	},
-	_multiplyPoint: function(m, x, y, z){
-		// summary: applies a matrix to a point
-		// matrix: dojox.gfx3d.matrix.Matrix3D: a 3D matrix object to be applied
-		// x: Number: an x coordinate of a point
-		// y: Number: a y coordinate of a point
-		// z: Number: a z coordinate of a point
-		return {x: m.xx * x + m.xy * y + m.xz * z + m.dx, y: m.yx * x + m.yy * y + m.yz * z + m.dy, z: m.zx * x + m.zy * y + m.zz * z + m.dz}; // Object
-	},
-	multiplyPoint: function(matrix, /* Number||Point */ a, /* Number, optional */ b, /* Number, optional */ c){
-		// summary: applies a matrix to a point
-		// matrix: dojox.gfx3d.matrix.Matrix3D: a 3D matrix object to be applied
-		// a: Number: an x coordinate of a point
-		// b: Number: a y coordinate of a point
-		// c: Number: a z coordinate of a point
-		var m = dojox.gfx3d.matrix.normalize(matrix);
-		if(typeof a == "number" && typeof b == "number" && typeof c == "number"){
-			return dojox.gfx3d.matrix._multiplyPoint(m, a, b, c); // Object
-		}
-		// branch
-		// matrix: dojox.gfx3d.matrix.Matrix3D: a 3D matrix object to be applied
-		// a: Object: a point
-		// b: null
-		// c: null
-		return dojox.gfx3d.matrix._multiplyPoint(m, a.x, a.y, a.z); // Object
-	},
-	multiply: function(matrix){
-		// summary: combines matrices by multiplying them sequentially in the given order
-		// matrix: dojox.gfx3d.matrix.Matrix3D...: a 3D matrix-like object, 
-		//		all subsequent arguments are matrix-like objects too
-		var m = dojox.gfx3d.matrix.normalize(matrix);
-		// combine matrices
-		for(var i = 1; i < arguments.length; ++i){
-			var l = m;
-			var r = dojox.gfx3d.matrix.normalize(arguments[i]);
-			m = new dojox.gfx3d.matrix.Matrix3D();
-			m.xx = l.xx * r.xx + l.xy * r.yx + l.xz * r.zx;
-			m.xy = l.xx * r.xy + l.xy * r.yy + l.xz * r.zy;
-			m.xz = l.xx * r.xz + l.xy * r.yz + l.xz * r.zz;
-			m.yx = l.yx * r.xx + l.yy * r.yx + l.yz * r.zx;
-			m.yy = l.yx * r.xy + l.yy * r.yy + l.yz * r.zy;
-			m.yz = l.yx * r.xz + l.yy * r.yz + l.yz * r.zz;
-			m.zx = l.zx * r.xx + l.zy * r.yx + l.zz * r.zx;
-			m.zy = l.zx * r.xy + l.zy * r.yy + l.zz * r.zy;
-			m.zz = l.zx * r.xz + l.zy * r.yz + l.zz * r.zz;
-			m.dx = l.xx * r.dx + l.xy * r.dy + l.xz * r.dz + l.dx;
-			m.dy = l.yx * r.dx + l.yy * r.dy + l.yz * r.dz + l.dy;
-			m.dz = l.zx * r.dx + l.zy * r.dy + l.zz * r.dz + l.dz;
-		}
-		return m; // dojox.gfx3d.matrix.Matrix3D
-	},
-
-	_project: function(m, x, y, z){
-		// summary: applies a matrix to a point
-		// matrix: dojox.gfx3d.matrix.Matrix3D: a 3D matrix object to be applied
-		// x: Number: an x coordinate of a point
-		// y: Number: a y coordinate of a point
-		// z: Number: a z coordinate of a point
-		return {	// Object
-			x: m.xx * x + m.xy * y + m.xz * z + m.dx, 
-			y: m.yx * x + m.yy * y + m.yz * z + m.dy, 
-			z: m.zx * x + m.zy * y + m.zz * z + m.dz};
-	},
-	project: function(matrix, /* Number||Point */ a, /* Number, optional */ b, /* Number, optional */ c){
-		// summary: applies a matrix to a point
-		// matrix: dojox.gfx3d.matrix.Matrix3D: a 3D matrix object to be applied
-		// a: Number: an x coordinate of a point
-		// b: Number: a y coordinate of a point
-		// c: Number: a z coordinate of a point
-		var m = dojox.gfx3d.matrix.normalize(matrix);
-		if(typeof a == "number" && typeof b == "number" && typeof c == "number"){
-			return dojox.gfx3d.matrix._project(m, a, b, c); // Object
-		}
-		// branch
-		// matrix: dojox.gfx3d.matrix.Matrix3D: a 3D matrix object to be applied
-		// a: Object: a point
-		// b: null
-		// c: null
-		return dojox.gfx3d.matrix._project(m, a.x, a.y, a.z); // Object
-	}
-});
-
-// propagate matrix up
-dojox.gfx3d.Matrix3D = dojox.gfx3d.matrix.Matrix3D;
-
-}
+dojox.gfx3d.matrix._radToDeg=function(A){return A/Math.PI*180
+};
+dojox.gfx3d.matrix.Matrix3D=function(B){if(B){if(typeof B=="number"){this.xx=this.yy=this.zz=B
+}else{if(B instanceof Array){if(B.length>0){var A=dojox.gfx3d.matrix.normalize(B[0]);
+for(var D=1;
+D<B.length;
+++D){var C=A;
+var E=dojox.gfx3d.matrix.normalize(B[D]);
+A=new dojox.gfx3d.matrix.Matrix3D();
+A.xx=C.xx*E.xx+C.xy*E.yx+C.xz*E.zx;
+A.xy=C.xx*E.xy+C.xy*E.yy+C.xz*E.zy;
+A.xz=C.xx*E.xz+C.xy*E.yz+C.xz*E.zz;
+A.yx=C.yx*E.xx+C.yy*E.yx+C.yz*E.zx;
+A.yy=C.yx*E.xy+C.yy*E.yy+C.yz*E.zy;
+A.yz=C.yx*E.xz+C.yy*E.yz+C.yz*E.zz;
+A.zx=C.zx*E.xx+C.zy*E.yx+C.zz*E.zx;
+A.zy=C.zx*E.xy+C.zy*E.yy+C.zz*E.zy;
+A.zz=C.zx*E.xz+C.zy*E.yz+C.zz*E.zz;
+A.dx=C.xx*E.dx+C.xy*E.dy+C.xz*E.dz+C.dx;
+A.dy=C.yx*E.dx+C.yy*E.dy+C.yz*E.dz+C.dy;
+A.dz=C.zx*E.dx+C.zy*E.dy+C.zz*E.dz+C.dz
+}dojo.mixin(this,A)
+}}else{dojo.mixin(this,B)
+}}}};
+dojo.extend(dojox.gfx3d.matrix.Matrix3D,{xx:1,xy:0,xz:0,yx:0,yy:1,yz:0,zx:0,zy:0,zz:1,dx:0,dy:0,dz:0});
+dojo.mixin(dojox.gfx3d.matrix,{identity:new dojox.gfx3d.matrix.Matrix3D(),translate:function(B,A,C){if(arguments.length>1){return new dojox.gfx3d.matrix.Matrix3D({dx:B,dy:A,dz:C})
+}return new dojox.gfx3d.matrix.Matrix3D({dx:B.x,dy:B.y,dz:B.z})
+},scale:function(B,A,C){if(arguments.length>1){return new dojox.gfx3d.matrix.Matrix3D({xx:B,yy:A,zz:C})
+}if(typeof B=="number"){return new dojox.gfx3d.matrix.Matrix3D({xx:B,yy:B,zz:B})
+}return new dojox.gfx3d.matrix.Matrix3D({xx:B.x,yy:B.y,zz:B.z})
+},rotateX:function(B){var C=Math.cos(B);
+var A=Math.sin(B);
+return new dojox.gfx3d.matrix.Matrix3D({yy:C,yz:-A,zy:A,zz:C})
+},rotateXg:function(A){return dojox.gfx3d.matrix.rotateX(dojox.gfx3d.matrix._degToRad(A))
+},rotateY:function(B){var C=Math.cos(B);
+var A=Math.sin(B);
+return new dojox.gfx3d.matrix.Matrix3D({xx:C,xz:A,zx:-A,zz:C})
+},rotateYg:function(A){return dojox.gfx3d.matrix.rotateY(dojox.gfx3d.matrix._degToRad(A))
+},rotateZ:function(B){var C=Math.cos(B);
+var A=Math.sin(B);
+return new dojox.gfx3d.matrix.Matrix3D({xx:C,xy:-A,yx:A,yy:C})
+},rotateZg:function(A){return dojox.gfx3d.matrix.rotateZ(dojox.gfx3d.matrix._degToRad(A))
+},cameraTranslate:function(B,A,C){if(arguments.length>1){return new dojox.gfx3d.matrix.Matrix3D({dx:-B,dy:-A,dz:-C})
+}return new dojox.gfx3d.matrix.Matrix3D({dx:-B.x,dy:-B.y,dz:-B.z})
+},cameraRotateX:function(B){var C=Math.cos(-B);
+var A=Math.sin(-B);
+return new dojox.gfx3d.matrix.Matrix3D({yy:C,yz:-A,zy:A,zz:C})
+},cameraRotateXg:function(A){return dojox.gfx3d.matrix.rotateX(dojox.gfx3d.matrix._degToRad(A))
+},cameraRotateY:function(B){var C=Math.cos(-B);
+var A=Math.sin(-B);
+return new dojox.gfx3d.matrix.Matrix3D({xx:C,xz:A,zx:-A,zz:C})
+},cameraRotateYg:function(A){return dojox.gfx3d.matrix.rotateY(dojox.gfx3d.matrix._degToRad(A))
+},cameraRotateZ:function(B){var C=Math.cos(-B);
+var A=Math.sin(-B);
+return new dojox.gfx3d.matrix.Matrix3D({xx:C,xy:-A,yx:A,yy:C})
+},cameraRotateZg:function(A){return dojox.gfx3d.matrix.rotateZ(dojox.gfx3d.matrix._degToRad(A))
+},normalize:function(A){return(A instanceof dojox.gfx3d.matrix.Matrix3D)?A:new dojox.gfx3d.matrix.Matrix3D(A)
+},clone:function(A){var C=new dojox.gfx3d.matrix.Matrix3D();
+for(var B in A){if(typeof (A[B])=="number"&&typeof (C[B])=="number"&&C[B]!=A[B]){C[B]=A[B]
+}}return C
+},invert:function(B){var A=dojox.gfx3d.matrix.normalize(B);
+var C=A.xx*A.yy*A.zz+A.xy*A.yz*A.zx+A.xz*A.yx*A.zy-A.xx*A.yz*A.zy-A.xy*A.yx*A.zz-A.xz*A.yy*A.zx;
+var E=new dojox.gfx3d.matrix.Matrix3D({xx:(A.yy*A.zz-A.yz*A.zy)/C,xy:(A.xz*A.zy-A.xy*A.zz)/C,xz:(A.xy*A.yz-A.xz*A.yy)/C,yx:(A.yz*A.zx-A.yx*A.zz)/C,yy:(A.xx*A.zz-A.xz*A.zx)/C,yz:(A.xz*A.yx-A.xx*A.yz)/C,zx:(A.yx*A.zy-A.yy*A.zx)/C,zy:(A.xy*A.zx-A.xx*A.zy)/C,zz:(A.xx*A.yy-A.xy*A.yx)/C,dx:-1*(A.xy*A.yz*A.dz+A.xz*A.dy*A.zy+A.dx*A.yy*A.zz-A.xy*A.dy*A.zz-A.xz*A.yy*A.dz-A.dx*A.yz*A.zy)/C,dy:(A.xx*A.yz*A.dz+A.xz*A.dy*A.zx+A.dx*A.yx*A.zz-A.xx*A.dy*A.zz-A.xz*A.yx*A.dz-A.dx*A.yz*A.zx)/C,dz:-1*(A.xx*A.yy*A.dz+A.xy*A.dy*A.zx+A.dx*A.yx*A.zy-A.xx*A.dy*A.zy-A.xy*A.yx*A.dz-A.dx*A.yy*A.zx)/C});
+return E
+},_multiplyPoint:function(B,A,D,C){return{x:B.xx*A+B.xy*D+B.xz*C+B.dx,y:B.yx*A+B.yy*D+B.yz*C+B.dy,z:B.zx*A+B.zy*D+B.zz*C+B.dz}
+},multiplyPoint:function(D,C,B,E){var A=dojox.gfx3d.matrix.normalize(D);
+if(typeof C=="number"&&typeof B=="number"&&typeof E=="number"){return dojox.gfx3d.matrix._multiplyPoint(A,C,B,E)
+}return dojox.gfx3d.matrix._multiplyPoint(A,C.x,C.y,C.z)
+},multiply:function(C){var A=dojox.gfx3d.matrix.normalize(C);
+for(var D=1;
+D<arguments.length;
+++D){var B=A;
+var E=dojox.gfx3d.matrix.normalize(arguments[D]);
+A=new dojox.gfx3d.matrix.Matrix3D();
+A.xx=B.xx*E.xx+B.xy*E.yx+B.xz*E.zx;
+A.xy=B.xx*E.xy+B.xy*E.yy+B.xz*E.zy;
+A.xz=B.xx*E.xz+B.xy*E.yz+B.xz*E.zz;
+A.yx=B.yx*E.xx+B.yy*E.yx+B.yz*E.zx;
+A.yy=B.yx*E.xy+B.yy*E.yy+B.yz*E.zy;
+A.yz=B.yx*E.xz+B.yy*E.yz+B.yz*E.zz;
+A.zx=B.zx*E.xx+B.zy*E.yx+B.zz*E.zx;
+A.zy=B.zx*E.xy+B.zy*E.yy+B.zz*E.zy;
+A.zz=B.zx*E.xz+B.zy*E.yz+B.zz*E.zz;
+A.dx=B.xx*E.dx+B.xy*E.dy+B.xz*E.dz+B.dx;
+A.dy=B.yx*E.dx+B.yy*E.dy+B.yz*E.dz+B.dy;
+A.dz=B.zx*E.dx+B.zy*E.dy+B.zz*E.dz+B.dz
+}return A
+},_project:function(B,A,D,C){return{x:B.xx*A+B.xy*D+B.xz*C+B.dx,y:B.yx*A+B.yy*D+B.yz*C+B.dy,z:B.zx*A+B.zy*D+B.zz*C+B.dz}
+},project:function(D,C,B,E){var A=dojox.gfx3d.matrix.normalize(D);
+if(typeof C=="number"&&typeof B=="number"&&typeof E=="number"){return dojox.gfx3d.matrix._project(A,C,B,E)
+}return dojox.gfx3d.matrix._project(A,C.x,C.y,C.z)
+}});
+dojox.gfx3d.Matrix3D=dojox.gfx3d.matrix.Matrix3D
+};

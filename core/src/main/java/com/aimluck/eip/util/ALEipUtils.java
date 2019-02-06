@@ -322,8 +322,8 @@ public class ALEipUtils {
         return null;
       }
 
-      @SuppressWarnings("unchecked")
-      Iterator<Entry> iterator = portlets.getEntriesIterator();
+      Iterator<Entry> iterator =
+        (Iterator<Entry>) portlets.getEntriesIterator();
       while (iterator.hasNext()) {
         Entry next = iterator.next();
         if (portletId.equals(next.getId())) {
@@ -382,8 +382,8 @@ public class ALEipUtils {
       if (portlets == null) {
         return hash;
       }
-      for (@SuppressWarnings("unchecked")
-      Iterator<Entry> it = portlets.getEntriesIterator(); it.hasNext();) {
+      for (Iterator<Entry> it = (Iterator<Entry>) portlets.getEntriesIterator(); it
+        .hasNext();) {
         Entry next = it.next();
         if (!hash.containsKey(next.getParent())) {
           hash.put(next.getParent(), next.getId());

@@ -5,82 +5,82 @@ A._degToRad=function(B){return Math.PI*B/180
 };
 A._radToDeg=function(B){return B/Math.PI*180
 };
-A.Matrix2D=function(B){if(B){if(typeof B=="number"){this.xx=this.yy=B
-}else{if(B instanceof Array){if(B.length>0){var D=A.normalize(B[0]);
-for(var E=1;
-E<B.length;
-++E){var C=D,F=dojox.gfx.matrix.normalize(B[E]);
-D=new A.Matrix2D();
-D.xx=C.xx*F.xx+C.xy*F.yx;
-D.xy=C.xx*F.xy+C.xy*F.yy;
-D.yx=C.yx*F.xx+C.yy*F.yx;
-D.yy=C.yx*F.xy+C.yy*F.yy;
-D.dx=C.xx*F.dx+C.xy*F.dy+C.dx;
-D.dy=C.yx*F.dx+C.yy*F.dy+C.dy
-}dojo.mixin(this,D)
-}}else{dojo.mixin(this,B)
+A.Matrix2D=function(C){if(C){if(typeof C=="number"){this.xx=this.yy=C
+}else{if(C instanceof Array){if(C.length>0){var E=A.normalize(C[0]);
+for(var F=1;
+F<C.length;
+++F){var D=E,B=dojox.gfx.matrix.normalize(C[F]);
+E=new A.Matrix2D();
+E.xx=D.xx*B.xx+D.xy*B.yx;
+E.xy=D.xx*B.xy+D.xy*B.yy;
+E.yx=D.yx*B.xx+D.yy*B.yx;
+E.yy=D.yx*B.xy+D.yy*B.yy;
+E.dx=D.xx*B.dx+D.xy*B.dy+D.dx;
+E.dy=D.yx*B.dx+D.yy*B.dy+D.dy
+}dojo.mixin(this,E)
+}}else{dojo.mixin(this,C)
 }}}};
 dojo.extend(A.Matrix2D,{xx:1,xy:0,yx:0,yy:1,dx:0,dy:0});
-dojo.mixin(A,{identity:new A.Matrix2D(),flipX:new A.Matrix2D({xx:-1}),flipY:new A.Matrix2D({yy:-1}),flipXY:new A.Matrix2D({xx:-1,yy:-1}),translate:function(C,B){if(arguments.length>1){return new A.Matrix2D({dx:C,dy:B})
-}return new A.Matrix2D({dx:C.x,dy:C.y})
-},scale:function(C,B){if(arguments.length>1){return new A.Matrix2D({xx:C,yy:B})
-}if(typeof C=="number"){return new A.Matrix2D({xx:C,yy:C})
-}return new A.Matrix2D({xx:C.x,yy:C.y})
-},rotate:function(C){var D=Math.cos(C);
-var B=Math.sin(C);
-return new A.Matrix2D({xx:D,xy:-B,yx:B,yy:D})
+dojo.mixin(A,{identity:new A.Matrix2D(),flipX:new A.Matrix2D({xx:-1}),flipY:new A.Matrix2D({yy:-1}),flipXY:new A.Matrix2D({xx:-1,yy:-1}),translate:function(B,C){if(arguments.length>1){return new A.Matrix2D({dx:B,dy:C})
+}return new A.Matrix2D({dx:B.x,dy:B.y})
+},scale:function(B,C){if(arguments.length>1){return new A.Matrix2D({xx:B,yy:C})
+}if(typeof B=="number"){return new A.Matrix2D({xx:B,yy:B})
+}return new A.Matrix2D({xx:B.x,yy:B.y})
+},rotate:function(D){var B=Math.cos(D);
+var C=Math.sin(D);
+return new A.Matrix2D({xx:B,xy:-C,yx:C,yy:B})
 },rotateg:function(B){return A.rotate(A._degToRad(B))
 },skewX:function(B){return new A.Matrix2D({xy:-Math.tan(B)})
 },skewXg:function(B){return A.skewX(A._degToRad(B))
 },skewY:function(B){return new A.Matrix2D({yx:Math.tan(B)})
 },skewYg:function(B){return A.skewY(A._degToRad(B))
-},reflect:function(D,C){if(arguments.length==1){C=D.y;
-D=D.x
-}var B=D*D,E=C*C,F=B+E,G=2*D*C/F;
-return new A.Matrix2D({xx:2*B/F-1,xy:G,yx:G,yy:2*E/F-1})
-},project:function(D,C){if(arguments.length==1){C=D.y;
-D=D.x
-}var B=D*D,E=C*C,F=B+E,G=D*C/F;
-return new A.Matrix2D({xx:B/F,xy:G,yx:G,yy:E/F})
+},reflect:function(E,D){if(arguments.length==1){D=E.y;
+E=E.x
+}var C=E*E,F=D*D,G=C+F,B=2*E*D/G;
+return new A.Matrix2D({xx:2*C/G-1,xy:B,yx:B,yy:2*F/G-1})
+},project:function(E,D){if(arguments.length==1){D=E.y;
+E=E.x
+}var C=E*E,F=D*D,G=C+F,B=E*D/G;
+return new A.Matrix2D({xx:C/G,xy:B,yx:B,yy:F/G})
 },normalize:function(B){return(B instanceof A.Matrix2D)?B:new A.Matrix2D(B)
-},clone:function(B){var D=new A.Matrix2D();
-for(var C in B){if(typeof (B[C])=="number"&&typeof (D[C])=="number"&&D[C]!=B[C]){D[C]=B[C]
-}}return D
-},invert:function(B){var E=A.normalize(B),C=E.xx*E.yy-E.xy*E.yx,E=new A.Matrix2D({xx:E.yy/C,xy:-E.xy/C,yx:-E.yx/C,yy:E.xx/C,dx:(E.xy*E.dy-E.yy*E.dx)/C,dy:(E.yx*E.dx-E.xx*E.dy)/C});
-return E
-},_multiplyPoint:function(C,B,D){return{x:C.xx*B+C.xy*D+C.dx,y:C.yx*B+C.yy*D+C.dy}
-},multiplyPoint:function(D,C,B){var E=A.normalize(D);
-if(typeof C=="number"&&typeof B=="number"){return A._multiplyPoint(E,C,B)
-}return A._multiplyPoint(E,C.x,C.y)
-},multiply:function(C){var F=A.normalize(C);
-for(var D=1;
-D<arguments.length;
-++D){var B=F,E=A.normalize(arguments[D]);
-F=new A.Matrix2D();
-F.xx=B.xx*E.xx+B.xy*E.yx;
-F.xy=B.xx*E.xy+B.xy*E.yy;
-F.yx=B.yx*E.xx+B.yy*E.yx;
-F.yy=B.yx*E.xy+B.yy*E.yy;
-F.dx=B.xx*E.dx+B.xy*E.dy+B.dx;
-F.dy=B.yx*E.dx+B.yy*E.dy+B.dy
-}return F
-},_sandwich:function(C,B,D){return A.multiply(A.translate(B,D),C,A.translate(-B,-D))
-},scaleAt:function(C,B,E,D){switch(arguments.length){case 4:return A._sandwich(A.scale(C,B),E,D);
-case 3:if(typeof E=="number"){return A._sandwich(A.scale(C),B,E)
-}return A._sandwich(A.scale(C,B),E.x,E.y)
-}return A._sandwich(A.scale(C),B.x,B.y)
-},rotateAt:function(D,C,B){if(arguments.length>2){return A._sandwich(A.rotate(D),C,B)
-}return A._sandwich(A.rotate(D),C.x,C.y)
-},rotategAt:function(D,C,B){if(arguments.length>2){return A._sandwich(A.rotateg(D),C,B)
-}return A._sandwich(A.rotateg(D),C.x,C.y)
-},skewXAt:function(D,C,B){if(arguments.length>2){return A._sandwich(A.skewX(D),C,B)
-}return A._sandwich(A.skewX(D),C.x,C.y)
-},skewXgAt:function(D,C,B){if(arguments.length>2){return A._sandwich(A.skewXg(D),C,B)
-}return A._sandwich(A.skewXg(D),C.x,C.y)
-},skewYAt:function(D,C,B){if(arguments.length>2){return A._sandwich(A.skewY(D),C,B)
-}return A._sandwich(A.skewY(D),C.x,C.y)
-},skewYgAt:function(D,C,B){if(arguments.length>2){return A._sandwich(A.skewYg(D),C,B)
-}return A._sandwich(A.skewYg(D),C.x,C.y)
+},clone:function(C){var B=new A.Matrix2D();
+for(var D in C){if(typeof (C[D])=="number"&&typeof (B[D])=="number"&&B[D]!=C[D]){B[D]=C[D]
+}}return B
+},invert:function(C){var B=A.normalize(C),E=B.xx*B.yy-B.xy*B.yx,B=new A.Matrix2D({xx:B.yy/E,xy:-B.xy/E,yx:-B.yx/E,yy:B.xx/E,dx:(B.xy*B.dy-B.yy*B.dx)/E,dy:(B.yx*B.dx-B.xx*B.dy)/E});
+return B
+},_multiplyPoint:function(D,C,B){return{x:D.xx*C+D.xy*B+D.dx,y:D.yx*C+D.yy*B+D.dy}
+},multiplyPoint:function(E,D,C){var B=A.normalize(E);
+if(typeof D=="number"&&typeof C=="number"){return A._multiplyPoint(B,D,C)
+}return A._multiplyPoint(B,D.x,D.y)
+},multiply:function(D){var B=A.normalize(D);
+for(var E=1;
+E<arguments.length;
+++E){var C=B,F=A.normalize(arguments[E]);
+B=new A.Matrix2D();
+B.xx=C.xx*F.xx+C.xy*F.yx;
+B.xy=C.xx*F.xy+C.xy*F.yy;
+B.yx=C.yx*F.xx+C.yy*F.yx;
+B.yy=C.yx*F.xy+C.yy*F.yy;
+B.dx=C.xx*F.dx+C.xy*F.dy+C.dx;
+B.dy=C.yx*F.dx+C.yy*F.dy+C.dy
+}return B
+},_sandwich:function(D,C,B){return A.multiply(A.translate(C,B),D,A.translate(-C,-B))
+},scaleAt:function(D,C,B,E){switch(arguments.length){case 4:return A._sandwich(A.scale(D,C),B,E);
+case 3:if(typeof B=="number"){return A._sandwich(A.scale(D),C,B)
+}return A._sandwich(A.scale(D,C),B.x,B.y)
+}return A._sandwich(A.scale(D),C.x,C.y)
+},rotateAt:function(B,D,C){if(arguments.length>2){return A._sandwich(A.rotate(B),D,C)
+}return A._sandwich(A.rotate(B),D.x,D.y)
+},rotategAt:function(B,D,C){if(arguments.length>2){return A._sandwich(A.rotateg(B),D,C)
+}return A._sandwich(A.rotateg(B),D.x,D.y)
+},skewXAt:function(B,D,C){if(arguments.length>2){return A._sandwich(A.skewX(B),D,C)
+}return A._sandwich(A.skewX(B),D.x,D.y)
+},skewXgAt:function(B,D,C){if(arguments.length>2){return A._sandwich(A.skewXg(B),D,C)
+}return A._sandwich(A.skewXg(B),D.x,D.y)
+},skewYAt:function(B,D,C){if(arguments.length>2){return A._sandwich(A.skewY(B),D,C)
+}return A._sandwich(A.skewY(B),D.x,D.y)
+},skewYgAt:function(B,D,C){if(arguments.length>2){return A._sandwich(A.skewYg(B),D,C)
+}return A._sandwich(A.skewYg(B),D.x,D.y)
 }})
 })();
 dojox.gfx.Matrix2D=dojox.gfx.matrix.Matrix2D

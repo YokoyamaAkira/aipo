@@ -1,42 +1,42 @@
 if(!dojo._hasResource["dojo.DeferredList"]){dojo._hasResource["dojo.DeferredList"]=true;
 dojo.provide("dojo.DeferredList");
-dojo.declare("dojo.DeferredList",dojo.Deferred,{constructor:function(F,E,A,D,C){this.list=F;
+dojo.declare("dojo.DeferredList",dojo.Deferred,{constructor:function(E,D,F,C,B){this.list=E;
 this.resultList=new Array(this.list.length);
 this.chain=[];
 this.id=this._nextId();
 this.fired=-1;
 this.paused=0;
 this.results=[null,null];
-this.canceller=C;
+this.canceller=B;
 this.silentlyCancelled=false;
-if(this.list.length===0&&!E){this.callback(this.resultList)
+if(this.list.length===0&&!D){this.callback(this.resultList)
 }this.finishedCount=0;
-this.fireOnOneCallback=E;
-this.fireOnOneErrback=A;
-this.consumeErrors=D;
-var B=0;
-dojo.forEach(this.list,function(H,G){H.addCallback(this,function(I){this._cbDeferred(G,true,I);
+this.fireOnOneCallback=D;
+this.fireOnOneErrback=F;
+this.consumeErrors=C;
+var A=0;
+dojo.forEach(this.list,function(G,H){G.addCallback(this,function(I){this._cbDeferred(H,true,I);
 return I
 });
-H.addErrback(this,function(I){this._cbDeferred(G,false,I);
+G.addErrback(this,function(I){this._cbDeferred(H,false,I);
 return I
 });
-G++
+H++
 },this)
-},_cbDeferred:function(B,C,A){this.resultList[B]=[C,A];
+},_cbDeferred:function(A,B,C){this.resultList[A]=[B,C];
 this.finishedCount+=1;
-if(this.fired!==0){if(C&&this.fireOnOneCallback){this.callback([B,A])
-}else{if(!C&&this.fireOnOneErrback){this.errback(A)
+if(this.fired!==0){if(B&&this.fireOnOneCallback){this.callback([A,C])
+}else{if(!B&&this.fireOnOneErrback){this.errback(C)
 }else{if(this.finishedCount==this.list.length){this.callback(this.resultList)
-}}}}if(!C&&this.consumeErrors){A=null
-}return A
-},gatherResults:function(A){var B=new dojo.DeferedList(A,false,true,false);
-B.addCallback(function(E){var C=[];
-for(var D=0;
-D<E.length;
-D++){C.push(E[D][1])
+}}}}if(!B&&this.consumeErrors){C=null
 }return C
+},gatherResults:function(B){var A=new dojo.DeferedList(B,false,true,false);
+A.addCallback(function(C){var D=[];
+for(var E=0;
+E<C.length;
+E++){D.push(C[E][1])
+}return D
 });
-return B
+return A
 }})
 };

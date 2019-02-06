@@ -2,16 +2,16 @@ dojo._xdResourceLoaded({depends:[["provide","dojox.wire.TableAdapter"],["require
 A.provide("dojox.wire.TableAdapter");
 A.require("dojox.wire.CompositeWire");
 A.declare("dojox.wire.TableAdapter",dojox.wire.CompositeWire,{_wireClass:"dojox.wire.TableAdapter",constructor:function(B){this._initializeChildren(this.columns)
-},_getValue:function(B){if(!B||!this.columns){return B
-}var F=B;
-if(!A.isArray(F)){F=[F]
-}var D=[];
-for(var C in F){var E=this._getRow(F[C]);
-D.push(E)
+},_getValue:function(C){if(!C||!this.columns){return C
+}var B=C;
+if(!A.isArray(B)){B=[B]
+}var E=[];
+for(var D in B){var F=this._getRow(B[D]);
+E.push(F)
+}return E
+},_setValue:function(C,B){throw new Error("Unsupported API: "+this._wireClass+"._setValue")
+},_getRow:function(C){var D=(A.isArray(this.columns)?[]:{});
+for(var B in this.columns){D[B]=this.columns[B].getValue(C)
 }return D
-},_setValue:function(B,C){throw new Error("Unsupported API: "+this._wireClass+"._setValue")
-},_getRow:function(B){var C=(A.isArray(this.columns)?[]:{});
-for(var D in this.columns){C[D]=this.columns[D].getValue(B)
-}return C
 }})
 }}});

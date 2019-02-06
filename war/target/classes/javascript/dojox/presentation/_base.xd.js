@@ -17,10 +17,10 @@ this._resizeWindow();
 this._updateSlides();
 this._readHash();
 this._setHash()
-},moveTo:function(B){var C=B-1;
-if(C<0){C=0
-}if(C>this._slides.length-1){C=this._slides.length-1
-}this._gotoSlide(C)
+},moveTo:function(C){var B=C-1;
+if(B<0){B=0
+}if(B>this._slides.length-1){B=this._slides.length-1
+}this._gotoSlide(B)
 },onMove:function(B){},nextSlide:function(B){if(!this.selectedChildWidget.isLastChild){this._gotoSlide(this._slideIndex+1)
 }if(B){B.stopPropagation()
 }},previousSlide:function(B){if(!this.selectedChildWidget.isFirstChild){this._gotoSlide(this._slideIndex-1)
@@ -40,45 +40,45 @@ D.text=C.title+" ("+B+") ";
 this._option.parentNode.insertBefore(D,this._option)
 }));
 if(this._option.parentNode){this._option.parentNode.removeChild(this._option)
-}}},_onEvent:function(B){var E=B.target;
-var C=B.type;
-if(C=="click"||C=="change"){if(E.index&&E.parentNode==this.select){this._gotoSlide(E.index)
-}else{if(E==this.select){this._gotoSlide(E.selectedIndex)
-}else{if(this.noClick||this.selectedChildWidget.noClick||this._isUnclickable(B)){return 
-}this.selectedChildWidget._nextAction(B)
-}}}else{if(C=="keydown"||C=="keypress"){var D=(B.charCode==A.keys.SPACE?A.keys.SPACE:B.keyCode);
-switch(D){case A.keys.DELETE:case A.keys.BACKSPACE:case A.keys.LEFT_ARROW:case A.keys.UP_ARROW:case A.keys.PAGE_UP:case 80:this.previousSlide(B);
+}}},_onEvent:function(C){var B=C.target;
+var D=C.type;
+if(D=="click"||D=="change"){if(B.index&&B.parentNode==this.select){this._gotoSlide(B.index)
+}else{if(B==this.select){this._gotoSlide(B.selectedIndex)
+}else{if(this.noClick||this.selectedChildWidget.noClick||this._isUnclickable(C)){return 
+}this.selectedChildWidget._nextAction(C)
+}}}else{if(D=="keydown"||D=="keypress"){var E=(C.charCode==A.keys.SPACE?A.keys.SPACE:C.keyCode);
+switch(E){case A.keys.DELETE:case A.keys.BACKSPACE:case A.keys.LEFT_ARROW:case A.keys.UP_ARROW:case A.keys.PAGE_UP:case 80:this.previousSlide(C);
 break;
-case A.keys.ENTER:case A.keys.SPACE:case A.keys.RIGHT_ARROW:case A.keys.DOWN_ARROW:case A.keys.PAGE_DOWN:case 78:this.selectedChildWidget._nextAction(B);
+case A.keys.ENTER:case A.keys.SPACE:case A.keys.RIGHT_ARROW:case A.keys.DOWN_ARROW:case A.keys.PAGE_DOWN:case 78:this.selectedChildWidget._nextAction(C);
 break;
 case A.keys.HOME:this._gotoSlide(0)
 }}}this._resizeWindow();
-B.stopPropagation()
+C.stopPropagation()
 },_gotoSlide:function(B){this.selectChild(this._slides[B]);
 this.selectedChildWidget._reset();
 this._slideIndex=B;
 if(this.useNav){this.select.selectedIndex=B
 }if(this.setHash){this._setHash()
 }this.onMove(this._slideIndex+1)
-},_isUnclickable:function(B){var C=B.target.nodeName.toLowerCase();
-switch(C){case"a":case"input":case"textarea":return true;
+},_isUnclickable:function(C){var B=C.target.nodeName.toLowerCase();
+switch(B){case"a":case"input":case"textarea":return true;
 break
 }return false
-},_readHash:function(){var B=window.location.hash;
-if(B.length&&this.setHash){var C=(""+window.location).split(this.getHash(""));
-if(C.length>1){this._gotoSlide(parseInt(C[1])-1)
+},_readHash:function(){var C=window.location.hash;
+if(C.length&&this.setHash){var B=(""+window.location).split(this.getHash(""));
+if(B.length>1){this._gotoSlide(parseInt(B[1])-1)
 }}},_setHash:function(){if(this.setHash){var B=this._slideIndex+1;
 window.location.href="#"+this.getHash(B)
-}},_resizeWindow:function(D){A.body().style.height="auto";
-var C=dijit.getViewport();
-var E=Math.max(document.documentElement.scrollHeight||A.body().scrollHeight,C.h);
-var B=C.w;
-this.selectedChildWidget.domNode.style.height=E+"px";
-this.selectedChildWidget.domNode.style.width=B+"px"
-},_transition:function(D,C){var B=[];
-if(C){this._hideChild(C)
-}if(D){this._showChild(D);
-D._reset()
+}},_resizeWindow:function(E){A.body().style.height="auto";
+var D=dijit.getViewport();
+var B=Math.max(document.documentElement.scrollHeight||A.body().scrollHeight,D.h);
+var C=D.w;
+this.selectedChildWidget.domNode.style.height=B+"px";
+this.selectedChildWidget.domNode.style.width=C+"px"
+},_transition:function(B,D){var C=[];
+if(D){this._hideChild(D)
+}if(B){this._showChild(B);
+B._reset()
 }}});
 A.declare("dojox.presentation.Slide",[dijit.layout.ContentPane,dijit._Contained,dijit._Container,dijit._Templated],{templateString:'<div dojoAttachPoint="showSlide" class="dojoShowPrint dojoShowSlide">\r\n\t<h1 class="showTitle" dojoAttachPoint="slideTitle"><span class="dojoShowSlideTitle" dojoAttachPoint="slideTitleText">${title}</span></h1>\r\n\t<div class="dojoShowBody" dojoAttachPoint="containerNode"></div>\r\n</div>\r\n',title:"",refreshOnShow:true,preLoad:false,doLayout:true,parseContent:true,noClick:false,_parts:[],_actions:[],_actionIndex:0,_runningDelay:false,startup:function(){this.slideTitleText.innerHTML=this.title;
 var B=this.getChildren();
@@ -89,15 +89,15 @@ break;
 case"dojox.presentation.action":this._actions.push(D);
 break
 }},this)
-},_nextAction:function(B){var D=this._actions[this._actionIndex]||0;
-if(D){if(D.on=="delay"){this._runningDelay=setTimeout(A.hitch(D,"_runAction"),D.delay);
+},_nextAction:function(C){var B=this._actions[this._actionIndex]||0;
+if(B){if(B.on=="delay"){this._runningDelay=setTimeout(A.hitch(B,"_runAction"),B.delay);
 console.debug("started delay action",this._runningDelay)
-}else{D._runAction()
-}var C=this._getNextAction();
+}else{B._runAction()
+}var D=this._getNextAction();
 this._actionIndex++;
-if(C.on=="delay"){console.debug("started delay action",this._runningDelay);
-setTimeout(A.hitch(C,"_runAction"),C.delay)
-}}else{this.getParent().nextSlide(B)
+if(D.on=="delay"){console.debug("started delay action",this._runningDelay);
+setTimeout(A.hitch(D,"_runAction"),D.delay)
+}}else{this.getParent().nextSlide(C)
 }},_getNextAction:function(){return this._actions[this._actionIndex+1]||0
 },_reset:function(){this._actionIndex=[0];
 A.forEach(this._parts,function(B){B._reset()
@@ -114,17 +114,17 @@ A.style(this.domNode,"visibility","visible");
 A.style(this.domNode,"opacity",1)
 }this._isShowing=!this._isShowing
 }});
-A.declare("dojox.presentation.Action",[dijit._Widget,dijit._Contained],{on:"click",forSlide:null,toggle:"fade",delay:0,duration:1000,_attached:[],_nullAnim:false,_runAction:function(){var B=[];
+A.declare("dojox.presentation.Action",[dijit._Widget,dijit._Contained],{on:"click",forSlide:null,toggle:"fade",delay:0,duration:1000,_attached:[],_nullAnim:false,_runAction:function(){var C=[];
 A.forEach(this._attached,function(F){var D=(F._isShowing)?"Out":"In";
 F._quickToggle();
 var E=A.fadeIn({node:F.domNode,duration:this.duration});
-B.push(E)
+C.push(E)
 },this);
-var C=A.fx.combine(B);
-if(C){C.play()
-}},_getSiblingsByType:function(B){var C=A.filter(this.getParent().getChildren(),function(D){return D.declaredClass==B
+var B=A.fx.combine(C);
+if(B){B.play()
+}},_getSiblingsByType:function(C){var B=A.filter(this.getParent().getChildren(),function(D){return D.declaredClass==C
 });
-return C
+return B
 },postCreate:function(){A.style(this.domNode,"display","none");
 var B=this._getSiblingsByType("dojox.presentation.Part");
 this._attached=[];

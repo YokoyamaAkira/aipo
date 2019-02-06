@@ -21,24 +21,24 @@ this._updateColor()
 },_setTimer:function(B){this._timer=setInterval(A.hitch(this,"_updateColor"),45)
 },_clearTimer:function(B){clearInterval(this._timer);
 this.onChange(this.value)
-},_setHue:function(C){var B=A.colorFromArray(this._hsv2rgb(C,1,1,{inputRange:1})).toHex();
-A.style(this.colorUnderlay,"backgroundColor",B)
-},_updateColor:function(){var E=Math.round((255+(this._offset))-((A.style(this.hueCursorNode,"top")+this._offset)*this._hueSc));
-var D=Math.round((A.style(this.cursorNode,"left")*this._sc)*100);
-var B=Math.round(100-(A.style(this.cursorNode,"top")*this._sc)*100);
-if(E!=this._hue){this._setHue(E)
-}var C=this._hsv2rgb(E,D/100,B/100,{inputRange:1});
-var F=(A.colorFromArray(C).toHex());
-this.previewNode.style.backgroundColor=F;
-if(this.webSafe){this.safePreviewNode.style.backgroundColor=F
-}if(this.showHex){this.hexCode.value=F
-}if(this.showRgb){this.Rval.value=C[0];
-this.Gval.value=C[1];
-this.Bval.value=C[2]
-}if(this.showHsv){this.Hval.value=Math.round((E*360)/255);
-this.Sval.value=D;
-this.Vval.value=B
-}this.value=F;
+},_setHue:function(B){var C=A.colorFromArray(this._hsv2rgb(B,1,1,{inputRange:1})).toHex();
+A.style(this.colorUnderlay,"backgroundColor",C)
+},_updateColor:function(){var F=Math.round((255+(this._offset))-((A.style(this.hueCursorNode,"top")+this._offset)*this._hueSc));
+var E=Math.round((A.style(this.cursorNode,"left")*this._sc)*100);
+var C=Math.round(100-(A.style(this.cursorNode,"top")*this._sc)*100);
+if(F!=this._hue){this._setHue(F)
+}var D=this._hsv2rgb(F,E/100,C/100,{inputRange:1});
+var B=(A.colorFromArray(D).toHex());
+this.previewNode.style.backgroundColor=B;
+if(this.webSafe){this.safePreviewNode.style.backgroundColor=B
+}if(this.showHex){this.hexCode.value=B
+}if(this.showRgb){this.Rval.value=D[0];
+this.Gval.value=D[1];
+this.Bval.value=D[2]
+}if(this.showHsv){this.Hval.value=Math.round((F*360)/255);
+this.Sval.value=E;
+this.Vval.value=C
+}this.value=B;
 if(!this._timer&&!(arguments[1])){this.setValue(this.value);
 this.onChange(this.value)
 }},_setHuePoint:function(B){if(this.animatePoint){A.fx.slideTo({node:this.hueCursorNode,duration:this.slideDuration,top:B.layerY,left:0,onEnd:A.hitch(this,"_updateColor")}).play()
@@ -48,72 +48,72 @@ this._updateColor(false)
 }else{A.style(this.cursorNode,"left",(B.layerX-this._offset)+"px");
 A.style(this.cursorNode,"top",(B.layerY-this._offset)+"px");
 this._updateColor(false)
-}},_hsv2rgb:function(H,N,L,O){if(A.isArray(H)){if(N){O=N
-}L=H[2]||0;
-N=H[1]||0;
-H=H[0]||0
-}var E={inputRange:(O&&O.inputRange)?O.inputRange:[255,255,255],outputRange:(O&&O.outputRange)?O.outputRange:255};
-switch(E.inputRange[0]){case 1:H=H*360;
+}},_hsv2rgb:function(C,J,H,K){if(A.isArray(C)){if(J){K=J
+}H=C[2]||0;
+J=C[1]||0;
+C=C[0]||0
+}var N={inputRange:(K&&K.inputRange)?K.inputRange:[255,255,255],outputRange:(K&&K.outputRange)?K.outputRange:255};
+switch(N.inputRange[0]){case 1:C=C*360;
 break;
-case 100:H=(H/100)*360;
+case 100:C=(C/100)*360;
 break;
-case 360:H=H;
+case 360:C=C;
 break;
-default:H=(H/255)*360
-}if(H==360){H=0
-}switch(E.inputRange[1]){case 100:N/=100;
+default:C=(C/255)*360
+}if(C==360){C=0
+}switch(N.inputRange[1]){case 100:J/=100;
 break;
-case 255:N/=255
-}switch(E.inputRange[2]){case 100:L/=100;
+case 255:J/=255
+}switch(N.inputRange[2]){case 100:H/=100;
 break;
-case 255:L/=255
-}var B=null;
-var I=null;
-var K=null;
-if(N==0){B=L;
-I=L;
-K=L
-}else{var F=H/60;
-var G=Math.floor(F);
-var J=F-G;
-var D=L*(1-N);
-var C=L*(1-(N*J));
-var M=L*(1-(N*(1-J)));
-switch(G){case 0:B=L;
-I=M;
-K=D;
+case 255:H/=255
+}var L=null;
+var E=null;
+var G=null;
+if(J==0){L=H;
+E=H;
+G=H
+}else{var O=C/60;
+var B=Math.floor(O);
+var F=O-B;
+var D=H*(1-J);
+var M=H*(1-(J*F));
+var I=H*(1-(J*(1-F)));
+switch(B){case 0:L=H;
+E=I;
+G=D;
 break;
-case 1:B=C;
-I=L;
-K=D;
+case 1:L=M;
+E=H;
+G=D;
 break;
-case 2:B=D;
-I=L;
-K=M;
+case 2:L=D;
+E=H;
+G=I;
 break;
-case 3:B=D;
-I=C;
-K=L;
+case 3:L=D;
+E=M;
+G=H;
 break;
-case 4:B=M;
-I=D;
-K=L;
+case 4:L=I;
+E=D;
+G=H;
 break;
-case 5:B=L;
-I=D;
-K=C;
+case 5:L=H;
+E=D;
+G=M;
 break
-}}switch(E.outputRange){case 1:B=A.math.round(B,2);
-I=A.math.round(I,2);
-K=A.math.round(K,2);
+}}switch(N.outputRange){case 1:L=A.math.round(L,2);
+E=A.math.round(E,2);
+G=A.math.round(G,2);
 break;
-case 100:B=Math.round(B*100);
-I=Math.round(I*100);
-K=Math.round(K*100);
+case 100:L=Math.round(L*100);
+E=Math.round(E*100);
+G=Math.round(G*100);
 break;
-default:B=Math.round(B*255);
-I=Math.round(I*255);
-K=Math.round(K*255)
-}return[B,I,K]
+default:L=Math.round(L*255);
+E=Math.round(E*255);
+G=Math.round(G*255)
+}return[L,E,G]
 }})
 }}});

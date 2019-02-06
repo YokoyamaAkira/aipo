@@ -1,123 +1,123 @@
 if(!dojo._hasResource["dojo.date"]){dojo._hasResource["dojo.date"]=true;
 dojo.provide("dojo.date");
-dojo.date.getDaysInMonth=function(A){var B=A.getMonth();
-var C=[31,28,31,30,31,30,31,31,30,31,30,31];
-if(B==1&&dojo.date.isLeapYear(A)){return 29
-}return C[B]
+dojo.date.getDaysInMonth=function(C){var A=C.getMonth();
+var B=[31,28,31,30,31,30,31,31,30,31,30,31];
+if(A==1&&dojo.date.isLeapYear(C)){return 29
+}return B[A]
 };
-dojo.date.isLeapYear=function(B){var A=B.getFullYear();
-return !(A%400)||(!(A%4)&&!!(A%100))
+dojo.date.isLeapYear=function(A){var B=A.getFullYear();
+return !(B%400)||(!(B%4)&&!!(B%100))
 };
-dojo.date.getTimezoneName=function(C){var D=C.toString();
-var F="";
-var B;
-var E=D.indexOf("(");
-if(E>-1){F=D.substring(++E,D.indexOf(")"))
-}else{var A=/([A-Z\/]+) \d{4}$/;
-if((B=D.match(A))){F=B[1]
-}else{D=C.toLocaleString();
-A=/ ([A-Z\/]+)$/;
-if((B=D.match(A))){F=B[1]
-}}}return(F=="AM"||F=="PM")?"":F
+dojo.date.getTimezoneName=function(B){var C=B.toString();
+var E="";
+var A;
+var D=C.indexOf("(");
+if(D>-1){E=C.substring(++D,C.indexOf(")"))
+}else{var F=/([A-Z\/]+) \d{4}$/;
+if((A=C.match(F))){E=A[1]
+}else{C=B.toLocaleString();
+F=/ ([A-Z\/]+)$/;
+if((A=C.match(F))){E=A[1]
+}}}return(E=="AM"||E=="PM")?"":E
 };
-dojo.date.compare=function(C,B,A){C=new Date(Number(C));
-B=new Date(Number(B||new Date()));
-if(typeof A!=="undefined"){if(A=="date"){C.setHours(0,0,0,0);
-B.setHours(0,0,0,0)
-}else{if(A=="time"){C.setFullYear(0,0,0);
-B.setFullYear(0,0,0)
-}}}if(C>B){return 1
-}if(C<B){return -1
+dojo.date.compare=function(B,A,C){B=new Date(Number(B));
+A=new Date(Number(A||new Date()));
+if(typeof C!=="undefined"){if(C=="date"){B.setHours(0,0,0,0);
+A.setHours(0,0,0,0)
+}else{if(C=="time"){B.setFullYear(0,0,0);
+A.setFullYear(0,0,0)
+}}}if(B>A){return 1
+}if(B<A){return -1
 }return 0
 };
-dojo.date.add=function(D,C,E){var G=new Date(Number(D));
-var B=false;
-var K="Date";
-switch(C){case"day":break;
-case"weekday":var L,A;
-var I=0;
-var J=E%5;
-if(!J){L=(E>0)?5:-5;
-A=(E>0)?((E-5)/5):((E+5)/5)
-}else{L=J;
-A=parseInt(E/5)
-}var F=D.getDay();
-if(F==6&&E>0){I=1
-}else{if(F==0&&E<0){I=-1
-}}var H=F+L;
-if(H==0||H==6){I=(E>0)?2:-2
-}E=7*A+L+I;
+dojo.date.add=function(L,K,A){var C=new Date(Number(L));
+var J=false;
+var G="Date";
+switch(K){case"day":break;
+case"weekday":var H,I;
+var E=0;
+var F=A%5;
+if(!F){H=(A>0)?5:-5;
+I=(A>0)?((A-5)/5):((A+5)/5)
+}else{H=F;
+I=parseInt(A/5)
+}var B=L.getDay();
+if(B==6&&A>0){E=1
+}else{if(B==0&&A<0){E=-1
+}}var D=B+H;
+if(D==0||D==6){E=(A>0)?2:-2
+}A=7*I+H+E;
 break;
-case"year":K="FullYear";
-B=true;
+case"year":G="FullYear";
+J=true;
 break;
-case"week":E*=7;
+case"week":A*=7;
 break;
-case"quarter":E*=3;
-case"month":B=true;
-K="Month";
+case"quarter":A*=3;
+case"month":J=true;
+G="Month";
 break;
-case"hour":case"minute":case"second":case"millisecond":K="UTC"+C.charAt(0).toUpperCase()+C.substring(1)+"s"
-}if(K){G["set"+K](G["get"+K]()+E)
-}if(B&&(G.getDate()<D.getDate())){G.setDate(0)
-}return G
+case"hour":case"minute":case"second":case"millisecond":G="UTC"+K.charAt(0).toUpperCase()+K.substring(1)+"s"
+}if(G){C["set"+G](C["get"+G]()+A)
+}if(J&&(C.getDate()<L.getDate())){C.setDate(0)
+}return C
 };
-dojo.date.difference=function(P,N,D){N=N||new Date();
-D=D||"day";
-var C=N.getFullYear()-P.getFullYear();
-var L=1;
-switch(D){case"quarter":var Q=P.getMonth();
-var O=N.getMonth();
-var I=Math.floor(Q/3)+1;
-var H=Math.floor(O/3)+1;
-H+=(C*4);
-L=H-I;
+dojo.date.difference=function(D,B,I){B=B||new Date();
+I=I||"day";
+var H=B.getFullYear()-D.getFullYear();
+var Q=1;
+switch(I){case"quarter":var E=D.getMonth();
+var C=B.getMonth();
+var N=Math.floor(E/3)+1;
+var M=Math.floor(C/3)+1;
+M+=(H*4);
+Q=M-N;
 break;
-case"weekday":var M=Math.round(dojo.date.difference(P,N,"day"));
-var A=parseInt(dojo.date.difference(P,N,"week"));
-var K=M%7;
-if(K==0){M=A*5
-}else{var J=0;
-var G=P.getDay();
-var E=N.getDay();
-A=parseInt(M/7);
-K=M%7;
-var F=new Date(P);
-F.setDate(F.getDate()+(A*7));
-var B=F.getDay();
-if(M>0){switch(true){case G==6:J=-1;
+case"weekday":var A=Math.round(dojo.date.difference(D,B,"day"));
+var F=parseInt(dojo.date.difference(D,B,"week"));
+var P=A%7;
+if(P==0){A=F*5
+}else{var O=0;
+var L=D.getDay();
+var J=B.getDay();
+F=parseInt(A/7);
+P=A%7;
+var K=new Date(D);
+K.setDate(K.getDate()+(F*7));
+var G=K.getDay();
+if(A>0){switch(true){case L==6:O=-1;
 break;
-case G==0:J=0;
+case L==0:O=0;
 break;
-case E==6:J=-1;
+case J==6:O=-1;
 break;
-case E==0:J=-2;
+case J==0:O=-2;
 break;
-case (B+K)>5:J=-2
-}}else{if(M<0){switch(true){case G==6:J=0;
+case (G+P)>5:O=-2
+}}else{if(A<0){switch(true){case L==6:O=0;
 break;
-case G==0:J=1;
+case L==0:O=1;
 break;
-case E==6:J=2;
+case J==6:O=2;
 break;
-case E==0:J=1;
+case J==0:O=1;
 break;
-case (B+K)<0:J=2
-}}}M+=J;
-M-=(A*2)
-}L=M;
+case (G+P)<0:O=2
+}}}A+=O;
+A-=(F*2)
+}Q=A;
 break;
-case"year":L=C;
+case"year":Q=H;
 break;
-case"month":L=(N.getMonth()-P.getMonth())+(C*12);
+case"month":Q=(B.getMonth()-D.getMonth())+(H*12);
 break;
-case"week":L=parseInt(dojo.date.difference(P,N,"day")/7);
+case"week":Q=parseInt(dojo.date.difference(D,B,"day")/7);
 break;
-case"day":L/=24;
-case"hour":L/=60;
-case"minute":L/=60;
-case"second":L/=1000;
-case"millisecond":L*=N.getTime()-P.getTime()
-}return Math.round(L)
+case"day":Q/=24;
+case"hour":Q/=60;
+case"minute":Q/=60;
+case"second":Q/=1000;
+case"millisecond":Q*=B.getTime()-D.getTime()
+}return Math.round(Q)
 }
 };

@@ -23,23 +23,23 @@ dojo.declare("aimluck.widget.ComboButton",[dijit.form.ComboButton],{url:"",itemC
 dojo.declare("aimluck.widget.Menubar",[dijit.Toolbar],{selectedIndex:-1,templateString:'<div class="tundra"><div class="dijit dijitToolbar" waiRole="toolbar" tabIndex="${tabIndex}" dojoAttachPoint="containerNode"></div></div>',postCreate:function(){dijit.Toolbar.superclass.postCreate.apply(this,arguments);
 this.makeMenu(this.items);
 this.isShowingNow=true
-},makeMenu:function(B){var C=this;
-var A=0;
-dojo.forEach(B,function(E){if(E.submenu){var G=new aimluck.widget.Menu({id:E.caption,style:"display: none;"});
-dojo.forEach(E.submenu,function(H){if(H!=null){if(H.caption){G.addChild(new aimluck.widget.Menuitem({label:H.caption,url:H.url,iconClass:H.iconClass}))
-}else{G.addChild(new aimluck.widget.Menuseparator())
+},makeMenu:function(A){var B=this;
+var C=0;
+dojo.forEach(A,function(F){if(F.submenu){var D=new aimluck.widget.Menu({id:F.caption,style:"display: none;"});
+dojo.forEach(F.submenu,function(H){if(H!=null){if(H.caption){D.addChild(new aimluck.widget.Menuitem({label:H.caption,url:H.url,iconClass:H.iconClass}))
+}else{D.addChild(new aimluck.widget.Menuseparator())
 }}});
-var D="";
-if(C.selectedIndex==parseInt(A)){D+="menuBarItemSelected"
-}var F=new aimluck.widget.ComboButton({label:E.caption,iconClass:E.iconClass,dropDown:G,url:E.url,itemClass:D});
-F.addChild(G);
-C.addChild(F)
-}else{if(E.url){var D="";
-if(C.selectedIndex==A){D+="menuBarItemSelected"
-}var F=new aimluck.widget.MenuButton({id:E.caption+"_Button"+A,label:E.caption,url:E.url,iconClass:E.iconClass,itemClass:D});
-C.addChild(F)
-}else{C.addChild(new aimluck.widget.ToolbarSeparator())
-}}A++
+var E="";
+if(B.selectedIndex==parseInt(C)){E+="menuBarItemSelected"
+}var G=new aimluck.widget.ComboButton({label:F.caption,iconClass:F.iconClass,dropDown:D,url:F.url,itemClass:E});
+G.addChild(D);
+B.addChild(G)
+}else{if(F.url){var E="";
+if(B.selectedIndex==C){E+="menuBarItemSelected"
+}var G=new aimluck.widget.MenuButton({id:F.caption+"_Button"+C,label:F.caption,url:F.url,iconClass:F.iconClass,itemClass:E});
+B.addChild(G)
+}else{B.addChild(new aimluck.widget.ToolbarSeparator())
+}}C++
 })
 }})
 };

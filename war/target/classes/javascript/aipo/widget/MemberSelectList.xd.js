@@ -7,122 +7,122 @@ params={url:this.memberFromUrl,key:this.memberFromOptionKey,value:this.memberFro
 aimluck.io.createOptions(this.memberFromId,params);
 params={url:this.memberGroupUrl,key:this.groupSelectOptionKey,value:this.groupSelectOptionValue,preOptions:{key:this.groupSelectPreOptionKey,value:this.groupSelectPreOptionValue}};
 aimluck.io.createOptions(this.groupSelectId,params)
-},addOption:function(B,C,D,E){aimluck.io.addOption(B,C,D,E)
-},addOptionSync:function(F,G,H){var C=A.byId(this.memberToId);
-var B=A.byId(this.selectId);
-if(this.memberLimit!=0&&C.options.length>=this.memberLimit){return 
-}if(document.all){var E=document.createElement("OPTION");
-E.value=F;
-E.text=G;
-E.selected=H;
-var D=document.createElement("OPTION");
-D.value=F;
-D.text=G;
-D.selected=H;
-if(C.options.length==1&&C.options[0].value==""){C.options.remove(0);
-B.options.remove(0)
-}C.add(E,C.options.length);
-B.add(D,B.options.length)
-}else{var E=document.createElement("OPTION");
-E.value=F;
-E.text=G;
-E.selected=H;
-var D=document.createElement("OPTION");
-D.value=F;
-D.text=G;
-D.selected=H;
-if(C.options.length==1&&C.options[0].value==""){C.removeChild(C.options[0]);
-B.removeChild(C.options[0])
-}C.insertBefore(E,C.options[C.options.length]);
-B.insertBefore(D,B.options[B.options.length])
+},addOption:function(C,D,E,B){aimluck.io.addOption(C,D,E,B)
+},addOptionSync:function(E,F,C){var H=A.byId(this.memberToId);
+var G=A.byId(this.selectId);
+if(this.memberLimit!=0&&H.options.length>=this.memberLimit){return 
+}if(document.all){var D=document.createElement("OPTION");
+D.value=E;
+D.text=F;
+D.selected=C;
+var B=document.createElement("OPTION");
+B.value=E;
+B.text=F;
+B.selected=C;
+if(H.options.length==1&&H.options[0].value==""){H.options.remove(0);
+G.options.remove(0)
+}H.add(D,H.options.length);
+G.add(B,G.options.length)
+}else{var D=document.createElement("OPTION");
+D.value=E;
+D.text=F;
+D.selected=C;
+var B=document.createElement("OPTION");
+B.value=E;
+B.text=F;
+B.selected=C;
+if(H.options.length==1&&H.options[0].value==""){H.removeChild(H.options[0]);
+G.removeChild(H.options[0])
+}H.insertBefore(D,H.options[H.options.length]);
+G.insertBefore(B,G.options[G.options.length])
 }this.inputMemberSync()
-},addMember:function(F,C){if(document.all){var B=F.options;
-var G=C.options;
-if(B.length==1&&B[0].value==""){return 
+},addMember:function(G,D){if(document.all){var C=G.options;
+var B=D.options;
+if(C.length==1&&C[0].value==""){return 
 }for(i=0;
-i<B.length;
-i++){if(!B[i].selected){continue
-}var E=false;
+i<C.length;
+i++){if(!C[i].selected){continue
+}var F=false;
 for(j=0;
-j<G.length;
-j++){if(G[j].value==B[i].value){E=true;
+j<B.length;
+j++){if(B[j].value==C[i].value){F=true;
 break
-}}if(E){continue
-}var D=document.createElement("OPTION");
-D.value=B[i].value;
-D.text=B[i].text;
-D.selected=true;
-if(G.length==1&&G[0].value==""){G.remove(0)
-}if(this.memberLimit!=0&&C.options.length>=this.memberLimit){return 
-}G.add(D,G.length)
-}}else{var B=F.options;
-var G=C.options;
-if(B.length==1&&B[0].value==""){return 
+}}if(F){continue
+}var E=document.createElement("OPTION");
+E.value=C[i].value;
+E.text=C[i].text;
+E.selected=true;
+if(B.length==1&&B[0].value==""){B.remove(0)
+}if(this.memberLimit!=0&&D.options.length>=this.memberLimit){return 
+}B.add(E,B.length)
+}}else{var C=G.options;
+var B=D.options;
+if(C.length==1&&C[0].value==""){return 
 }for(i=0;
-i<B.length;
-i++){if(!B[i].selected){continue
-}var E=false;
+i<C.length;
+i++){if(!C[i].selected){continue
+}var F=false;
 for(j=0;
-j<G.length;
-j++){if(G[j].value==B[i].value){E=true;
+j<B.length;
+j++){if(B[j].value==C[i].value){F=true;
 break
-}}if(E){continue
-}var D=document.createElement("OPTION");
-D.value=B[i].value;
-D.text=B[i].text;
-D.selected=true;
-if(C.options.length==1&&C.options[0].value==""){C.removeChild(C.options[0])
-}if(this.memberLimit!=0&&C.options.length>=this.memberLimit){return 
-}C.insertBefore(D,G[G.length])
-}}},removeAllMember:function(B){if(document.all){var C=B.options;
+}}if(F){continue
+}var E=document.createElement("OPTION");
+E.value=C[i].value;
+E.text=C[i].text;
+E.selected=true;
+if(D.options.length==1&&D.options[0].value==""){D.removeChild(D.options[0])
+}if(this.memberLimit!=0&&D.options.length>=this.memberLimit){return 
+}D.insertBefore(E,B[B.length])
+}}},removeAllMember:function(C){if(document.all){var B=C.options;
 for(i=0;
-i<C.length;
-i++){if(C[i].selected){C.remove(i);
+i<B.length;
+i++){if(B[i].selected){B.remove(i);
 i-=1
-}}}else{var C=B.options;
+}}}else{var B=C.options;
 for(i=0;
-i<C.length;
-i++){if(C[i].selected){B.removeChild(C[i]);
+i<B.length;
+i++){if(B[i].selected){C.removeChild(B[i]);
 i-=1
-}}}},removeMember:function(B){if(document.all){var C=B.options;
+}}}},removeMember:function(C){if(document.all){var B=C.options;
 for(i=0;
-i<C.length;
-i++){if(C[i].selected){C.remove(i);
+i<B.length;
+i++){if(B[i].selected){B.remove(i);
 i-=1
-}}}else{var C=B.options;
+}}}else{var B=C.options;
 for(i=0;
-i<C.length;
-i++){if(C[i].selected){B.removeChild(C[i]);
+i<B.length;
+i++){if(B[i].selected){C.removeChild(B[i]);
 i-=1
-}}}},removeMemberSync:function(){var D=A.byId(this.memberToId);
-var C=A.byId(this.selectId);
-if(document.all){var E=D.options;
+}}}},removeMemberSync:function(){var E=A.byId(this.memberToId);
+var D=A.byId(this.selectId);
+if(document.all){var B=E.options;
+var C=D.options;
+for(i=0;
+i<B.length;
+i++){if(B[i].selected){B.remove(i);
+C.remove(i);
+i-=1
+}}}else{var B=E.options;
+var C=D.options;
+for(i=0;
+i<B.length;
+i++){if(B[i].selected){E.removeChild(B[i]);
+D.removeChild(C[i]);
+i-=1
+}}}},inputMemberSync:function(){var C=A.byId(this.selectId);
+var D=A.byId(this.inputId);
+var E="";
 var B=C.options;
 for(i=0;
-i<E.length;
-i++){if(E[i].selected){E.remove(i);
-B.remove(i);
-i-=1
-}}}else{var E=D.options;
-var B=C.options;
-for(i=0;
-i<E.length;
-i++){if(E[i].selected){D.removeChild(E[i]);
-C.removeChild(B[i]);
-i-=1
-}}}},inputMemberSync:function(){var B=A.byId(this.selectId);
-var C=A.byId(this.inputId);
-var D="";
-var E=B.options;
-for(i=0;
-i<E.length;
-i++){if(i!=0){D+=", "
-}D+=E[i].text
-}C.innerHTML=D
-},changeGroup:function(B){var E=B.target.options[B.target.selectedIndex].value;
-var C=this.changeGroupUrl+"&groupname="+E;
-var D={url:C,key:this.memberFromOptionKey,value:this.memberFromOptionValue};
-aimluck.io.createOptions(this.memberFromId,D)
+i<B.length;
+i++){if(i!=0){E+=", "
+}E+=B[i].text
+}D.innerHTML=E
+},changeGroup:function(C){var B=C.target.options[C.target.selectedIndex].value;
+var D=this.changeGroupUrl+"&groupname="+B;
+var E={url:D,key:this.memberFromOptionKey,value:this.memberFromOptionValue};
+aimluck.io.createOptions(this.memberFromId,E)
 },onMemberAddClick:function(B){this.addMember(A.byId(this.memberFromId),A.byId(this.memberToId));
 this.addMember(A.byId(this.memberFromId),A.byId(this.selectId));
 this.inputMemberSync()

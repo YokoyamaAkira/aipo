@@ -21,12 +21,12 @@ if(typeof C=="string"||C instanceof A.Color){this.material.color=C
 if(this.data&&this.data.length){C=C/this.data.length
 }return C-2*this.gap
 }return this.depth
-},generate:function(E,D){if(!this.data){return this
-}var F=this.width/this.data.length,I=0,H=this.depth=="auto"?F-2*this.gap:this.depth,G=this.height/B(this.data,Math.max);
-if(!D){D=E.view
-}for(var C=0;
-C<this.data.length;
-++C,I+=F){D.createCube({bottom:{x:I+this.gap,y:0,z:0},top:{x:I+F-this.gap,y:this.data[C]*G,z:H}}).setFill(this.material)
+},generate:function(H,G){if(!this.data){return this
+}var I=this.width/this.data.length,E=0,D=this.depth=="auto"?I-2*this.gap:this.depth,C=this.height/B(this.data,Math.max);
+if(!G){G=H.view
+}for(var F=0;
+F<this.data.length;
+++F,E+=I){G.createCube({bottom:{x:E+this.gap,y:0,z:0},top:{x:E+I-this.gap,y:this.data[F]*C,z:D}}).setFill(this.material)
 }}})
 })()
 }}});

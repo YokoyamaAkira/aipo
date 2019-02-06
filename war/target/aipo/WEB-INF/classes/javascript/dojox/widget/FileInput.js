@@ -9,7 +9,7 @@ this._keyListener=dojo.connect(this.fileInput,"onkeyup",this,"_matchValue")
 },_matchValue:function(){this.inputNode.value=this.fileInput.value;
 if(this.inputNode.value){this.cancelNode.style.visibility="visible";
 dojo.fadeIn({node:this.cancelNode,duration:275}).play()
-}},setLabel:function(B,A){this.titleNode.innerHTML=B
+}},setLabel:function(A,B){this.titleNode.innerHTML=A
 },_onClick:function(A){dojo.disconnect(this._listener);
 dojo.disconnect(this._keyListener);
 this.domNode.removeChild(this.fileInput);

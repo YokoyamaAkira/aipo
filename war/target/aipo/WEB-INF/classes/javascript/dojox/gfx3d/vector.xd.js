@@ -6,28 +6,28 @@ B.y+=C.y;
 B.z+=C.z
 });
 return B
-},center:function(){var B=arguments.length;
-if(B==0){return{x:0,y:0,z:0}
-}var C=dojox.gfx3d.vector.sum(arguments);
-return{x:C.x/B,y:C.y/B,z:C.z/B}
-},substract:function(C,B){return{x:C.x-B.x,y:C.y-B.y,z:C.z-B.z}
-},_crossProduct:function(B,G,F,E,D,C){return{x:G*C-F*D,y:F*E-B*C,z:B*D-G*E}
-},crossProduct:function(C,B,G,F,E,D){if(arguments.length==6&&A.every(arguments,function(H){return typeof H=="number"
-})){return dojox.gfx3d.vector._crossProduct(C,B,G,F,E,D)
-}return dojox.gfx3d.vector._crossProduct(C.x,C.y,C.z,B.x,B.y,B.z)
-},_dotProduct:function(B,G,F,E,D,C){return B*E+G*D+F*C
-},dotProduct:function(C,B,G,F,E,D){if(arguments.length==6&&A.every(arguments,function(H){return typeof H=="number"
-})){return dojox.gfx3d.vector._dotProduct(C,B,G,F,E,D)
-}return dojox.gfx3d.vector._dotProduct(C.x,C.y,C.z,B.x,B.y,B.z)
-},normalize:function(E,C,I){var D,B,H;
-if(E instanceof Array){D=E[0];
-B=E[1];
-H=E[2]
-}else{D=E;
-B=C;
-H=I
-}var G=dojox.gfx3d.vector.substract(B,D);
-var F=dojox.gfx3d.vector.substract(H,D);
-return dojox.gfx3d.vector.crossProduct(G,F)
+},center:function(){var C=arguments.length;
+if(C==0){return{x:0,y:0,z:0}
+}var B=dojox.gfx3d.vector.sum(arguments);
+return{x:B.x/C,y:B.y/C,z:B.z/C}
+},substract:function(B,C){return{x:B.x-C.x,y:B.y-C.y,z:B.z-C.z}
+},_crossProduct:function(C,B,G,F,E,D){return{x:B*D-G*E,y:G*F-C*D,z:C*E-B*F}
+},crossProduct:function(D,C,B,G,F,E){if(arguments.length==6&&A.every(arguments,function(H){return typeof H=="number"
+})){return dojox.gfx3d.vector._crossProduct(D,C,B,G,F,E)
+}return dojox.gfx3d.vector._crossProduct(D.x,D.y,D.z,C.x,C.y,C.z)
+},_dotProduct:function(C,B,G,F,E,D){return C*F+B*E+G*D
+},dotProduct:function(D,C,B,G,F,E){if(arguments.length==6&&A.every(arguments,function(H){return typeof H=="number"
+})){return dojox.gfx3d.vector._dotProduct(D,C,B,G,F,E)
+}return dojox.gfx3d.vector._dotProduct(D.x,D.y,D.z,C.x,C.y,C.z)
+},normalize:function(I,G,C){var H,F,E;
+if(I instanceof Array){H=I[0];
+F=I[1];
+E=I[2]
+}else{H=I;
+F=G;
+E=C
+}var D=dojox.gfx3d.vector.substract(F,H);
+var B=dojox.gfx3d.vector.substract(E,H);
+return dojox.gfx3d.vector.crossProduct(D,B)
 }})
 }}});

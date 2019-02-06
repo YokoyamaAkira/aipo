@@ -19,17 +19,17 @@ this.canDropFlag=false;
 this.avatar.update();
 A.publish("/dnd/source/over",[null])
 }}else{A.publish("/dnd/source/over",[null])
-}},startDrag:function(C,B,E){this.source=C;
-this.nodes=B;
-this.copy=Boolean(E);
+}},startDrag:function(D,C,B){this.source=D;
+this.nodes=C;
+this.copy=Boolean(B);
 this.avatar=this.makeAvatar();
 A.body().appendChild(this.avatar.node);
-A.publish("/dnd/start",[C,B,this.copy]);
+A.publish("/dnd/start",[D,C,this.copy]);
 this.events=[A.connect(A.doc,"onmousemove",this,"onMouseMove"),A.connect(A.doc,"onmouseup",this,"onMouseUp"),A.connect(A.doc,"onkeydown",this,"onKeyDown"),A.connect(A.doc,"onkeyup",this,"onKeyUp")];
-var D="dojoDnd"+(E?"Copy":"Move");
-A.addClass(A.body(),D)
-},canDrop:function(B){var C=this.target&&B;
-if(this.canDropFlag!=C){this.canDropFlag=C;
+var E="dojoDnd"+(B?"Copy":"Move");
+A.addClass(A.body(),E)
+},canDrop:function(C){var B=this.target&&C;
+if(this.canDropFlag!=B){this.canDropFlag=B;
 this.avatar.update()
 }},stopDrag:function(){A.removeClass(A.body(),"dojoDndCopy");
 A.removeClass(A.body(),"dojoDndMove");
@@ -41,24 +41,24 @@ this.source=null;
 this.nodes=[]
 },makeAvatar:function(){return new A.dnd.Avatar(this)
 },updateAvatar:function(){this.avatar.update()
-},onMouseMove:function(C){var B=this.avatar;
-if(B){A.dnd.autoScroll(C);
-A.marginBox(B.node,{l:C.pageX+this.OFFSET_X,t:C.pageY+this.OFFSET_Y});
-var D=Boolean(this.source.copyState(A.dnd.getCopyKeyState(C)));
-if(this.copy!=D){this._setCopyStatus(D)
-}}},onMouseUp:function(B){if(this.avatar&&(!("mouseButton" in this.source)||this.source.mouseButton==B.button)){if(this.target&&this.canDropFlag){var C=[this.source,this.nodes,Boolean(this.source.copyState(A.dnd.getCopyKeyState(B))),this.target];
-A.publish("/dnd/drop/before",C);
-A.publish("/dnd/drop",C)
+},onMouseMove:function(D){var C=this.avatar;
+if(C){A.dnd.autoScroll(D);
+A.marginBox(C.node,{l:D.pageX+this.OFFSET_X,t:D.pageY+this.OFFSET_Y});
+var B=Boolean(this.source.copyState(A.dnd.getCopyKeyState(D)));
+if(this.copy!=B){this._setCopyStatus(B)
+}}},onMouseUp:function(C){if(this.avatar&&(!("mouseButton" in this.source)||this.source.mouseButton==C.button)){if(this.target&&this.canDropFlag){var B=[this.source,this.nodes,Boolean(this.source.copyState(A.dnd.getCopyKeyState(C))),this.target];
+A.publish("/dnd/drop/before",B);
+A.publish("/dnd/drop",B)
 }else{A.publish("/dnd/cancel")
 }this.stopDrag()
-}},onKeyDown:function(B){if(this.avatar){switch(B.keyCode){case A.keys.CTRL:var C=Boolean(this.source.copyState(true));
-if(this.copy!=C){this._setCopyStatus(C)
+}},onKeyDown:function(C){if(this.avatar){switch(C.keyCode){case A.keys.CTRL:var B=Boolean(this.source.copyState(true));
+if(this.copy!=B){this._setCopyStatus(B)
 }break;
 case A.keys.ESCAPE:A.publish("/dnd/cancel");
 this.stopDrag();
 break
-}}},onKeyUp:function(B){if(this.avatar&&B.keyCode==A.keys.CTRL){var C=Boolean(this.source.copyState(false));
-if(this.copy!=C){this._setCopyStatus(C)
+}}},onKeyUp:function(C){if(this.avatar&&C.keyCode==A.keys.CTRL){var B=Boolean(this.source.copyState(false));
+if(this.copy!=B){this._setCopyStatus(B)
 }}},_setCopyStatus:function(B){this.copy=B;
 this.source._markDndStatus(this.copy);
 this.updateAvatar();

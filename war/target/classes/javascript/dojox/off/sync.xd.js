@@ -13,9 +13,9 @@ this.start()
 }this.cancelled=true;
 if(dojox.off.files.refreshing){dojox.off.files.abortRefresh()
 }this.onSync("cancel")
-},finishedDownloading:function(C,B){if(typeof C=="undefined"){C=true
-}if(!C){this.successful=false;
-this.details.push(B);
+},finishedDownloading:function(B,C){if(typeof B=="undefined"){B=true
+}if(!B){this.successful=false;
+this.details.push(C);
 this.error=true
 }this.finished()
 },start:function(){if(this.cancelled){this.finished();
@@ -25,11 +25,11 @@ this.refreshFiles()
 },refreshFiles:function(){if(this.cancelled){this.finished();
 return 
 }this.onSync("refreshFiles");
-dojox.off.files.refresh(A.hitch(this,function(B,D){if(B){this.error=true;
+dojox.off.files.refresh(A.hitch(this,function(C,B){if(C){this.error=true;
 this.successful=false;
-for(var C=0;
-C<D.length;
-C++){this.details.push(D[C])
+for(var D=0;
+D<B.length;
+D++){this.details.push(B[D])
 }}this.upload()
 }))
 },upload:function(){if(this.cancelled){this.finished();
@@ -51,27 +51,27 @@ this.onSync("finished")
 A.declare("dojox.off.sync.ActionLog",null,{entries:[],reasonHalted:null,isReplaying:false,autoSave:true,add:function(B){if(this.isReplaying){throw"Programming error: you can not call dojox.off.sync.actions.add() while we are replaying an action log"
 }this.entries.push(B);
 if(this.autoSave){this._save()
-}},onReplay:function(B,C){},length:function(){return this.entries.length
-},haltReplay:function(C){if(!this.isReplaying){return 
-}if(C){this.reasonHalted=C.toString()
-}if(this.autoSave){var B=this;
-this._save(function(){B.isReplaying=false;
-B.onReplayFinished()
+}},onReplay:function(C,B){},length:function(){return this.entries.length
+},haltReplay:function(B){if(!this.isReplaying){return 
+}if(B){this.reasonHalted=B.toString()
+}if(this.autoSave){var C=this;
+this._save(function(){C.isReplaying=false;
+C.onReplayFinished()
 })
 }else{this.isReplaying=false;
 this.onReplayFinished()
 }},continueReplay:function(){if(!this.isReplaying){return 
 }this.entries.shift();
-if(!this.entries.length){if(this.autoSave){var C=this;
-this._save(function(){C.isReplaying=false;
-C.onReplayFinished()
+if(!this.entries.length){if(this.autoSave){var B=this;
+this._save(function(){B.isReplaying=false;
+B.onReplayFinished()
 });
 return 
 }else{this.isReplaying=false;
 this.onReplayFinished();
 return 
-}}var B=this.entries[0];
-this.onReplay(B,this)
+}}var C=this.entries[0];
+this.onReplay(C,this)
 },clear:function(){if(this.isReplaying){return 
 }this.entries=[];
 if(this.autoSave){this._save()
@@ -82,30 +82,30 @@ return
 }this.isReplaying=true;
 var B=this.entries[0];
 this.onReplay(B,this)
-},onReplayFinished:function(){},toString:function(){var D="";
-D+="[";
-for(var C=0;
-C<this.entries.length;
-C++){D+="{";
-for(var B in this.entries[C]){D+=B+': "'+this.entries[C][B]+'"';
-D+=", "
-}D+="}, "
-}D+="]";
-return D
-},_save:function(E){if(!E){E=function(){}
-}try{var B=this;
-var C=function(F,G,H){if(F==dojox.storage.FAILED){dojox.off.onFrameworkEvent("save",{status:dojox.storage.FAILED,isCoreSave:true,key:G,value:H,namespace:dojox.off.STORAGE_NAMESPACE});
-E()
-}else{if(F==dojox.storage.SUCCESS){E()
+},onReplayFinished:function(){},toString:function(){var B="";
+B+="[";
+for(var D=0;
+D<this.entries.length;
+D++){B+="{";
+for(var C in this.entries[D]){B+=C+': "'+this.entries[D][C]+'"';
+B+=", "
+}B+="}, "
+}B+="]";
+return B
+},_save:function(B){if(!B){B=function(){}
+}try{var C=this;
+var D=function(F,G,H){if(F==dojox.storage.FAILED){dojox.off.onFrameworkEvent("save",{status:dojox.storage.FAILED,isCoreSave:true,key:G,value:H,namespace:dojox.off.STORAGE_NAMESPACE});
+B()
+}else{if(F==dojox.storage.SUCCESS){B()
 }}};
-dojox.storage.put("actionlog",this.entries,C,dojox.off.STORAGE_NAMESPACE)
-}catch(D){console.debug("dojox.off.sync._save: "+D.message||D);
+dojox.storage.put("actionlog",this.entries,D,dojox.off.STORAGE_NAMESPACE)
+}catch(E){console.debug("dojox.off.sync._save: "+E.message||E);
 dojox.off.onFrameworkEvent("save",{status:dojox.storage.FAILED,isCoreSave:true,key:"actionlog",value:this.entries,namespace:dojox.off.STORAGE_NAMESPACE});
-E()
-}},_load:function(C){var B=dojox.storage.get("actionlog",dojox.off.STORAGE_NAMESPACE);
-if(!B){B=[]
-}this.entries=B;
-C()
+B()
+}},_load:function(B){var C=dojox.storage.get("actionlog",dojox.off.STORAGE_NAMESPACE);
+if(!C){C=[]
+}this.entries=C;
+B()
 }});
 dojox.off.sync.actions=new dojox.off.sync.ActionLog()
 }}});

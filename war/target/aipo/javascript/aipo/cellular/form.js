@@ -1,4 +1,4 @@
 dojo.provide("aipo.cellular");
-aipo.cellular.displayIndicator=function(A,B){var C=dojo.byId(A+B);
-if(C){dojo.style(C,"display","")
+aipo.cellular.displayIndicator=function(D,F){var E=dojo.byId(D+F);
+if(E){dojo.style(E,"display","")
 }};

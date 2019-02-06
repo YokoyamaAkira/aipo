@@ -1,20 +1,20 @@
 if(!dojo._hasResource["dojox.grid._data.model"]){dojo._hasResource["dojox.grid._data.model"]=true;
 dojo.provide("dojox.grid._data.model");
 dojo.require("dojox.grid._data.fields");
-dojo.declare("dojox.grid.data.Model",null,{constructor:function(B,A){this.observers=[];
+dojo.declare("dojox.grid.data.Model",null,{constructor:function(A,B){this.observers=[];
 this.fields=new dojox.grid.data.Fields();
-if(B){this.fields.set(B)
-}this.setData(A)
-},count:0,updating:0,observer:function(B,A){this.observers.push({o:B,p:A||"model"})
-},notObserver:function(B){for(var C=0,A,D;
-(D=this.observers[C]);
-C++){if(D.o==B){this.observers.splice(C,1);
+if(A){this.fields.set(A)
+}this.setData(B)
+},count:0,updating:0,observer:function(A,B){this.observers.push({o:A,p:B||"model"})
+},notObserver:function(A){for(var B=0,D,C;
+(C=this.observers[B]);
+B++){if(C.o==A){this.observers.splice(B,1);
 return 
-}}},notify:function(E,D){if(!this.isUpdating()){var B=D||[];
-for(var C=0,A,F;
-(F=this.observers[C]);
-C++){A=F.p+E,F=F.o;
-(A in F)&&(F[A].apply(F,B))
+}}},notify:function(D,C){if(!this.isUpdating()){var A=C||[];
+for(var B=0,F,E;
+(E=this.observers[B]);
+B++){F=E.p+D,E=E.o;
+(F in E)&&(E[F].apply(E,A))
 }}},clear:function(){this.fields.clear();
 this.clearData()
 },beginUpdate:function(){this.updating++
@@ -33,29 +33,29 @@ return true
 }this.removal.apply(this,arguments);
 return true
 },canSort:function(){return this.sort!=null
-},makeComparator:function(E){var B,C,F,A=null;
-for(var D=E.length-1;
-D>=0;
-D--){B=E[D];
-C=Math.abs(B)-1;
-if(C>=0){F=this.fields.get(C);
-A=this.generateComparator(F.compare,F.key,B>0,A)
-}}return A
+},makeComparator:function(D){var A,B,E,F=null;
+for(var C=D.length-1;
+C>=0;
+C--){A=D[C];
+B=Math.abs(A)-1;
+if(B>=0){E=this.fields.get(B);
+F=this.generateComparator(E.compare,E.key,A>0,F)
+}}return F
 },sort:null,dummy:0});
 dojo.declare("dojox.grid.data.Rows",dojox.grid.data.Model,{allChange:function(){this.notify("AllChange",arguments);
 this.notify("Change",arguments)
 },rowChange:function(){this.notify("RowChange",arguments)
 },datumChange:function(){this.notify("DatumChange",arguments)
 },beginModifyRow:function(A){if(!this.cache[A]){this.cache[A]=this.copyRow(A)
-}},endModifyRow:function(C){var A=this.cache[C];
-if(A){var B=this.getRow(C);
-if(!dojox.grid.arrayCompare(A,B)){this.update(A,B,C)
-}delete this.cache[C]
-}},cancelModifyRow:function(B){var A=this.cache[B];
-if(A){this.setRow(A,B);
-delete this.cache[B]
-}},generateComparator:function(B,C,A,D){return function(F,E){var G=B(F[C],E[C]);
-return G?(A?G:-G):D&&D(F,E)
+}},endModifyRow:function(B){var C=this.cache[B];
+if(C){var A=this.getRow(B);
+if(!dojox.grid.arrayCompare(C,A)){this.update(C,A,B)
+}delete this.cache[B]
+}},cancelModifyRow:function(A){var B=this.cache[A];
+if(B){this.setRow(B,A);
+delete this.cache[A]
+}},generateComparator:function(A,B,D,C){return function(G,F){var E=A(G[B],F[B]);
+return E?(D?E:-E):C&&C(G,F)
 }
 }});
 dojo.declare("dojox.grid.data.Table",dojox.grid.data.Rows,{constructor:function(){this.cache=[]
@@ -64,42 +64,42 @@ this.colCount=this.getColCount();
 this.allChange()
 },getRowCount:function(){return(this.data?this.data.length:0)
 },getColCount:function(){return(this.data&&this.data.length?this.data[0].length:this.fields.count())
-},badIndex:function(A,B){console.debug("dojox.grid.data.Table: badIndex")
-},isGoodIndex:function(B,A){return(B>=0&&B<this.count&&(arguments.length<2||(A>=0&&A<this.colCount)))
+},badIndex:function(B,A){console.debug("dojox.grid.data.Table: badIndex")
+},isGoodIndex:function(A,B){return(A>=0&&A<this.count&&(arguments.length<2||(B>=0&&B<this.colCount)))
 },getRow:function(A){return this.data[A]
 },copyRow:function(A){return this.getRow(A).slice(0)
-},getDatum:function(B,A){return this.data[B][A]
+},getDatum:function(A,B){return this.data[A][B]
 },get:function(){throw ('Plain "get" no longer supported. Use "getRow" or "getDatum".')
 },setData:function(A){this.data=(A||[]);
 this.allChange()
-},setRow:function(A,B){this.data[B]=A;
-this.rowChange(A,B);
+},setRow:function(B,A){this.data[A]=B;
+this.rowChange(B,A);
 this.change()
-},setDatum:function(C,B,A){this.data[B][A]=C;
-this.datumChange(C,B,A)
+},setDatum:function(B,A,C){this.data[A][C]=B;
+this.datumChange(B,A,C)
 },set:function(){throw ('Plain "set" no longer supported. Use "setData", "setRow", or "setDatum".')
-},setRows:function(A,E){for(var C=0,B=A.length,D=E;
-C<B;
-C++,D++){this.setRow(A[C],D)
-}},update:function(B,A,C){return true
-},_insert:function(A,B){dojox.grid.arrayInsert(this.data,B,A);
+},setRows:function(E,D){for(var B=0,A=E.length,C=D;
+B<A;
+B++,C++){this.setRow(E[B],C)
+}},update:function(A,C,B){return true
+},_insert:function(B,A){dojox.grid.arrayInsert(this.data,A,B);
 this.count++;
 return true
-},_remove:function(B){for(var A=B.length-1;
-A>=0;
-A--){dojox.grid.arrayRemove(this.data,B[A])
-}this.count-=B.length;
+},_remove:function(A){for(var B=A.length-1;
+B>=0;
+B--){dojox.grid.arrayRemove(this.data,A[B])
+}this.count-=A.length;
 return true
 },sort:function(){this.data.sort(this.makeComparator(arguments))
-},swap:function(B,A){dojox.grid.arraySwap(this.data,B,A);
-this.rowChange(this.getRow(B),B);
+},swap:function(A,B){dojox.grid.arraySwap(this.data,A,B);
 this.rowChange(this.getRow(A),A);
+this.rowChange(this.getRow(B),B);
 this.change()
 },dummy:0});
-dojo.declare("dojox.grid.data.Objects",dojox.grid.data.Table,{constructor:function(C,A,B){if(!C){this.autoAssignFields()
-}},autoAssignFields:function(){var C=this.data[0],A=0;
-for(var B in C){this.fields.get(A++).key=B
-}},getDatum:function(B,A){return this.data[B][this.fields.get(A).key]
+dojo.declare("dojox.grid.data.Objects",dojox.grid.data.Table,{constructor:function(B,C,A){if(!B){this.autoAssignFields()
+}},autoAssignFields:function(){var B=this.data[0],C=0;
+for(var A in B){this.fields.get(C++).key=A
+}},getDatum:function(A,B){return this.data[A][this.fields.get(B).key]
 }});
 dojo.declare("dojox.grid.data.Dynamic",dojox.grid.data.Table,{constructor:function(){this.page=[];
 this.pages=[]
@@ -112,103 +112,103 @@ this.setData([])
 this.change()
 },requestsPending:function(A){},rowToPage:function(A){return(this.rowsPerPage?Math.floor(A/this.rowsPerPage):A)
 },pageToRow:function(A){return(this.rowsPerPage?this.rowsPerPage*A:A)
-},requestRows:function(B,A){},rowsProvided:function(B,A){this.requests--;
+},requestRows:function(A,B){},rowsProvided:function(A,B){this.requests--;
 if(this.requests==0){this.requestsPending(false)
-}},requestPage:function(C){var B=this.pageToRow(C);
-var A=Math.min(this.rowsPerPage,this.count-B);
-if(A>0){this.requests++;
+}},requestPage:function(B){var A=this.pageToRow(B);
+var C=Math.min(this.rowsPerPage,this.count-A);
+if(C>0){this.requests++;
 this.requestsPending(true);
-setTimeout(dojo.hitch(this,"requestRows",B,A),1)
+setTimeout(dojo.hitch(this,"requestRows",A,C),1)
 }},needPage:function(A){if(!this.pages[A]){this.pages[A]=true;
 this.requestPage(A)
-}},preparePage:function(C,B){if(C<this.bop||C>=this.eop){var A=this.rowToPage(C);
-this.needPage(A);
-this.bop=A*this.rowsPerPage;
+}},preparePage:function(B,A){if(B<this.bop||B>=this.eop){var C=this.rowToPage(B);
+this.needPage(C);
+this.bop=C*this.rowsPerPage;
 this.eop=this.bop+(this.rowsPerPage||this.count)
 }},isRowLoaded:function(A){return Boolean(this.data[A])
-},removePages:function(C){for(var A=0,B;
-((B=C[A])!=undefined);
-A++){this.pages[this.rowToPage(B)]=false
+},removePages:function(B){for(var C=0,A;
+((A=B[C])!=undefined);
+C++){this.pages[this.rowToPage(A)]=false
 }this.bop=this.eop=-1
 },remove:function(A){this.removePages(A);
 dojox.grid.data.Table.prototype.remove.apply(this,arguments)
-},getRow:function(B){var A=this.data[B];
-if(!A){this.preparePage(B)
-}return A
-},getDatum:function(C,A){var B=this.getRow(C);
-return(B?B[A]:this.fields.get(A).na)
-},setDatum:function(D,C,A){var B=this.getRow(C);
-if(B){B[A]=D;
-this.datumChange(D,C,A)
+},getRow:function(A){var B=this.data[A];
+if(!B){this.preparePage(A)
+}return B
+},getDatum:function(B,C){var A=this.getRow(B);
+return(A?A[C]:this.fields.get(C).na)
+},setDatum:function(C,B,D){var A=this.getRow(B);
+if(A){A[D]=C;
+this.datumChange(C,B,D)
 }else{console.debug("["+this.declaredClass+"] dojox.grid.data.dynamic.set: cannot set data on an non-loaded row")
 }},canSort:function(){return false
 }});
 dojox.grid.data.table=dojox.grid.data.Table;
 dojox.grid.data.dynamic=dojox.grid.data.Dyanamic;
-dojo.declare("dojox.grid.data.DojoData",dojox.grid.data.Dynamic,{constructor:function(C,A,B){this.count=1;
+dojo.declare("dojox.grid.data.DojoData",dojox.grid.data.Dynamic,{constructor:function(B,D,A){this.count=1;
 this._rowIdentities={};
-if(B){dojo.mixin(this,B)
-}if(this.store){var D=this.store.getFeatures();
-this._canNotify=D["dojo.data.api.Notification"];
-this._canWrite=D["dojo.data.api.Write"];
+if(A){dojo.mixin(this,A)
+}if(this.store){var C=this.store.getFeatures();
+this._canNotify=C["dojo.data.api.Notification"];
+this._canWrite=C["dojo.data.api.Write"];
 if(this._canNotify){dojo.connect(this.store,"onSet",this,"_storeDatumChange")
-}}},markupFactory:function(A,B){return new dojox.grid.data.DojoData(null,null,A)
+}}},markupFactory:function(B,A){return new dojox.grid.data.DojoData(null,null,B)
 },query:{name:"*"},store:null,_canNotify:false,_canWrite:false,_rowIdentities:{},clientSort:false,setData:function(A){this.store=A;
 this.data=[];
 this.allChange()
 },setRowCount:function(A){this.count=A;
 this.allChange()
 },beginReturn:function(A){if(this.count!=A){this.setRowCount(A)
-}},_setupFields:function(C){if(this.fields._nameMaps){return 
-}var B={};
-var A=dojo.map(this.store.getAttributes(C),function(E,D){B[E]=D;
-B[D+".idx"]=E;
-return{name:E,key:E}
+}},_setupFields:function(B){if(this.fields._nameMaps){return 
+}var A={};
+var C=dojo.map(this.store.getAttributes(B),function(D,E){A[D]=E;
+A[E+".idx"]=D;
+return{name:D,key:D}
 },this);
-this.fields._nameMaps=B;
-this.fields.set(A);
+this.fields._nameMaps=A;
+this.fields.set(C);
 this.notify("FieldsChange")
-},_getRowFromItem:function(A){},processRows:function(B,A){if(!B){return 
-}this._setupFields(B[0]);
-dojo.forEach(B,function(D,C){var E={};
-E.__dojo_data_item=D;
-dojo.forEach(this.fields.values,function(F){E[F.name]=this.store.getValue(D,F.name)||""
+},_getRowFromItem:function(A){},processRows:function(A,B){if(!A){return 
+}this._setupFields(A[0]);
+dojo.forEach(A,function(E,D){var C={};
+C.__dojo_data_item=E;
+dojo.forEach(this.fields.values,function(F){C[F.name]=this.store.getValue(E,F.name)||""
 },this);
-this._rowIdentities[this.store.getIdentity(D)]=A.start+C;
-this.setRow(E,A.start+C)
+this._rowIdentities[this.store.getIdentity(E)]=B.start+D;
+this.setRow(C,B.start+D)
 },this)
-},requestRows:function(D,A){var C=D||0;
-var B={start:C,count:this.rowsPerPage,query:this.query,onBegin:dojo.hitch(this,"beginReturn"),onComplete:dojo.hitch(this,"processRows")};
-this.store.fetch(B)
-},getDatum:function(D,A){var C=this.getRow(D);
-var B=this.fields.values[A];
-return C&&B?C[B.name]:B?B.na:"?"
-},setDatum:function(C,B,A){var D=this.fields._nameMaps[A+".idx"];
-if(D){this.data[B][D]=C;
-this.datumChange(C,B,A)
-}},copyRow:function(E){var D={};
-var B={};
-var C=this.getRow(E);
-for(var A in C){if(C[A]!=B[A]){D[A]=C[A]
-}}return D
-},_attrCompare:function(A,B){dojo.forEach(this.fields.values,function(C){if(A[C.name]!=B[C.name]){return false
+},requestRows:function(C,D){var B=C||0;
+var A={start:B,count:this.rowsPerPage,query:this.query,onBegin:dojo.hitch(this,"beginReturn"),onComplete:dojo.hitch(this,"processRows")};
+this.store.fetch(A)
+},getDatum:function(C,D){var B=this.getRow(C);
+var A=this.fields.values[D];
+return B&&A?B[A.name]:A?A.na:"?"
+},setDatum:function(B,A,D){var C=this.fields._nameMaps[D+".idx"];
+if(C){this.data[A][C]=B;
+this.datumChange(B,A,D)
+}},copyRow:function(D){var C={};
+var A={};
+var B=this.getRow(D);
+for(var E in B){if(B[E]!=A[E]){C[E]=B[E]
+}}return C
+},_attrCompare:function(B,A){dojo.forEach(this.fields.values,function(C){if(B[C.name]!=A[C.name]){return false
 }},this);
 return true
-},endModifyRow:function(C){var A=this.cache[C];
-if(A){var B=this.getRow(C);
-if(!this._attrCompare(A,B)){this.update(A,B,C)
-}delete this.cache[C]
-}},cancelModifyRow:function(B){var A=this.cache[B];
-if(A){this.setRow(A,B);
-delete this.cache[B]
-}},_storeDatumChange:function(E,A,B,C){var F=this._rowIdentities[this.store.getIdentity(E)];
-var G=this.getRow(F);
-G[A]=C;
-var D=this.fields._nameMaps[A];
-this.notify("DatumChange",[C,F,D])
-},datumChange:function(B,A,E){if(this._canWrite){var D=this.getRow(A);
-var C=this.fields._nameMaps[E+".idx"];
-this.store.setValue(D.__dojo_data_item,C,B)
+},endModifyRow:function(B){var C=this.cache[B];
+if(C){var A=this.getRow(B);
+if(!this._attrCompare(C,A)){this.update(C,A,B)
+}delete this.cache[B]
+}},cancelModifyRow:function(A){var B=this.cache[A];
+if(B){this.setRow(B,A);
+delete this.cache[A]
+}},_storeDatumChange:function(B,E,F,G){var C=this._rowIdentities[this.store.getIdentity(B)];
+var D=this.getRow(C);
+D[E]=G;
+var A=this.fields._nameMaps[E];
+this.notify("DatumChange",[G,C,A])
+},datumChange:function(A,E,D){if(this._canWrite){var C=this.getRow(E);
+var B=this.fields._nameMaps[D+".idx"];
+this.store.setValue(C.__dojo_data_item,B,A)
 }else{this.notify("DatumChange",arguments)
 }},insertion:function(){console.debug("Insertion",arguments);
 this.notify("Insertion",arguments);

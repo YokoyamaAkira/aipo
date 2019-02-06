@@ -3,33 +3,33 @@ dojo.provide("dojox.layout.BorderContainer");
 dojo.require("dijit.layout._LayoutWidget");
 dojo.experimental("dojox.layout.BorderContainer");
 dojo.declare("dojox.layout.BorderContainer",dijit.layout._LayoutWidget,{top:{},bottom:{},left:{},right:{},center:{},layout:function(){this._layoutChildren(this.domNode,this._contentBox,this.getChildren())
-},addChild:function(B,A){dijit._Container.prototype.addChild.apply(this,arguments);
+},addChild:function(A,B){dijit._Container.prototype.addChild.apply(this,arguments);
 if(this._started){this._layoutChildren(this.domNode,this._contentBox,this.getChildren())
 }},removeChild:function(A){dijit._Container.prototype.removeChild.apply(this,arguments);
 if(this._started){this._layoutChildren(this.domNode,this._contentBox,this.getChildren())
-}},_layoutChildren:function(A,E,C){this.domNode.style.position="relative";
-dojo.addClass(A,"dijitBorderContainer");
-dojo.forEach(C,function(O){var N=O.domNode.style;
-N.position="absolute";
-if(O.position){this[O.position]=O.domNode
+}},_layoutChildren:function(J,A,L){this.domNode.style.position="relative";
+dojo.addClass(J,"dijitBorderContainer");
+dojo.forEach(L,function(N){var O=N.domNode.style;
+O.position="absolute";
+if(N.position){this[N.position]=N.domNode
 }},this);
-var H=this.top.style;
-var I=this.right.style;
-var D=this.left.style;
-var L=this.center.style;
-var J=this.bottom.style;
-var M=dojo.coords(this.right);
-var F=dojo.coords(this.left);
-var B=dojo.coords(this.center);
-var G=dojo.coords(this.bottom);
-var K=dojo.coords(this.top);
-I.top=D.top=L.top=K.h+"px";
-H.top=H.left=H.right="0px";
-J.left=J.bottom=J.right="0px";
-D.left=I.right="0px";
-L.left=F.w+"px";
-L.right=M.w+"px";
-I.bottom=D.bottom=L.bottom=G.h+"px"
+var D=this.top.style;
+var E=this.right.style;
+var M=this.left.style;
+var H=this.center.style;
+var F=this.bottom.style;
+var I=dojo.coords(this.right);
+var B=dojo.coords(this.left);
+var K=dojo.coords(this.center);
+var C=dojo.coords(this.bottom);
+var G=dojo.coords(this.top);
+E.top=M.top=H.top=G.h+"px";
+D.top=D.left=D.right="0px";
+F.left=F.bottom=F.right="0px";
+M.left=E.right="0px";
+H.left=B.w+"px";
+H.right=I.w+"px";
+E.bottom=M.bottom=H.bottom=C.h+"px"
 },resize:function(A){this.layout()
 }});
 dojo.extend(dijit._Widget,{position:"none"})

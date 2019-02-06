@@ -1,37 +1,24 @@
-if(!dojo._hasResource["dojox.validate.isbn"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.validate.isbn"] = true;
+if(!dojo._hasResource["dojox.validate.isbn"]){dojo._hasResource["dojox.validate.isbn"]=true;
 dojo.provide("dojox.validate.isbn");
-
-dojox.validate.isValidIsbn = function(/* String */value) {
-	// summary: Vadlidate ISBN-10 or ISBN-13 based on the length of value
-	// returns: Boolean
-	var len, sum, weight;
-	if(typeof value!='string'){
-		value = String(value);
-	}
-	value = value.replace(/[- ]/g,''); //ignore dashes and whitespaces
-	len = value.length;
-	sum = 0;
-	if(len == 10){
-		weight = 10;
-		// ISBN-10 validation algorithm
-		for(var i = 0; i< 9; i++){
-			sum += parseInt(value.charAt(i)) * weight;
-			weight --;
-		}
-		var t = value.charAt(9).toUpperCase();
-		sum += t == 'X' ? 10 : parseInt(t);
-		return sum % 11 == 0;
-	}else if(len == 13) {
-		weight = -1;
-		for(var i=0; i< len; i++){
-			sum += parseInt(value.charAt(i)) * (2 + weight);
-			weight *= -1;
-		}
-		return sum % 10 == 0;
-	}else{
-		return false;
-	}
-}
-
-}
+dojox.validate.isValidIsbn=function(F){var A,D,E;
+if(typeof F!="string"){F=String(F)
+}F=F.replace(/[- ]/g,"");
+A=F.length;
+D=0;
+if(A==10){E=10;
+for(var C=0;
+C<9;
+C++){D+=parseInt(F.charAt(C))*E;
+E--
+}var B=F.charAt(9).toUpperCase();
+D+=B=="X"?10:parseInt(B);
+return D%11==0
+}else{if(A==13){E=-1;
+for(var C=0;
+C<A;
+C++){D+=parseInt(F.charAt(C))*(2+E);
+E*=-1
+}return D%10==0
+}else{return false
+}}}
+};

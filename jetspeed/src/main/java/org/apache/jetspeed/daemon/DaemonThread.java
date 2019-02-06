@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@ public class DaemonThread extends Thread {
    * Static initialization of the logger for this class
    */
   private static final JetspeedLogger logger = JetspeedLogFactoryService
-      .getLogger(DaemonThread.class.getName());
+    .getLogger(DaemonThread.class.getName());
 
   /**
    */
@@ -61,6 +61,7 @@ public class DaemonThread extends Thread {
 
   /**
    */
+  @Override
   public void run() {
     // at the very minimum this daemon is processing...
 
@@ -101,17 +102,17 @@ public class DaemonThread extends Thread {
     daemon.setStatus(Daemon.STATUS_PROCESSING);
 
     logger.info("DaemonThread -> PROCESSING daemon -> "
-        + daemon.getDaemonEntry().getName());
+      + daemon.getDaemonEntry().getName());
 
     try {
       daemon.run();
     } catch (Throwable t) {
       logger.error("Could not process Daemon: "
-          + daemon.getDaemonEntry().getName(), t);
+        + daemon.getDaemonEntry().getName(), t);
     }
 
     logger.info("DaemonThread -> *DONE* PROCESSING daemon -> "
-        + daemon.getDaemonEntry().getName());
+      + daemon.getDaemonEntry().getName());
 
     daemon.setStatus(Daemon.STATUS_PROCESSED);
 

@@ -1,112 +1,112 @@
 if(!dojo._hasResource["dojo.back"]){dojo._hasResource["dojo.back"]=true;
 dojo.provide("dojo.back");
-(function(){var M=dojo.back;
-function L(){var U=window.location.hash;
+(function(){var S=dojo.back;
+function R(){var U=window.location.hash;
 if(U.charAt(0)=="#"){U=U.substring(1)
 }return dojo.isMozilla?U:decodeURIComponent(U)
-}function G(U){if(!U){U=""
+}function M(U){if(!U){U=""
 }window.location.hash=encodeURIComponent(U);
-R=history.length
-}if(dojo.exists("tests.back-hash")){M.getHash=L;
-M.setHash=G
-}var P=(typeof (window)!=="undefined")?window.location.href:"";
-var C=(typeof (window)!=="undefined")?L():"";
-var O=null;
-var N=null;
-var B=null;
-var F=null;
-var J=[];
-var T=[];
-var A=false;
-var D=false;
-var R;
-function I(){var V=T.pop();
-if(!V){return 
-}var U=T[T.length-1];
-if(!U&&T.length==0){U=O
-}if(U){if(U.kwArgs.back){U.kwArgs.back()
-}else{if(U.kwArgs.backButton){U.kwArgs.backButton()
-}else{if(U.kwArgs.handle){U.kwArgs.handle("back")
-}}}}J.push(V)
-}M.goBack=I;
-function S(){var U=J.pop();
+D=history.length
+}if(dojo.exists("tests.back-hash")){S.getHash=R;
+S.setHash=M
+}var B=(typeof (window)!=="undefined")?window.location.href:"";
+var I=(typeof (window)!=="undefined")?R():"";
+var A=null;
+var T=null;
+var H=null;
+var L=null;
+var P=[];
+var F=[];
+var G=false;
+var J=false;
+var D;
+function O(){var U=F.pop();
+if(!U){return 
+}var V=F[F.length-1];
+if(!V&&F.length==0){V=A
+}if(V){if(V.kwArgs.back){V.kwArgs.back()
+}else{if(V.kwArgs.backButton){V.kwArgs.backButton()
+}else{if(V.kwArgs.handle){V.kwArgs.handle("back")
+}}}}P.push(U)
+}S.goBack=O;
+function E(){var U=P.pop();
 if(!U){return 
 }if(U.kwArgs.forward){U.kwArgs.forward()
 }else{if(U.kwArgs.forwardButton){U.kwArgs.forwardButton()
 }else{if(U.kwArgs.handle){U.kwArgs.handle("forward")
-}}}T.push(U)
-}M.goForward=S;
-function K(V,U,W){return{url:V,kwArgs:U,urlHash:W}
-}function E(V){var U=V.split("?");
-if(U.length<2){return null
-}else{return U[1]
-}}function Q(){var U=(djConfig.dojoIframeHistoryUrl||dojo.moduleUrl("dojo","resources/iframe_history.html"))+"?"+(new Date()).getTime();
-A=true;
-if(F){(dojo.isSafari)?F.location=U:window.frames[F.name].location=U
+}}}F.push(U)
+}S.goForward=E;
+function Q(W,V,U){return{url:W,kwArgs:V,urlHash:U}
+}function K(U){var V=U.split("?");
+if(V.length<2){return null
+}else{return V[1]
+}}function C(){var U=(djConfig.dojoIframeHistoryUrl||dojo.moduleUrl("dojo","resources/iframe_history.html"))+"?"+(new Date()).getTime();
+G=true;
+if(L){(dojo.isSafari)?L.location=U:window.frames[L.name].location=U
 }else{}return U
-}function H(){if(!D){var U=T.length;
-var W=L();
-if((W===C||window.location.href==P)&&(U==1)){I();
+}function N(){if(!J){var V=F.length;
+var U=R();
+if((U===I||window.location.href==B)&&(V==1)){O();
 return 
-}if(J.length>0){if(J[J.length-1].urlHash===W){S();
+}if(P.length>0){if(P[P.length-1].urlHash===U){E();
 return 
-}}if((U>=2)&&(T[U-2])){if(T[U-2].urlHash===W){I();
+}}if((V>=2)&&(F[V-2])){if(F[V-2].urlHash===U){O();
 return 
-}}if(dojo.isSafari&&dojo.isSafari<3){var V=history.length;
-if(V>R){S()
-}else{if(V<R){I()
-}}R=V
-}}}M.init=function(){if(dojo.byId("dj_history")){return 
+}}if(dojo.isSafari&&dojo.isSafari<3){var W=history.length;
+if(W>D){E()
+}else{if(W<D){O()
+}}D=W
+}}}S.init=function(){if(dojo.byId("dj_history")){return 
 }var U=djConfig.dojoIframeHistoryUrl||dojo.moduleUrl("dojo","resources/iframe_history.html");
 document.write('<iframe style="border:0;width:1px;height:1px;position:absolute;visibility:hidden;bottom:0;right:0;" name="dj_history" id="dj_history" src="'+U+'"></iframe>')
 };
-M.setInitialState=function(U){O=K(P,U,C)
+S.setInitialState=function(U){A=Q(B,U,I)
 };
-M.addToHistory=function(V){J=[];
+S.addToHistory=function(Z){P=[];
+var W=null;
 var Y=null;
-var U=null;
-if(!F){if(djConfig.useXDomain&&!djConfig.dojoIframeHistoryUrl){console.debug("dojo.back: When using cross-domain Dojo builds, please save iframe_history.html to your domain and set djConfig.dojoIframeHistoryUrl to the path on your domain to iframe_history.html")
-}F=window.frames.dj_history
-}if(!B){B=document.createElement("a");
-dojo.body().appendChild(B);
-B.style.display="none"
-}if(V.changeUrl){Y=""+((V.changeUrl!==true)?V.changeUrl:(new Date()).getTime());
-if(T.length==0&&O.urlHash==Y){O=K(U,V,Y);
+if(!L){if(djConfig.useXDomain&&!djConfig.dojoIframeHistoryUrl){console.debug("dojo.back: When using cross-domain Dojo builds, please save iframe_history.html to your domain and set djConfig.dojoIframeHistoryUrl to the path on your domain to iframe_history.html")
+}L=window.frames.dj_history
+}if(!H){H=document.createElement("a");
+dojo.body().appendChild(H);
+H.style.display="none"
+}if(Z.changeUrl){W=""+((Z.changeUrl!==true)?Z.changeUrl:(new Date()).getTime());
+if(F.length==0&&A.urlHash==W){A=Q(Y,Z,W);
 return 
-}else{if(T.length>0&&T[T.length-1].urlHash==Y){T[T.length-1]=K(U,V,Y);
+}else{if(F.length>0&&F[F.length-1].urlHash==W){F[F.length-1]=Q(Y,Z,W);
 return 
-}}D=true;
-setTimeout(function(){G(Y);
-D=false
+}}J=true;
+setTimeout(function(){M(W);
+J=false
 },1);
-B.href=Y;
-if(dojo.isIE){U=Q();
-var a=V.back||V.backButton||V.handle;
-var Z=function(b){if(L()!=""){setTimeout(function(){G(Y)
+H.href=W;
+if(dojo.isIE){Y=C();
+var a=Z.back||Z.backButton||Z.handle;
+var X=function(b){if(R()!=""){setTimeout(function(){M(W)
 },1)
 }a.apply(this,[b])
 };
-if(V.back){V.back=Z
-}else{if(V.backButton){V.backButton=Z
-}else{if(V.handle){V.handle=Z
-}}}var X=V.forward||V.forwardButton||V.handle;
-var W=function(b){if(L()!=""){G(Y)
-}if(X){X.apply(this,[b])
+if(Z.back){Z.back=X
+}else{if(Z.backButton){Z.backButton=X
+}else{if(Z.handle){Z.handle=X
+}}}var V=Z.forward||Z.forwardButton||Z.handle;
+var U=function(b){if(R()!=""){M(W)
+}if(V){V.apply(this,[b])
 }};
-if(V.forward){V.forward=W
-}else{if(V.forwardButton){V.forwardButton=W
-}else{if(V.handle){V.handle=W
-}}}}else{if(!dojo.isIE){if(!N){N=setInterval(H,200)
-}}}}else{U=Q()
-}T.push(K(U,V,Y))
+if(Z.forward){Z.forward=U
+}else{if(Z.forwardButton){Z.forwardButton=U
+}else{if(Z.handle){Z.handle=U
+}}}}else{if(!dojo.isIE){if(!T){T=setInterval(N,200)
+}}}}else{Y=C()
+}F.push(Q(Y,Z,W))
 };
-M._iframeLoaded=function(U,W){var V=E(W.href);
-if(V==null){if(T.length==1){I()
+S._iframeLoaded=function(V,U){var W=K(U.href);
+if(W==null){if(F.length==1){O()
 }return 
-}if(A){A=false;
+}if(G){G=false;
 return 
-}if(T.length>=2&&V==E(T[T.length-2].url)){I()
-}else{if(J.length>0&&V==E(J[J.length-1].url)){S()
+}if(F.length>=2&&W==K(F[F.length-2].url)){O()
+}else{if(P.length>0&&W==K(P[P.length-1].url)){E()
 }}}
 })()
 };

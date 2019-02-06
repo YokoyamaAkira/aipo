@@ -38,7 +38,7 @@ import org.apache.log4j.Logger;
 /*
  * Abstract Base class for web page sessions. Implements the primary dispatcher
  * logic for getting and posting resources.
- * 
+ *
  */
 
 public abstract class AbstractSiteSession implements SiteSession {
@@ -50,7 +50,7 @@ public abstract class AbstractSiteSession implements SiteSession {
   protected String proxyBase;
 
   // the cookies collection
-  protected HashMap cookies = new HashMap();
+  protected HashMap<String, Cookie> cookies = new HashMap<String, Cookie>();
 
   // counters
   protected int hitCount = 0;
@@ -65,9 +65,9 @@ public abstract class AbstractSiteSession implements SiteSession {
    * element.
    * 
    * @param targetBase
-   *            the target host's base URL
+   *          the target host's base URL
    * @param proxyBase
-   *            the proxy server host URL base address.
+   *          the proxy server host URL base address.
    */
   public AbstractSiteSession(String targetBase, String proxyBase) {
     this.proxyBase = proxyBase;
@@ -85,12 +85,12 @@ public abstract class AbstractSiteSession implements SiteSession {
    * @see logon(String, HttpServletRequest, HttpServletResponse)
    * 
    * @param url
-   *            the proxied resource address.
+   *          the proxied resource address.
    * @param data
-   *            the rundata
+   *          the rundata
    * 
    * @exception IOException
-   *                a servlet exception.
+   *              a servlet exception.
    */
 
   public void dispatch(String url, ProxyRunData data) throws IOException {
@@ -108,7 +108,7 @@ public abstract class AbstractSiteSession implements SiteSession {
       con.setDoInput(true);
       con.setDoOutput(true);
       con.setAllowUserInteraction(false);
-      con.setFollowRedirects(false);
+      HttpURLConnection.setFollowRedirects(false);
 
       if (data.getPosting()) {
         con.setRequestMethod("POST");
@@ -126,10 +126,10 @@ public abstract class AbstractSiteSession implements SiteSession {
       }
 
       // send the cookies (session ids) back to the NE
-      Iterator it = cookies.values().iterator();
+      Iterator<Cookie> it = cookies.values().iterator();
       Cookie cookie;
       while (it.hasNext()) {
-        cookie = (Cookie) it.next();
+        cookie = it.next();
         String sessionID = WebPageHelper.buildCookieString(cookie);
         con.setRequestProperty("Cookie", sessionID);
         log.debug("... Sending Session ID: " + sessionID);
@@ -144,7 +144,7 @@ public abstract class AbstractSiteSession implements SiteSession {
         // get the post params
         StringBuffer postParams = new StringBuffer();
         int count = 0;
-        Enumeration e = data.getRequest().getParameterNames();
+        Enumeration<?> e = data.getRequest().getParameterNames();
         while (e.hasMoreElements()) {
 
           String name = (String) e.nextElement();
@@ -184,7 +184,7 @@ public abstract class AbstractSiteSession implements SiteSession {
           .toString());
       String location = con.getHeaderField("Location");
 
-      if ((rc == con.HTTP_MOVED_PERM || rc == con.HTTP_MOVED_TEMP)
+      if ((rc == HttpURLConnection.HTTP_MOVED_PERM || rc == HttpURLConnection.HTTP_MOVED_TEMP)
         && null != location) {
         log.debug("+++ REDIRECT = " + location);
         location = WebPageHelper.concatURLs(targetBase, location);
@@ -221,13 +221,13 @@ public abstract class AbstractSiteSession implements SiteSession {
    * string
    * 
    * @param con
-   *            The URLConnection to read from.
+   *          The URLConnection to read from.
    * @param resource
-   *            The full URL of the resource.
+   *          The full URL of the resource.
    * @return The HTML Content from the stream.
    * 
    * @exception IOException
-   *                a servlet exception.
+   *              a servlet exception.
    */
   public String getHTMLContent(URLConnection con, ProxyRunData data,
       String resource) throws IOException {
@@ -255,6 +255,7 @@ public abstract class AbstractSiteSession implements SiteSession {
     byte[] bytes = new byte[CAPACITY];
 
     int readCount = 0;
+    @SuppressWarnings("unused")
     int total = 0;
 
     while ((readCount = is.read(bytes)) > 0) {
@@ -277,10 +278,10 @@ public abstract class AbstractSiteSession implements SiteSession {
    * respones
    * 
    * @param con
-   *            The URLConnection to read from.
+   *          The URLConnection to read from.
    * 
    * @exception IOException
-   *                a servlet exception.
+   *              a servlet exception.
    */
   public void getBinaryContent(URLConnection con, HttpServletResponse response)
       throws IOException {
@@ -316,10 +317,11 @@ public abstract class AbstractSiteSession implements SiteSession {
    * collection for this session.
    * 
    * @param cookie
-   *            new cookie returned from target server.
+   *          new cookie returned from target server.
    * @return true when a new cookie added, false when updated.
    * 
    */
+  @Override
   public boolean addCookieToSession(Cookie cookie) {
     boolean added = (null == cookies.get(cookie.getName()));
     cookies.put(cookie.getName(), cookie); // adds or updates
@@ -331,14 +333,15 @@ public abstract class AbstractSiteSession implements SiteSession {
    * 
    * @return the hitcount for this session.
    */
+  @Override
   public int getHitCount() {
     return hitCount;
   }
 
   /*
    * Increments the hitcount for this session.
-   * 
    */
+  @Override
   public void incHitCount() {
     hitCount++;
   }
@@ -348,14 +351,15 @@ public abstract class AbstractSiteSession implements SiteSession {
    * 
    * @return the cache count for this session.
    */
+  @Override
   public int getCacheCount() {
     return cacheCount;
   }
 
   /*
    * Increments the hitcount for this session.
-   * 
    */
+  @Override
   public void incCacheCount() {
     cacheCount++;
   }

@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,121 +16,127 @@
 
 package org.apache.jetspeed.capability;
 
-import org.apache.jetspeed.util.*;
-import java.util.*;
+import java.util.Iterator;
+
+import org.apache.jetspeed.util.MimeType;
 
 /**
- * This interface provides lookup features on the capabilities supported
- * by a client user agent.
- *
- * @author <a href="mailto:raphael@apache.org">Raphaël Luta</a>
+ * This interface provides lookup features on the capabilities supported by a
+ * client user agent.
+ * 
+ * @author <a href="mailto:raphael@apache.org">Raphaï¿½l Luta</a>
  * @author <a href="mailto:burton@apache.org">Kevin A. Burton</a>
  * @version $Id: CapabilityMap.java,v 1.8 2004/02/23 02:46:39 jford Exp $
  */
-public interface CapabilityMap
-{
+public interface CapabilityMap {
 
-    /** Handle HTML Table */
-    public static final int HTML_TABLE = 0;
+  /** Handle HTML Table */
+  public static final int HTML_TABLE = 0;
 
-    /** Handle inline image display */
-    public static final int HTML_IMAGE = 1;
+  /** Handle inline image display */
+  public static final int HTML_IMAGE = 1;
 
-    /** Handle form handling */
-    public static final int HTML_FORM = 2;
+  /** Handle form handling */
+  public static final int HTML_FORM = 2;
 
-    /** Handle frames */
-    public static final int HTML_FRAME = 3;
+  /** Handle frames */
+  public static final int HTML_FRAME = 3;
 
-    /** Handle client-side applet */
-    public static final int HTML_JAVA = 17;
-    public static final int HTML_JAVA1_0 = 4;
-    public static final int HTML_JAVA1_1 = 5;
-    public static final int HTML_JAVA1_2 = 6;
+  /** Handle client-side applet */
+  public static final int HTML_JAVA = 17;
 
-    /** Handle client-side javascript */
-    public static final int HTML_JSCRIPT = 18;
-    public static final int HTML_JSCRIPT1_0 = 7;
-    public static final int HTML_JSCRIPT1_1 = 8;
-    public static final int HTML_JSCRIPT1_2 = 9;
+  public static final int HTML_JAVA1_0 = 4;
 
-    /** Handle activex controls */
-    public static final int HTML_ACTIVEX = 10;
+  public static final int HTML_JAVA1_1 = 5;
 
-    /** Handle CSS1 */
-    public static final int HTML_CSS1 = 11;
+  public static final int HTML_JAVA1_2 = 6;
 
-    /** Handle CSS2 */
-    public static final int HTML_CSS2 = 12;
+  /** Handle client-side javascript */
+  public static final int HTML_JSCRIPT = 18;
 
-    /** Handle CSSP */
-    public static final int HTML_CSSP = 13;
+  public static final int HTML_JSCRIPT1_0 = 7;
 
-    /** Handle XML */
-    public static final int HTML_XML = 14;
+  public static final int HTML_JSCRIPT1_1 = 8;
 
-    /** Handle XSL */
-    public static final int HTML_XSL = 15;
+  public static final int HTML_JSCRIPT1_2 = 9;
 
-    /** Handle DOM */
-    public static final int HTML_DOM = 16;
+  /** Handle activex controls */
+  public static final int HTML_ACTIVEX = 10;
 
-    /**
-    Returns the preferred MIME type for the current user-agent
-    */
-    public MimeType getPreferredType();
+  /** Handle CSS1 */
+  public static final int HTML_CSS1 = 11;
 
-    /**
-    Returns the preferred media type for the current user-agent
-    */
-    public String getPreferredMediaType();
+  /** Handle CSS2 */
+  public static final int HTML_CSS2 = 12;
 
-    /**
-     * Returns an ordered list of supported media-types, from most preferred
-     * to least preferred
-     */
-    public Iterator listMediaTypes();
+  /** Handle CSSP */
+  public static final int HTML_CSSP = 13;
 
-    /**
-    Returns the user-agent string
-    */
-    public String getAgent();
+  /** Handle XML */
+  public static final int HTML_XML = 14;
 
-    /**
-    Checks to see if the current agent has the specified capability
-    */
-    public boolean hasCapability( int cap );
+  /** Handle XSL */
+  public static final int HTML_XSL = 15;
 
-    /**
-    Checks to see if the current agent has the specified capability
-    */
-    public boolean hasCapability( String capability );
+  /** Handle DOM */
+  public static final int HTML_DOM = 16;
 
-    /**
-    Get the mime types that this CapabilityMap supports.
-    */
-    public MimeType[] getMimeTypes();
+  /**
+   * Returns the preferred MIME type for the current user-agent
+   */
+  public MimeType getPreferredType();
 
-    /**
-    Return true if this CapabilityMap supports the given MimeType
-    */
-    public boolean supportsMimeType( MimeType mimeType );
+  /**
+   * Returns the preferred media type for the current user-agent
+   */
+  public String getPreferredMediaType();
 
-    /**
-     * Return true if this CapabilityMap supports the given media type
-     *
-     * @param media the name of a media type registered in the
-     * MediaType regsitry
-     *
-     * @return true is the capabilities of this agent at least match those
-     * required by the media type
-     */
-    public boolean supportsMediaType( String media );
+  /**
+   * Returns an ordered list of supported media-types, from most preferred to
+   * least preferred
+   */
+  public Iterator<String> listMediaTypes();
 
-    /**
-    Create a map -> string representation
-    */
-    public String toString();
+  /**
+   * Returns the user-agent string
+   */
+  public String getAgent();
+
+  /**
+   * Checks to see if the current agent has the specified capability
+   */
+  public boolean hasCapability(int cap);
+
+  /**
+   * Checks to see if the current agent has the specified capability
+   */
+  public boolean hasCapability(String capability);
+
+  /**
+   * Get the mime types that this CapabilityMap supports.
+   */
+  public MimeType[] getMimeTypes();
+
+  /**
+   * Return true if this CapabilityMap supports the given MimeType
+   */
+  public boolean supportsMimeType(MimeType mimeType);
+
+  /**
+   * Return true if this CapabilityMap supports the given media type
+   * 
+   * @param media
+   *          the name of a media type registered in the MediaType regsitry
+   * 
+   * @return true is the capabilities of this agent at least match those
+   *         required by the media type
+   */
+  public boolean supportsMediaType(String media);
+
+  /**
+   * Create a map -> string representation
+   */
+  @Override
+  public String toString();
 
 }
-

@@ -6,12 +6,12 @@ dojo.declare("aipo.widget.DropdownActivityChecker",[aimluck.widget.Dropdown],{in
 this.dropDown=new aipo.widget.ActivityList({},"activityLiteList")
 },_openDropDown:function(){this.inherited(arguments);
 this.dropDown.reload()
-},onCheckActivity:function(B){var A=dojo.byId("activitychecker");
-if(B>99){A.innerHTML="99+";
+},onCheckActivity:function(A){var B=dojo.byId("activitychecker");
+if(A>99){B.innerHTML="99+";
 dojo.removeClass("activitychecker","zero")
-}else{if(B==0){A.innerHTML=B;
+}else{if(A==0){B.innerHTML=A;
 dojo.addClass("activitychecker","zero")
-}else{A.innerHTML=B;
+}else{B.innerHTML=A;
 dojo.removeClass("activitychecker","zero")
 }}},onCheckBlank:function(A){}})
 };

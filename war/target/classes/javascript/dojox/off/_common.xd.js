@@ -12,10 +12,10 @@ this.isOnline=false
 }this.goingOnline=true;
 this.isOnline=false;
 this._isSiteAvailable(B)
-},onFrameworkEvent:function(C,B){if(C=="save"){if(B.isCoreSave&&(B.status==dojox.storage.FAILED)){dojox.off.coreOpFailed=true;
+},onFrameworkEvent:function(B,C){if(B=="save"){if(C.isCoreSave&&(C.status==dojox.storage.FAILED)){dojox.off.coreOpFailed=true;
 dojox.off.enabled=false;
 dojox.off.onFrameworkEvent("coreOperationFailed")
-}}else{if(C=="coreOperationFailed"){dojox.off.coreOpFailed=true;
+}}else{if(B=="coreOperationFailed"){dojox.off.coreOpFailed=true;
 dojox.off.enabled=false
 }}},_checkOfflineCacheAvailable:function(B){this.hasOfflineCache=A.isGears;
 B()
@@ -63,18 +63,18 @@ if(B.indexOf("?")==-1){B+="?"
 }B+="browserbust="+new Date().getTime();
 return B
 },_onOfflineCacheInstalled:function(){this.onFrameworkEvent("offlineCacheInstalled")
-},_cacheDojoResources:function(){var C=true;
+},_cacheDojoResources:function(){var B=true;
 A.forEach(A.query("script"),function(D){var E=D.getAttribute("src");
 if(!E){return 
-}if(E.indexOf("_base/_loader/bootstrap.js")!=-1){C=false
+}if(E.indexOf("_base/_loader/bootstrap.js")!=-1){B=false
 }});
-if(!C){dojox.off.files.cache(A.moduleUrl("dojo","_base.js").uri);
+if(!B){dojox.off.files.cache(A.moduleUrl("dojo","_base.js").uri);
 dojox.off.files.cache(A.moduleUrl("dojo","_base/_loader/loader.js").uri);
 dojox.off.files.cache(A.moduleUrl("dojo","_base/_loader/bootstrap.js").uri);
 dojox.off.files.cache(A.moduleUrl("dojo","_base/_loader/hostenv_browser.js").uri)
-}for(var B=0;
-B<A._loadedUrls.length;
-B++){dojox.off.files.cache(A._loadedUrls[B])
+}for(var C=0;
+C<A._loadedUrls.length;
+C++){dojox.off.files.cache(A._loadedUrls[C])
 }},_save:function(){},_load:function(B){dojox.off.sync._load(B)
 }});
 dojox.storage.manager.addOnLoad(A.hitch(dojox.off,"_onStorageLoad"));

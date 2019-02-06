@@ -14,82 +14,82 @@ return
 }this.initialized=true;
 dojox.storage.manager.loaded()
 },isAvailable:function(){return this._available=A.isGears
-},put:function(B,E,D,C){if(this.isValidKey(B)==false){throw new Error("Invalid key given: "+B)
-}C=C||this.DEFAULT_NAMESPACE;
-if(A.isString(E)){E="string:"+E
-}else{E=A.toJson(E)
-}try{dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?",C,B);
-dojox.sql("INSERT INTO "+this.TABLE_NAME+" VALUES (?, ?, ?)",C,B,E)
-}catch(F){console.debug("dojox.storage.GearsStorageProvider.put:",F);
-D(this.FAILED,B,F.toString());
-return 
-}if(D){D(dojox.storage.SUCCESS,B,null)
-}},get:function(C,D){if(this.isValidKey(C)==false){throw new Error("Invalid key given: "+C)
+},put:function(C,F,E,D){if(this.isValidKey(C)==false){throw new Error("Invalid key given: "+C)
 }D=D||this.DEFAULT_NAMESPACE;
-var B=dojox.sql("SELECT * FROM "+this.TABLE_NAME+" WHERE namespace = ? AND  key = ?",D,C);
-if(!B.length){return null
-}else{B=B[0].value
-}if(A.isString(B)&&(/^string:/.test(B))){B=B.substring("string:".length)
-}else{B=A.fromJson(B)
-}return B
-},getNamespaces:function(){var D=[dojox.storage.DEFAULT_NAMESPACE];
-var B=dojox.sql("SELECT namespace FROM "+this.TABLE_NAME+" DESC GROUP BY namespace");
-for(var C=0;
-C<B.length;
-C++){if(B[C].namespace!=dojox.storage.DEFAULT_NAMESPACE){D.push(B[C].namespace)
-}}return D
-},getKeys:function(E){E=E||this.DEFAULT_NAMESPACE;
-if(this.isValidKey(E)==false){throw new Error("Invalid namespace given: "+E)
-}var B=dojox.sql("SELECT key FROM "+this.TABLE_NAME+" WHERE namespace = ?",E);
-var D=[];
-for(var C=0;
-C<B.length;
-C++){D.push(B[C].key)
-}return D
+if(A.isString(F)){F="string:"+F
+}else{F=A.toJson(F)
+}try{dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?",D,C);
+dojox.sql("INSERT INTO "+this.TABLE_NAME+" VALUES (?, ?, ?)",D,C,F)
+}catch(B){console.debug("dojox.storage.GearsStorageProvider.put:",B);
+E(this.FAILED,C,B.toString());
+return 
+}if(E){E(dojox.storage.SUCCESS,C,null)
+}},get:function(D,B){if(this.isValidKey(D)==false){throw new Error("Invalid key given: "+D)
+}B=B||this.DEFAULT_NAMESPACE;
+var C=dojox.sql("SELECT * FROM "+this.TABLE_NAME+" WHERE namespace = ? AND  key = ?",B,D);
+if(!C.length){return null
+}else{C=C[0].value
+}if(A.isString(C)&&(/^string:/.test(C))){C=C.substring("string:".length)
+}else{C=A.fromJson(C)
+}return C
+},getNamespaces:function(){var B=[dojox.storage.DEFAULT_NAMESPACE];
+var C=dojox.sql("SELECT namespace FROM "+this.TABLE_NAME+" DESC GROUP BY namespace");
+for(var D=0;
+D<C.length;
+D++){if(C[D].namespace!=dojox.storage.DEFAULT_NAMESPACE){B.push(C[D].namespace)
+}}return B
+},getKeys:function(B){B=B||this.DEFAULT_NAMESPACE;
+if(this.isValidKey(B)==false){throw new Error("Invalid namespace given: "+B)
+}var C=dojox.sql("SELECT key FROM "+this.TABLE_NAME+" WHERE namespace = ?",B);
+var E=[];
+for(var D=0;
+D<C.length;
+D++){E.push(C[D].key)
+}return E
 },clear:function(B){if(this.isValidKey(B)==false){throw new Error("Invalid namespace given: "+B)
 }B=B||this.DEFAULT_NAMESPACE;
 dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ?",B)
-},remove:function(B,C){C=C||this.DEFAULT_NAMESPACE;
-dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?",C,B)
-},putMultiple:function(G,B,F,E){if(this.isValidKeyArray(G)===false||!B instanceof Array||G.length!=B.length){throw new Error("Invalid arguments: keys = ["+G+"], values = ["+B+"]")
-}if(E==null||typeof E=="undefined"){E=dojox.storage.DEFAULT_NAMESPACE
-}if(this.isValidKey(E)==false){throw new Error("Invalid namespace given: "+E)
-}this._statusHandler=F;
+},remove:function(C,B){B=B||this.DEFAULT_NAMESPACE;
+dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?",B,C)
+},putMultiple:function(D,F,C,I){if(this.isValidKeyArray(D)===false||!F instanceof Array||D.length!=F.length){throw new Error("Invalid arguments: keys = ["+D+"], values = ["+F+"]")
+}if(I==null||typeof I=="undefined"){I=dojox.storage.DEFAULT_NAMESPACE
+}if(this.isValidKey(I)==false){throw new Error("Invalid namespace given: "+I)
+}this._statusHandler=C;
 try{dojox.sql.open();
 dojox.sql.db.execute("BEGIN TRANSACTION");
-var D="REPLACE INTO "+this.TABLE_NAME+" VALUES (?, ?, ?)";
-for(var C=0;
-C<G.length;
-C++){var H=B[C];
-if(A.isString(H)){H="string:"+H
-}else{H=A.toJson(H)
-}dojox.sql.db.execute(D,[E,G[C],H])
+var H="REPLACE INTO "+this.TABLE_NAME+" VALUES (?, ?, ?)";
+for(var G=0;
+G<D.length;
+G++){var E=F[G];
+if(A.isString(E)){E="string:"+E
+}else{E=A.toJson(E)
+}dojox.sql.db.execute(H,[I,D[G],E])
 }dojox.sql.db.execute("COMMIT TRANSACTION");
 dojox.sql.close()
-}catch(I){console.debug("dojox.storage.GearsStorageProvider.putMultiple:",I);
-if(F){F(this.FAILED,G,I.toString())
+}catch(B){console.debug("dojox.storage.GearsStorageProvider.putMultiple:",B);
+if(C){C(this.FAILED,D,B.toString())
 }return 
-}if(F){F(dojox.storage.SUCCESS,key,null)
-}},getMultiple:function(G,F){if(this.isValidKeyArray(G)===false){throw new ("Invalid key array given: "+G)
-}if(F==null||typeof F=="undefined"){F=dojox.storage.DEFAULT_NAMESPACE
-}if(this.isValidKey(F)==false){throw new Error("Invalid namespace given: "+F)
-}var E="SELECT * FROM "+this.TABLE_NAME+" WHERE namespace = ? AND  key = ?";
-var D=[];
-for(var C=0;
-C<G.length;
-C++){var B=dojox.sql(E,F,G[C]);
-if(!B.length){D[C]=null
+}if(C){C(dojox.storage.SUCCESS,key,null)
+}},getMultiple:function(C,G){if(this.isValidKeyArray(C)===false){throw new ("Invalid key array given: "+C)
+}if(G==null||typeof G=="undefined"){G=dojox.storage.DEFAULT_NAMESPACE
+}if(this.isValidKey(G)==false){throw new Error("Invalid namespace given: "+G)
+}var F="SELECT * FROM "+this.TABLE_NAME+" WHERE namespace = ? AND  key = ?";
+var E=[];
+for(var D=0;
+D<C.length;
+D++){var B=dojox.sql(F,G,C[D]);
+if(!B.length){E[D]=null
 }else{B=B[0].value;
-if(A.isString(B)&&(/^string:/.test(B))){D[C]=B.substring("string:".length)
-}else{D[C]=A.fromJson(B)
-}}}return D
-},removeMultiple:function(E,D){D=D||this.DEFAULT_NAMESPACE;
+if(A.isString(B)&&(/^string:/.test(B))){E[D]=B.substring("string:".length)
+}else{E[D]=A.fromJson(B)
+}}}return E
+},removeMultiple:function(B,E){E=E||this.DEFAULT_NAMESPACE;
 dojox.sql.open();
 dojox.sql.db.execute("BEGIN TRANSACTION");
-var C="DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?";
-for(var B=0;
-B<E.length;
-B++){dojox.sql.db.execute(C,[D,E[B]])
+var D="DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?";
+for(var C=0;
+C<B.length;
+C++){dojox.sql.db.execute(D,[E,B[C]])
 }dojox.sql.db.execute("COMMIT TRANSACTION");
 dojox.sql.close()
 },isPermanent:function(){return true

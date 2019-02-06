@@ -6,18 +6,18 @@ A.declare("dijit._MasterTooltip",[dijit._Widget,dijit._Templated],{duration:200,
 this.bgIframe=new dijit.BackgroundIframe(this.domNode);
 this.fadeIn=A.fadeIn({node:this.domNode,duration:this.duration,onEnd:A.hitch(this,"_onShow")});
 this.fadeOut=A.fadeOut({node:this.domNode,duration:this.duration,onEnd:A.hitch(this,"_onHide")})
-},show:function(E,B){if(this.aroundNode&&this.aroundNode===B){return 
+},show:function(B,C){if(this.aroundNode&&this.aroundNode===C){return 
 }if(this.fadeOut.status()=="playing"){this._onDeck=arguments;
 return 
-}this.containerNode.innerHTML=E;
+}this.containerNode.innerHTML=B;
 this.domNode.style.top=(this.domNode.offsetTop+1)+"px";
-var D=this.isLeftToRight()?{BR:"BL",BL:"BR"}:{BL:"BR",BR:"BL"};
-var C=dijit.placeOnScreenAroundElement(this.domNode,B,D);
-this.domNode.className="dijitTooltip dijitTooltip"+(C.corner=="BL"?"Right":"Left");
+var E=this.isLeftToRight()?{BR:"BL",BL:"BR"}:{BL:"BR",BR:"BL"};
+var D=dijit.placeOnScreenAroundElement(this.domNode,C,E);
+this.domNode.className="dijitTooltip dijitTooltip"+(D.corner=="BL"?"Right":"Left");
 A.style(this.domNode,"opacity",0);
 this.fadeIn.play();
 this.isShowingNow=true;
-this.aroundNode=B
+this.aroundNode=C
 },_onShow:function(){if(A.isIE){this.domNode.style.filter=""
 }},hide:function(B){if(!this.aroundNode||this.aroundNode!==B){return 
 }if(this._onDeck){this._onDeck=null;
@@ -30,19 +30,19 @@ this.fadeOut.play()
 if(this._onDeck){this.show.apply(this,this._onDeck);
 this._onDeck=null
 }}});
-dijit.showTooltip=function(C,B){if(!dijit._masterTT){dijit._masterTT=new dijit._MasterTooltip()
-}return dijit._masterTT.show(C,B)
+dijit.showTooltip=function(B,C){if(!dijit._masterTT){dijit._masterTT=new dijit._MasterTooltip()
+}return dijit._masterTT.show(B,C)
 };
 dijit.hideTooltip=function(B){if(!dijit._masterTT){dijit._masterTT=new dijit._MasterTooltip()
 }return dijit._masterTT.hide(B)
 };
 A.declare("dijit.Tooltip",dijit._Widget,{label:"",showDelay:400,connectId:[],postCreate:function(){if(this.srcNodeRef){this.srcNodeRef.style.display="none"
 }this._connectNodes=[];
-A.forEach(this.connectId,function(C){var B=A.byId(C);
-if(B){this._connectNodes.push(B);
-A.forEach(["onMouseOver","onMouseOut","onFocus","onBlur","onHover","onUnHover"],function(D){this.connect(B,D.toLowerCase(),"_"+D)
+A.forEach(this.connectId,function(B){var C=A.byId(B);
+if(C){this._connectNodes.push(C);
+A.forEach(["onMouseOver","onMouseOut","onFocus","onBlur","onHover","onUnHover"],function(D){this.connect(C,D.toLowerCase(),"_"+D)
 },this);
-if(A.isIE){B.style.zoom=1
+if(A.isIE){C.style.zoom=1
 }}},this)
 },_onMouseOver:function(B){this._onHover(B)
 },_onMouseOut:function(B){if(A.isDescendant(B.relatedTarget,B.target)){return 
@@ -51,8 +51,8 @@ if(A.isIE){B.style.zoom=1
 this._onHover(B)
 },_onBlur:function(B){this._focus=false;
 this._onUnHover(B)
-},_onHover:function(C){if(!this._showTimer){var B=C.target;
-this._showTimer=setTimeout(A.hitch(this,function(){this.open(B)
+},_onHover:function(B){if(!this._showTimer){var C=B.target;
+this._showTimer=setTimeout(A.hitch(this,function(){this.open(C)
 }),this.showDelay)
 }},_onUnHover:function(B){if(this._focus){return 
 }if(this._showTimer){clearTimeout(this._showTimer);

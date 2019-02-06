@@ -10,10 +10,10 @@ A.setSelectable(this.titleNode,false);
 this.inherited("postCreate",arguments);
 dijit.setWaiState(this.containerNode,"labelledby",this.titleNode.id);
 dijit.setWaiState(this.focusNode,"haspopup","true");
-var C=this.hideNode,B=this.wipeNode;
-this._wipeIn=A.fx.wipeIn({node:this.wipeNode,duration:this.duration,beforeBegin:function(){C.style.display=""
+var B=this.hideNode,C=this.wipeNode;
+this._wipeIn=A.fx.wipeIn({node:this.wipeNode,duration:this.duration,beforeBegin:function(){B.style.display=""
 }});
-this._wipeOut=A.fx.wipeOut({node:this.wipeNode,duration:this.duration,onEnd:function(){C.style.display="none"
+this._wipeOut=A.fx.wipeOut({node:this.wipeNode,duration:this.duration,onEnd:function(){B.style.display="none"
 }})
 },setContent:function(B){if(this._wipeOut.status()=="playing"){this.inherited("setContent",arguments)
 }else{if(this._wipeIn.status()=="playing"){this._wipeIn.stop()
@@ -26,10 +26,10 @@ this[this.open?"_wipeOut":"_wipeIn"].play();
 this.open=!this.open;
 this._loadCheck();
 this._setCss()
-},_setCss:function(){var B=["dijitClosed","dijitOpen"];
-var C=this.open;
-A.removeClass(this.focusNode,B[!C+0]);
-this.focusNode.className+=" "+B[C+0];
+},_setCss:function(){var C=["dijitClosed","dijitOpen"];
+var B=this.open;
+A.removeClass(this.focusNode,C[!B+0]);
+this.focusNode.className+=" "+C[B+0];
 this.arrowNodeInner.innerHTML=this.open?"-":"+"
 },_onTitleKey:function(B){if(B.keyCode==A.keys.ENTER||B.charCode==A.keys.SPACE){this.toggle()
 }else{if(B.keyCode==A.keys.DOWN_ARROW){if(this.open){this.containerNode.focus();

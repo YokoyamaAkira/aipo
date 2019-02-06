@@ -1,39 +1,17 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojo.dnd.common"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojo.dnd.common"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.common"] = true;
-dojo.provide("dojo.dnd.common");
-
-dojo.dnd._copyKey = navigator.appVersion.indexOf("Macintosh") < 0 ? "ctrlKey" : "metaKey";
-
-dojo.dnd.getCopyKeyState = function(e) {
-	// summary: abstracts away the difference between selection on Mac and PC,
-	//	and returns the state of the "copy" key to be pressed.
-	// e: Event: mouse event
-	return e[dojo.dnd._copyKey];	// Boolean
+dojo._xdResourceLoaded({depends:[["provide","dojo.dnd.common"]],defineResource:function(A){if(!A._hasResource["dojo.dnd.common"]){A._hasResource["dojo.dnd.common"]=true;
+A.provide("dojo.dnd.common");
+A.dnd._copyKey=navigator.appVersion.indexOf("Macintosh")<0?"ctrlKey":"metaKey";
+A.dnd.getCopyKeyState=function(B){return B[A.dnd._copyKey]
 };
-
-dojo.dnd._uniqueId = 0;
-dojo.dnd.getUniqueId = function(){
-	// summary: returns a unique string for use with any DOM element
-	var id;
-	do{
-		id = "dojoUnique" + (++dojo.dnd._uniqueId);
-	}while(dojo.byId(id));
-	return id;
+A.dnd._uniqueId=0;
+A.dnd.getUniqueId=function(){var B;
+do{B="dojoUnique"+(++A.dnd._uniqueId)
+}while(A.byId(B));
+return B
 };
-
-dojo.dnd._empty = {};
-
-dojo.dnd.isFormElement = function(/*Event*/ e){
-	// summary: returns true, if user clicked on a form element
-	var t = e.target;
-	if(t.nodeType == 3 /*TEXT_NODE*/){
-		t = t.parentNode;
-	}
-	return " button textarea input select option ".indexOf(" " + t.tagName.toLowerCase() + " ") >= 0;	// Boolean
-};
-
+A.dnd._empty={};
+A.dnd.isFormElement=function(C){var B=C.target;
+if(B.nodeType==3){B=B.parentNode
+}return" button textarea input select option ".indexOf(" "+B.tagName.toLowerCase()+" ")>=0
 }
-
-}});
+}}});

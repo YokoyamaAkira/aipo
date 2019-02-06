@@ -1,35 +1,35 @@
 dojo.provide("aipo.workflow");
 var before=0;
-aipo.workflow.onLoadWorkflowDetail=function(A){aipo.portletReload("whatsnew")
+aipo.workflow.onLoadWorkflowDetail=function(B){aipo.portletReload("whatsnew")
 };
-aipo.workflow.onLoadWorkflowDialog=function(F){var D=dijit.byId("membernormalselect");
-if(D){var B=D;
-var A=dojo.byId("init_memberlist");
-var E;
-var C=A.options;
-if(C.length==1&&C[0].value==""){return 
-}for(E=0;
-E<C.length;
-E++){B.addOptionSync(C[E].value,C[E].text,true)
-}}var G=dojo.byId("route_name");
-if(G){G.focus()
-}if(dojo.byId("mode_"+F).value=="insert"){dojo.byId("category_id").onchange()
+aipo.workflow.onLoadWorkflowDialog=function(J){var L=dijit.byId("membernormalselect");
+if(L){var N=L;
+var H=dojo.byId("init_memberlist");
+var K;
+var M=H.options;
+if(M.length==1&&M[0].value==""){return 
+}for(K=0;
+K<M.length;
+K++){N.addOptionSync(M[K].value,M[K].text,true)
+}}var I=dojo.byId("route_name");
+if(I){I.focus()
+}if(dojo.byId("mode_"+J).value=="insert"){dojo.byId("category_id").onchange()
 }};
-aipo.workflow.onChangeSelecter=function(D,C,B,A,F){dojo.byId(F).checked=false;
-var E=new Array();
-E.named="workflow_"+A;
-aimluck.io.sendRawData(C+"&value="+B,B,aipo.workflow.setTemplate,E);
+aipo.workflow.onChangeSelecter=function(J,K,L,G,H){dojo.byId(H).checked=false;
+var I=new Array();
+I.named="workflow_"+G;
+aimluck.io.sendRawData(K+"&value="+L,L,aipo.workflow.setTemplate,I);
 return false
 };
-aipo.workflow.setTemplate=function(H,C){var E=aipo.workflow.getJsonDataOne(C);
-var A=E.route_h;
-var B=E.route;
-var G=B.split(",");
-var F=(G.length-1)/2;
-if(B==null||B==""){dojo.byId(H.named).style.display="none"
-}else{dojo.byId(H.named).style.display=""
-}if(B==null||B==""){dojo.byId(H.named).innerHTML=""
-}else{dojo.byId(H.named).innerHTML=A
+aipo.workflow.setTemplate=function(J,O){var M=aipo.workflow.getJsonDataOne(O);
+var I=M.route_h;
+var P=M.route;
+var K=P.split(",");
+var L=(K.length-1)/2;
+if(P==null||P==""){dojo.byId(J.named).style.display="none"
+}else{dojo.byId(J.named).style.display=""
+}if(P==null||P==""){dojo.byId(J.named).innerHTML=""
+}else{dojo.byId(J.named).innerHTML=I
 }memberFrom=dojo.byId("tmp_member_from");
 memberFromOpts=memberFrom.options;
 for(i=0;
@@ -37,40 +37,40 @@ i<memberFromOpts.length;
 i++){memberFromOpts[i].selected=false
 }memberTo=dojo.byId("positions");
 while(memberTo.lastChild){memberTo.removeChild(memberTo.lastChild)
-}var D;
+}var N;
 for(i=0;
-i<F;
-i++){memberTo.options[i]=new Option(G[2*i+1],G[2*i])
+i<L;
+i++){memberTo.options[i]=new Option(K[2*i+1],K[2*i])
 }};
-aipo.workflow.categoryOnChangeSelecter=function(F,E,D,C,H,B,A){if(aipo.workflow.NoteChangeConfirm(H)){before=dojo.byId("category_id").selectedIndex;
-dojo.byId(H).checked=false;
-var G=new Array();
-G.named="workflow_"+C;
-G.namedRoute="workflow_"+B;
-G.selectRoute=A;
-aimluck.io.sendRawData(E+"&value="+D,D,aipo.workflow.categorySetTemplate,G)
+aipo.workflow.categoryOnChangeSelecter=function(L,M,N,O,J,P,I){if(aipo.workflow.NoteChangeConfirm(J)){before=dojo.byId("category_id").selectedIndex;
+dojo.byId(J).checked=false;
+var K=new Array();
+K.named="workflow_"+O;
+K.namedRoute="workflow_"+P;
+K.selectRoute=I;
+aimluck.io.sendRawData(M+"&value="+N,N,aipo.workflow.categorySetTemplate,K)
 }else{dojo.byId("category_id").selectedIndex=before
 }return false
 };
-aipo.workflow.categorySetTemplate=function(D,E){var G=aipo.workflow.getJsonDataOne(E);
-var J=G.template;
-var F=G.route_id.toString();
-var H=G.route_h;
-var I=G.route;
-var B=I.split(",");
-var C=(B.length-1)/2;
-if(H==null||H==""){dojo.byId(D.namedRoute).style.display="none"
-}else{dojo.byId(D.namedRoute).style.display=""
-}if(null!=J){dojo.byId(D.named).value=J
-}else{dojo.byId(D.named).value=""
-}dojo.byId(D.namedRoute).value="";
-var L=dojo.byId(D.selectRoute);
-var K=L.options;
-K[0].selected=true;
-if(!(F.match(/[^0-9]/g)||parseInt(F,10)+""!=F)){for(i=0;
-i<L.length;
-i++){if(K[i].value==F){K[i].selected=true
-}}dojo.byId(D.namedRoute).value=H;
+aipo.workflow.categorySetTemplate=function(M,X){var V=aipo.workflow.getJsonDataOne(X);
+var S=V.template;
+var W=V.route_id.toString();
+var U=V.route_h;
+var T=V.route;
+var O=T.split(",");
+var N=(O.length-1)/2;
+if(U==null||U==""){dojo.byId(M.namedRoute).style.display="none"
+}else{dojo.byId(M.namedRoute).style.display=""
+}if(null!=S){dojo.byId(M.named).value=S
+}else{dojo.byId(M.named).value=""
+}dojo.byId(M.namedRoute).value="";
+var Q=dojo.byId(M.selectRoute);
+var R=Q.options;
+R[0].selected=true;
+if(!(W.match(/[^0-9]/g)||parseInt(W,10)+""!=W)){for(i=0;
+i<Q.length;
+i++){if(R[i].value==W){R[i].selected=true
+}}dojo.byId(M.namedRoute).value=U;
 dojo.byId("is_saved_route_button").value=aimluck.io.escapeText("workflow_val_route1");
 dojo.byId("workflowRouteSelectField").style.display="";
 dojo.byId("workflowRouteInputField").style.display="none";
@@ -83,69 +83,69 @@ for(i=0;
 i<memberFromOpts.length;
 i++){memberFromOpts[i].selected=false
 }memberTo=dojo.byId("positions");
-var A;
+var P;
 for(i=0;
-i<C;
-i++){memberTo.options[i]=new Option(B[2*i+1],B[2*i])
+i<N;
+i++){memberTo.options[i]=new Option(O[2*i+1],O[2*i])
 }}};
-aipo.workflow.onFocusComment=function(A){};
+aipo.workflow.onFocusComment=function(B){};
 aipo.workflow.onChangeNote=function(){dojo.byId("isChangedNote").checked=true
 };
-aipo.workflow.NoteChangeConfirm=function(A){if(dojo.byId(A).checked){if(!confirm(aimluck.io.escapeText("workflow_val_confirm1"))){return false
+aipo.workflow.NoteChangeConfirm=function(B){if(dojo.byId(B).checked){if(!confirm(aimluck.io.escapeText("workflow_val_confirm1"))){return false
 }}return true
 };
-aipo.workflow.onReceiveMessage=function(C){var A=dojo.byId("attachments_select");
-if(typeof A!="undefined"&&A!=null){A.parentNode.removeChild(A)
-}if(!C){var B=dijit.byId("modalDialog");
-if(B){B.hide()
+aipo.workflow.onReceiveMessage=function(E){var D=dojo.byId("attachments_select");
+if(typeof D!="undefined"&&D!=null){D.parentNode.removeChild(D)
+}if(!E){var F=dijit.byId("modalDialog");
+if(F){F.hide()
 }aipo.portletReload("workflow");
 aipo.portletReload("whatsnew");
 aipo.portletReload("timeline")
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=C
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=E
 }};
-aipo.workflow.onAccept=function(A){dojo.query("input[name='eventSubmit_doWorkflow_accept']").forEach(function(C){dojo.removeClass(C,"auiButtonAction")
+aipo.workflow.onAccept=function(C){dojo.query("input[name='eventSubmit_doWorkflow_accept']").forEach(function(A){dojo.removeClass(A,"auiButtonAction")
 });
-dojo.query("input[name='eventSubmit_doWorkflow_accept']").forEach(function(C){dojo.addClass(C,"auiButtonDisabled")
+dojo.query("input[name='eventSubmit_doWorkflow_accept']").forEach(function(A){dojo.addClass(A,"auiButtonDisabled")
 });
-var B=dojo.byId("workflowForm"+A);
-aipo.workflow._portletId=A;
-B.mode.value="accept"
+var D=dojo.byId("workflowForm"+C);
+aipo.workflow._portletId=C;
+D.mode.value="accept"
 };
-aipo.workflow.onDenial=function(A){dojo.query(".auiButtonAction").forEach(function(C){dojo.removeClass(C,"auiButtonAction")
+aipo.workflow.onDenial=function(C){dojo.query(".auiButtonAction").forEach(function(A){dojo.removeClass(A,"auiButtonAction")
 });
-dojo.query("input[name='eventSubmit_doWorkflow_accept']").forEach(function(C){dojo.addClass(C,"auiButtonDisabled")
+dojo.query("input[name='eventSubmit_doWorkflow_accept']").forEach(function(A){dojo.addClass(A,"auiButtonDisabled")
 });
-var B=dojo.byId("workflowForm"+A);
-aipo.workflow._portletId=A;
-B.mode.value="denial"
+var D=dojo.byId("workflowForm"+C);
+aipo.workflow._portletId=C;
+D.mode.value="denial"
 };
-aipo.workflow.onDelete=function(A){var B=dojo.byId("workflowForm"+A);
-aipo.workflow._portletId=A;
-B.mode.value="delete"
+aipo.workflow.onDelete=function(C){var D=dojo.byId("workflowForm"+C);
+aipo.workflow._portletId=C;
+D.mode.value="delete"
 };
-aipo.workflow.submit_list=function(C){var A=C.member_to.options;
-var B="";
+aipo.workflow.submit_list=function(E){var D=E.member_to.options;
+var F="";
 for(i=0;
-i<A.length;
-i++){A[i].selected=false
-}if(A.length>0){for(i=0;
-i<A.length-1;
-i++){B=B+A[i].value+","
-}B=B+A[A.length-1].value
-}C.positions.value=B
+i<D.length;
+i++){D[i].selected=false
+}if(D.length>0){for(i=0;
+i<D.length-1;
+i++){F=F+D[i].value+","
+}F=F+D[D.length-1].value
+}E.positions.value=F
 };
-aipo.workflow.formSwitchRouteSelect=function(A){if(A.form.is_saved_route.value=="TRUE"||A.form.is_saved_route.value=="true"){A.value=aimluck.io.escapeText("workflow_val_route2");
-aipo.workflow.formRouteSelectOff(A.form)
-}else{A.value=aimluck.io.escapeText("workflow_val_route1");
-aipo.workflow.formRouteSelectOn(A.form)
+aipo.workflow.formSwitchRouteSelect=function(B){if(B.form.is_saved_route.value=="TRUE"||B.form.is_saved_route.value=="true"){B.value=aimluck.io.escapeText("workflow_val_route2");
+aipo.workflow.formRouteSelectOff(B.form)
+}else{B.value=aimluck.io.escapeText("workflow_val_route1");
+aipo.workflow.formRouteSelectOn(B.form)
 }};
-aipo.workflow.formRouteSelectOn=function(A){dojo.byId("workflowRouteSelectField").style.display="";
+aipo.workflow.formRouteSelectOn=function(B){dojo.byId("workflowRouteSelectField").style.display="";
 dojo.byId("workflowRouteInputField").style.display="none";
-A.is_saved_route.value="TRUE"
+B.is_saved_route.value="TRUE"
 };
-aipo.workflow.formRouteSelectOff=function(A){dojo.byId("workflowRouteSelectField").style.display="none";
+aipo.workflow.formRouteSelectOff=function(B){dojo.byId("workflowRouteSelectField").style.display="none";
 dojo.byId("workflowRouteInputField").style.display="";
-A.is_saved_route.value="FALSE"
+B.is_saved_route.value="FALSE"
 };
 aipo.workflow.getJsonDataOne=function(rtnData){var cStartIdx=rtnData.type.indexOf("/*");
 var cEndIdx=rtnData.type.lastIndexOf("*/");
@@ -154,10 +154,10 @@ var jsonData="";
 if(dojo.isArray(rawData)&&rawData.length>0){jsonData=rawData[0]
 }return jsonData
 };
-aipo.workflow.onChangeFilter=aipo.workflow.onChangeSearch=function(A,C){var B=encodeURIComponent(dojo.byId("q").value);
-A+="?template=WorkflowListScreen";
-A+="&filter="+dojo.byId("topic").value;
-A+="&filtertype=category";
-A+="&search="+B;
-aipo.viewPage(A,C)
+aipo.workflow.onChangeFilter=aipo.workflow.onChangeSearch=function(D,E){var F=encodeURIComponent(dojo.byId("q").value);
+D+="?template=WorkflowListScreen";
+D+="&filter="+dojo.byId("topic").value;
+D+="&filtertype=category";
+D+="&search="+F;
+aipo.viewPage(D,E)
 };

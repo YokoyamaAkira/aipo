@@ -1,62 +1,20 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.timing._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.timing._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.timing._base"] = true;
-dojo.provide("dojox.timing._base");
-dojo.experimental("dojox.timing"); 
-
-dojox.timing.Timer = function(/*int*/ interval){
-	// summary: Timer object executes an "onTick()" method repeatedly at a specified interval. 
-	//			repeatedly at a given interval.
-	// interval: Interval between function calls, in milliseconds.
-	this.timer = null;
-	this.isRunning = false;
-	this.interval = interval;
-
-	this.onStart = null;
-	this.onStop = null;
+dojo._xdResourceLoaded({depends:[["provide","dojox.timing._base"]],defineResource:function(A){if(!A._hasResource["dojox.timing._base"]){A._hasResource["dojox.timing._base"]=true;
+A.provide("dojox.timing._base");
+A.experimental("dojox.timing");
+dojox.timing.Timer=function(B){this.timer=null;
+this.isRunning=false;
+this.interval=B;
+this.onStart=null;
+this.onStop=null
 };
-
-dojo.extend(dojox.timing.Timer, {
-	onTick : function(){
-		// summary: Method called every time the interval passes.  Override to do something useful.
-	},
-		
-	setInterval : function(interval){
-		// summary: Reset the interval of a timer, whether running or not.
-		// interval: New interval, in milliseconds.
-		if (this.isRunning){
-			window.clearInterval(this.timer);
-		}
-		this.interval = interval;
-		if (this.isRunning){
-			this.timer = window.setInterval(dojo.hitch(this, "onTick"), this.interval);
-		}
-	},
-	
-	start : function(){
-		// summary: Start the timer ticking.
-		// description: Calls the "onStart()" handler, if defined.
-		// 				Note that the onTick() function is not called right away, 
-		//				only after first interval passes.
-		if (typeof this.onStart == "function"){
-			this.onStart();
-		}
-		this.isRunning = true;
-		this.timer = window.setInterval(dojo.hitch(this, "onTick"), this.interval);
-	},
-	
-	stop : function(){
-		// summary: Stop the timer.
-		// description: Calls the "onStop()" handler, if defined.
-		if (typeof this.onStop == "function"){
-			this.onStop();
-		}
-		this.isRunning = false;
-		window.clearInterval(this.timer);
-	}
-});
-
-}
-
-}});
+A.extend(dojox.timing.Timer,{onTick:function(){},setInterval:function(B){if(this.isRunning){window.clearInterval(this.timer)
+}this.interval=B;
+if(this.isRunning){this.timer=window.setInterval(A.hitch(this,"onTick"),this.interval)
+}},start:function(){if(typeof this.onStart=="function"){this.onStart()
+}this.isRunning=true;
+this.timer=window.setInterval(A.hitch(this,"onTick"),this.interval)
+},stop:function(){if(typeof this.onStop=="function"){this.onStop()
+}this.isRunning=false;
+window.clearInterval(this.timer)
+}})
+}}});

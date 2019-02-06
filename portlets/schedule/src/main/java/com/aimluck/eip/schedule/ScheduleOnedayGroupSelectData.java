@@ -346,6 +346,7 @@ public class ScheduleOnedayGroupSelectData extends ScheduleOnedaySelectData {
       ALEipUtils.getTemp(rundata, context, ScheduleUtils.FILTER_NAMESPACE);
     String filter_type =
       ALEipUtils.getTemp(rundata, context, ScheduleUtils.FILTER_NAMESPACE_TYPE);
+    @SuppressWarnings("unused")
     String crt_key = null;
     Attributes map = getColumnMap();
     if (filter == null

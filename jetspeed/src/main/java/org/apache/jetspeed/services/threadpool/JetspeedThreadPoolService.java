@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,8 +39,7 @@ import org.apache.turbine.services.resources.ResourceService;
  * <dt>max.count</dt>
  * <dd>The maximum number of threads started by this service</dd>
  * <dt>minspare.count</dt>
- * <dd>The pool tries to keep lways this minimum number if threads available
- * </dd>
+ * <dd>The pool tries to keep lways this minimum number if threads available</dd>
  * </dl>
  * </p>
  * 
@@ -54,7 +53,7 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
    * Static initialization of the logger for this class
    */
   protected static final JetspeedLogger logger = JetspeedLogFactoryService
-      .getLogger(JetspeedThreadPoolService.class.getName());
+    .getLogger(JetspeedThreadPoolService.class.getName());
 
   /**
    * The number of threads to create on initialization
@@ -79,17 +78,18 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
   /**
    * Stores threads that are available within the pool.
    */
-  private Vector availableThreads = new Vector();
+  private final Vector<RunnableThread> availableThreads =
+    new Vector<RunnableThread>();
 
   /**
    * The thread group used for all created threads.
    */
-  private ThreadGroup tg = new ThreadGroup("JetspeedThreadPoolService");
+  private final ThreadGroup tg = new ThreadGroup("JetspeedThreadPoolService");
 
   /**
    * Create a new queue for adding Runnable objects to.
    */
-  private Queue queue = new Queue();
+  private final Queue queue = new Queue();
 
   /**
    * Holds the total number of threads that have ever been processed.
@@ -101,8 +101,8 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
   /**
    * Constructor.
    * 
-   * @exception Exception,
-   *                a generic exception.
+   * @exception Exception
+   *              , a generic exception.
    */
   public JetspeedThreadPoolService() throws Exception {
   }
@@ -110,6 +110,7 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
   /**
    * Late init. Don't return control until early init says we're done.
    */
+  @Override
   public void init() {
     while (!getInit()) {
       try {
@@ -124,8 +125,9 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
    * Called during Turbine.init()
    * 
    * @param config
-   *            A ServletConfig.
+   *          A ServletConfig.
    */
+  @Override
   public synchronized void init(ServletConfig config) {
     if (getInit()) {
       // Already inited
@@ -147,10 +149,11 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
   /**
    * Processes the Runnable object with an available thread at default priority
    * 
-   * @see #process( Runnable, int )
+   * @see #process(Runnable, int )
    * @param runnable
-   *            the runnable code to process
+   *          the runnable code to process
    */
+  @Override
   public void process(Runnable runnable) {
 
     process(runnable, Thread.MIN_PRIORITY);
@@ -162,10 +165,11 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
    * priority
    * 
    * @param runnable
-   *            the runnable code to process
+   *          the runnable code to process
    * @param priority
-   *            the priority used be the thread that will run this runnable
+   *          the priority used be the thread that will run this runnable
    */
+  @Override
   public void process(Runnable runnable, int priority) {
 
     RunnableThread thread = this.getAvailableThread();
@@ -246,7 +250,7 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
    * Place this thread back into the pool so that it can be used again
    * 
    * @param thread
-   *            the thread to release back to the pool
+   *          the thread to release back to the pool
    */
   void release(RunnableThread thread) {
 
@@ -287,7 +291,7 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
    * This method initialized the ThreadPool
    * 
    * @param config
-   *            A ServletConfig.
+   *          A ServletConfig.
    */
   private void initThreadpool(ServletConfig config) {
     // Properties props = getProperties();
@@ -295,8 +299,9 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
     try {
 
       // get configuration parameters from Jetspeed Resources
-      ResourceService serviceConf = ((TurbineServices) TurbineServices
-          .getInstance()).getResources(JetspeedThreadPoolService.SERVICE_NAME);
+      ResourceService serviceConf =
+        ((TurbineServices) TurbineServices.getInstance())
+          .getResources(JetspeedThreadPoolService.SERVICE_NAME);
 
       this.initThreads = serviceConf.getInt("init.count", 10);
       this.maxThreads = serviceConf.getInt("max.count", 50);
@@ -322,7 +327,7 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
    * Create "count" number of threads and make them available.
    * 
    * @param count
-   *            the number of threads to create
+   *          the number of threads to create
    */
   private synchronized void createThreads(int count) {
 
@@ -330,7 +335,7 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
     // greater than maxThreads then just cap this off to the end point so that
     // you end up with exactly maxThreads
     if (this.getThreadCount() < this.maxThreads
-        && this.getThreadCount() + count > this.maxThreads) {
+      && this.getThreadCount() + count > this.maxThreads) {
 
       count = this.maxThreads - this.getThreadCount();
 
@@ -339,8 +344,10 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
       return;
     }
 
-    logger.info("JetspeedThreadPoolService:  creating " + count
-        + " more thread(s) for a total of: " + (this.getThreadCount() + count));
+    logger.info("JetspeedThreadPoolService:  creating "
+      + count
+      + " more thread(s) for a total of: "
+      + (this.getThreadCount() + count));
 
     for (int i = 0; i < count; ++i) {
 
@@ -382,7 +389,7 @@ public class JetspeedThreadPoolService extends TurbineBaseService implements
       // get the element to use
       int id = this.availableThreads.size() - 1;
 
-      thread = (RunnableThread) this.availableThreads.elementAt(id);
+      thread = this.availableThreads.elementAt(id);
       this.availableThreads.removeElementAt(id);
 
       return thread;
@@ -407,13 +414,13 @@ class Queue {
    * Holds Runnables that have been requested to process but there are no
    * threads available.
    */
-  private Vector queue = new Vector();
+  private final Vector<Runnable> queue = new Vector<Runnable>();
 
   /**
    * Add a Runnable object into the queue.
    * 
    * @param runnable
-   *            the process to add to the queue
+   *          the process to add to the queue
    */
   public synchronized void add(Runnable runnable) {
     queue.insertElementAt(runnable, 0);
@@ -429,12 +436,12 @@ class Queue {
 
     if (this.queue.size() == 0) {
       JetspeedThreadPoolService.logger
-          .info("JetspeedThreadPoolService->Queue: No more Runnables left in queue.  Returning null");
+        .info("JetspeedThreadPoolService->Queue: No more Runnables left in queue.  Returning null");
       return null;
     }
 
     int id = queue.size() - 1;
-    Runnable runnable = (Runnable) queue.elementAt(id);
+    Runnable runnable = queue.elementAt(id);
     this.queue.removeElementAt(id);
 
     return runnable;

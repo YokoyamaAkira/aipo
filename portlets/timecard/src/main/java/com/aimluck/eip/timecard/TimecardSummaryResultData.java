@@ -70,6 +70,7 @@ public class TimecardSummaryResultData implements ALData {
   /**
    *
    */
+  @Override
   public void initField() {
     date = new ALDateField();
     date.setValue(new Date());
@@ -442,6 +443,7 @@ public class TimecardSummaryResultData implements ALData {
       }
 
       // 整列されたデータを順に見て、就業時間などを数える
+      @SuppressWarnings("unused")
       long shugyo_temp = 0;
       long jikannai_temp = 0;
       long zangyo_temp = 0;

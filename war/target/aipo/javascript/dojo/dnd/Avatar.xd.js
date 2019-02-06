@@ -1,80 +1,46 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojo.dnd.Avatar"],
-["require", "dojo.dnd.common"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojo.dnd.Avatar"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.Avatar"] = true;
-dojo.provide("dojo.dnd.Avatar");
-
-dojo.require("dojo.dnd.common");
-
-dojo.dnd.Avatar = function(manager){
-	// summary: an object, which represents transferred DnD items visually
-	// manager: Object: a DnD manager object
-	this.manager = manager;
-	this.construct();
+dojo._xdResourceLoaded({depends:[["provide","dojo.dnd.Avatar"],["require","dojo.dnd.common"]],defineResource:function(A){if(!A._hasResource["dojo.dnd.Avatar"]){A._hasResource["dojo.dnd.Avatar"]=true;
+A.provide("dojo.dnd.Avatar");
+A.require("dojo.dnd.common");
+A.dnd.Avatar=function(B){this.manager=B;
+this.construct()
 };
-
-dojo.extend(dojo.dnd.Avatar, {
-	construct: function(){
-		// summary: a constructor function;
-		//	it is separate so it can be (dynamically) overwritten in case of need
-		var a = dojo.doc.createElement("table");
-		a.className = "dojoDndAvatar";
-		a.style.position = "absolute";
-		a.style.zIndex = 1999;
-		a.style.margin = "0px"; // to avoid dojo.marginBox() problems with table's margins
-		var b = dojo.doc.createElement("tbody");
-		var tr = dojo.doc.createElement("tr");
-		tr.className = "dojoDndAvatarHeader";
-		var td = dojo.doc.createElement("td");
-		td.innerHTML = this._generateText();
-		tr.appendChild(td);
-		dojo.style(tr, "opacity", 0.9);
-		b.appendChild(tr);
-		var k = Math.min(5, this.manager.nodes.length);
-		var source = this.manager.source;
-		for(var i = 0; i < k; ++i){
-			tr = dojo.doc.createElement("tr");
-			tr.className = "dojoDndAvatarItem";
-			td = dojo.doc.createElement("td");
-			var node = source.creator ?
-				// create an avatar representation of the node
-				node = source._normalizedCreator(source.getItem(this.manager.nodes[i].id).data, "avatar").node :
-				// or just clone the node and hope it works
-				node = this.manager.nodes[i].cloneNode(true);
-			node.id = "";
-			td.appendChild(node);
-			tr.appendChild(td);
-			dojo.style(tr, "opacity", (9 - i) / 10);
-			b.appendChild(tr);
-		}
-		a.appendChild(b);
-		this.node = a;
-	},
-	destroy: function(){
-		// summary: a desctructor for the avatar, called to remove all references so it can be garbage-collected
-		dojo._destroyElement(this.node);
-		this.node = false;
-	},
-	update: function(){
-		// summary: updates the avatar to reflect the current DnD state
-		dojo[(this.manager.canDropFlag ? "add" : "remove") + "Class"](this.node, "dojoDndAvatarCanDrop");
-		// replace text
-		var t = this.node.getElementsByTagName("td");
-		for(var i = 0; i < t.length; ++i){
-			var n = t[i];
-			if(dojo.hasClass(n.parentNode, "dojoDndAvatarHeader")){
-				n.innerHTML = this._generateText();
-				break;
-			}
-		}
-	},
-	_generateText: function(){
-		// summary: generates a proper text to reflect copying or moving of items
-		return this.manager.nodes.length.toString();
-	}
-});
-
-}
-
-}});
+A.extend(A.dnd.Avatar,{construct:function(){var C=A.doc.createElement("table");
+C.className="dojoDndAvatar";
+C.style.position="absolute";
+C.style.zIndex=1999;
+C.style.margin="0px";
+var B=A.doc.createElement("tbody");
+var H=A.doc.createElement("tr");
+H.className="dojoDndAvatarHeader";
+var I=A.doc.createElement("td");
+I.innerHTML=this._generateText();
+H.appendChild(I);
+A.style(H,"opacity",0.9);
+B.appendChild(H);
+var D=Math.min(5,this.manager.nodes.length);
+var G=this.manager.source;
+for(var E=0;
+E<D;
+++E){H=A.doc.createElement("tr");
+H.className="dojoDndAvatarItem";
+I=A.doc.createElement("td");
+var F=G.creator?F=G._normalizedCreator(G.getItem(this.manager.nodes[E].id).data,"avatar").node:F=this.manager.nodes[E].cloneNode(true);
+F.id="";
+I.appendChild(F);
+H.appendChild(I);
+A.style(H,"opacity",(9-E)/10);
+B.appendChild(H)
+}C.appendChild(B);
+this.node=C
+},destroy:function(){A._destroyElement(this.node);
+this.node=false
+},update:function(){A[(this.manager.canDropFlag?"add":"remove")+"Class"](this.node,"dojoDndAvatarCanDrop");
+var C=this.node.getElementsByTagName("td");
+for(var B=0;
+B<C.length;
+++B){var D=C[B];
+if(A.hasClass(D.parentNode,"dojoDndAvatarHeader")){D.innerHTML=this._generateText();
+break
+}}},_generateText:function(){return this.manager.nodes.length.toString()
+}})
+}}});

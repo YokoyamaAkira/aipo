@@ -1,341 +1,86 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.wire.Wire"],
-["require", "dojox.wire._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.wire.Wire"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.Wire"] = true;
-dojo.provide("dojox.wire.Wire");
-
-dojo.require("dojox.wire._base");
-
-dojo.declare("dojox.wire.Wire", null, {
-	//	summary:
-	//		A default and base Wire to access an object property
-	//	description:
-	//		This class accesses a property of an object with a dotted notation
-	//		specified to 'property' property, such as "a.b.c", which identifies
-	//		a descendant property, "object.a.b.c".
-	//		Property names in the dotted notation may have an array index, such
-	//		as "a[0]", to identify an array element, literally, "object.a[0]".
-	//		When a notation start with an array index, such as "[0].a", it
-	//		specifies an array element of the root object (array),
-	//		"object[0].a".
-	//		This class also serves as a base class for other Wire classes,
-	//		preparing a root object and converting a return value, so that
-	//		sub-classes just can implement _getValue() and _setValue() called
-	//		from getValue() and setValue() implemented by this calss.
-	
-	_wireClass: "dojox.wire.Wire",
-	
-	constructor: function(/*Object*/args){
-		//	summary:
-		//		Initialize properties
-		//	description:
-		//		If 'converter' property is specified and is a string for
-		//		a converter class, an instanceof the converter class is
-		//		created.
-		//	args:
-		//		Arguments to initialize properties
-		//		object:
-		//			A root object (or another Wire to access a root object)
-		//		property:
-		//			A dotted notation to a descendant property
-		//		type:
-		//			A type of the return value (for the source Wire)
-		//		converter:
-		//			A converter object (or class name) to convert the return
-		//			value (for the source Wire)
-		dojo.mixin(this, args);
-
-		if(this.converter){
-			if(dojo.isString(this.converter)){
-				//First check the object tree for it.  Might be defined variable
-				//name/global function (like a jsId, or just a function name).
-				var convertObject = dojo.getObject(this.converter);
-				if (dojo.isFunction(convertObject)){
-					//We need to see if this is a pure function or an object constructor...
-					try{
-						var testObj = new convertObject();
-						if(testObj && !dojo.isFunction(testObj["convert"])){
-							//Looks like a 'pure' function...
-							this.converter = {convert: convertObject};
-						}else{
-							this.converter = testObj;
-						}
-					}catch(e){
-						//Do if this fails.	
-					}
-				}else if(dojo.isObject(convertObject)){
-					//It's an object, like a jsId ... see if it has a convert function
-					if(dojo.isFunction(convertObject["convert"])){
-						this.converter = convertObject;
-					}
-				}
-
-				//No object with that name (Converter is still a string), 
-				//then look for a class that needs to be dynamically loaded...
-				if (dojo.isString(this.converter)) {
-					var converterClass = dojox.wire._getClass(this.converter);
-					if(converterClass){
-						this.converter = new converterClass();
-					}else{
-						this.converter = undefined;
-					}
-				}
-			}else if(dojo.isFunction(this.converter)){
-				this.converter = {convert: this.converter};
-			}
-		}
-	},
-
-	getValue: function(/*Object||Array*/defaultObject){
-		//	summary:
-		//		Return a value of an object
-		//	description:
-		//		This method first determins a root object as follows:
-		//		1. If 'object' property specified,
-		//		1.1 If 'object' is a Wire, its getValue() method is called to
-		//	    	obtain a root object.
-		//		1.2 Otherwise, use 'object' as a root object.
-		//		2. Otherwise, use 'defaultObject' argument.
-		//		3. If 'property' is specified, it is used to get a property
-		//			value.
-		//		Then, if a sub-class implements _getValue() method, it is
-		//		called with the root object to get the return value.
-		//		Otherwise, the root object (typically, a property valye) is
-		//		used for the return value.
-		//		Finally, if 'type' property is specified, the return value is
-		//		converted to the specified primitive type ("string", "number",
-		//		"boolean" and "array").
-		//		If 'converter' property is specified, its convert() method is
-		//		called to convert the value.
-		//	defaultObject:
-		//		A default root object
-		//	returns:
-		//		A value found
-		var object = undefined;
-		if(dojox.wire.isWire(this.object)){
-			object = this.object.getValue(defaultObject);
-		}else{
-			object = (this.object || defaultObject);
-		}
-
-		if(this.property){
-			var list = this.property.split('.');
-			for(var i in list){
-				if(!object){
-					return object; //anything (null, undefined, etc)
-				}
-				object = this._getPropertyValue(object, list[i]);
-			}
-		}
-
-		var value = undefined;
-		if(this._getValue){
-			value = this._getValue(object);
-		}else{
-			value = object;
-		}
-
-		if(value){
-			if(this.type){
-				if(this.type == "string"){
-					value = value.toString();
-				}else if(this.type == "number"){
-					value = parseInt(value);
-				}else if(this.type == "boolean"){
-					value = (value != "false");
-				}else if(this.type == "array"){
-					if(!dojo.isArray(value)){
-						value = [value];
-					}
-				}
-			}
-			if(this.converter && this.converter.convert){
-				value = this.converter.convert(value, this); // optional "this" context
-			}
-		}
-		return value; //anything
-	},
-
-	setValue: function(/*anything*/value, /*Object||Array*/defaultObject){
-		//	summary:
-		//		Set a value to an object
-		//	description:
-		//		This method first determins a root object as follows:
-		//		1. If 'object' property specified,
-		//		1.1 If 'object' is a Wire, its getValue() method is called to
-		//	    	obtain a root object.
-		//		1.2 Otherwise, use 'object' as a root object.
-		//		2. Otherwise, use 'defaultObject' argument.
-		//		3. If 'property' is specified, it is used to get a property
-		//			value.
-		//		Then, if a sub-class implements _setValue() method, it is
-		//		called with the root object and 'value' argument to set
-		//		the value.
-		//		Otherwise, 'value' is set to a property specified with
-		//		'property' property.
-		//		If the root object is undefined and 'object' property is a Wire
-		//		and a new object is created and returned by _setValue() it is
-		//		set through 'object' (setValue() method).
-		//	value:
-		//		A value to set
-		//	defaultObject:
-		//		A default root object
-		var object = undefined;
-		if(dojox.wire.isWire(this.object)){
-			object = this.object.getValue(defaultObject);
-		}else{
-			object = (this.object || defaultObject);
-		}
-
-		var property = undefined;
-		if(this.property){
-			if(!object){
-				if(dojox.wire.isWire(this.object)){
-					object = {};
-					this.object.setValue(object, defaultObject);
-				}else{
-					throw new Error(this._wireClass + ".setValue(): invalid object");
-				}
-			}
-			var list = this.property.split('.');
-			var last = list.length - 1;
-			for(var i = 0; i < last; i++){
-				var p = list[i];
-				var o = this._getPropertyValue(object, p);
-				if(!o){
-					o = {};
-					this._setPropertyValue(object, p, o);
-				}
-				object = o;
-			}
-			property = list[last];
-		}
-
-		if(this._setValue){
-			if(property){
-				var o = this._getPropertyValue(object, property);
-				if(!o){
-					o = {};
-					this._setPropertyValue(object, property, o);
-				}
-				object = o;
-			}
-			var newObject = this._setValue(object, value);
-			if(!object && newObject){
-				if(dojox.wire.isWire(this.object)){
-					this.object.setValue(newObject, defaultObject);
-				}else{
-					throw new Error(this._wireClass + ".setValue(): invalid object");
-				}
-			}
-		}else{
-			if(property){
-				this._setPropertyValue(object, property, value);
-			}else{
-				if(dojox.wire.isWire(this.object)){
-					this.object.setValue(value, defaultObject);
-				}else{
-					throw new Error(this._wireClass + ".setValue(): invalid property");
-				}
-			}
-		}
-	},
-
-	_getPropertyValue: function(/*Object||Array*/object, /*String*/property){
-		//	summary:
-		//		Return a property value of an object
-		//	description:
-		//		A value for 'property' of 'object' is returned.
-		//		If 'property' ends with an array index, it is used to indentify
-		//		an element of an array property.
-		//		If 'object' implements getPropertyValue(), it is called with
-		//		'property' to obtain the property value.
-		//		If 'object' implements a getter for the property, it is called
-		//		to obtain the property value.
-		//	object:
-		//		A default root object
-		//	property:
-		//		A property name
-		//	returns:
-		//		A value found, otherwise 'undefined'
-		var value = undefined;
-		var i1 = property.indexOf('[');
-		if(i1 >= 0){
-			var i2 = property.indexOf(']');
-			var index = property.substring(i1 + 1, i2);
-			var array = null;
-			if(i1 === 0){ // object is array
-				array = object;
-			}else{
-				property = property.substring(0, i1);
-				array = this._getPropertyValue(object, property);
-				if(array && !dojo.isArray(array)){
-					array = [array];
-				}
-			}
-			if(array){
-				value = array[index];
-			}
-		}else if(object.getPropertyValue){
-			value = object.getPropertyValue(property);
-		}else{
-			var getter = "get" + property.charAt(0).toUpperCase() + property.substring(1);
-			if(object[getter]){
-				value = object[getter]();
-			}else{
-				value = object[property];
-			}
-		}
-		return value; //anything
-	},
-
-	_setPropertyValue: function(/*Object||Array*/object, /*String*/property, /*anything*/value){
-		//	summary:
-		//		Set a property value to an object
-		//	description:
-		//		'value' is set to 'property' of 'object'.
-		//		If 'property' ends with an array index, it is used to indentify
-		//		an element of an array property to set the value.
-		//		If 'object' implements setPropertyValue(), it is called with
-		//		'property' and 'value' to set the property value.
-		//		If 'object' implements a setter for the property, it is called
-		//		with 'value' to set the property value.
-		//	object:
-		//		An object
-		//	property:
-		//		A property name
-		//	value:
-		//		A value to set
-		var i1 = property.indexOf('[');
-		if(i1 >= 0){
-			var i2 = property.indexOf(']');
-			var index = property.substring(i1 + 1, i2);
-			var array = null;
-			if(i1 === 0){ // object is array
-				array = object;
-			}else{
-				property = property.substring(0, i1);
-				array = this._getPropertyValue(object, property);
-				if(!array){
-					array = [];
-					this._setPropertyValue(object, property, array);
-				}
-			}
-			array[index] = value;
-		}else if(object.setPropertyValue){
-			object.setPropertyValue(property, value);
-		}else{
-			var setter = "set" + property.charAt(0).toUpperCase() + property.substring(1);
-			if(object[setter]){
-				object[setter](value);
-			}else{
-				object[property] = value;
-			}
-		}
-	}
-});
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.wire.Wire"],["require","dojox.wire._base"]],defineResource:function(A){if(!A._hasResource["dojox.wire.Wire"]){A._hasResource["dojox.wire.Wire"]=true;
+A.provide("dojox.wire.Wire");
+A.require("dojox.wire._base");
+A.declare("dojox.wire.Wire",null,{_wireClass:"dojox.wire.Wire",constructor:function(C){A.mixin(this,C);
+if(this.converter){if(A.isString(this.converter)){var E=A.getObject(this.converter);
+if(A.isFunction(E)){try{var B=new E();
+if(B&&!A.isFunction(B.convert)){this.converter={convert:E}
+}else{this.converter=B
+}}catch(D){}}else{if(A.isObject(E)){if(A.isFunction(E.convert)){this.converter=E
+}}}if(A.isString(this.converter)){var F=dojox.wire._getClass(this.converter);
+if(F){this.converter=new F()
+}else{this.converter=undefined
+}}}else{if(A.isFunction(this.converter)){this.converter={convert:this.converter}
+}}}},getValue:function(B){var C=undefined;
+if(dojox.wire.isWire(this.object)){C=this.object.getValue(B)
+}else{C=(this.object||B)
+}if(this.property){var F=this.property.split(".");
+for(var D in F){if(!C){return C
+}C=this._getPropertyValue(C,F[D])
+}}var E=undefined;
+if(this._getValue){E=this._getValue(C)
+}else{E=C
+}if(E){if(this.type){if(this.type=="string"){E=E.toString()
+}else{if(this.type=="number"){E=parseInt(E)
+}else{if(this.type=="boolean"){E=(E!="false")
+}else{if(this.type=="array"){if(!A.isArray(E)){E=[E]
+}}}}}}if(this.converter&&this.converter.convert){E=this.converter.convert(E,this)
+}}return E
+},setValue:function(I,G){var D=undefined;
+if(dojox.wire.isWire(this.object)){D=this.object.getValue(G)
+}else{D=(this.object||G)
+}var J=undefined;
+if(this.property){if(!D){if(dojox.wire.isWire(this.object)){D={};
+this.object.setValue(D,G)
+}else{throw new Error(this._wireClass+".setValue(): invalid object")
+}}var H=this.property.split(".");
+var K=H.length-1;
+for(var E=0;
+E<K;
+E++){var B=H[E];
+var C=this._getPropertyValue(D,B);
+if(!C){C={};
+this._setPropertyValue(D,B,C)
+}D=C
+}J=H[K]
+}if(this._setValue){if(J){var C=this._getPropertyValue(D,J);
+if(!C){C={};
+this._setPropertyValue(D,J,C)
+}D=C
+}var F=this._setValue(D,I);
+if(!D&&F){if(dojox.wire.isWire(this.object)){this.object.setValue(F,G)
+}else{throw new Error(this._wireClass+".setValue(): invalid object")
+}}}else{if(J){this._setPropertyValue(D,J,I)
+}else{if(dojox.wire.isWire(this.object)){this.object.setValue(I,G)
+}else{throw new Error(this._wireClass+".setValue(): invalid property")
+}}}},_getPropertyValue:function(D,H){var G=undefined;
+var F=H.indexOf("[");
+if(F>=0){var E=H.indexOf("]");
+var C=H.substring(F+1,E);
+var I=null;
+if(F===0){I=D
+}else{H=H.substring(0,F);
+I=this._getPropertyValue(D,H);
+if(I&&!A.isArray(I)){I=[I]
+}}if(I){G=I[C]
+}}else{if(D.getPropertyValue){G=D.getPropertyValue(H)
+}else{var B="get"+H.charAt(0).toUpperCase()+H.substring(1);
+if(D[B]){G=D[B]()
+}else{G=D[H]
+}}}return G
+},_setPropertyValue:function(C,G,F){var E=G.indexOf("[");
+if(E>=0){var D=G.indexOf("]");
+var B=G.substring(E+1,D);
+var I=null;
+if(E===0){I=C
+}else{G=G.substring(0,E);
+I=this._getPropertyValue(C,G);
+if(!I){I=[];
+this._setPropertyValue(C,G,I)
+}}I[B]=F
+}else{if(C.setPropertyValue){C.setPropertyValue(G,F)
+}else{var H="set"+G.charAt(0).toUpperCase()+G.substring(1);
+if(C[H]){C[H](F)
+}else{C[G]=F
+}}}}})
+}}});

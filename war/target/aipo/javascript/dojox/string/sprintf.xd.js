@@ -1,411 +1,138 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.string.sprintf"],
-["require", "dojox.string.tokenize"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.string.sprintf"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.string.sprintf"] = true;
-dojo.provide("dojox.string.sprintf");
-
-dojo.require("dojox.string.tokenize");
-
-dojox.string.sprintf = function(/*String*/ format, /*mixed...*/ filler){
-	for(var args = [], i = 1; i < arguments.length; i++){
-		args.push(arguments[i]);
-	}
-	var formatter = new dojox.string.sprintf.Formatter(format);
-	return formatter.format.apply(formatter, args);
-}
-
-dojox.string.sprintf.Formatter = function(/*String*/ format){
-	var tokens = [];
-	this._mapped = false;
-	this._format = format;
-	this._tokens = dojox.string.tokenize(format, this._re, this._parseDelim, this);
-}
-dojo.extend(dojox.string.sprintf.Formatter, {
-	_re: /\%(?:\(([\w_]+)\)|([1-9]\d*)\$)?([0 +\-\#]*)(\*|\d+)?(\.)?(\*|\d+)?[hlL]?([\%scdeEfFgGiouxX])/g,
-	_parseDelim: function(mapping, intmapping, flags, minWidth, period, precision, specifier){
-		if(mapping){
-			this._mapped = true;
-		}
-		return {
-			mapping: mapping,
-			intmapping: intmapping,
-			flags: flags,
-			_minWidth: minWidth, // May be dependent on parameters
-			period: period,
-			_precision: precision, // May be dependent on parameters
-			specifier: specifier
-		};
-	},
-	_specifiers: {
-		b: {
-			base: 2,
-			isInt: true
-		},
-		o: {
-			base: 8,
-			isInt: true
-		},
-		x: {
-			base: 16,
-			isInt: true
-		},
-		X: {
-			extend: ["x"],
-			toUpper: true
-		},
-		d: {
-			base: 10,
-			isInt: true
-		},
-		i: {
-			extend: ["d"]
-		},
-		u: {
-			extend: ["d"],
-			isUnsigned: true
-		},
-		c: {
-			setArg: function(token){
-				if(!isNaN(token.arg)){
-					var num = parseInt(token.arg);
-					if(num < 0 || num > 127){
-						throw new Error("invalid character code passed to %c in sprintf");
-					}
-					token.arg = isNaN(num) ? "" + num : String.fromCharCode(num);
-				}
-			}
-		},
-		s: {
-			setMaxWidth: function(token){
-				token.maxWidth = (token.period == ".") ? token.precision : -1;
-			}
-		},
-		e: {
-			isDouble: true,
-			doubleNotation: "e"
-		},
-		E: {
-			extend: ["e"],
-			toUpper: true
-		},
-		f: {
-			isDouble: true,
-			doubleNotation: "f"
-		},
-		F: {
-			extend: ["f"]
-		},
-		g: {
-			isDouble: true,
-			doubleNotation: "g"
-		},
-		G: {
-			extend: ["g"],
-			toUpper: true
-		}
-	},
-	format: function(/*mixed...*/ filler){
-		if(this._mapped && typeof filler != "object"){
-			throw new Error("format requires a mapping");
-		}
-
-		var str = "";
-		var position = 0;
-		for(var i = 0, token; i < this._tokens.length; i++){
-			token = this._tokens[i];
-			if(typeof token == "string"){
-				str += token;
-			}else{
-				if(this._mapped){
-					if(typeof filler[token.mapping] == "undefined"){
-						throw new Error("missing key " + token.mapping);
-					}
-					token.arg = filler[token.mapping];
-				}else{
-					if(token.intmapping){
-						var position = parseInt(token.intmapping) - 1;
-					}
-					if(position >= arguments.length){
-						throw new Error("got " + arguments.length + " printf arguments, insufficient for '" + this._format + "'");
-					}
-					token.arg = arguments[position++];
-				}
-
-				if(!token.compiled){
-					token.compiled = true;
-					token.sign = "";
-					token.zeroPad = false;
-					token.rightJustify = false;
-					token.alternative = false;
-
-					var flags = {};
-					for(var fi = token.flags.length; fi--;){
-						var flag = token.flags.charAt(fi);
-						flags[flag] = true;
-						switch(flag){
-							case " ":
-								token.sign = " ";
-								break;
-							case "+":
-								token.sign = "+";
-								break;
-							case "0":
-								token.zeroPad = (flags["-"]) ? false : true;
-								break;
-							case "-":
-								token.rightJustify = true;
-								token.zeroPad = false;
-								break;
-							case "\#":
-								token.alternative = true;
-								break;
-							default:
-								throw Error("bad formatting flag '" + token.flags.charAt(fi) + "'");
-						}
-					}
-
-					token.minWidth = (token._minWidth) ? parseInt(token._minWidth) : 0;
-					token.maxWidth = -1;
-					token.toUpper = false;
-					token.isUnsigned = false;
-					token.isInt = false;
-					token.isDouble = false;
-					token.precision = 1;
-					if(token.period == '.'){
-						if(token._precision){
-							token.precision = parseInt(token._precision);
-						}else{
-							token.precision = 0;
-						}
-					}
-
-					var mixins = this._specifiers[token.specifier];
-					if(typeof mixins == "undefined"){
-						throw new Error("unexpected specifier '" + token.specifier + "'");
-					}
-					if(mixins.extend){
-						dojo.mixin(mixins, this._specifiers[mixins.extend]);
-						delete mixins.extend;
-					}
-					dojo.mixin(token, mixins);
-				}
-
-				if(typeof token.setArg == "function"){
-					token.setArg(token);
-				}
-
-				if(typeof token.setMaxWidth == "function"){
-					token.setMaxWidth(token);
-				}
-
-				if(token._minWidth == "*"){
-					if(this._mapped){
-						throw new Error("* width not supported in mapped formats");
-					}
-					token.minWidth = parseInt(arguments[position++]);
-					if(isNaN(token.minWidth)){
-						throw new Error("the argument for * width at position " + position + " is not a number in " + this._format);
-					}
-					// negative width means rightJustify
-					if (token.minWidth < 0) {
-						token.rightJustify = true;
-						token.minWidth = -token.minWidth;
-					}
-				}
-
-				if(token._precision == "*" && token.period == "."){
-					if(this._mapped){
-						throw new Error("* precision not supported in mapped formats");
-					}
-					token.precision = parseInt(arguments[position++]);
-					if(isNaN(token.precision)){
-						throw Error("the argument for * precision at position " + position + " is not a number in " + this._format);
-					}
-					// negative precision means unspecified
-					if (token.precision < 0) {
-						token.precision = 1;
-						token.period = '';
-					}
-				}
-
-				if(token.isInt){
-					// a specified precision means no zero padding
-					if(token.period == '.'){
-						token.zeroPad = false;
-					}
-					this.formatInt(token);
-				}else if(token.isDouble){
-					if(token.period != '.'){
-						token.precision = 6;
-					}
-					this.formatDouble(token); 
-				}
-				this.fitField(token);
-
-				str += "" + token.arg;
-			}
-		}
-
-		return str;
-	},
-	_zeros10: '0000000000',
-	_spaces10: '          ',
-	formatInt: function(token) {
-		var i = parseInt(token.arg);
-		if(!isFinite(i)){ // isNaN(f) || f == Number.POSITIVE_INFINITY || f == Number.NEGATIVE_INFINITY)
-			// allow this only if arg is number
-			if(typeof token.arg != "number"){
-				throw new Error("format argument '" + token.arg + "' not an integer; parseInt returned " + i);
-			}
-			//return '' + i;
-			i = 0;
-		}
-
-		// if not base 10, make negatives be positive
-		// otherwise, (-10).toString(16) is '-a' instead of 'fffffff6'
-		if(i < 0 && (token.isUnsigned || token.base != 10)){
-			i = 0xffffffff + i + 1;
-		} 
-
-		if(i < 0){
-			token.arg = (- i).toString(token.base);
-			this.zeroPad(token);
-			token.arg = "-" + token.arg;
-		}else{
-			token.arg = i.toString(token.base);
-			// need to make sure that argument 0 with precision==0 is formatted as ''
-			if(!i && !token.precision){
-				token.arg = "";
-			}else{
-				this.zeroPad(token);
-			}
-			if(token.sign){
-				token.arg = token.sign + token.arg;
-			}
-		}
-		if(token.base == 16){
-			if(token.alternative){
-				token.arg = '0x' + token.arg;
-			}
-			toke.art = token.toUpper ? token.arg.toUpperCase() : token.arg.toLowerCase();
-		}
-		if(token.base == 8){
-			if(token.alternative && token.arg.charAt(0) != '0'){
-				token.arg = '0' + token.arg;
-			}
-		}
-	},
-	formatDouble: function(token) {
-		var f = parseFloat(token.arg);
-		if(!isFinite(f)){ // isNaN(f) || f == Number.POSITIVE_INFINITY || f == Number.NEGATIVE_INFINITY)
-			// allow this only if arg is number
-			if(typeof token.arg != "number"){
-				throw new Error("format argument '" + token.arg + "' not a float; parseFloat returned " + f);
-			}
-			// C99 says that for 'f':
-			//   infinity -> '[-]inf' or '[-]infinity' ('[-]INF' or '[-]INFINITY' for 'F')
-			//   NaN -> a string  starting with 'nan' ('NAN' for 'F')
-			// this is not commonly implemented though.
-			//return '' + f;
-			f = 0;
-		}
-
-		switch(token.doubleNotation) {
-			case 'e': {
-				token.arg = f.toExponential(token.precision); 
-				break;
-			}
-			case 'f': {
-				token.arg = f.toFixed(token.precision); 
-				break;
-			}
-			case 'g': {
-				// C says use 'e' notation if exponent is < -4 or is >= prec
-				// ECMAScript for toPrecision says use exponential notation if exponent is >= prec,
-				// though step 17 of toPrecision indicates a test for < -6 to force exponential.
-				if(Math.abs(f) < 0.0001){
-					//print("forcing exponential notation for f=" + f);
-					token.arg = f.toExponential(token.precision > 0 ? token.precision - 1 : token.precision);
-				}else{
-					token.arg = f.toPrecision(token.precision); 
-				}
-
-				// In C, unlike 'f', 'gG' removes trailing 0s from fractional part, unless alternative format flag ("#").
-				// But ECMAScript formats toPrecision as 0.00100000. So remove trailing 0s.
-				if(!token.alternative){ 
-					//print("replacing trailing 0 in '" + s + "'");
-					token.arg = token.arg.replace(/(\..*[^0])0*/, "$1");
-					// if fractional part is entirely 0, remove it and decimal point
-					token.arg = token.arg.replace(/\.0*e/, 'e').replace(/\.0$/,'');
-				}
-				break;
-			}
-			default: throw new Error("unexpected double notation '" + token.doubleNotation + "'");
-		}
-
-		// C says that exponent must have at least two digits.
-		// But ECMAScript does not; toExponential results in things like "1.000000e-8" and "1.000000e+8".
-		// Note that s.replace(/e([\+\-])(\d)/, "e$10$2") won't work because of the "$10" instead of "$1".
-		// And replace(re, func) isn't supported on IE50 or Safari1.
-		token.arg = token.arg.replace(/e\+(\d)$/, "e+0$1").replace(/e\-(\d)$/, "e-0$1");
-
-		// Ensure a '0' before the period.
-		// Opera implements (0.001).toString() as '0.001', but (0.001).toFixed(1) is '.001'
-		if(dojo.isOpera){
-			token.arg = token.arg.replace(/^\./, '0.');
-		}
-
-		// if alt, ensure a decimal point
-		if(token.alternative){
-			token.arg = token.arg.replace(/^(\d+)$/,"$1.");
-			token.arg = token.arg.replace(/^(\d+)e/,"$1.e");
-		}
-
-		if(f >= 0 && token.sign){
-			token.arg = token.sign + token.arg;
-		}
-
-		token.arg = token.toUpper ? token.arg.toUpperCase() : token.arg.toLowerCase();
-	},
-	zeroPad: function(token, /*Int*/ length) {
-		length = (arguments.length == 2) ? length : token.precision;
-		if(typeof token.arg != "string"){
-			token.arg = "" + token.arg;
-		}
-
-		var tenless = length - 10;
-		while(token.arg.length < tenless){
-			token.arg = (token.rightJustify) ? token.arg + this._zeros10 : this._zeros10 + token.arg;
-		}
-		var pad = length - token.arg.length;
-		token.arg = (token.rightJustify) ? token.arg + this._zeros10.substring(0, pad) : this._zeros10.substring(0, pad) + token.arg;
-	},
-	fitField: function(token) {
-		if(token.maxWidth >= 0 && token.arg.length > token.maxWidth){
-			return token.arg.substring(0, token.maxWidth);
-		}
-		if(token.zeroPad){
-			this.zeroPad(token, token.minWidth);
-			return;
-		}
-		this.spacePad(token);
-	},
-	spacePad: function(token, /*Int*/ length) {
-		length = (arguments.length == 2) ? length : token.minWidth;
-		if(typeof token.arg != 'string'){
-			token.arg = '' + token.arg;
-		}
-
-		var tenless = length - 10;
-		while(token.arg.length < tenless){
-			token.arg = (token.rightJustify) ? token.arg + this._spaces10 : this._spaces10 + token.arg;
-		}
-		var pad = length - token.arg.length;
-		token.arg = (token.rightJustify) ? token.arg + this._spaces10.substring(0, pad) : this._spaces10.substring(0, pad) + token.arg;
-	}
-});
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.string.sprintf"],["require","dojox.string.tokenize"]],defineResource:function(A){if(!A._hasResource["dojox.string.sprintf"]){A._hasResource["dojox.string.sprintf"]=true;
+A.provide("dojox.string.sprintf");
+A.require("dojox.string.tokenize");
+dojox.string.sprintf=function(F,E){for(var B=[],D=1;
+D<arguments.length;
+D++){B.push(arguments[D])
+}var C=new dojox.string.sprintf.Formatter(F);
+return C.format.apply(C,B)
+};
+dojox.string.sprintf.Formatter=function(C){var B=[];
+this._mapped=false;
+this._format=C;
+this._tokens=dojox.string.tokenize(C,this._re,this._parseDelim,this)
+};
+A.extend(dojox.string.sprintf.Formatter,{_re:/\%(?:\(([\w_]+)\)|([1-9]\d*)\$)?([0 +\-\#]*)(\*|\d+)?(\.)?(\*|\d+)?[hlL]?([\%scdeEfFgGiouxX])/g,_parseDelim:function(E,D,C,G,H,B,F){if(E){this._mapped=true
+}return{mapping:E,intmapping:D,flags:C,_minWidth:G,period:H,_precision:B,specifier:F}
+},_specifiers:{b:{base:2,isInt:true},o:{base:8,isInt:true},x:{base:16,isInt:true},X:{extend:["x"],toUpper:true},d:{base:10,isInt:true},i:{extend:["d"]},u:{extend:["d"],isUnsigned:true},c:{setArg:function(C){if(!isNaN(C.arg)){var B=parseInt(C.arg);
+if(B<0||B>127){throw new Error("invalid character code passed to %c in sprintf")
+}C.arg=isNaN(B)?""+B:String.fromCharCode(B)
+}}},s:{setMaxWidth:function(B){B.maxWidth=(B.period==".")?B.precision:-1
+}},e:{isDouble:true,doubleNotation:"e"},E:{extend:["e"],toUpper:true},f:{isDouble:true,doubleNotation:"f"},F:{extend:["f"]},g:{isDouble:true,doubleNotation:"g"},G:{extend:["g"],toUpper:true}},format:function(D){if(this._mapped&&typeof D!="object"){throw new Error("format requires a mapping")
+}var I="";
+var F=0;
+for(var E=0,C;
+E<this._tokens.length;
+E++){C=this._tokens[E];
+if(typeof C=="string"){I+=C
+}else{if(this._mapped){if(typeof D[C.mapping]=="undefined"){throw new Error("missing key "+C.mapping)
+}C.arg=D[C.mapping]
+}else{if(C.intmapping){var F=parseInt(C.intmapping)-1
+}if(F>=arguments.length){throw new Error("got "+arguments.length+" printf arguments, insufficient for '"+this._format+"'")
+}C.arg=arguments[F++]
+}if(!C.compiled){C.compiled=true;
+C.sign="";
+C.zeroPad=false;
+C.rightJustify=false;
+C.alternative=false;
+var B={};
+for(var J=C.flags.length;
+J--;
+){var H=C.flags.charAt(J);
+B[H]=true;
+switch(H){case" ":C.sign=" ";
+break;
+case"+":C.sign="+";
+break;
+case"0":C.zeroPad=(B["-"])?false:true;
+break;
+case"-":C.rightJustify=true;
+C.zeroPad=false;
+break;
+case"#":C.alternative=true;
+break;
+default:throw Error("bad formatting flag '"+C.flags.charAt(J)+"'")
+}}C.minWidth=(C._minWidth)?parseInt(C._minWidth):0;
+C.maxWidth=-1;
+C.toUpper=false;
+C.isUnsigned=false;
+C.isInt=false;
+C.isDouble=false;
+C.precision=1;
+if(C.period=="."){if(C._precision){C.precision=parseInt(C._precision)
+}else{C.precision=0
+}}var G=this._specifiers[C.specifier];
+if(typeof G=="undefined"){throw new Error("unexpected specifier '"+C.specifier+"'")
+}if(G.extend){A.mixin(G,this._specifiers[G.extend]);
+delete G.extend
+}A.mixin(C,G)
+}if(typeof C.setArg=="function"){C.setArg(C)
+}if(typeof C.setMaxWidth=="function"){C.setMaxWidth(C)
+}if(C._minWidth=="*"){if(this._mapped){throw new Error("* width not supported in mapped formats")
+}C.minWidth=parseInt(arguments[F++]);
+if(isNaN(C.minWidth)){throw new Error("the argument for * width at position "+F+" is not a number in "+this._format)
+}if(C.minWidth<0){C.rightJustify=true;
+C.minWidth=-C.minWidth
+}}if(C._precision=="*"&&C.period=="."){if(this._mapped){throw new Error("* precision not supported in mapped formats")
+}C.precision=parseInt(arguments[F++]);
+if(isNaN(C.precision)){throw Error("the argument for * precision at position "+F+" is not a number in "+this._format)
+}if(C.precision<0){C.precision=1;
+C.period=""
+}}if(C.isInt){if(C.period=="."){C.zeroPad=false
+}this.formatInt(C)
+}else{if(C.isDouble){if(C.period!="."){C.precision=6
+}this.formatDouble(C)
+}}this.fitField(C);
+I+=""+C.arg
+}}return I
+},_zeros10:"0000000000",_spaces10:"          ",formatInt:function(C){var B=parseInt(C.arg);
+if(!isFinite(B)){if(typeof C.arg!="number"){throw new Error("format argument '"+C.arg+"' not an integer; parseInt returned "+B)
+}B=0
+}if(B<0&&(C.isUnsigned||C.base!=10)){B=4294967295+B+1
+}if(B<0){C.arg=(-B).toString(C.base);
+this.zeroPad(C);
+C.arg="-"+C.arg
+}else{C.arg=B.toString(C.base);
+if(!B&&!C.precision){C.arg=""
+}else{this.zeroPad(C)
+}if(C.sign){C.arg=C.sign+C.arg
+}}if(C.base==16){if(C.alternative){C.arg="0x"+C.arg
+}toke.art=C.toUpper?C.arg.toUpperCase():C.arg.toLowerCase()
+}if(C.base==8){if(C.alternative&&C.arg.charAt(0)!="0"){C.arg="0"+C.arg
+}}},formatDouble:function(B){var C=parseFloat(B.arg);
+if(!isFinite(C)){if(typeof B.arg!="number"){throw new Error("format argument '"+B.arg+"' not a float; parseFloat returned "+C)
+}C=0
+}switch(B.doubleNotation){case"e":B.arg=C.toExponential(B.precision);
+break;
+case"f":B.arg=C.toFixed(B.precision);
+break;
+case"g":if(Math.abs(C)<0.0001){B.arg=C.toExponential(B.precision>0?B.precision-1:B.precision)
+}else{B.arg=C.toPrecision(B.precision)
+}if(!B.alternative){B.arg=B.arg.replace(/(\..*[^0])0*/,"$1");
+B.arg=B.arg.replace(/\.0*e/,"e").replace(/\.0$/,"")
+}break;
+default:throw new Error("unexpected double notation '"+B.doubleNotation+"'")
+}B.arg=B.arg.replace(/e\+(\d)$/,"e+0$1").replace(/e\-(\d)$/,"e-0$1");
+if(A.isOpera){B.arg=B.arg.replace(/^\./,"0.")
+}if(B.alternative){B.arg=B.arg.replace(/^(\d+)$/,"$1.");
+B.arg=B.arg.replace(/^(\d+)e/,"$1.e")
+}if(C>=0&&B.sign){B.arg=B.sign+B.arg
+}B.arg=B.toUpper?B.arg.toUpperCase():B.arg.toLowerCase()
+},zeroPad:function(C,D){D=(arguments.length==2)?D:C.precision;
+if(typeof C.arg!="string"){C.arg=""+C.arg
+}var B=D-10;
+while(C.arg.length<B){C.arg=(C.rightJustify)?C.arg+this._zeros10:this._zeros10+C.arg
+}var E=D-C.arg.length;
+C.arg=(C.rightJustify)?C.arg+this._zeros10.substring(0,E):this._zeros10.substring(0,E)+C.arg
+},fitField:function(B){if(B.maxWidth>=0&&B.arg.length>B.maxWidth){return B.arg.substring(0,B.maxWidth)
+}if(B.zeroPad){this.zeroPad(B,B.minWidth);
+return 
+}this.spacePad(B)
+},spacePad:function(C,D){D=(arguments.length==2)?D:C.minWidth;
+if(typeof C.arg!="string"){C.arg=""+C.arg
+}var B=D-10;
+while(C.arg.length<B){C.arg=(C.rightJustify)?C.arg+this._spaces10:this._spaces10+C.arg
+}var E=D-C.arg.length;
+C.arg=(C.rightJustify)?C.arg+this._spaces10.substring(0,E):this._spaces10.substring(0,E)+C.arg
+}})
+}}});

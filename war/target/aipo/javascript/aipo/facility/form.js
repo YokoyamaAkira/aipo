@@ -1,39 +1,39 @@
 dojo.provide("aipo.facility");
-aipo.facility.onLoadFacilityDialog=function(E){var F=dojo.byId("facility_name");
-if(F){F.focus()
-}var D=dijit.byId("facilitygroupselect");
-if(D){var A=dojo.byId("init_grouplist");
-var C;
-var B=A.options;
-if(B.length==1&&B[0].value==""){return 
-}for(C=0;
-C<B.length;
-C++){D.addOptionSync(B[C].value,B[C].text,true)
+aipo.facility.onLoadFacilityDialog=function(I){var H=dojo.byId("facility_name");
+if(H){H.focus()
+}var J=dijit.byId("facilitygroupselect");
+if(J){var G=dojo.byId("init_grouplist");
+var K;
+var L=G.options;
+if(L.length==1&&L[0].value==""){return 
+}for(K=0;
+K<L.length;
+K++){J.addOptionSync(L[K].value,L[K].text,true)
 }}};
-aipo.facility.onLoadFacilityGroupDialog=function(E){var F=dojo.byId("facility_group_name");
-if(F){F.focus()
-}var D=dijit.byId("facilityselect");
-if(D){var A=dojo.byId("init_facilitylist");
-var C;
-var B=A.options;
-if(B.length==1&&B[0].value==""){return 
-}for(C=0;
-C<B.length;
-C++){D.addOptionSync(B[C].value,B[C].text,true)
+aipo.facility.onLoadFacilityGroupDialog=function(I){var H=dojo.byId("facility_group_name");
+if(H){H.focus()
+}var J=dijit.byId("facilityselect");
+if(J){var G=dojo.byId("init_facilitylist");
+var K;
+var L=G.options;
+if(L.length==1&&L[0].value==""){return 
+}for(K=0;
+K<L.length;
+K++){J.addOptionSync(L[K].value,L[K].text,true)
 }}};
-aipo.facility.onReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
-if(A){A.hide()
+aipo.facility.onReceiveMessage=function(D){if(!D){var C=dijit.byId("modalDialog");
+if(C){C.hide()
 }aipo.portletReload("facility")
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=D
 }};
-aipo.facility.sortsubmit=function(C){var A=C.member_so.options;
-var B="";
+aipo.facility.sortsubmit=function(E){var D=E.member_so.options;
+var F="";
 for(i=0;
-i<A.length;
-i++){A[i].selected=false
-}if(A.length>0){B=A[0].value;
+i<D.length;
+i++){D[i].selected=false
+}if(D.length>0){F=D[0].value;
 for(i=1;
-i<A.length;
-i++){B=B+","+A[i].value
-}}C.positions.value=B
+i<D.length;
+i++){F=F+","+D[i].value
+}}E.positions.value=F
 };

@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -70,7 +70,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * Static initialization of the logger for this class
    */
   private static final JetspeedLogger logger = JetspeedLogFactoryService
-      .getLogger(BaseProfileLocator.class.getName());
+    .getLogger(BaseProfileLocator.class.getName());
 
   /*
    * Gets the unique profile locator id, which is a combination of the params
@@ -84,6 +84,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * @return The profile locator id
    */
 
+  @Override
   public String getId() {
     StringBuffer id = new StringBuffer(128);
 
@@ -136,6 +137,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * @return The profile locator path
    */
 
+  @Override
   public String getPath() {
     StringBuffer id = new StringBuffer(128);
 
@@ -187,10 +189,11 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param path The formatted profiler path string.
    */
+  @Override
   public void createFromPath(String path) {
     StringTokenizer tok = new StringTokenizer(path, "/");
     while (tok.hasMoreTokens()) {
-      String name = (String) tok.nextToken();
+      String name = tok.nextToken();
       if (name.equals(Profiler.PARAM_USER) && tok.hasMoreTokens()) {
         try {
           // keep profile locator from failing if the user has been removed
@@ -238,6 +241,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * @see Object#clone
    * @return an instance copy of this object
    */
+  @Override
   public Object clone() throws java.lang.CloneNotSupportedException {
     return super.clone();
   }
@@ -247,6 +251,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @return The resource name parameter for this profile.
    */
+  @Override
   public String getName() {
     return name;
   }
@@ -256,6 +261,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param The resource name parameter for this profile.
    */
+  @Override
   public void setName(String name) {
     this.name = name;
   }
@@ -265,6 +271,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param The user parameter for this profile.
    */
+  @Override
   public boolean getAnonymous() {
     return this.anonymous;
   }
@@ -274,6 +281,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param anonymous True indicates this is an anonymous user.
    */
+  @Override
   public void setAnonymous(boolean anonymous) {
     try {
       JetspeedUser user = JetspeedUserFactory.getInstance();
@@ -292,6 +300,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @return The media type parameter for this profile.
    */
+  @Override
   public String getMediaType() {
     return mediaType;
   }
@@ -302,6 +311,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param The media type parameter for this profile.
    */
+  @Override
   public void setMediaType(String mediaType) {
     this.mediaType = mediaType;
   }
@@ -312,6 +322,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @return The language parameter for this profile.
    */
+  @Override
   public String getLanguage() {
     return language;
   }
@@ -322,6 +333,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param The language parameter for this profile.
    */
+  @Override
   public void setLanguage(String language) {
     this.language = language;
   }
@@ -332,6 +344,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @return The country code parameter for this profile.
    */
+  @Override
   public String getCountry() {
     return country;
   }
@@ -342,6 +355,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param The country code parameter for this profile.
    */
+  @Override
   public void setCountry(String country) {
     this.country = country;
   }
@@ -351,13 +365,16 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @return The user parameter for this profile.
    */
+  @Override
   public JetspeedUser getUser() {
     return user;
   }
 
+  @Override
   public String getUserName() {
-    if (null == user)
+    if (null == user) {
       return userName;
+    }
 
     return user.getUserName();
   }
@@ -367,6 +384,7 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param The user parameter for this profile.
    */
+  @Override
   public void setUser(JetspeedUser user) {
     this.user = user;
   }
@@ -376,13 +394,16 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @return The role parameter for this profile.
    */
+  @Override
   public Role getRole() {
     return role;
   }
 
+  @Override
   public String getRoleName() {
-    if (null == role)
+    if (null == role) {
       return roleName;
+    }
 
     return role.getName();
   }
@@ -392,10 +413,12 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param The role parameter for this profile.
    */
+  @Override
   public void setRole(Role role) {
     this.role = role;
   }
 
+  @Override
   public void setRoleByName(String roleName) {
     try {
       Role temp = JetspeedSecurity.getRole(roleName);
@@ -412,13 +435,16 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @return The group parameter for this profile.
    */
+  @Override
   public Group getGroup() {
     return group;
   }
 
+  @Override
   public String getGroupName() {
-    if (null == group)
+    if (null == group) {
       return groupName;
+    }
 
     return group.getName();
   }
@@ -428,10 +454,12 @@ public class BaseProfileLocator implements ProfileLocator {
    * 
    * @param The group parameter for this profile.
    */
+  @Override
   public void setGroup(Group group) {
     this.group = group;
   }
 
+  @Override
   public void setGroupByName(String groupName) {
     try {
       Group temp = JetspeedSecurity.getGroup(groupName);
@@ -443,10 +471,12 @@ public class BaseProfileLocator implements ProfileLocator {
     }
   }
 
+  @Override
   public void setOrgName(String orgName) {
     this.orgName = orgName;
   }
 
+  @Override
   public String getOrgName() {
     return orgName;
   }
@@ -459,8 +489,9 @@ public class BaseProfileLocator implements ProfileLocator {
    * Define equality criteria for ProfileLocator objects.
    * 
    * @param obj
-   *            ProfileLocator object to be compared with.
+   *          ProfileLocator object to be compared with.
    */
+  @Override
   public boolean equals(Object obj) {
     if (obj == null) {
       return false;
@@ -481,11 +512,14 @@ public class BaseProfileLocator implements ProfileLocator {
       // String orgName = locator.getOrgName();
 
       return nameEquals(name)
-          // && locator.getId() == id
-          // && orgNameEquals(orgName) && mediaTypeEquals(mediaType)
-          && mediaTypeEquals(mediaType) && languageEquals(language)
-          && countryEquals(country) && userEquals(locator)
-          && groupEquals(group) && roleEquals(role);
+      // && locator.getId() == id
+      // && orgNameEquals(orgName) && mediaTypeEquals(mediaType)
+        && mediaTypeEquals(mediaType)
+        && languageEquals(language)
+        && countryEquals(country)
+        && userEquals(locator)
+        && groupEquals(group)
+        && roleEquals(role);
     }
   }
 
@@ -567,6 +601,7 @@ public class BaseProfileLocator implements ProfileLocator {
   /**
    * Check equality for name object with this ProfileLocator's name object.
    */
+  @SuppressWarnings("unused")
   private boolean orgNameEquals(String orgName) {
     return stringEquals(this.orgName, orgName);
   }
@@ -604,6 +639,6 @@ public class BaseProfileLocator implements ProfileLocator {
    */
   private boolean exclusiveOr(Object obj1, Object obj2) {
     return (assertNotNull(obj1) && !assertNotNull(obj2))
-        || (!assertNotNull(obj1) && assertNotNull(obj2));
+      || (!assertNotNull(obj1) && assertNotNull(obj2));
   }
 }

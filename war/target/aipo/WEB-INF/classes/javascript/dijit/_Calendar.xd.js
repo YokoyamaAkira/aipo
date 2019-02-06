@@ -11,78 +11,78 @@ if(!this.isDisabledDate(B,this.lang)){this.value=B;
 this.value.setHours(0,0,0,0);
 this.onChange(this.value)
 }this._populateGrid()
-}},_setText:function(B,C){while(B.firstChild){B.removeChild(B.firstChild)
-}B.appendChild(document.createTextNode(C))
-},_populateGrid:function(){var G=this.displayMonth;
-G.setDate(1);
-var B=G.getDay();
-var C=A.date.getDaysInMonth(G);
-var J=A.date.getDaysInMonth(A.date.add(G,"month",-1));
-var H=new Date();
-var D=this.value;
-var L=A.cldr.supplemental.getFirstDayOfWeek(this.lang);
-if(L>B){L-=7
-}A.query(".dijitCalendarDateTemplate",this.domNode).forEach(function(R,Q){Q+=L;
-var P=new Date(G);
+}},_setText:function(C,B){while(C.firstChild){C.removeChild(C.firstChild)
+}C.appendChild(document.createTextNode(B))
+},_populateGrid:function(){var E=this.displayMonth;
+E.setDate(1);
+var K=E.getDay();
+var L=A.date.getDaysInMonth(E);
+var H=A.date.getDaysInMonth(A.date.add(E,"month",-1));
+var F=new Date();
+var B=this.value;
+var J=A.cldr.supplemental.getFirstDayOfWeek(this.lang);
+if(J>K){J-=7
+}A.query(".dijitCalendarDateTemplate",this.domNode).forEach(function(R,Q){Q+=J;
+var P=new Date(E);
 var S,O="dijitCalendar",M=0;
-if(Q<B){S=J-B+Q+1;
+if(Q<K){S=H-K+Q+1;
 M=-1;
 O+="Previous"
-}else{if(Q>=(B+C)){S=Q-B-C+1;
+}else{if(Q>=(K+L)){S=Q-K-L+1;
 M=1;
 O+="Next"
-}else{S=Q-B+1;
+}else{S=Q-K+1;
 O+="Current"
 }}if(M){P=A.date.add(P,"month",M)
 }P.setDate(S);
-if(!A.date.compare(P,H,"date")){O="dijitCalendarCurrentDate "+O
-}if(!A.date.compare(P,D,"date")){O="dijitCalendarSelectedDate "+O
+if(!A.date.compare(P,F,"date")){O="dijitCalendarCurrentDate "+O
+}if(!A.date.compare(P,B,"date")){O="dijitCalendarSelectedDate "+O
 }if(this.isDisabledDate(P,this.lang)){O="dijitCalendarDisabledDate "+O
 }R.className=O+"Month dijitCalendarDateTemplate";
 R.dijitDateValue=P.valueOf();
 var N=A.query(".dijitCalendarDateLabel",R)[0];
 this._setText(N,P.getDate())
 },this);
-var E=A.date.locale.getNames("months","wide","standAlone",this.lang);
-this._setText(this.monthLabelNode,E[G.getMonth()]);
-var I=G.getFullYear()-1;
-A.forEach(["previous","current","next"],function(M){this._setText(this[M+"YearLabelNode"],A.date.locale.format(new Date(I++,0),{selector:"year",locale:this.lang}))
+var C=A.date.locale.getNames("months","wide","standAlone",this.lang);
+this._setText(this.monthLabelNode,C[E.getMonth()]);
+var G=E.getFullYear()-1;
+A.forEach(["previous","current","next"],function(M){this._setText(this[M+"YearLabelNode"],A.date.locale.format(new Date(G++,0),{selector:"year",locale:this.lang}))
 },this);
-var F=this;
-var K=function(N,O,M){dijit.typematic.addMouseListener(F[N],F,function(P){if(P>=0){F._adjustDisplay(O,M)
+var D=this;
+var I=function(N,O,M){dijit.typematic.addMouseListener(D[N],D,function(P){if(P>=0){D._adjustDisplay(O,M)
 }},0.8,500)
 };
-K("incrementMonth","month",1);
-K("decrementMonth","month",-1);
-K("nextYearLabelNode","year",1);
-K("previousYearLabelNode","year",-1)
+I("incrementMonth","month",1);
+I("decrementMonth","month",-1);
+I("nextYearLabelNode","year",1);
+I("previousYearLabelNode","year",-1)
 },postCreate:function(){dijit._Calendar.superclass.postCreate.apply(this);
-var C=A.hitch(this,function(F,I){var H=A.query(F,this.domNode)[0];
+var D=A.hitch(this,function(F,I){var H=A.query(F,this.domNode)[0];
 for(var G=0;
 G<I;
 G++){H.parentNode.appendChild(H.cloneNode(true))
 }});
-C(".dijitCalendarDayLabelTemplate",6);
-C(".dijitCalendarDateTemplate",6);
-C(".dijitCalendarWeekTemplate",5);
-var E=A.date.locale.getNames("days",this.dayWidth,"standAlone",this.lang);
-var B=A.cldr.supplemental.getFirstDayOfWeek(this.lang);
-A.query(".dijitCalendarDayLabel",this.domNode).forEach(function(F,G){this._setText(F,E[(G+B)%7])
+D(".dijitCalendarDayLabelTemplate",6);
+D(".dijitCalendarDateTemplate",6);
+D(".dijitCalendarWeekTemplate",5);
+var B=A.date.locale.getNames("days",this.dayWidth,"standAlone",this.lang);
+var C=A.cldr.supplemental.getFirstDayOfWeek(this.lang);
+A.query(".dijitCalendarDayLabel",this.domNode).forEach(function(F,G){this._setText(F,B[(G+C)%7])
 },this);
-var D=A.date.locale.getNames("months","wide","standAlone",this.lang);
-A.forEach(D,function(G){var F=A.doc.createElement("div");
+var E=A.date.locale.getNames("months","wide","standAlone",this.lang);
+A.forEach(E,function(G){var F=A.doc.createElement("div");
 this._setText(F,G);
 this.monthLabelSpacer.appendChild(F)
 },this);
 this.value=null;
 this.setValue(new Date())
-},_adjustDisplay:function(B,C){this.displayMonth=A.date.add(this.displayMonth,B,C);
+},_adjustDisplay:function(C,B){this.displayMonth=A.date.add(this.displayMonth,C,B);
 this._populateGrid()
-},_onDayClick:function(B){var C=B.target;
-A.stopEvent(B);
-while(!C.dijitDateValue){C=C.parentNode
-}if(!A.hasClass(C,"dijitCalendarDisabledDate")){this.setValue(C.dijitDateValue);
+},_onDayClick:function(C){var B=C.target;
+A.stopEvent(C);
+while(!B.dijitDateValue){B=B.parentNode
+}if(!A.hasClass(B,"dijitCalendarDisabledDate")){this.setValue(B.dijitDateValue);
 this.onValueSelected(this.value)
-}},onValueSelected:function(B){},onChange:function(B){},isDisabledDate:function(C,B){return false
+}},onValueSelected:function(B){},onChange:function(B){},isDisabledDate:function(B,C){return false
 }})
 }}});

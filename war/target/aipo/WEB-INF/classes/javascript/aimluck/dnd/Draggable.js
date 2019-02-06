@@ -7,16 +7,16 @@ dojo.require("dojo.parser");
 dojo.require("dojo.dnd.Source");
 dojo.declare("aimluck.dnd.DragMoveObject",[dojo.dnd.Mover],{_pageY:0,_pageX:0,portletId:null,leftTop:null,onFirstMove:function(A){dojo.dnd.Mover.prototype.onFirstMove.apply(this,arguments)
 },onMouseUp:function(A){dojo.dnd.Mover.prototype.onMouseUp.apply(this,arguments)
-},onMouseDown:function(B){var A=this.marginBox;
-this.leftTop={l:A.l+B.pageX,t:A.t+B.pageY};
+},onMouseDown:function(A){var B=this.marginBox;
+this.leftTop={l:B.l+A.pageX,t:B.t+A.pageY};
 dojo.dnd.Mover.prototype.onMouseDown.apply(this,arguments)
-},onMouseMove:function(B){this._pageX=B.pageX;
-this._pageY=B.pageY;
-dojo.dnd.autoScroll(B);
-var A=this.marginBox;
-this.leftTop={l:A.l+B.pageX,t:A.t+B.pageY}
+},onMouseMove:function(A){this._pageX=A.pageX;
+this._pageY=A.pageY;
+dojo.dnd.autoScroll(A);
+var B=this.marginBox;
+this.leftTop={l:B.l+A.pageX,t:B.t+A.pageY}
 }});
-dojo.declare("aimluck.dnd.Draggable",dojo.dnd.Moveable,{DragMoveObject:aimluck.dnd.DragMoveObject,portletId:null,constructor:function(A,B){this.portletId=B.pid
+dojo.declare("aimluck.dnd.Draggable",dojo.dnd.Moveable,{DragMoveObject:aimluck.dnd.DragMoveObject,portletId:null,constructor:function(B,A){this.portletId=A.pid
 },onMouseDown:function(A){if(this.skip&&dojo.dnd.isFormElement(A)){return 
 }if(this.delay){this.events.push(dojo.connect(this.handle,"onmousemove",this,"onMouseMove"));
 this.events.push(dojo.connect(this.handle,"onmouseup",this,"onMouseUp"))

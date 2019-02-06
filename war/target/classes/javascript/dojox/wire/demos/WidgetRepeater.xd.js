@@ -4,10 +4,10 @@ A.require("dojo.parser");
 A.require("dijit._Widget");
 A.require("dijit._Templated");
 A.require("dijit._Container");
-A.declare("dojox.wire.demos.WidgetRepeater",[dijit._Widget,dijit._Templated,dijit._Container],{templateString:"<div class='WidgetRepeater' dojoAttachPoint='repeaterNode'></div>",widget:null,repeater:null,createNew:function(C){try{if(A.isString(this.widget)){A.require(this.widget);
+A.declare("dojox.wire.demos.WidgetRepeater",[dijit._Widget,dijit._Templated,dijit._Container],{templateString:"<div class='WidgetRepeater' dojoAttachPoint='repeaterNode'></div>",widget:null,repeater:null,createNew:function(B){try{if(A.isString(this.widget)){A.require(this.widget);
 this.widget=A.getObject(this.widget)
-}this.addChild(new this.widget(C));
+}this.addChild(new this.widget(B));
 this.repeaterNode.appendChild(document.createElement("br"))
-}catch(B){console.debug(B)
+}catch(C){console.debug(C)
 }}})
 }}});

@@ -6,14 +6,14 @@ dojox.grid.publicEvents={cellOverClass:"dojoxGrid-cell-over",onKeyEvent:function
 },onStyleRow:function(inRow){with(inRow){customClasses+=(odd?" dojoxGrid-row-odd":"")+(selected?" dojoxGrid-row-selected":"")+(over?" dojoxGrid-row-over":"")
 }this.focus.styleRow(inRow);
 this.edit.styleRow(inRow)
-},onKeyDown:function(B){if(B.altKey||B.ctrlKey||B.metaKey){return 
-}switch(B.keyCode){case dojo.keys.ESCAPE:this.edit.cancel();
+},onKeyDown:function(A){if(A.altKey||A.ctrlKey||A.metaKey){return 
+}switch(A.keyCode){case dojo.keys.ESCAPE:this.edit.cancel();
 break;
-case dojo.keys.ENTER:if(!B.shiftKey){var A=this.edit.isEditing();
+case dojo.keys.ENTER:if(!A.shiftKey){var B=this.edit.isEditing();
 this.edit.apply();
-if(!A){this.edit.setEditCell(this.focus.cell,this.focus.rowIndex)
+if(!B){this.edit.setEditCell(this.focus.cell,this.focus.rowIndex)
 }}break;
-case dojo.keys.TAB:this.focus[B.shiftKey?"previousKey":"nextKey"](B);
+case dojo.keys.TAB:this.focus[A.shiftKey?"previousKey":"nextKey"](A);
 break;
 case dojo.keys.LEFT_ARROW:if(!this.edit.isEditing()){this.focus.move(0,-1)
 }break;
@@ -37,7 +37,7 @@ this.onRowClick(A)
 },onCellDblClick:function(A){this.edit.setEditCell(A.cell,A.rowIndex);
 this.onRowDblClick(A)
 },onCellContextMenu:function(A){this.onRowContextMenu(A)
-},onCellFocus:function(A,B){this.edit.cellFocus(A,B)
+},onCellFocus:function(B,A){this.edit.cellFocus(B,A)
 },onRowClick:function(A){this.edit.rowClick(A);
 this.selection.clickSelectEvent(A)
 },onRowDblClick:function(A){},onRowMouseOver:function(A){},onRowMouseOut:function(A){},onRowContextMenu:function(A){dojo.stopEvent(A)
@@ -48,7 +48,7 @@ this.onHeaderClick(A)
 },onHeaderDblClick:function(A){},onHeaderCellDblClick:function(A){this.onHeaderDblClick(A)
 },onHeaderCellContextMenu:function(A){this.onHeaderContextMenu(A)
 },onHeaderContextMenu:function(A){dojo.stopEvent(A)
-},onStartEdit:function(A,B){},onApplyCellEdit:function(A,C,B){},onCancelEdit:function(A){},onApplyEdit:function(A){},onCanSelect:function(A){return true
+},onStartEdit:function(B,A){},onApplyCellEdit:function(C,B,A){},onCancelEdit:function(A){},onApplyEdit:function(A){},onCanSelect:function(A){return true
 },onCanDeselect:function(A){return true
 },onSelected:function(A){this.updateRowStyles(A)
 },onDeselected:function(A){this.updateRowStyles(A)

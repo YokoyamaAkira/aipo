@@ -1,14 +1,14 @@
 if(!dojo._hasResource["dojox.string.tokenize"]){dojo._hasResource["dojox.string.tokenize"]=true;
 dojo.provide("dojox.string.tokenize");
-dojox.string.tokenize=function(E,I,G,H){var F=[];
-var A,C,B=0;
-while(A=I.exec(E)){C=E.substring(B,I.lastIndex-A[0].length);
-if(C.length){F.push(C)
-}if(G){var D=G.apply(H,A.slice(1));
-if(typeof D!="undefined"){F.push(D)
-}}B=I.lastIndex
-}C=E.substr(B);
-if(C.length){F.push(C)
-}return F
+dojox.string.tokenize=function(A,E,C,D){var B=[];
+var F,H,G=0;
+while(F=E.exec(A)){H=A.substring(G,E.lastIndex-F[0].length);
+if(H.length){B.push(H)
+}if(C){var I=C.apply(D,F.slice(1));
+if(typeof I!="undefined"){B.push(I)
+}}G=E.lastIndex
+}H=A.substr(G);
+if(H.length){B.push(H)
+}return B
 }
 };

@@ -1,56 +1,56 @@
 dojo._xdResourceLoaded({depends:[["provide","dojox.gfx.decompose"],["require","dojox.gfx.matrix"]],defineResource:function(A){if(!A._hasResource["dojox.gfx.decompose"]){A._hasResource["dojox.gfx.decompose"]=true;
 A.provide("dojox.gfx.decompose");
 A.require("dojox.gfx.matrix");
-(function(){var C=dojox.gfx.matrix;
-var B=function(K,J){return Math.abs(K-J)<=0.000001*(Math.abs(K)+Math.abs(J))
+(function(){var G=dojox.gfx.matrix;
+var F=function(K,J){return Math.abs(K-J)<=0.000001*(Math.abs(K)+Math.abs(J))
 };
-var I=function(L,M,J,K){if(!isFinite(L)){return J
-}else{if(!isFinite(J)){return L
-}}M=Math.abs(M),K=Math.abs(K);
-return(M*L+K*J)/(M+K)
+var C=function(M,J,K,L){if(!isFinite(M)){return K
+}else{if(!isFinite(K)){return M
+}}J=Math.abs(J),L=Math.abs(L);
+return(J*M+L*K)/(J+L)
 };
-var D=function(J){var K=new C.Matrix2D(J);
+var H=function(J){var K=new G.Matrix2D(J);
 return A.mixin(K,{dx:0,dy:0,xy:K.yx,yx:K.xy})
 };
-var G=function(J){return(J.xx*J.yy<0||J.xy*J.yx>0)?-1:1
+var D=function(J){return(J.xx*J.yy<0||J.xy*J.yx>0)?-1:1
 };
-var F=function(W){var Q=C.normalize(W),U=-Q.xx-Q.yy,S=Q.xx*Q.yy-Q.xy*Q.yx,R=Math.sqrt(U*U-4*S),N=-(U+(U<0?-R:R))/2,L=S/N,V=Q.xy/(N-Q.xx),P=1,T=Q.xy/(L-Q.xx),O=1;
-if(B(N,L)){V=1,P=0,T=0,O=1
-}if(!isFinite(V)){V=1,P=(N-Q.xx)/Q.xy;
-if(!isFinite(P)){V=(N-Q.yy)/Q.yx,P=1;
-if(!isFinite(V)){V=1,P=Q.yx/(N-Q.yy)
-}}}if(!isFinite(T)){T=1,O=(L-Q.xx)/Q.xy;
-if(!isFinite(O)){T=(L-Q.yy)/Q.yx,O=1;
-if(!isFinite(T)){T=1,O=Q.yx/(L-Q.yy)
-}}}var K=Math.sqrt(V*V+P*P),J=Math.sqrt(T*T+O*O);
-if(!isFinite(V/=K)){V=0
-}if(!isFinite(P/=K)){P=0
-}if(!isFinite(T/=J)){T=0
-}if(!isFinite(O/=J)){O=0
-}return{value1:N,value2:L,vector1:{x:V,y:P},vector2:{x:T,y:O}}
+var B=function(K){var R=G.normalize(K),V=-R.xx-R.yy,T=R.xx*R.yy-R.xy*R.yx,S=Math.sqrt(V*V-4*T),L=-(V+(V<0?-S:S))/2,Q=T/L,J=R.xy/(L-R.xx),N=1,U=R.xy/(Q-R.xx),M=1;
+if(F(L,Q)){J=1,N=0,U=0,M=1
+}if(!isFinite(J)){J=1,N=(L-R.xx)/R.xy;
+if(!isFinite(N)){J=(L-R.yy)/R.yx,N=1;
+if(!isFinite(J)){J=1,N=R.yx/(L-R.yy)
+}}}if(!isFinite(U)){U=1,M=(Q-R.xx)/R.xy;
+if(!isFinite(M)){U=(Q-R.yy)/R.yx,M=1;
+if(!isFinite(U)){U=1,M=R.yx/(Q-R.yy)
+}}}var P=Math.sqrt(J*J+N*N),O=Math.sqrt(U*U+M*M);
+if(!isFinite(J/=P)){J=0
+}if(!isFinite(N/=P)){N=0
+}if(!isFinite(U/=O)){U=0
+}if(!isFinite(M/=O)){M=0
+}return{value1:L,value2:Q,vector1:{x:J,y:N},vector2:{x:U,y:M}}
 };
-var H=function(P,J){var L=G(P),K=J.angle1=(Math.atan2(P.yx,P.yy)+Math.atan2(-L*P.xy,L*P.xx))/2,O=Math.cos(K),N=Math.sin(K);
-J.sx=I(P.xx/O,O,-P.xy/N,N);
-J.sy=I(P.yy/O,O,P.yx/N,N);
-return J
+var E=function(L,M){var O=D(L),N=M.angle1=(Math.atan2(L.yx,L.yy)+Math.atan2(-O*L.xy,O*L.xx))/2,K=Math.cos(N),J=Math.sin(N);
+M.sx=C(L.xx/K,K,-L.xy/J,J);
+M.sy=C(L.yy/K,K,L.yx/J,J);
+return M
 };
-var E=function(P,J){var L=G(P),K=J.angle2=(Math.atan2(L*P.yx,L*P.xx)+Math.atan2(-P.xy,P.yy))/2,O=Math.cos(K),N=Math.sin(K);
-J.sx=I(P.xx/O,O,P.yx/N,N);
-J.sy=I(P.yy/O,O,-P.xy/N,N);
-return J
+var I=function(L,M){var O=D(L),N=M.angle2=(Math.atan2(O*L.yx,O*L.xx)+Math.atan2(-L.xy,L.yy))/2,K=Math.cos(N),J=Math.sin(N);
+M.sx=C(L.xx/K,K,L.yx/J,J);
+M.sy=C(L.yy/K,K,-L.xy/J,J);
+return M
 };
-dojox.gfx.decompose=function(P){var O=C.normalize(P),T={dx:O.dx,dy:O.dy,sx:1,sy:1,angle1:0,angle2:0};
-if(B(O.xy,0)&&B(O.yx,0)){return A.mixin(T,{sx:O.xx,sy:O.yy})
-}if(B(O.xx*O.yx,-O.xy*O.yy)){return H(O,T)
-}if(B(O.xx*O.xy,-O.yx*O.yy)){return E(O,T)
-}var N=D(O),R=F([O,N]),Q=F([N,O]),J=new C.Matrix2D({xx:R.vector1.x,xy:R.vector2.x,yx:R.vector1.y,yy:R.vector2.y}),L=new C.Matrix2D({xx:Q.vector1.x,xy:Q.vector1.y,yx:Q.vector2.x,yy:Q.vector2.y}),K=new C.Matrix2D([C.invert(J),O,C.invert(L)]);
-H(L,T);
-K.xx*=T.sx;
-K.yy*=T.sy;
-E(J,T);
-K.xx*=T.sx;
-K.yy*=T.sy;
-return A.mixin(T,{sx:K.xx,sy:K.yy})
+dojox.gfx.decompose=function(Q){var P=G.normalize(Q),K={dx:P.dx,dy:P.dy,sx:1,sy:1,angle1:0,angle2:0};
+if(F(P.xy,0)&&F(P.yx,0)){return A.mixin(K,{sx:P.xx,sy:P.yy})
+}if(F(P.xx*P.yx,-P.xy*P.yy)){return E(P,K)
+}if(F(P.xx*P.xy,-P.yx*P.yy)){return I(P,K)
+}var O=H(P),J=B([P,O]),R=B([O,P]),L=new G.Matrix2D({xx:J.vector1.x,xy:J.vector2.x,yx:J.vector1.y,yy:J.vector2.y}),N=new G.Matrix2D({xx:R.vector1.x,xy:R.vector1.y,yx:R.vector2.x,yy:R.vector2.y}),M=new G.Matrix2D([G.invert(L),P,G.invert(N)]);
+E(N,K);
+M.xx*=K.sx;
+M.yy*=K.sy;
+I(L,K);
+M.xx*=K.sx;
+M.yy*=K.sy;
+return A.mixin(K,{sx:M.xx,sy:M.yy})
 }
 })()
 }}});

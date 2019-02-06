@@ -1,336 +1,123 @@
-if(!dojo._hasResource["dojo.date"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.date"] = true;
+if(!dojo._hasResource["dojo.date"]){dojo._hasResource["dojo.date"]=true;
 dojo.provide("dojo.date");
-
-dojo.date.getDaysInMonth = function(/*Date*/dateObject){
-	//	summary:
-	//		Returns the number of days in the month used by dateObject
-	var month = dateObject.getMonth();
-	var days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-	if(month == 1 && dojo.date.isLeapYear(dateObject)){ return 29; } // Number
-	return days[month]; // Number
-}
-
-dojo.date.isLeapYear = function(/*Date*/dateObject){
-	//	summary:
-	//		Determines if the year of the dateObject is a leap year
-	//	description:
-	//		Leap years are years with an additional day YYYY-02-29, where the
-	//		year number is a multiple of four with the following exception: If
-	//		a year is a multiple of 100, then it is only a leap year if it is
-	//		also a multiple of 400. For example, 1900 was not a leap year, but
-	//		2000 is one.
-
-	var year = dateObject.getFullYear();
-	return !(year%400) || (!(year%4) && !!(year%100)); // Boolean
-}
-
-// FIXME: This is not localized
-dojo.date.getTimezoneName = function(/*Date*/dateObject){
-	//	summary:
-	//		Get the user's time zone as provided by the browser
-	// dateObject:
-	//		Needed because the timezone may vary with time (daylight savings)
-	//	description:
-	//		Try to get time zone info from toString or toLocaleString method of
-	//		the Date object -- UTC offset is not a time zone.  See
-	//		http://www.twinsun.com/tz/tz-link.htm Note: results may be
-	//		inconsistent across browsers.
-
-	var str = dateObject.toString(); // Start looking in toString
-	var tz = ''; // The result -- return empty string if nothing found
-	var match;
-
-	// First look for something in parentheses -- fast lookup, no regex
-	var pos = str.indexOf('(');
-	if(pos > -1){
-		tz = str.substring(++pos, str.indexOf(')'));
-	}else{
-		// If at first you don't succeed ...
-		// If IE knows about the TZ, it appears before the year
-		// Capital letters or slash before a 4-digit year 
-		// at the end of string
-		var pat = /([A-Z\/]+) \d{4}$/;
-		if((match = str.match(pat))){
-			tz = match[1];
-		}else{
-		// Some browsers (e.g. Safari) glue the TZ on the end
-		// of toLocaleString instead of putting it in toString
-			str = dateObject.toLocaleString();
-			// Capital letters or slash -- end of string, 
-			// after space
-			pat = / ([A-Z\/]+)$/;
-			if((match = str.match(pat))){
-				tz = match[1];
-			}
-		}
-	}
-
-	// Make sure it doesn't somehow end up return AM or PM
-	return (tz == 'AM' || tz == 'PM') ? '' : tz; // String
-}
-
-// Utility methods to do arithmetic calculations with Dates
-
-dojo.date.compare = function(/*Date*/date1, /*Date?*/date2, /*String?*/portion){
-	//	summary:
-	//		Compare two date objects by date, time, or both.
-	//	description:
-	//  	Returns 0 if equal, positive if a > b, else negative.
-	//	date1:
-	//		Date object
-	//	date2:
-	//		Date object.  If not specified, the current Date is used.
-	//	portion:
-	//		A string indicating the "date" or "time" portion of a Date object.
-	//		Compares both "date" and "time" by default.  One of the following:
-	//		"date", "time", "datetime"
-
-	// Extra step required in copy for IE - see #3112
-	date1 = new Date(Number(date1));
-	date2 = new Date(Number(date2 || new Date()));
-
-	if(typeof portion !== "undefined"){
-		if(portion == "date"){
-			// Ignore times and compare dates.
-			date1.setHours(0, 0, 0, 0);
-			date2.setHours(0, 0, 0, 0);
-		}else if(portion == "time"){
-			// Ignore dates and compare times.
-			date1.setFullYear(0, 0, 0);
-			date2.setFullYear(0, 0, 0);
-		}
-	}
-	
-	if(date1 > date2){ return 1; } // int
-	if(date1 < date2){ return -1; } // int
-	return 0; // int
+dojo.date.getDaysInMonth=function(A){var B=A.getMonth();
+var C=[31,28,31,30,31,30,31,31,30,31,30,31];
+if(B==1&&dojo.date.isLeapYear(A)){return 29
+}return C[B]
 };
-
-dojo.date.add = function(/*Date*/date, /*String*/interval, /*int*/amount){
-	//	summary:
-	//		Add to a Date in intervals of different size, from milliseconds to years
-	//	date: Date
-	//		Date object to start with
-	//	interval:
-	//		A string representing the interval.  One of the following:
-	//			"year", "month", "day", "hour", "minute", "second",
-	//			"millisecond", "quarter", "week", "weekday"
-	//	amount:
-	//		How much to add to the date.
-
-	var sum = new Date(Number(date)); // convert to Number before copying to accomodate IE (#3112)
-	var fixOvershoot = false;
-	var property = "Date";
-
-	switch(interval){
-		case "day":
-			break;
-		case "weekday":
-			//i18n FIXME: assumes Saturday/Sunday weekend, but even this is not standard.  There are CLDR entries to localize this.
-			var days, weeks;
-			var adj = 0;
-			// Divide the increment time span into weekspans plus leftover days
-			// e.g., 8 days is one 5-day weekspan / and two leftover days
-			// Can't have zero leftover days, so numbers divisible by 5 get
-			// a days value of 5, and the remaining days make up the number of weeks
-			var mod = amount % 5;
-			if(!mod){
-				days = (amount > 0) ? 5 : -5;
-				weeks = (amount > 0) ? ((amount-5)/5) : ((amount+5)/5);
-			}else{
-				days = mod;
-				weeks = parseInt(amount/5);
-			}
-			// Get weekday value for orig date param
-			var strt = date.getDay();
-			// Orig date is Sat / positive incrementer
-			// Jump over Sun
-			if(strt == 6 && amount > 0){
-				adj = 1;
-			}else if(strt == 0 && amount < 0){
-			// Orig date is Sun / negative incrementer
-			// Jump back over Sat
-				adj = -1;
-			}
-			// Get weekday val for the new date
-			var trgt = strt + days;
-			// New date is on Sat or Sun
-			if(trgt == 0 || trgt == 6){
-				adj = (amount > 0) ? 2 : -2;
-			}
-			// Increment by number of weeks plus leftover days plus
-			// weekend adjustments
-			amount = 7 * weeks + days + adj;
-			break;
-		case "year":
-			property = "FullYear";
-			// Keep increment/decrement from 2/29 out of March
-			fixOvershoot = true;
-			break;
-		case "week":
-			amount *= 7;
-			break;
-		case "quarter":
-			// Naive quarter is just three months
-			amount *= 3;
-			// fallthrough...
-		case "month":
-			// Reset to last day of month if you overshoot
-			fixOvershoot = true;
-			property = "Month";
-			break;
-		case "hour":
-		case "minute":
-		case "second":
-		case "millisecond":
-			property = "UTC" + interval.charAt(0).toUpperCase() + interval.substring(1) + "s";
-	}
-
-	if(property){
-		sum["set"+property](sum["get"+property]()+amount);
-	}
-
-	if(fixOvershoot && (sum.getDate() < date.getDate())){
-		sum.setDate(0);
-	}
-
-	return sum; // Date
+dojo.date.isLeapYear=function(B){var A=B.getFullYear();
+return !(A%400)||(!(A%4)&&!!(A%100))
 };
-
-dojo.date.difference = function(/*Date*/date1, /*Date?*/date2, /*String?*/interval){
-	//	summary:
-	//		Get the difference in a specific unit of time (e.g., number of
-	//		months, weeks, days, etc.) between two dates, rounded to the
-	//		nearest integer.
-	//	date1:
-	//		Date object
-	//	date2:
-	//		Date object.  If not specified, the current Date is used.
-	//	interval:
-	//		A string representing the interval.  One of the following:
-	//			"year", "month", "day", "hour", "minute", "second",
-	//			"millisecond", "quarter", "week", "weekday"
-	//		Defaults to "day".
-
-	date2 = date2 || new Date();
-	interval = interval || "day";
-	var yearDiff = date2.getFullYear() - date1.getFullYear();
-	var delta = 1; // Integer return value
-
-	switch(interval){
-		case "quarter":
-			var m1 = date1.getMonth();
-			var m2 = date2.getMonth();
-			// Figure out which quarter the months are in
-			var q1 = Math.floor(m1/3) + 1;
-			var q2 = Math.floor(m2/3) + 1;
-			// Add quarters for any year difference between the dates
-			q2 += (yearDiff * 4);
-			delta = q2 - q1;
-			break;
-		case "weekday":
-			var days = Math.round(dojo.date.difference(date1, date2, "day"));
-			var weeks = parseInt(dojo.date.difference(date1, date2, "week"));
-			var mod = days % 7;
-
-			// Even number of weeks
-			if(mod == 0){
-				days = weeks*5;
-			}else{
-				// Weeks plus spare change (< 7 days)
-				var adj = 0;
-				var aDay = date1.getDay();
-				var bDay = date2.getDay();
-
-				weeks = parseInt(days/7);
-				mod = days % 7;
-				// Mark the date advanced by the number of
-				// round weeks (may be zero)
-				var dtMark = new Date(date1);
-				dtMark.setDate(dtMark.getDate()+(weeks*7));
-				var dayMark = dtMark.getDay();
-
-				// Spare change days -- 6 or less
-				if(days > 0){
-					switch(true){
-						// Range starts on Sat
-						case aDay == 6:
-							adj = -1;
-							break;
-						// Range starts on Sun
-						case aDay == 0:
-							adj = 0;
-							break;
-						// Range ends on Sat
-						case bDay == 6:
-							adj = -1;
-							break;
-						// Range ends on Sun
-						case bDay == 0:
-							adj = -2;
-							break;
-						// Range contains weekend
-						case (dayMark + mod) > 5:
-							adj = -2;
-					}
-				}else if(days < 0){
-					switch(true){
-						// Range starts on Sat
-						case aDay == 6:
-							adj = 0;
-							break;
-						// Range starts on Sun
-						case aDay == 0:
-							adj = 1;
-							break;
-						// Range ends on Sat
-						case bDay == 6:
-							adj = 2;
-							break;
-						// Range ends on Sun
-						case bDay == 0:
-							adj = 1;
-							break;
-						// Range contains weekend
-						case (dayMark + mod) < 0:
-							adj = 2;
-					}
-				}
-				days += adj;
-				days -= (weeks*2);
-			}
-			delta = days;
-			break;
-		case "year":
-			delta = yearDiff;
-			break;
-		case "month":
-			delta = (date2.getMonth() - date1.getMonth()) + (yearDiff * 12);
-			break;
-		case "week":
-			// Truncate instead of rounding
-			// Don't use Math.floor -- value may be negative
-			delta = parseInt(dojo.date.difference(date1, date2, "day")/7);
-			break;
-		case "day":
-			delta /= 24;
-			// fallthrough
-		case "hour":
-			delta /= 60;
-			// fallthrough
-		case "minute":
-			delta /= 60;
-			// fallthrough
-		case "second":
-			delta /= 1000;
-			// fallthrough
-		case "millisecond":
-			delta *= date2.getTime() - date1.getTime();
-	}
-
-	// Round for fractional values and DST leaps
-	return Math.round(delta); // Number (integer)
+dojo.date.getTimezoneName=function(C){var D=C.toString();
+var F="";
+var B;
+var E=D.indexOf("(");
+if(E>-1){F=D.substring(++E,D.indexOf(")"))
+}else{var A=/([A-Z\/]+) \d{4}$/;
+if((B=D.match(A))){F=B[1]
+}else{D=C.toLocaleString();
+A=/ ([A-Z\/]+)$/;
+if((B=D.match(A))){F=B[1]
+}}}return(F=="AM"||F=="PM")?"":F
 };
-
+dojo.date.compare=function(C,B,A){C=new Date(Number(C));
+B=new Date(Number(B||new Date()));
+if(typeof A!=="undefined"){if(A=="date"){C.setHours(0,0,0,0);
+B.setHours(0,0,0,0)
+}else{if(A=="time"){C.setFullYear(0,0,0);
+B.setFullYear(0,0,0)
+}}}if(C>B){return 1
+}if(C<B){return -1
+}return 0
+};
+dojo.date.add=function(D,C,E){var G=new Date(Number(D));
+var B=false;
+var K="Date";
+switch(C){case"day":break;
+case"weekday":var L,A;
+var I=0;
+var J=E%5;
+if(!J){L=(E>0)?5:-5;
+A=(E>0)?((E-5)/5):((E+5)/5)
+}else{L=J;
+A=parseInt(E/5)
+}var F=D.getDay();
+if(F==6&&E>0){I=1
+}else{if(F==0&&E<0){I=-1
+}}var H=F+L;
+if(H==0||H==6){I=(E>0)?2:-2
+}E=7*A+L+I;
+break;
+case"year":K="FullYear";
+B=true;
+break;
+case"week":E*=7;
+break;
+case"quarter":E*=3;
+case"month":B=true;
+K="Month";
+break;
+case"hour":case"minute":case"second":case"millisecond":K="UTC"+C.charAt(0).toUpperCase()+C.substring(1)+"s"
+}if(K){G["set"+K](G["get"+K]()+E)
+}if(B&&(G.getDate()<D.getDate())){G.setDate(0)
+}return G
+};
+dojo.date.difference=function(P,N,D){N=N||new Date();
+D=D||"day";
+var C=N.getFullYear()-P.getFullYear();
+var L=1;
+switch(D){case"quarter":var Q=P.getMonth();
+var O=N.getMonth();
+var I=Math.floor(Q/3)+1;
+var H=Math.floor(O/3)+1;
+H+=(C*4);
+L=H-I;
+break;
+case"weekday":var M=Math.round(dojo.date.difference(P,N,"day"));
+var A=parseInt(dojo.date.difference(P,N,"week"));
+var K=M%7;
+if(K==0){M=A*5
+}else{var J=0;
+var G=P.getDay();
+var E=N.getDay();
+A=parseInt(M/7);
+K=M%7;
+var F=new Date(P);
+F.setDate(F.getDate()+(A*7));
+var B=F.getDay();
+if(M>0){switch(true){case G==6:J=-1;
+break;
+case G==0:J=0;
+break;
+case E==6:J=-1;
+break;
+case E==0:J=-2;
+break;
+case (B+K)>5:J=-2
+}}else{if(M<0){switch(true){case G==6:J=0;
+break;
+case G==0:J=1;
+break;
+case E==6:J=2;
+break;
+case E==0:J=1;
+break;
+case (B+K)<0:J=2
+}}}M+=J;
+M-=(A*2)
+}L=M;
+break;
+case"year":L=C;
+break;
+case"month":L=(N.getMonth()-P.getMonth())+(C*12);
+break;
+case"week":L=parseInt(dojo.date.difference(P,N,"day")/7);
+break;
+case"day":L/=24;
+case"hour":L/=60;
+case"minute":L/=60;
+case"second":L/=1000;
+case"millisecond":L*=N.getTime()-P.getTime()
+}return Math.round(L)
 }
+};

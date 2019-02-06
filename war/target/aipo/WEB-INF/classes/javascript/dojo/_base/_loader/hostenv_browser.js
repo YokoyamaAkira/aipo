@@ -66,9 +66,9 @@ throw err
 }
 })();
 dojo._initFired=false;
-dojo._loadInit=function(B){dojo._initFired=true;
-var A=(B&&B.type)?B.type.toLowerCase():"load";
-if(arguments.callee.initialized||(A!="domcontentloaded"&&A!="load")){return 
+dojo._loadInit=function(A){dojo._initFired=true;
+var B=(A&&A.type)?A.type.toLowerCase():"load";
+if(arguments.callee.initialized||(B!="domcontentloaded"&&B!="load")){return 
 }arguments.callee.initialized=true;
 if(typeof dojo._khtmlTimer!="undefined"){clearInterval(dojo._khtmlTimer);
 delete dojo._khtmlTimer
@@ -78,22 +78,22 @@ if(document.addEventListener){if(dojo.isOpera||(dojo.isMoz&&(djConfig.enableMozD
 }window.addEventListener("load",dojo._loadInit,null)
 }if(/(WebKit|khtml)/i.test(navigator.userAgent)){dojo._khtmlTimer=setInterval(function(){if(/loaded|complete/.test(document.readyState)){dojo._loadInit()
 }},10)
-}(function(){var B=window;
-var A=function(G,E){var F=B[G]||function(){};
-B[G]=function(){E.apply(B,arguments);
-F.apply(B,arguments)
+}(function(){var A=window;
+var D=function(E,F){var G=A[E]||function(){};
+A[E]=function(){F.apply(A,arguments);
+G.apply(A,arguments)
 }
 };
 if(dojo.isIE){document.write('<script defer src="//:" onreadystatechange="if(this.readyState==\'complete\'){dojo._loadInit();}"><\/script>');
-var D=true;
-A("onbeforeunload",function(){B.setTimeout(function(){D=false
+var C=true;
+D("onbeforeunload",function(){A.setTimeout(function(){C=false
 },0)
 });
-A("onunload",function(){if(D){dojo.unloaded()
+D("onunload",function(){if(C){dojo.unloaded()
 }});
 try{document.namespaces.add("v","urn:schemas-microsoft-com:vml");
 document.createStyleSheet().addRule("v\\:*","behavior:url(#default#VML)")
-}catch(C){}}else{A("onbeforeunload",function(){dojo.unloaded()
+}catch(B){}}else{D("onbeforeunload",function(){dojo.unloaded()
 })
 }})()
 }if(djConfig.isDebug){dojo.require("dojo._firebug.firebug")

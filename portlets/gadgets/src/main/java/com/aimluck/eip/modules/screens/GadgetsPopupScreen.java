@@ -84,11 +84,9 @@ public class GadgetsPopupScreen extends ALVelocityScreen {
       Portlet portlet =
         ALEipUtils.getPortlet(rundata, String.valueOf(moduleId));
       if (portlet != null) {
-        @SuppressWarnings("unchecked")
-        Iterator<String> names =
-          portlet.getPortletConfig().getInitParameterNames();
+        Iterator<?> names = portlet.getPortletConfig().getInitParameterNames();
         while (names.hasNext()) {
-          String next = names.next();
+          String next = (String) names.next();
           if (next != null && next.startsWith("pref-")) {
             String value = portlet.getPortletConfig().getInitParameter(next);
             String key = next.substring(5);

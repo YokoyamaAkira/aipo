@@ -5,34 +5,34 @@ dojox.encoding.bits.OutputStream=function(){this.reset()
 A.extend(dojox.encoding.bits.OutputStream,{reset:function(){this.buffer=[];
 this.accumulator=0;
 this.available=8
-},putBits:function(E,D){while(D){var B=Math.min(D,this.available);
-var C=(B<=D?E>>>(D-B):E)<<(this.available-B);
-this.accumulator|=C&(255>>>(8-this.available));
-this.available-=B;
+},putBits:function(B,E){while(E){var C=Math.min(E,this.available);
+var D=(C<=E?B>>>(E-C):B)<<(this.available-C);
+this.accumulator|=D&(255>>>(8-this.available));
+this.available-=C;
 if(!this.available){this.buffer.push(this.accumulator);
 this.accumulator=0;
 this.available=8
-}D-=B
+}E-=C
 }},getWidth:function(){return this.buffer.length*8+(8-this.available)
 },getBuffer:function(){var B=this.buffer;
 if(this.available<8){B.push(this.accumulator&(255<<this.available))
 }this.reset();
 return B
 }});
-dojox.encoding.bits.InputStream=function(B,C){this.buffer=B;
-this.width=C;
+dojox.encoding.bits.InputStream=function(C,B){this.buffer=C;
+this.width=B;
 this.bbyte=this.bit=0
 };
-A.extend(dojox.encoding.bits.InputStream,{getBits:function(D){var E=0;
-while(D){var B=Math.min(D,8-this.bit);
-var C=this.buffer[this.bbyte]>>>(8-this.bit-B);
-E<<=B;
-E|=C&~(~0<<B);
-this.bit+=B;
+A.extend(dojox.encoding.bits.InputStream,{getBits:function(E){var B=0;
+while(E){var C=Math.min(E,8-this.bit);
+var D=this.buffer[this.bbyte]>>>(8-this.bit-C);
+B<<=C;
+B|=D&~(~0<<C);
+this.bit+=C;
 if(this.bit==8){++this.bbyte;
 this.bit=0
-}D-=B
-}return E
+}E-=C
+}return B
 },getWidth:function(){return this.width-this.bbyte*8-this.bit
 }})
 }}});

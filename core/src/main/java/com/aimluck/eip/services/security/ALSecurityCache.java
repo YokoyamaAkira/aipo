@@ -356,13 +356,14 @@ public class ALSecurityCache extends TurbineBaseService implements
     try {
       if (perms != null) {
         @SuppressWarnings("unchecked")
-        Iterator<Role> roles = JetspeedSecurity.getRoles();
+        Iterator<Role> roles = (Iterator<Role>) JetspeedSecurity.getRoles();
         while (roles.hasNext()) {
           Role role = roles.next();
           Map<String, Permission> map = new HashMap<String, Permission>();
           @SuppressWarnings("unchecked")
           Iterator<Permission> prms =
-            JetspeedSecurity.getPermissions(role.getName());
+            (Iterator<Permission>) JetspeedSecurity.getPermissions(role
+              .getName());
           while (prms.hasNext()) {
             Permission perm = prms.next();
             map.put(perm.getName(), perm);

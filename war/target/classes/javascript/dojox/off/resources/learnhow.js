@@ -1,23 +1,23 @@
-window.onload=function(){var B=window.location.href;
-var G=B.match(/appName=([a-z0-9 \%]*)/i);
-var I="Application";
-if(G&&G.length>0){I=decodeURIComponent(G[1])
-}var H=document.getElementById("dot-learn-how-app-name");
-H.innerHTML="";
-H.appendChild(document.createTextNode(I));
-G=B.match(/hasOfflineCache=(true|false)/);
-var E=false;
-if(G&&G.length>0){E=G[1];
-E=(E=="true")?true:false
-}if(E==true){var D=document.getElementById("dot-download-step");
-var F=document.getElementById("dot-install-step");
-D.parentNode.removeChild(D);
-F.parentNode.removeChild(F)
-}G=B.match(/runLink=([^\&]*)\&runLinkText=([^\&]*)/);
-if(G&&G.length>0){var C=decodeURIComponent(G[1]);
-var A=document.getElementById("dot-learn-how-run-link");
-A.setAttribute("href",C);
-var J=decodeURIComponent(G[2]);
-A.innerHTML="";
-A.appendChild(document.createTextNode(J))
+window.onload=function(){var H=window.location.href;
+var C=H.match(/appName=([a-z0-9 \%]*)/i);
+var E="Application";
+if(C&&C.length>0){E=decodeURIComponent(C[1])
+}var D=document.getElementById("dot-learn-how-app-name");
+D.innerHTML="";
+D.appendChild(document.createTextNode(E));
+C=H.match(/hasOfflineCache=(true|false)/);
+var A=false;
+if(C&&C.length>0){A=C[1];
+A=(A=="true")?true:false
+}if(A==true){var J=document.getElementById("dot-download-step");
+var B=document.getElementById("dot-install-step");
+J.parentNode.removeChild(J);
+B.parentNode.removeChild(B)
+}C=H.match(/runLink=([^\&]*)\&runLinkText=([^\&]*)/);
+if(C&&C.length>0){var I=decodeURIComponent(C[1]);
+var G=document.getElementById("dot-learn-how-run-link");
+G.setAttribute("href",I);
+var F=decodeURIComponent(C[2]);
+G.innerHTML="";
+G.appendChild(document.createTextNode(F))
 }};

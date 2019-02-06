@@ -5,10 +5,10 @@ A.require("dijit.form.NumberTextBox");
 A.require("dojo.date");
 A.require("dojo.date.locale");
 A.require("dojo.date.stamp");
-A.declare("dojox.widget.TimeSpinner",[dijit.form._Spinner],{required:false,adjust:function(B,C){return A.date.add(B,"minute",C)
+A.declare("dojox.widget.TimeSpinner",[dijit.form._Spinner],{required:false,adjust:function(C,B){return A.date.add(C,"minute",B)
 },isValid:function(){return true
-},smallDelta:5,largeDelta:30,timeoutChangeRate:0.5,parse:function(C,B){return A.date.locale.parse(C,{selector:"time",formatLength:"short"})
-},format:function(C,B){if(A.isString(C)){return C
-}return A.date.locale.format(C,{selector:"time",formatLength:"short"})
+},smallDelta:5,largeDelta:30,timeoutChangeRate:0.5,parse:function(B,C){return A.date.locale.parse(B,{selector:"time",formatLength:"short"})
+},format:function(B,C){if(A.isString(B)){return B
+}return A.date.locale.format(B,{selector:"time",formatLength:"short"})
 },serialize:A.date.stamp.toISOString,value:"12:00 AM"})
 }}});

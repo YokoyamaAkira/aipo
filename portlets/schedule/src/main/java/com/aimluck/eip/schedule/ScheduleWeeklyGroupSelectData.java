@@ -385,6 +385,7 @@ public class ScheduleWeeklyGroupSelectData extends ScheduleWeeklySelectData {
       ALEipUtils.getTemp(rundata, context, ScheduleUtils.FILTER_NAMESPACE);
     String filter_type =
       ALEipUtils.getTemp(rundata, context, ScheduleUtils.FILTER_NAMESPACE_TYPE);
+    @SuppressWarnings("unused")
     String crt_key = null;
     Attributes map = getColumnMap();
 
@@ -827,6 +828,7 @@ public class ScheduleWeeklyGroupSelectData extends ScheduleWeeklySelectData {
     return target_group_name;
   }
 
+  @Override
   public String getViewStartFormat() {
     return ALLocalizationUtils.getl10nFormat(
       "SCHEDULE_DATE_FORMAT_NOSPACE",
@@ -835,6 +837,7 @@ public class ScheduleWeeklyGroupSelectData extends ScheduleWeeklySelectData {
       getViewStart().getDay());
   }
 
+  @Override
   public String getViewEndFormat() {
     return ALLocalizationUtils.getl10nFormat(
       "SCHEDULE_DATE_FORMAT_NOSPACE",

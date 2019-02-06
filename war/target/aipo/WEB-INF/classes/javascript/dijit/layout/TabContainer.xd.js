@@ -12,10 +12,10 @@ return B
 this.inherited("startup",arguments);
 if(A.isSafari){setTimeout(A.hitch(this,"layout"),0)
 }},layout:function(){if(!this.doLayout){return 
-}var C=this.tabPosition.replace(/-h/,"");
-var B=[{domNode:this.tablist.domNode,layoutAlign:C},{domNode:this.containerNode,layoutAlign:"client"}];
-dijit.layout.layoutChildren(this.domNode,this._contentBox,B);
-this._containerContentBox=dijit.layout.marginBox2contentBox(this.containerNode,B[1]);
+}var B=this.tabPosition.replace(/-h/,"");
+var C=[{domNode:this.tablist.domNode,layoutAlign:B},{domNode:this.containerNode,layoutAlign:"client"}];
+dijit.layout.layoutChildren(this.domNode,this._contentBox,C);
+this._containerContentBox=dijit.layout.marginBox2contentBox(this.containerNode,C[1]);
 if(this.selectedChildWidget){this._showChild(this.selectedChildWidget);
 if(this.doLayout&&this.selectedChildWidget.resize){this.selectedChildWidget.resize(this._containerContentBox)
 }}},destroy:function(){this.tablist.destroy();

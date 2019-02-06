@@ -1,46 +1,46 @@
 dojo._xdResourceLoaded({depends:[["provide","dojox.encoding.ascii85"]],defineResource:function(A){if(!A._hasResource["dojox.encoding.ascii85"]){A._hasResource["dojox.encoding.ascii85"]=true;
 A.provide("dojox.encoding.ascii85");
-(function(){var B=function(E,H,D){var G,F,I,C=[0,0,0,0,0];
-for(G=0;
-G<H;
-G+=4){I=((E[G]*256+E[G+1])*256+E[G+2])*256+E[G+3];
-if(!I){D.push("z")
-}else{for(F=0;
-F<5;
-C[F++]=I%85+33,I=Math.floor(I/85)){}}D.push(String.fromCharCode(C[4],C[3],C[2],C[1],C[0]))
+(function(){var B=function(H,D,G){var C,I,E,F=[0,0,0,0,0];
+for(C=0;
+C<D;
+C+=4){E=((H[C]*256+H[C+1])*256+H[C+2])*256+H[C+3];
+if(!E){G.push("z")
+}else{for(I=0;
+I<5;
+F[I++]=E%85+33,E=Math.floor(E/85)){}}G.push(String.fromCharCode(F[4],F[3],F[2],F[1],F[0]))
 }};
-dojox.encoding.ascii85.encode=function(F){var D=[],E=F.length%4,H=F.length-E;
-B(F,H,D);
-if(E){var G=F.slice(H);
-while(G.length<4){G.push(0)
-}B(G,4,D);
-var C=D.pop();
-if(C=="z"){C="!!!!!"
-}D.push(C.substr(0,E+1))
-}return D.join("")
+dojox.encoding.ascii85.encode=function(D){var H=[],C=D.length%4,F=D.length-C;
+B(D,F,H);
+if(C){var E=D.slice(F);
+while(E.length<4){E.push(0)
+}B(E,4,H);
+var G=H.pop();
+if(G=="z"){G="!!!!!"
+}H.push(G.substr(0,C+1))
+}return H.join("")
 };
-dojox.encoding.ascii85.decode=function(J){var D=J.length,C=[],I=[0,0,0,0,0],F,E,L,K,H,G;
-for(F=0;
-F<D;
-++F){if(J.charAt(F)=="z"){C.push(0,0,0,0);
+dojox.encoding.ascii85.decode=function(H){var L=H.length,K=[],G=[0,0,0,0,0],D,C,J,I,F,E;
+for(D=0;
+D<L;
+++D){if(H.charAt(D)=="z"){K.push(0,0,0,0);
 continue
-}for(E=0;
-E<5;
-++E){I[E]=J.charCodeAt(F+E)-33
-}G=D-F;
-if(G<5){for(E=G;
-E<4;
-I[++E]=0){}I[G]=85
-}L=(((I[0]*85+I[1])*85+I[2])*85+I[3])*85+I[4];
-K=L&255;
-L>>>=8;
-H=L&255;
-L>>>=8;
-C.push(L>>>8,L&255,H,K);
-for(E=G;
-E<5;
-++E,C.pop()){}F+=4
-}return C
+}for(C=0;
+C<5;
+++C){G[C]=H.charCodeAt(D+C)-33
+}E=L-D;
+if(E<5){for(C=E;
+C<4;
+G[++C]=0){}G[E]=85
+}J=(((G[0]*85+G[1])*85+G[2])*85+G[3])*85+G[4];
+I=J&255;
+J>>>=8;
+F=J&255;
+J>>>=8;
+K.push(J>>>8,J&255,F,I);
+for(C=E;
+C<5;
+++C,K.pop()){}D+=4
+}return K
 }
 })()
 }}});

@@ -1,19 +1,19 @@
 dojo.provide("aipo.userlist");
-aipo.userlist.onSubmitSearchButton=function(E,A,G,D,C){var H=dojo.byId(C+G);
-if(H){dojo.style(H,"display","")
-}var F=A;
-if(D==""){if(E.tab!=undefined){if(E.tab[0].checked){D=E.tab[0].value
-}else{D=E.tab[1].value
-}}}var B=[["sword",E.sword.value],["tab",D],["mode",E.mode.value]];
-aipo.viewPage(F,G,B)
+aipo.userlist.onSubmitSearchButton=function(M,I,K,N,O){var J=dojo.byId(O+K);
+if(J){dojo.style(J,"display","")
+}var L=I;
+if(N==""){if(M.tab!=undefined){if(M.tab[0].checked){N=M.tab[0].value
+}else{N=M.tab[1].value
+}}}var P=[["sword",M.sword.value],["tab",N],["mode",M.mode.value]];
+aipo.viewPage(L,K,P)
 };
-aipo.userlist.onReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
-if(A){A.hide()
+aipo.userlist.onReceiveMessage=function(D){if(!D){var C=dijit.byId("modalDialog");
+if(C){C.hide()
 }aipo.portletReload("addressbook")
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=D
 }};
-aipo.userlist.onListReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
-if(A){A.hide()
+aipo.userlist.onListReceiveMessage=function(D){if(!D){var C=dijit.byId("modalDialog");
+if(C){C.hide()
 }aipo.portletReload("addressbook")
-}if(dojo.byId("listmessageDiv")){dojo.byId("listmessageDiv").innerHTML=B
+}if(dojo.byId("listmessageDiv")){dojo.byId("listmessageDiv").innerHTML=D
 }};

@@ -1,26 +1,26 @@
 dojo._xdResourceLoaded({depends:[["provide","dojo.data.util.sorter"]],defineResource:function(A){if(!A._hasResource["dojo.data.util.sorter"]){A._hasResource["dojo.data.util.sorter"]=true;
 A.provide("dojo.data.util.sorter");
-A.data.util.sorter.basicComparator=function(C,B){var D=0;
-if(C>B||typeof C==="undefined"||C===null){D=1
-}else{if(C<B||typeof B==="undefined"||B===null){D=-1
-}}return D
+A.data.util.sorter.basicComparator=function(D,C){var B=0;
+if(D>C||typeof D==="undefined"||D===null){B=1
+}else{if(D<C||typeof C==="undefined"||C===null){B=-1
+}}return B
 };
-A.data.util.sorter.createSortFunction=function(E,C){var G=[];
-function B(H,I){return function(N,M){var L=C.getValue(N,H);
-var J=C.getValue(M,H);
+A.data.util.sorter.createSortFunction=function(F,D){var C=[];
+function B(H,I){return function(N,M){var L=D.getValue(N,H);
+var J=D.getValue(M,H);
 var K=null;
-if(C.comparatorMap){if(typeof H!=="string"){H=C.getIdentity(H)
-}K=C.comparatorMap[H]||A.data.util.sorter.basicComparator
+if(D.comparatorMap){if(typeof H!=="string"){H=D.getIdentity(H)
+}K=D.comparatorMap[H]||A.data.util.sorter.basicComparator
 }K=K||A.data.util.sorter.basicComparator;
 return I*K(L,J)
 }
-}for(var D=0;
-D<E.length;
-D++){sortAttribute=E[D];
-if(sortAttribute.attribute){var F=(sortAttribute.descending)?-1:1;
-G.push(B(sortAttribute.attribute,F))
+}for(var E=0;
+E<F.length;
+E++){sortAttribute=F[E];
+if(sortAttribute.attribute){var G=(sortAttribute.descending)?-1:1;
+C.push(B(sortAttribute.attribute,G))
 }}return function(I,H){var K=0;
-while(K<G.length){var J=G[K++](I,H);
+while(K<C.length){var J=C[K++](I,H);
 if(J!==0){return J
 }}return 0
 }

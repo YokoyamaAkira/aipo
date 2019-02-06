@@ -1,203 +1,97 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.collections.SortedList"],
-["require", "dojox.collections._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.collections.SortedList"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.collections.SortedList"] = true;
-dojo.provide("dojox.collections.SortedList");
-dojo.require("dojox.collections._base");
-
-dojox.collections.SortedList=function(/* object? */ dictionary){
-	//	summary
-	//	creates a collection that acts like a dictionary but is also internally sorted.
-	//	Note that the act of adding any elements forces an internal resort, making this object potentially slow.
-	var _this=this;
-	var items={};
-	var q=[];
-	var sorter=function(a,b){
-		if (a.key > b.key) return 1;
-		if (a.key < b.key) return -1;
-		return 0;
-	};
-	var build=function(){
-		q=[];
-		var e=_this.getIterator();
-		while (!e.atEnd()){
-			q.push(e.get());
-		}
-		q.sort(sorter);
-	};
-	var testObject={};
-
-	this.count=q.length;
-	this.add=function(/* string */ k,/* object */v){
-		//	summary
-		//	add the passed value to the dictionary at location k
-		if (!items[k]) {
-			items[k]=new dojox.collections.DictionaryEntry(k,v);
-			this.count=q.push(items[k]);
-			q.sort(sorter);
-		}
-	};
-	this.clear=function(){
-		//	summary
-		//	clear the internal collections
-		items={};
-		q=[];
-		this.count=q.length;
-	};
-	this.clone=function(){
-		//	summary
-		//	create a clone of this sorted list
-		return new dojox.collections.SortedList(this);	//	dojox.collections.SortedList
-	};
-	this.contains=this.containsKey=function(/* string */ k){
-		//	summary
-		//	Check to see if the list has a location k
-		if(testObject[k]){
-			return false;			//	bool
-		}
-		return (items[k]!=null);	//	bool
-	};
-	this.containsValue=function(/* object */ o){
-		//	summary
-		//	Check to see if this list contains the passed object
-		var e=this.getIterator();
-		while (!e.atEnd()){
-			var item=e.get();
-			if(item.value==o){ 
-				return true;	//	bool
-			}
-		}
-		return false;	//	bool
-	};
-	this.copyTo=function(/* array */ arr, /* int */ i){
-		//	summary
-		//	copy the contents of the list into array arr at index i
-		var e=this.getIterator();
-		var idx=i;
-		while(!e.atEnd()){
-			arr.splice(idx,0,e.get());
-			idx++;
-		}
-	};
-	this.entry=function(/* string */ k){
-		//	summary
-		//	return the object at location k
-		return items[k];	//	dojox.collections.DictionaryEntry
-	};
-	this.forEach=function(/* function */ fn, /* object? */ scope){
-		//	summary
-		//	functional iterator, following the mozilla spec.
-		dojo.forEach(q, fn, scope);
-	};
-	this.getByIndex=function(/* int */ i){
-		//	summary
-		//	return the item at index i
-		return q[i].valueOf();	//	object
-	};
-	this.getIterator=function(){
-		//	summary
-		//	get an iterator for this object
-		return new dojox.collections.DictionaryIterator(items);	//	dojox.collections.DictionaryIterator
-	};
-	this.getKey=function(/* int */ i){
-		//	summary
-		//	return the key of the item at index i
-		return q[i].key;
-	};
-	this.getKeyList=function(){
-		//	summary
-		//	return an array of the keys set in this list
-		var arr=[];
-		var e=this.getIterator();
-		while (!e.atEnd()){
-			arr.push(e.get().key);
-		}
-		return arr;	//	array
-	};
-	this.getValueList=function(){
-		//	summary
-		//	return an array of values in this list
-		var arr=[];
-		var e=this.getIterator();
-		while (!e.atEnd()){
-			arr.push(e.get().value);
-		}
-		return arr;	//	array
-	};
-	this.indexOfKey=function(/* string */ k){
-		//	summary
-		//	return the index of the passed key.
-		for (var i=0; i<q.length; i++){
-			if (q[i].key==k){
-				return i;	//	int
-			}
-		}
-		return -1;	//	int
-	};
-	this.indexOfValue=function(/* object */ o){
-		//	summary
-		//	return the first index of object o
-		for (var i=0; i<q.length; i++){
-			if (q[i].value==o){
-				return i;	//	int
-			}
-		}
-		return -1;	//	int
-	};
-	this.item=function(/* string */ k){
-		// 	summary
-		//	return the value of the object at location k.
-		if(k in items && !testObject[k]){
-			return items[k].valueOf();	//	object
-		}
-		return undefined;	//	object
-	};
-	this.remove=function(/* string */k){
-		// 	summary
-		//	remove the item at location k and rebuild the internal collections.
-		delete items[k];
-		build();
-		this.count=q.length;
-	};
-	this.removeAt=function(/* int */ i){
-		//	summary
-		//	remove the item at index i, and rebuild the internal collections.
-		delete items[q[i].key];
-		build();
-		this.count=q.length;
-	};
-	this.replace=function(/* string */ k, /* object */ v){
-		//	summary
-		//	Replace an existing item if it's there, and add a new one if not.
-		if (!items[k]){
-			//	we're adding a new object, return false
-			this.add(k,v);
-			return false; // bool
-		}else{
-			//	we're replacing an object, return true
-			items[k]=new dojox.collections.DictionaryEntry(k,v);
-			build();
-			return true; // bool
-		}
-	};
-	this.setByIndex=function(/* int */ i, /* object */ o){
-		//	summary
-		//	set an item by index
-		items[q[i].key].value=o;
-		build();
-		this.count=q.length;
-	};
-	if (dictionary){
-		var e=dictionary.getIterator();
-		while (!e.atEnd()){
-			var item=e.get();
-			q[q.length]=items[item.key]=new dojox.collections.DictionaryEntry(item.key,item.value);
-		}
-		q.sort(sorter);
-	}
-}
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.collections.SortedList"],["require","dojox.collections._base"]],defineResource:function(A){if(!A._hasResource["dojox.collections.SortedList"]){A._hasResource["dojox.collections.SortedList"]=true;
+A.provide("dojox.collections.SortedList");
+A.require("dojox.collections._base");
+dojox.collections.SortedList=function(G){var D=this;
+var F={};
+var B=[];
+var J=function(L,K){if(L.key>K.key){return 1
+}if(L.key<K.key){return -1
+}return 0
+};
+var H=function(){B=[];
+var K=D.getIterator();
+while(!K.atEnd()){B.push(K.get())
+}B.sort(J)
+};
+var C={};
+this.count=B.length;
+this.add=function(L,K){if(!F[L]){F[L]=new dojox.collections.DictionaryEntry(L,K);
+this.count=B.push(F[L]);
+B.sort(J)
+}};
+this.clear=function(){F={};
+B=[];
+this.count=B.length
+};
+this.clone=function(){return new dojox.collections.SortedList(this)
+};
+this.contains=this.containsKey=function(K){if(C[K]){return false
+}return(F[K]!=null)
+};
+this.containsValue=function(M){var L=this.getIterator();
+while(!L.atEnd()){var K=L.get();
+if(K.value==M){return true
+}}return false
+};
+this.copyTo=function(L,M){var N=this.getIterator();
+var K=M;
+while(!N.atEnd()){L.splice(K,0,N.get());
+K++
+}};
+this.entry=function(K){return F[K]
+};
+this.forEach=function(L,K){A.forEach(B,L,K)
+};
+this.getByIndex=function(K){return B[K].valueOf()
+};
+this.getIterator=function(){return new dojox.collections.DictionaryIterator(F)
+};
+this.getKey=function(K){return B[K].key
+};
+this.getKeyList=function(){var K=[];
+var L=this.getIterator();
+while(!L.atEnd()){K.push(L.get().key)
+}return K
+};
+this.getValueList=function(){var K=[];
+var L=this.getIterator();
+while(!L.atEnd()){K.push(L.get().value)
+}return K
+};
+this.indexOfKey=function(K){for(var L=0;
+L<B.length;
+L++){if(B[L].key==K){return L
+}}return -1
+};
+this.indexOfValue=function(L){for(var K=0;
+K<B.length;
+K++){if(B[K].value==L){return K
+}}return -1
+};
+this.item=function(K){if(K in F&&!C[K]){return F[K].valueOf()
+}return undefined
+};
+this.remove=function(K){delete F[K];
+H();
+this.count=B.length
+};
+this.removeAt=function(K){delete F[B[K].key];
+H();
+this.count=B.length
+};
+this.replace=function(L,K){if(!F[L]){this.add(L,K);
+return false
+}else{F[L]=new dojox.collections.DictionaryEntry(L,K);
+H();
+return true
+}};
+this.setByIndex=function(K,L){F[B[K].key].value=L;
+H();
+this.count=B.length
+};
+if(G){var E=G.getIterator();
+while(!E.atEnd()){var I=E.get();
+B[B.length]=F[I.key]=new dojox.collections.DictionaryEntry(I.key,I.value)
+}B.sort(J)
+}}
+}}});

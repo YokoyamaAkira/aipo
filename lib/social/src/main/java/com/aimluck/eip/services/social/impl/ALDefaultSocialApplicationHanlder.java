@@ -161,7 +161,8 @@ public class ALDefaultSocialApplicationHanlder extends
       List<ALOAuthConsumer> consumers = new ArrayList<ALOAuthConsumer>();
       List<ALOAuthService> services = gadgetSpec.getOAuthServices();
       @SuppressWarnings("unchecked")
-      List<OAuthConsumer> consumerModels = app.getOauthConsumer();
+      List<OAuthConsumer> consumerModels =
+        (List<OAuthConsumer>) app.getOauthConsumer();
       for (ALOAuthService service : services) {
         ALOAuthConsumer consumer = new ALOAuthConsumer();
         consumer.setAppId(app.getAppId());
@@ -204,7 +205,8 @@ public class ALDefaultSocialApplicationHanlder extends
         return;
       }
       @SuppressWarnings("unchecked")
-      List<OAuthConsumer> oauthConsumers = app.getOauthConsumer();
+      List<OAuthConsumer> oauthConsumers =
+        (List<OAuthConsumer>) app.getOauthConsumer();
       boolean has = false;
       if (oauthConsumers != null) {
         for (OAuthConsumer oauthConsumer : oauthConsumers) {

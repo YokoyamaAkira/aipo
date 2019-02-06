@@ -21,104 +21,104 @@ return
 }if(!A.isIE){dijit.focus(this.sliderHandle)
 }A.stopEvent(B)
 },_isReversed:function(){return !(this._upsideDown||this.isLeftToRight())
-},_onBarClick:function(D){if(this.disabled||!this.clickSelect){return 
+},_onBarClick:function(B){if(this.disabled||!this.clickSelect){return 
 }dijit.focus(this.sliderHandle);
-A.stopEvent(D);
-var C=A.coords(this.sliderBarContainer,true);
-var B=D[this._mousePixelCoord]-C[this._startingPixelCoord];
-this._setPixelValue(this._isReversed()||this._upsideDown?(C[this._pixelCount]-B):B,C[this._pixelCount],true)
-},_setPixelValue:function(C,E,G){if(this.disabled){return 
-}C=C<0?0:E<C?E:C;
-var F=this.discreteValues;
-if(F<=1||F==Infinity){F=E
-}F--;
-var B=E/F;
-var D=Math.round(C/B);
-this.setValue((this.maximum-this.minimum)*D/F+this.minimum,G)
-},setValue:function(D,C){this.valueNode.value=this.value=D;
+A.stopEvent(B);
+var D=A.coords(this.sliderBarContainer,true);
+var C=B[this._mousePixelCoord]-D[this._startingPixelCoord];
+this._setPixelValue(this._isReversed()||this._upsideDown?(D[this._pixelCount]-C):C,D[this._pixelCount],true)
+},_setPixelValue:function(D,F,C){if(this.disabled){return 
+}D=D<0?0:F<D?F:D;
+var G=this.discreteValues;
+if(G<=1||G==Infinity){G=F
+}G--;
+var B=F/G;
+var E=Math.round(D/B);
+this.setValue((this.maximum-this.minimum)*E/G+this.minimum,C)
+},setValue:function(B,D){this.valueNode.value=this.value=B;
 this.inherited("setValue",arguments);
-var B=(D-this.minimum)/(this.maximum-this.minimum);
-this.progressBar.style[this._progressPixelSize]=(B*100)+"%";
-this.remainingBar.style[this._progressPixelSize]=((1-B)*100)+"%"
-},_bumpValue:function(E){if(this.disabled){return 
-}var B=A.getComputedStyle(this.sliderBarContainer);
-var F=A._getContentBox(this.sliderBarContainer,B);
-var C=this.discreteValues;
-if(C<=1||C==Infinity){C=F[this._pixelCount]
-}C--;
-var D=(this.value-this.minimum)*C/(this.maximum-this.minimum)+E;
-if(D<0){D=0
-}if(D>C){D=C
-}D=D*(this.maximum-this.minimum)/C+this.minimum;
-this.setValue(D,true)
+var C=(B-this.minimum)/(this.maximum-this.minimum);
+this.progressBar.style[this._progressPixelSize]=(C*100)+"%";
+this.remainingBar.style[this._progressPixelSize]=((1-C)*100)+"%"
+},_bumpValue:function(F){if(this.disabled){return 
+}var C=A.getComputedStyle(this.sliderBarContainer);
+var B=A._getContentBox(this.sliderBarContainer,C);
+var D=this.discreteValues;
+if(D<=1||D==Infinity){D=B[this._pixelCount]
+}D--;
+var E=(this.value-this.minimum)*D/(this.maximum-this.minimum)+F;
+if(E<0){E=0
+}if(E>D){E=D
+}E=E*(this.maximum-this.minimum)/D+this.minimum;
+this.setValue(E,true)
 },decrement:function(B){this._bumpValue(B.keyCode==A.keys.PAGE_DOWN?-this.pageIncrement:-1)
 },increment:function(B){this._bumpValue(B.keyCode==A.keys.PAGE_UP?this.pageIncrement:1)
-},_mouseWheeled:function(B){A.stopEvent(B);
-var C=0;
-if(typeof B.wheelDelta=="number"){C=B.wheelDelta
-}else{if(typeof B.detail=="number"){C=-B.detail
-}}if(C>0){this.increment(B)
-}else{if(C<0){this.decrement(B)
+},_mouseWheeled:function(C){A.stopEvent(C);
+var B=0;
+if(typeof C.wheelDelta=="number"){B=C.wheelDelta
+}else{if(typeof C.detail=="number"){B=-C.detail
+}}if(B>0){this.increment(C)
+}else{if(B<0){this.decrement(C)
 }}},startup:function(){A.forEach(this.getChildren(),function(B){if(this[B.container]!=this.containerNode){this[B.container].appendChild(B.domNode)
 }},this)
 },_onBlur:function(){dijit.form.HorizontalSlider.superclass.setValue.call(this,this.value,true)
 },postCreate:function(){if(this.showButtons){this.incrementButton.style.display="";
 this.decrementButton.style.display=""
 }this.connect(this.domNode,A.isIE?"onmousewheel":"DOMMouseScroll","_mouseWheeled");
-var B=this;
-var C=function(){dijit.form._SliderMover.apply(this,arguments);
-this.widget=B
+var C=this;
+var B=function(){dijit.form._SliderMover.apply(this,arguments);
+this.widget=C
 };
-A.extend(C,dijit.form._SliderMover.prototype);
-this._movable=new A.dnd.Moveable(this.sliderHandle,{mover:C});
+A.extend(B,dijit.form._SliderMover.prototype);
+this._movable=new A.dnd.Moveable(this.sliderHandle,{mover:B});
 this.inherited("postCreate",arguments)
 },destroy:function(){this._movable.destroy();
 this.inherited("destroy",arguments)
 }});
 A.declare("dijit.form.VerticalSlider",dijit.form.HorizontalSlider,{templateString:'<table class="dijitReset dijitSlider" cellspacing="0" cellpadding="0" border="0" rules="none"\r\n><tbody class="dijitReset"\r\n\t><tr class="dijitReset"\r\n\t\t><td class="dijitReset"></td\r\n\t\t><td class="dijitReset dijitSliderButtonContainer dijitVerticalSliderButtonContainer"\r\n\t\t\t><div class="dijitVerticalSliderIncrementIcon" tabIndex="-1" style="display:none" dojoAttachPoint="incrementButton" dojoAttachEvent="onclick: increment"><span class="dijitSliderButtonInner">+</span></div\r\n\t\t></td\r\n\t\t><td class="dijitReset"></td\r\n\t></tr\r\n\t><tr class="dijitReset"\r\n\t\t><td class="dijitReset"></td\r\n\t\t><td class="dijitReset"\r\n\t\t\t><center><div class="dijitSliderBar dijitSliderBumper dijitVerticalSliderBumper dijitSliderTopBumper dijitVerticalSliderTopBumper"></div></center\r\n\t\t></td\r\n\t\t><td class="dijitReset"></td\r\n\t></tr\r\n\t><tr class="dijitReset"\r\n\t\t><td dojoAttachPoint="leftDecoration" class="dijitReset" style="text-align:center;height:100%;"></td\r\n\t\t><td class="dijitReset" style="height:100%;"\r\n\t\t\t><input dojoAttachPoint="valueNode" type="hidden" name="${name}"\r\n\t\t\t/><center style="position:relative;height:100%;" dojoAttachPoint="sliderBarContainer"\r\n\t\t\t\t><div dojoAttachPoint="remainingBar" class="dijitSliderBar dijitVerticalSliderBar dijitSliderRemainingBar dijitVerticalSliderRemainingBar" dojoAttachEvent="onclick:_onBarClick"></div\r\n\t\t\t\t><div dojoAttachPoint="progressBar" class="dijitSliderBar dijitVerticalSliderBar dijitSliderProgressBar dijitVerticalSliderProgressBar" dojoAttachEvent="onclick:_onBarClick"\r\n\t\t\t\t\t><div dojoAttachPoint="sliderHandle,focusNode" class="dijitSliderMoveable" dojoAttachEvent="onkeypress:_onKeyPress,onclick:_onHandleClick" style="vertical-align:top;" waiRole="slider" valuemin="${minimum}" valuemax="${maximum}"\r\n\t\t\t\t\t\t><div class="dijitSliderImageHandle dijitVerticalSliderImageHandle"></div\r\n\t\t\t\t\t></div\r\n\t\t\t\t></div\r\n\t\t\t></center\r\n\t\t></td\r\n\t\t><td dojoAttachPoint="containerNode,rightDecoration" class="dijitReset" style="text-align:center;height:100%;"></td\r\n\t></tr\r\n\t><tr class="dijitReset"\r\n\t\t><td class="dijitReset"></td\r\n\t\t><td class="dijitReset"\r\n\t\t\t><center><div class="dijitSliderBar dijitSliderBumper dijitVerticalSliderBumper dijitSliderBottomBumper dijitVerticalSliderBottomBumper"></div></center\r\n\t\t></td\r\n\t\t><td class="dijitReset"></td\r\n\t></tr\r\n\t><tr class="dijitReset"\r\n\t\t><td class="dijitReset"></td\r\n\t\t><td class="dijitReset dijitSliderButtonContainer dijitVerticalSliderButtonContainer"\r\n\t\t\t><div class="dijitVerticalSliderDecrementIcon" tabIndex="-1" style="display:none" dojoAttachPoint="decrementButton" dojoAttachEvent="onclick: decrement"><span class="dijitSliderButtonInner">-</span></div\r\n\t\t></td\r\n\t\t><td class="dijitReset"></td\r\n\t></tr\r\n></tbody></table>\r\n',_mousePixelCoord:"pageY",_pixelCount:"h",_startingPixelCoord:"y",_startingPixelCount:"t",_handleOffsetCoord:"top",_progressPixelSize:"height",_upsideDown:true});
-A.declare("dijit.form._SliderMover",A.dnd.Mover,{onMouseMove:function(G){var F=this.widget;
-var H=this.constraintBox;
-if(!H){var D=F.sliderBarContainer;
-var E=A.getComputedStyle(D);
-var H=A._getContentBox(D,E);
-H[F._startingPixelCount]=0;
-this.constraintBox=H
-}var B=this.marginBox;
-var C=F._isReversed()?G[F._mousePixelCoord]-A._abs(F.sliderBarContainer).x:B[F._startingPixelCount]+G[F._mousePixelCoord];
-A.hitch(F,"_setPixelValue")(F._isReversed()||F._upsideDown?(H[F._pixelCount]-C):C,H[F._pixelCount])
-},destroy:function(C){var B=this.widget;
-B.setValue(B.value,true);
+A.declare("dijit.form._SliderMover",A.dnd.Mover,{onMouseMove:function(F){var E=this.widget;
+var C=this.constraintBox;
+if(!C){var B=E.sliderBarContainer;
+var D=A.getComputedStyle(B);
+var C=A._getContentBox(B,D);
+C[E._startingPixelCount]=0;
+this.constraintBox=C
+}var G=this.marginBox;
+var H=E._isReversed()?F[E._mousePixelCoord]-A._abs(E.sliderBarContainer).x:G[E._startingPixelCount]+F[E._mousePixelCoord];
+A.hitch(E,"_setPixelValue")(E._isReversed()||E._upsideDown?(C[E._pixelCount]-H):H,C[E._pixelCount])
+},destroy:function(B){var C=this.widget;
+C.setValue(C.value,true);
 A.dnd.Mover.prototype.destroy.call(this)
 }});
-A.declare("dijit.form.HorizontalRule",[dijit._Widget,dijit._Templated],{templateString:'<div class="RuleContainer HorizontalRuleContainer"></div>',count:3,container:"containerNode",ruleStyle:"",_positionPrefix:'<div class="RuleMark HorizontalRuleMark" style="left:',_positionSuffix:"%;",_suffix:'"></div>',_genHTML:function(C,B){return this._positionPrefix+C+this._positionSuffix+this.ruleStyle+this._suffix
-},_isHorizontal:true,postCreate:function(){if(this.count==1){var D=this._genHTML(50,0)
-}else{var B=100/(this.count-1);
-if(!this._isHorizontal||this.isLeftToRight()){var D=this._genHTML(0,0);
-for(var C=1;
-C<this.count-1;
-C++){D+=this._genHTML(B*C,C)
-}D+=this._genHTML(100,this.count-1)
-}else{var D=this._genHTML(100,0);
-for(var C=1;
-C<this.count-1;
-C++){D+=this._genHTML(100-B*C,C)
-}D+=this._genHTML(0,this.count-1)
-}}this.domNode.innerHTML=D
+A.declare("dijit.form.HorizontalRule",[dijit._Widget,dijit._Templated],{templateString:'<div class="RuleContainer HorizontalRuleContainer"></div>',count:3,container:"containerNode",ruleStyle:"",_positionPrefix:'<div class="RuleMark HorizontalRuleMark" style="left:',_positionSuffix:"%;",_suffix:'"></div>',_genHTML:function(B,C){return this._positionPrefix+B+this._positionSuffix+this.ruleStyle+this._suffix
+},_isHorizontal:true,postCreate:function(){if(this.count==1){var B=this._genHTML(50,0)
+}else{var C=100/(this.count-1);
+if(!this._isHorizontal||this.isLeftToRight()){var B=this._genHTML(0,0);
+for(var D=1;
+D<this.count-1;
+D++){B+=this._genHTML(C*D,D)
+}B+=this._genHTML(100,this.count-1)
+}else{var B=this._genHTML(100,0);
+for(var D=1;
+D<this.count-1;
+D++){B+=this._genHTML(100-C*D,D)
+}B+=this._genHTML(0,this.count-1)
+}}this.domNode.innerHTML=B
 }});
 A.declare("dijit.form.VerticalRule",dijit.form.HorizontalRule,{templateString:'<div class="RuleContainer VerticalRuleContainer"></div>',_positionPrefix:'<div class="RuleMark VerticalRuleMark" style="top:',_isHorizontal:false});
 A.declare("dijit.form.HorizontalRuleLabels",dijit.form.HorizontalRule,{templateString:'<div class="RuleContainer HorizontalRuleContainer"></div>',labelStyle:"",labels:[],numericMargin:0,minimum:0,maximum:1,constraints:{pattern:"#%"},_positionPrefix:'<div class="RuleLabelContainer HorizontalRuleLabelContainer" style="left:',_labelPrefix:'"><span class="RuleLabel HorizontalRuleLabel">',_suffix:"</span></div>",_calcPosition:function(B){return B
-},_genHTML:function(C,B){return this._positionPrefix+this._calcPosition(C)+this._positionSuffix+this.labelStyle+this._labelPrefix+this.labels[B]+this._suffix
-},getLabels:function(){var E=this.labels;
-if(!E.length){E=A.query("> li",this.srcNodeRef).map(function(F){return String(F.innerHTML)
+},_genHTML:function(B,C){return this._positionPrefix+this._calcPosition(B)+this._positionSuffix+this.labelStyle+this._labelPrefix+this.labels[C]+this._suffix
+},getLabels:function(){var B=this.labels;
+if(!B.length){B=A.query("> li",this.srcNodeRef).map(function(F){return String(F.innerHTML)
 })
 }this.srcNodeRef.innerHTML="";
-if(!E.length&&this.count>1){var D=this.minimum;
-var C=(this.maximum-D)/(this.count-1);
-for(var B=0;
-B<this.count;
-B++){E.push((B<this.numericMargin||B>=(this.count-this.numericMargin))?"":A.number.format(D,this.constraints));
-D+=C
-}}return E
+if(!B.length&&this.count>1){var E=this.minimum;
+var D=(this.maximum-E)/(this.count-1);
+for(var C=0;
+C<this.count;
+C++){B.push((C<this.numericMargin||C>=(this.count-this.numericMargin))?"":A.number.format(E,this.constraints));
+E+=D
+}}return B
 },postMixInProperties:function(){this.inherited("postMixInProperties",arguments);
 this.labels=this.getLabels();
 this.count=this.labels.length

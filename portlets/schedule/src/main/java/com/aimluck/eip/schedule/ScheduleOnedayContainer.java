@@ -60,10 +60,11 @@ public class ScheduleOnedayContainer implements ALData {
   /** <code>rowIndex</code> rowIndex */
   private int rowIndex;
 
+  @SuppressWarnings("unused")
   private ScheduleOnedayResultData dummyList;
 
   /*
-   * 
+   *
    */
   @Override
   public void initField() {

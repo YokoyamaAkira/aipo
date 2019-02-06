@@ -2,15 +2,15 @@ if(!dojo._hasResource["dojo.dnd.Mover"]){dojo._hasResource["dojo.dnd.Mover"]=tru
 dojo.provide("dojo.dnd.Mover");
 dojo.require("dojo.dnd.common");
 dojo.require("dojo.dnd.autoscroll");
-dojo.declare("dojo.dnd.Mover",null,{constructor:function(D,E,C){this.node=dojo.byId(D);
-this.marginBox={l:E.pageX,t:E.pageY};
-this.mouseButton=E.button;
-var B=this.host=C,F=D.ownerDocument,A=dojo.connect(F,"onmousemove",this,"onFirstMove");
-this.events=[dojo.connect(F,"onmousemove",this,"onMouseMove"),dojo.connect(F,"onmouseup",this,"onMouseUp"),dojo.connect(F,"ondragstart",dojo,"stopEvent"),dojo.connect(F,"onselectstart",dojo,"stopEvent"),A];
-if(B&&B.onMoveStart){B.onMoveStart(this)
-}},onMouseMove:function(B){dojo.dnd.autoScroll(B);
-var A=this.marginBox;
-this.host.onMove(this,{l:A.l+B.pageX,t:A.t+B.pageY})
+dojo.declare("dojo.dnd.Mover",null,{constructor:function(C,D,B){this.node=dojo.byId(C);
+this.marginBox={l:D.pageX,t:D.pageY};
+this.mouseButton=D.button;
+var A=this.host=B,E=C.ownerDocument,F=dojo.connect(E,"onmousemove",this,"onFirstMove");
+this.events=[dojo.connect(E,"onmousemove",this,"onMouseMove"),dojo.connect(E,"onmouseup",this,"onMouseUp"),dojo.connect(E,"ondragstart",dojo,"stopEvent"),dojo.connect(E,"onselectstart",dojo,"stopEvent"),F];
+if(A&&A.onMoveStart){A.onMoveStart(this)
+}},onMouseMove:function(A){dojo.dnd.autoScroll(A);
+var B=this.marginBox;
+this.host.onMove(this,{l:B.l+A.pageX,t:B.t+A.pageY})
 },onMouseUp:function(A){if(this.mouseButton==A.button){this.destroy()
 }},onFirstMove:function(){this.node.style.position="absolute";
 var A=dojo.marginBox(this.node);

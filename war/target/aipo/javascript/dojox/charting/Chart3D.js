@@ -1,86 +1,46 @@
-if(!dojo._hasResource["dojox.charting.Chart3D"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.charting.Chart3D"] = true;
+if(!dojo._hasResource["dojox.charting.Chart3D"]){dojo._hasResource["dojox.charting.Chart3D"]=true;
 dojo.provide("dojox.charting.Chart3D");
-
 dojo.require("dojox.gfx3d");
-
-(function(){
-	var observerVector = {x: 0, y: 0, z: 1}, v = dojox.gfx3d.vector, n = dojox.gfx.normalizedLength;
-
-	dojo.declare("dojox.charting.Chart3D", null, {
-		constructor: function(node, lights, camera, theme){
-			// setup a view
-			this.node = dojo.byId(node);
-			this.surface = dojox.gfx.createSurface(this.node, n(this.node.style.width), n(this.node.style.height));
-			this.view = this.surface.createViewport();
-			this.view.setLights(lights.lights, lights.ambient, lights.specular);
-			this.view.setCameraTransform(camera);
-			this.theme = theme;
-			
-			// initialize internal variables
-			this.walls = [];
-			this.plots = [];
-		},
-		
-		// public API
-		generate: function(){
-			return this._generateWalls()._generatePlots();
-		},
-		invalidate: function(){
-			this.view.invalidate();
-			return this;
-		},
-		render: function(){
-			this.view.render();
-			return this;
-		},
-		addPlot: function(plot){
-			return this._add(this.plots, plot);
-		},
-		removePlot: function(plot){
-			return this._remove(this.plots, plot);
-		},
-		addWall: function(wall){
-			return this._add(this.walls, wall);
-		},
-		removeWall: function(wall){
-			return this._remove(this.walls, wall);
-		},
-		
-		// internal API
-		_add: function(array, item){
-			if(!dojo.some(array, function(i){ return i == item; })){
-				array.push(item);
-				this.view.invalidate();
-			}
-			return this;
-		},
-		_remove: function(array, item){
-			var a = dojo.filter(array, function(i){ return i != item; });
-			return a.length < array.length ? (array = a, this.invalidate()) : this;
-		},
-		_generateWalls: function(){
-			for(var i = 0; i < this.walls.length; ++i){
-				if(v.dotProduct(observerVector, this.walls[i].normal) > 0){
-					this.walls[i].generate(this);
-				}
-			}
-			return this;
-		},
-		_generatePlots: function(){
-			var depth = 0, m = dojox.gfx3d.matrix, i = 0;
-			for(; i < this.plots.length; ++i){
-				depth += this.plots[i].getDepth();
-			}
-			for(--i; i >= 0; --i){
-				var scene = this.view.createScene();
-				scene.setTransform(m.translate(0, 0, -depth));
-				this.plots[i].generate(this, scene);
-				depth -= this.plots[i].getDepth();
-			}
-			return this;
-		}
-	});
-})();
-
-}
+(function(){var B={x:0,y:0,z:1},A=dojox.gfx3d.vector,C=dojox.gfx.normalizedLength;
+dojo.declare("dojox.charting.Chart3D",null,{constructor:function(F,D,E,G){this.node=dojo.byId(F);
+this.surface=dojox.gfx.createSurface(this.node,C(this.node.style.width),C(this.node.style.height));
+this.view=this.surface.createViewport();
+this.view.setLights(D.lights,D.ambient,D.specular);
+this.view.setCameraTransform(E);
+this.theme=G;
+this.walls=[];
+this.plots=[]
+},generate:function(){return this._generateWalls()._generatePlots()
+},invalidate:function(){this.view.invalidate();
+return this
+},render:function(){this.view.render();
+return this
+},addPlot:function(D){return this._add(this.plots,D)
+},removePlot:function(D){return this._remove(this.plots,D)
+},addWall:function(D){return this._add(this.walls,D)
+},removeWall:function(D){return this._remove(this.walls,D)
+},_add:function(E,D){if(!dojo.some(E,function(F){return F==D
+})){E.push(D);
+this.view.invalidate()
+}return this
+},_remove:function(F,E){var D=dojo.filter(F,function(G){return G!=E
+});
+return D.length<F.length?(F=D,this.invalidate()):this
+},_generateWalls:function(){for(var D=0;
+D<this.walls.length;
+++D){if(A.dotProduct(B,this.walls[D].normal)>0){this.walls[D].generate(this)
+}}return this
+},_generatePlots:function(){var G=0,D=dojox.gfx3d.matrix,E=0;
+for(;
+E<this.plots.length;
+++E){G+=this.plots[E].getDepth()
+}for(--E;
+E>=0;
+--E){var F=this.view.createScene();
+F.setTransform(D.translate(0,0,-G));
+this.plots[E].generate(this,F);
+G-=this.plots[E].getDepth()
+}return this
+}})
+})()
+};

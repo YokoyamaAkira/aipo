@@ -1024,7 +1024,6 @@ public class ALCustomizeSetAction extends VelocityPortletAction {
   }
 
   // Create a list of all available portlets
-  @SuppressWarnings("unchecked")
   public static List<PortletEntry> buildPortletList(RunData data,
       PortletSet set, String mediaType, List<PortletEntry> allPortlets) {
     List<PortletEntry> list = new ArrayList<PortletEntry>();
@@ -1045,7 +1044,7 @@ public class ALCustomizeSetAction extends VelocityPortletAction {
         JetspeedSecurity.PERMISSION_VIEW)
         && ((!entry.isHidden())
           && (!entry.getType().equals(PortletEntry.TYPE_ABSTRACT)) && entry
-          .hasMediaType(mediaType))
+            .hasMediaType(mediaType))
         && !entry.getSecurityRef().getParent().equals("admin-view")
         && ALPortalApplicationService.isActive(entry.getName())) {
         list.add(entry);
@@ -1218,7 +1217,7 @@ public class ALCustomizeSetAction extends VelocityPortletAction {
           JetspeedSecurity.PERMISSION_VIEW)
           && ((!entry.isHidden())
             && (!entry.getType().equals(PortletEntry.TYPE_ABSTRACT)) && entry
-            .hasMediaType(mediaType))) {
+              .hasMediaType(mediaType))) {
           Iterator<?> cItr = entry.listCategories();
           while (cItr.hasNext()) {
             BaseCategory cat = (BaseCategory) cItr.next();

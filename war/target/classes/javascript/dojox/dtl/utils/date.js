@@ -1,15 +1,15 @@
 if(!dojo._hasResource["dojox.dtl.utils.date"]){dojo._hasResource["dojox.dtl.utils.date"]=true;
 dojo.provide("dojox.dtl.utils.date");
 dojo.require("dojox.date.php");
-dojo.mixin(dojox.dtl.utils.date,{format:function(A,B){return dojox.date.php.format(A,B,dojox.dtl.utils.date._overrides)
-},timesince:function(E,B){if(!(E instanceof Date)){E=new Date(E.year,E.month,E.day)
-}if(!B){B=new Date()
-}var F=Math.abs(B.getTime()-E.getTime());
-for(var C=0,A;
-A=dojox.dtl.utils.date._chunks[C];
-C++){var D=Math.floor(F/A[0]);
-if(D){break
-}}return D+" "+A[1](D)
+dojo.mixin(dojox.dtl.utils.date,{format:function(B,A){return dojox.date.php.format(B,A,dojox.dtl.utils.date._overrides)
+},timesince:function(D,A){if(!(D instanceof Date)){D=new Date(D.year,D.month,D.day)
+}if(!A){A=new Date()
+}var E=Math.abs(A.getTime()-D.getTime());
+for(var B=0,F;
+F=dojox.dtl.utils.date._chunks[B];
+B++){var C=Math.floor(E/F[0]);
+if(C){break
+}}return C+" "+F[1](C)
 },_chunks:[[60*60*24*365*1000,function(A){return(A==1)?"year":"years"
 }],[60*60*24*30*1000,function(A){return(A==1)?"month":"months"
 }],[60*60*24*7*1000,function(A){return(A==1)?"week":"weeks"

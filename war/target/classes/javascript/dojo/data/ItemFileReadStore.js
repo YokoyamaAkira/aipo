@@ -20,21 +20,21 @@ this._loadInProgress=false;
 this._queuedFetches=[]
 },url:"",_assertIsItem:function(A){if(!this.isItem(A)){throw new Error("dojo.data.ItemFileReadStore: Invalid item argument.")
 }},_assertIsAttribute:function(A){if(typeof A!=="string"){throw new Error("dojo.data.ItemFileReadStore: Invalid attribute argument.")
-}},getValue:function(D,C,A){var B=this.getValues(D,C);
-return(B.length>0)?B[0]:A
-},getValues:function(B,A){this._assertIsItem(B);
-this._assertIsAttribute(A);
-return B[A]||[]
-},getAttributes:function(C){this._assertIsItem(C);
-var A=[];
-for(var B in C){if((B!==this._storeRefPropName)&&(B!==this._itemNumPropName)&&(B!==this._rootItemPropName)){A.push(B)
-}}return A
-},hasAttribute:function(B,A){return this.getValues(B,A).length>0
-},containsValue:function(B,A,D){var C=undefined;
-if(typeof D==="string"){C=dojo.data.util.filter.patternToRegExp(D,false)
-}return this._containsValue(B,A,D,C)
-},_containsValue:function(B,A,D,C){return dojo.some(this.getValues(B,A),function(E){if(E!==null&&!dojo.isObject(E)&&C){if(E.toString().match(C)){return true
-}}else{if(D===E){return true
+}},getValue:function(C,B,D){var A=this.getValues(C,B);
+return(A.length>0)?A[0]:D
+},getValues:function(A,B){this._assertIsItem(A);
+this._assertIsAttribute(B);
+return A[B]||[]
+},getAttributes:function(B){this._assertIsItem(B);
+var C=[];
+for(var A in B){if((A!==this._storeRefPropName)&&(A!==this._itemNumPropName)&&(A!==this._rootItemPropName)){C.push(A)
+}}return C
+},hasAttribute:function(A,B){return this.getValues(A,B).length>0
+},containsValue:function(A,D,C){var B=undefined;
+if(typeof C==="string"){B=dojo.data.util.filter.patternToRegExp(C,false)
+}return this._containsValue(A,D,C,B)
+},_containsValue:function(A,D,C,B){return dojo.some(this.getValues(A,D),function(E){if(E!==null&&!dojo.isObject(E)&&B){if(E.toString().match(B)){return true
+}}else{if(C===E){return true
 }}})
 },isItem:function(A){if(A&&A[this._storeRefPropName]===this){if(this._arrayOfAllItems[A[this._itemNumPropName]]===A){return true
 }}return false
@@ -45,185 +45,185 @@ if(typeof D==="string"){C=dojo.data.util.filter.patternToRegExp(D,false)
 }return undefined
 },getLabelAttributes:function(A){if(this._labelAttr){return[this._labelAttr]
 }return null
-},_fetchItems:function(C,H,B){var A=this;
-var D=function(L,O){var N=[];
-if(L.query){var M=L.queryOptions?L.queryOptions.ignoreCase:false;
-var Q={};
-for(var R in L.query){var P=L.query[R];
-if(typeof P==="string"){Q[R]=dojo.data.util.filter.patternToRegExp(P,M)
-}}for(var J=0;
-J<O.length;
-++J){var K=true;
-var I=O[J];
-if(I===null){K=false
-}else{for(var R in L.query){var P=L.query[R];
-if(!A._containsValue(I,R,P,Q[R])){K=false
-}}}if(K){N.push(I)
-}}H(N,L)
-}else{for(var J=0;
-J<O.length;
-++J){var S=O[J];
-if(S!==null){N.push(S)
-}}H(N,L)
+},_fetchItems:function(F,C,E){var D=this;
+var G=function(P,S){var R=[];
+if(P.query){var Q=P.queryOptions?P.queryOptions.ignoreCase:false;
+var J={};
+for(var K in P.query){var I=P.query[K];
+if(typeof I==="string"){J[K]=dojo.data.util.filter.patternToRegExp(I,Q)
+}}for(var N=0;
+N<S.length;
+++N){var O=true;
+var M=S[N];
+if(M===null){O=false
+}else{for(var K in P.query){var I=P.query[K];
+if(!D._containsValue(M,K,I,J[K])){O=false
+}}}if(O){R.push(M)
+}}C(R,P)
+}else{for(var N=0;
+N<S.length;
+++N){var L=S[N];
+if(L!==null){R.push(L)
+}}C(R,P)
 }};
-if(this._loadFinished){D(C,this._getItemsArray(C.queryOptions))
-}else{if(this._jsonFileUrl){if(this._loadInProgress){this._queuedFetches.push({args:C,filter:D})
+if(this._loadFinished){G(F,this._getItemsArray(F.queryOptions))
+}else{if(this._jsonFileUrl){if(this._loadInProgress){this._queuedFetches.push({args:F,filter:G})
 }else{this._loadInProgress=true;
-var F={url:A._jsonFileUrl,handleAs:"json-comment-optional"};
-var E=dojo.xhrGet(F);
-E.addCallback(function(I){try{A._getItemsFromLoadedData(I);
-A._loadFinished=true;
-A._loadInProgress=false;
-D(C,A._getItemsArray(C.queryOptions));
-A._handleQueuedFetches()
-}catch(J){A._loadFinished=true;
-A._loadInProgress=false;
-B(J,C)
+var A={url:D._jsonFileUrl,handleAs:"json-comment-optional"};
+var H=dojo.xhrGet(A);
+H.addCallback(function(J){try{D._getItemsFromLoadedData(J);
+D._loadFinished=true;
+D._loadInProgress=false;
+G(F,D._getItemsArray(F.queryOptions));
+D._handleQueuedFetches()
+}catch(I){D._loadFinished=true;
+D._loadInProgress=false;
+E(I,F)
 }});
-E.addErrback(function(I){A._loadInProgress=false;
-B(I,C)
+H.addErrback(function(I){D._loadInProgress=false;
+E(I,F)
 })
 }}else{if(this._jsonData){try{this._loadFinished=true;
 this._getItemsFromLoadedData(this._jsonData);
 this._jsonData=null;
-D(C,this._getItemsArray(C.queryOptions))
-}catch(G){B(G,C)
-}}else{B(new Error("dojo.data.ItemFileReadStore: No JSON source data was provided as either URL or a nested Javascript object."),C)
-}}}},_handleQueuedFetches:function(){if(this._queuedFetches.length>0){for(var C=0;
-C<this._queuedFetches.length;
-C++){var A=this._queuedFetches[C];
-var B=A.args;
-var D=A.filter;
-if(D){D(B,this._getItemsArray(B.queryOptions))
-}else{this.fetchItemByIdentity(B)
+G(F,this._getItemsArray(F.queryOptions))
+}catch(B){E(B,F)
+}}else{E(new Error("dojo.data.ItemFileReadStore: No JSON source data was provided as either URL or a nested Javascript object."),F)
+}}}},_handleQueuedFetches:function(){if(this._queuedFetches.length>0){for(var B=0;
+B<this._queuedFetches.length;
+B++){var D=this._queuedFetches[B];
+var A=D.args;
+var C=D.filter;
+if(C){C(A,this._getItemsArray(A.queryOptions))
+}else{this.fetchItemByIdentity(A)
 }}this._queuedFetches=[]
 }},_getItemsArray:function(A){if(A&&A.deep){return this._arrayOfAllItems
 }return this._arrayOfTopLevelItems
-},close:function(A){},_getItemsFromLoadedData:function(E){function B(U){var V=((U!=null)&&(typeof U=="object")&&(!dojo.isArray(U))&&(!dojo.isFunction(U))&&(U.constructor==Object)&&(typeof U._reference=="undefined")&&(typeof U._type=="undefined")&&(typeof U._value=="undefined"));
-return V
-}var J=this;
-function R(Z){J._arrayOfAllItems.push(Z);
-for(var Y in Z){var X=Z[Y];
-if(X){if(dojo.isArray(X)){var W=X;
-for(var V=0;
-V<W.length;
-++V){var U=W[V];
-if(B(U)){R(U)
-}}}else{if(B(X)){R(X)
-}}}}}this._labelAttr=E.label;
-var O;
-var Q;
+},close:function(A){},_getItemsFromLoadedData:function(K){function H(V){var U=((V!=null)&&(typeof V=="object")&&(!dojo.isArray(V))&&(!dojo.isFunction(V))&&(V.constructor==Object)&&(typeof V._reference=="undefined")&&(typeof V._type=="undefined")&&(typeof V._value=="undefined"));
+return U
+}var P=this;
+function D(X){P._arrayOfAllItems.push(X);
+for(var W in X){var V=X[W];
+if(V){if(dojo.isArray(V)){var U=V;
+for(var Z=0;
+Z<U.length;
+++Z){var Y=U[Z];
+if(H(Y)){D(Y)
+}}}else{if(H(V)){D(V)
+}}}}}this._labelAttr=K.label;
+var A;
+var C;
 this._arrayOfAllItems=[];
-this._arrayOfTopLevelItems=E.items;
-for(O=0;
-O<this._arrayOfTopLevelItems.length;
-++O){Q=this._arrayOfTopLevelItems[O];
-R(Q);
-Q[this._rootItemPropName]=true
-}var L={};
-var S;
-for(O=0;
-O<this._arrayOfAllItems.length;
-++O){Q=this._arrayOfAllItems[O];
-for(S in Q){if(S!==this._rootItemPropName){var K=Q[S];
-if(K!==null){if(!dojo.isArray(K)){Q[S]=[K]
-}}else{Q[S]=[null]
-}}L[S]=S
-}}while(L[this._storeRefPropName]){this._storeRefPropName+="_"
-}while(L[this._itemNumPropName]){this._itemNumPropName+="_"
-}var H;
-var D=E.identifier;
-if(D){this._itemsByIdentity={};
-this._features["dojo.data.api.Identity"]=D;
-for(O=0;
-O<this._arrayOfAllItems.length;
-++O){Q=this._arrayOfAllItems[O];
-H=Q[D];
-var T=H[0];
-if(!this._itemsByIdentity[T]){this._itemsByIdentity[T]=Q
-}else{if(this._jsonFileUrl){throw new Error("dojo.data.ItemFileReadStore:  The json data as specified by: ["+this._jsonFileUrl+"] is malformed.  Items within the list have identifier: ["+D+"].  Value collided: ["+T+"]")
-}else{if(this._jsonData){throw new Error("dojo.data.ItemFileReadStore:  The json data provided by the creation arguments is malformed.  Items within the list have identifier: ["+D+"].  Value collided: ["+T+"]")
+this._arrayOfTopLevelItems=K.items;
+for(A=0;
+A<this._arrayOfTopLevelItems.length;
+++A){C=this._arrayOfTopLevelItems[A];
+D(C);
+C[this._rootItemPropName]=true
+}var R={};
+var E;
+for(A=0;
+A<this._arrayOfAllItems.length;
+++A){C=this._arrayOfAllItems[A];
+for(E in C){if(E!==this._rootItemPropName){var Q=C[E];
+if(Q!==null){if(!dojo.isArray(Q)){C[E]=[Q]
+}}else{C[E]=[null]
+}}R[E]=E
+}}while(R[this._storeRefPropName]){this._storeRefPropName+="_"
+}while(R[this._itemNumPropName]){this._itemNumPropName+="_"
+}var N;
+var J=K.identifier;
+if(J){this._itemsByIdentity={};
+this._features["dojo.data.api.Identity"]=J;
+for(A=0;
+A<this._arrayOfAllItems.length;
+++A){C=this._arrayOfAllItems[A];
+N=C[J];
+var F=N[0];
+if(!this._itemsByIdentity[F]){this._itemsByIdentity[F]=C
+}else{if(this._jsonFileUrl){throw new Error("dojo.data.ItemFileReadStore:  The json data as specified by: ["+this._jsonFileUrl+"] is malformed.  Items within the list have identifier: ["+J+"].  Value collided: ["+F+"]")
+}else{if(this._jsonData){throw new Error("dojo.data.ItemFileReadStore:  The json data provided by the creation arguments is malformed.  Items within the list have identifier: ["+J+"].  Value collided: ["+F+"]")
 }}}}}else{this._features["dojo.data.api.Identity"]=Number
-}for(O=0;
-O<this._arrayOfAllItems.length;
-++O){Q=this._arrayOfAllItems[O];
-Q[this._storeRefPropName]=this;
-Q[this._itemNumPropName]=O
-}for(O=0;
-O<this._arrayOfAllItems.length;
-++O){Q=this._arrayOfAllItems[O];
-for(S in Q){H=Q[S];
-for(var N=0;
-N<H.length;
-++N){K=H[N];
-if(K!==null&&typeof K=="object"){if(K._type&&K._value){var F=K._type;
-var G=this._datatypeMap[F];
-if(!G){throw new Error("dojo.data.ItemFileReadStore: in the typeMap constructor arg, no object class was specified for the datatype '"+F+"'")
-}else{if(dojo.isFunction(G)){H[N]=new G(K._value)
-}else{if(dojo.isFunction(G.deserialize)){H[N]=G.deserialize(K._value)
+}for(A=0;
+A<this._arrayOfAllItems.length;
+++A){C=this._arrayOfAllItems[A];
+C[this._storeRefPropName]=this;
+C[this._itemNumPropName]=A
+}for(A=0;
+A<this._arrayOfAllItems.length;
+++A){C=this._arrayOfAllItems[A];
+for(E in C){N=C[E];
+for(var T=0;
+T<N.length;
+++T){Q=N[T];
+if(Q!==null&&typeof Q=="object"){if(Q._type&&Q._value){var L=Q._type;
+var M=this._datatypeMap[L];
+if(!M){throw new Error("dojo.data.ItemFileReadStore: in the typeMap constructor arg, no object class was specified for the datatype '"+L+"'")
+}else{if(dojo.isFunction(M)){N[T]=new M(Q._value)
+}else{if(dojo.isFunction(M.deserialize)){N[T]=M.deserialize(Q._value)
 }else{throw new Error("dojo.data.ItemFileReadStore: Value provided in typeMap was neither a constructor, nor a an object with a deserialize function")
-}}}}if(K._reference){var A=K._reference;
-if(dojo.isString(A)){H[N]=this._itemsByIdentity[A]
-}else{for(var M=0;
-M<this._arrayOfAllItems.length;
-++M){var C=this._arrayOfAllItems[M];
-var I=true;
-for(var P in A){if(C[P]!=A[P]){I=false
-}}if(I){H[N]=C
-}}}}}}}}},getIdentity:function(B){var A=this._features["dojo.data.api.Identity"];
-if(A===Number){return B[this._itemNumPropName]
-}else{var C=B[A];
-if(C){return C[0]
+}}}}if(Q._reference){var G=Q._reference;
+if(dojo.isString(G)){N[T]=this._itemsByIdentity[G]
+}else{for(var S=0;
+S<this._arrayOfAllItems.length;
+++S){var I=this._arrayOfAllItems[S];
+var O=true;
+for(var B in G){if(I[B]!=G[B]){O=false
+}}if(O){N[T]=I
+}}}}}}}}},getIdentity:function(A){var C=this._features["dojo.data.api.Identity"];
+if(C===Number){return A[this._itemNumPropName]
+}else{var B=A[C];
+if(B){return B[0]
 }}return null
-},fetchItemByIdentity:function(B){if(!this._loadFinished){var A=this;
-if(this._jsonFileUrl){if(this._loadInProgress){this._queuedFetches.push({args:B})
+},fetchItemByIdentity:function(A){if(!this._loadFinished){var F=this;
+if(this._jsonFileUrl){if(this._loadInProgress){this._queuedFetches.push({args:A})
 }else{this._loadInProgress=true;
-var F={url:A._jsonFileUrl,handleAs:"json-comment-optional"};
-var E=dojo.xhrGet(F);
-E.addCallback(function(J){var H=B.scope?B.scope:dojo.global;
-try{A._getItemsFromLoadedData(J);
-A._loadFinished=true;
-A._loadInProgress=false;
-var I=A._getItemByIdentity(B.identity);
-if(B.onItem){B.onItem.call(H,I)
-}A._handleQueuedFetches()
-}catch(G){A._loadInProgress=false;
-if(B.onError){B.onError.call(H,G)
+var E={url:F._jsonFileUrl,handleAs:"json-comment-optional"};
+var D=dojo.xhrGet(E);
+D.addCallback(function(G){var I=A.scope?A.scope:dojo.global;
+try{F._getItemsFromLoadedData(G);
+F._loadFinished=true;
+F._loadInProgress=false;
+var J=F._getItemByIdentity(A.identity);
+if(A.onItem){A.onItem.call(I,J)
+}F._handleQueuedFetches()
+}catch(H){F._loadInProgress=false;
+if(A.onError){A.onError.call(I,H)
 }}});
-E.addErrback(function(G){A._loadInProgress=false;
-if(B.onError){var H=B.scope?B.scope:dojo.global;
-B.onError.call(H,G)
+D.addErrback(function(H){F._loadInProgress=false;
+if(A.onError){var G=A.scope?A.scope:dojo.global;
+A.onError.call(G,H)
 }})
-}}else{if(this._jsonData){A._getItemsFromLoadedData(A._jsonData);
-A._jsonData=null;
-A._loadFinished=true;
-var D=A._getItemByIdentity(B.identity);
-if(B.onItem){var C=B.scope?B.scope:dojo.global;
-B.onItem.call(C,D)
-}}}}else{var D=this._getItemByIdentity(B.identity);
-if(B.onItem){var C=B.scope?B.scope:dojo.global;
-B.onItem.call(C,D)
-}}},_getItemByIdentity:function(A){var B=null;
-if(this._itemsByIdentity){B=this._itemsByIdentity[A]
-}else{B=this._arrayOfAllItems[A]
-}if(B===undefined){B=null
-}return B
-},getIdentityAttributes:function(B){var A=this._features["dojo.data.api.Identity"];
-if(A===Number){return null
-}else{return[A]
-}},_forceLoad:function(){var A=this;
-if(this._jsonFileUrl){var C={url:A._jsonFileUrl,handleAs:"json-comment-optional",sync:true};
-var B=dojo.xhrGet(C);
-B.addCallback(function(D){try{if(A._loadInProgress!==true&&!A._loadFinished){A._getItemsFromLoadedData(D);
-A._loadFinished=true
-}}catch(E){console.log(E);
-throw E
+}}else{if(this._jsonData){F._getItemsFromLoadedData(F._jsonData);
+F._jsonData=null;
+F._loadFinished=true;
+var C=F._getItemByIdentity(A.identity);
+if(A.onItem){var B=A.scope?A.scope:dojo.global;
+A.onItem.call(B,C)
+}}}}else{var C=this._getItemByIdentity(A.identity);
+if(A.onItem){var B=A.scope?A.scope:dojo.global;
+A.onItem.call(B,C)
+}}},_getItemByIdentity:function(B){var A=null;
+if(this._itemsByIdentity){A=this._itemsByIdentity[B]
+}else{A=this._arrayOfAllItems[B]
+}if(A===undefined){A=null
+}return A
+},getIdentityAttributes:function(A){var B=this._features["dojo.data.api.Identity"];
+if(B===Number){return null
+}else{return[B]
+}},_forceLoad:function(){var C=this;
+if(this._jsonFileUrl){var B={url:C._jsonFileUrl,handleAs:"json-comment-optional",sync:true};
+var A=dojo.xhrGet(B);
+A.addCallback(function(E){try{if(C._loadInProgress!==true&&!C._loadFinished){C._getItemsFromLoadedData(E);
+C._loadFinished=true
+}}catch(D){console.log(D);
+throw D
 }});
-B.addErrback(function(D){throw D
+A.addErrback(function(D){throw D
 })
-}else{if(this._jsonData){A._getItemsFromLoadedData(A._jsonData);
-A._jsonData=null;
-A._loadFinished=true
+}else{if(this._jsonData){C._getItemsFromLoadedData(C._jsonData);
+C._jsonData=null;
+C._loadFinished=true
 }}}});
 dojo.extend(dojo.data.ItemFileReadStore,dojo.data.util.simpleFetch)
 };

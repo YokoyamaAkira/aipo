@@ -1,12 +1,4 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dojox.wire"],
-["require", "dojox.wire._base"]],
-defineResource: function(dojo){if(!dojo._hasResource["dojox.wire"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire"] = true;
-dojo.provide("dojox.wire");
-dojo.require("dojox.wire._base");
-
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dojox.wire"],["require","dojox.wire._base"]],defineResource:function(A){if(!A._hasResource["dojox.wire"]){A._hasResource["dojox.wire"]=true;
+A.provide("dojox.wire");
+A.require("dojox.wire._base")
+}}});

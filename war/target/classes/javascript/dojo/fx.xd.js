@@ -1,81 +1,81 @@
 dojo._xdResourceLoaded({depends:[["provide","dojo.fx"],["provide","dojo.fx.Toggler"]],defineResource:function(A){if(!A._hasResource["dojo.fx"]){A._hasResource["dojo.fx"]=true;
 A.provide("dojo.fx");
 A.provide("dojo.fx.Toggler");
-A.fx.chain=function(D){var C=D.shift();
-var B=C;
-A.forEach(D,function(E){A.connect(B,"onEnd",E,"play");
-B=E
+A.fx.chain=function(B){var D=B.shift();
+var C=D;
+A.forEach(B,function(E){A.connect(C,"onEnd",E,"play");
+C=E
+});
+return D
+};
+A.fx.combine=function(B){var C=new A._Animation({curve:[0,1]});
+if(!B.length){return C
+}C.duration=B[0].duration;
+A.forEach(B,function(D){A.forEach(["play","pause","stop"],function(E){if(D[E]){A.connect(C,E,D,E)
+}})
 });
 return C
 };
-A.fx.combine=function(C){var B=new A._Animation({curve:[0,1]});
-if(!C.length){return B
-}B.duration=C[0].duration;
-A.forEach(C,function(D){A.forEach(["play","pause","stop"],function(E){if(D[E]){A.connect(B,E,D,E)
-}})
-});
-return B
-};
-A.declare("dojo.fx.Toggler",null,{constructor:function(B){var C=this;
-A.mixin(C,B);
-C.node=B.node;
-C._showArgs=A.mixin({},B);
-C._showArgs.node=C.node;
-C._showArgs.duration=C.showDuration;
-C.showAnim=C.showFunc(C._showArgs);
-C._hideArgs=A.mixin({},B);
-C._hideArgs.node=C.node;
-C._hideArgs.duration=C.hideDuration;
-C.hideAnim=C.hideFunc(C._hideArgs);
-A.connect(C.showAnim,"beforeBegin",A.hitch(C.hideAnim,"stop",true));
-A.connect(C.hideAnim,"beforeBegin",A.hitch(C.showAnim,"stop",true))
+A.declare("dojo.fx.Toggler",null,{constructor:function(C){var B=this;
+A.mixin(B,C);
+B.node=C.node;
+B._showArgs=A.mixin({},C);
+B._showArgs.node=B.node;
+B._showArgs.duration=B.showDuration;
+B.showAnim=B.showFunc(B._showArgs);
+B._hideArgs=A.mixin({},C);
+B._hideArgs.node=B.node;
+B._hideArgs.duration=B.hideDuration;
+B.hideAnim=B.hideFunc(B._hideArgs);
+A.connect(B.showAnim,"beforeBegin",A.hitch(B.hideAnim,"stop",true));
+A.connect(B.hideAnim,"beforeBegin",A.hitch(B.showAnim,"stop",true))
 },node:null,showFunc:A.fadeIn,hideFunc:A.fadeOut,showDuration:200,hideDuration:200,show:function(B){return this.showAnim.play(B||0)
 },hide:function(B){return this.hideAnim.play(B||0)
 }});
-A.fx.wipeIn=function(B){B.node=A.byId(B.node);
-var D=B.node,C=D.style;
-var E=A.animateProperty(A.mixin({properties:{height:{start:function(){C.overflow="hidden";
-if(C.visibility=="hidden"||C.display=="none"){C.height="1px";
-C.display="";
-C.visibility="";
+A.fx.wipeIn=function(C){C.node=A.byId(C.node);
+var E=C.node,D=E.style;
+var B=A.animateProperty(A.mixin({properties:{height:{start:function(){D.overflow="hidden";
+if(D.visibility=="hidden"||D.display=="none"){D.height="1px";
+D.display="";
+D.visibility="";
 return 1
-}else{var F=A.style(D,"height");
+}else{var F=A.style(E,"height");
 return Math.max(F,1)
-}},end:function(){return D.scrollHeight
-}}}},B));
-A.connect(E,"onEnd",function(){C.height="auto"
+}},end:function(){return E.scrollHeight
+}}}},C));
+A.connect(B,"onEnd",function(){D.height="auto"
 });
-return E
+return B
 };
-A.fx.wipeOut=function(B){var D=B.node=A.byId(B.node);
-var C=D.style;
-var E=A.animateProperty(A.mixin({properties:{height:{end:1}}},B));
-A.connect(E,"beforeBegin",function(){C.overflow="hidden";
-C.display=""
+A.fx.wipeOut=function(C){var E=C.node=A.byId(C.node);
+var D=E.style;
+var B=A.animateProperty(A.mixin({properties:{height:{end:1}}},C));
+A.connect(B,"beforeBegin",function(){D.overflow="hidden";
+D.display=""
 });
-A.connect(E,"onEnd",function(){C.height="auto";
-C.display="none"
+A.connect(B,"onEnd",function(){D.height="auto";
+D.display="none"
 });
-return E
+return B
 };
-A.fx.slideTo=function(B){var C=(B.node=A.byId(B.node));
+A.fx.slideTo=function(C){var D=(C.node=A.byId(C.node));
+var G=null;
 var F=null;
-var E=null;
-var G=(function(H){return function(){var J=A.getComputedStyle(H);
+var B=(function(H){return function(){var J=A.getComputedStyle(H);
 var K=J.position;
-F=(K=="absolute"?H.offsetTop:parseInt(J.top)||0);
-E=(K=="absolute"?H.offsetLeft:parseInt(J.left)||0);
+G=(K=="absolute"?H.offsetTop:parseInt(J.top)||0);
+F=(K=="absolute"?H.offsetLeft:parseInt(J.left)||0);
 if(K!="absolute"&&K!="relative"){var I=A.coords(H,true);
-F=I.y;
-E=I.x;
+G=I.y;
+F=I.x;
 H.style.position="absolute";
-H.style.top=F+"px";
-H.style.left=E+"px"
+H.style.top=G+"px";
+H.style.left=F+"px"
 }}
-})(C);
-G();
-var D=A.animateProperty(A.mixin({properties:{top:{end:B.top||0},left:{end:B.left||0}}},B));
-A.connect(D,"beforeBegin",D,G);
-return D
+})(D);
+B();
+var E=A.animateProperty(A.mixin({properties:{top:{end:C.top||0},left:{end:C.left||0}}},C));
+A.connect(E,"beforeBegin",E,B);
+return E
 }
 }}});

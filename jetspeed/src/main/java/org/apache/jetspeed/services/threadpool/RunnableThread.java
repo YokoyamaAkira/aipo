@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ public class RunnableThread extends Thread {
    * Static initialization of the logger for this class
    */
   private static final JetspeedLogger logger = JetspeedLogFactoryService
-      .getLogger(RunnableThread.class.getName());
+    .getLogger(RunnableThread.class.getName());
 
   private boolean running = false;
 
@@ -63,7 +63,7 @@ public class RunnableThread extends Thread {
    * Creates a new Thread in the specified threadgroup
    * 
    * @param tg
-   *            the Threadgroup which will contain the new Thread
+   *          the Threadgroup which will contain the new Thread
    */
   public RunnableThread(ThreadGroup tg) {
     super(tg, "Provisory");
@@ -78,9 +78,9 @@ public class RunnableThread extends Thread {
    * Creates a new Thread in the specified threadgroup and assigns it an id.
    * 
    * @param tg
-   *            the Threadgroup which will contain the new Thread
+   *          the Threadgroup which will contain the new Thread
    * @param id
-   *            an identifier for the new Thread
+   *          an identifier for the new Thread
    */
   public RunnableThread(ThreadGroup tg, int id) {
 
@@ -93,6 +93,7 @@ public class RunnableThread extends Thread {
   /**
    * Processes the Runnable object assigned to it, whenever one is available
    */
+  @Override
   public void run() {
 
     /*
@@ -126,7 +127,7 @@ public class RunnableThread extends Thread {
 
         // ok... add this thread back into the thread pool
         ((JetspeedThreadPoolService) TurbineServices.getInstance().getService(
-            ThreadPoolService.SERVICE_NAME)).release(this);
+          ThreadPoolService.SERVICE_NAME)).release(this);
 
         // if the runnable == null wait because it has been not been
         // directly assigned a task..
@@ -170,7 +171,7 @@ public class RunnableThread extends Thread {
    * Set the Runnable process to execute
    * 
    * @param runnable
-   *            the Object to execute
+   *          the Object to execute
    */
   public void setRunnable(Runnable runnable) {
     this.runnable = runnable;
@@ -192,6 +193,7 @@ public class RunnableThread extends Thread {
    *         executing a Runnable process, if false it's waiting for a new
    *         process
    */
+  @SuppressWarnings("unused")
   private boolean isRunning() {
     return this.running;
   }
@@ -210,6 +212,7 @@ public class RunnableThread extends Thread {
    * 
    * @return the identifier of the thread
    */
+  @Override
   public long getId() {
     return this.id;
   }

@@ -1,34 +1,34 @@
 if(!dojo._hasResource["dojox.charting.plot3d.Cylinders"]){dojo._hasResource["dojox.charting.plot3d.Cylinders"]=true;
 dojo.provide("dojox.charting.plot3d.Cylinders");
 dojo.require("dojox.charting.plot3d.Base");
-(function(){var A=function(B,D,F){B=typeof B=="string"?B.split(""):B;
-F=F||dojo.global;
-var E=B[0];
-for(var C=1;
-C<B.length;
-E=D.call(F,E,B[C++])){}return E
+(function(){var A=function(C,E,B){C=typeof C=="string"?C.split(""):C;
+B=B||dojo.global;
+var F=C[0];
+for(var D=1;
+D<C.length;
+F=E.call(B,F,C[D++])){}return F
 };
-dojo.declare("dojox.charting.plot3d.Cylinders",dojox.charting.plot3d.Base,{constructor:function(E,C,D){this.depth="auto";
+dojo.declare("dojox.charting.plot3d.Cylinders",dojox.charting.plot3d.Base,{constructor:function(B,D,E){this.depth="auto";
 this.gap=0;
 this.data=[];
 this.material={type:"plastic",finish:"shiny",color:"lime"};
 this.outline=null;
-if(D){if("depth" in D){this.depth=D.depth
-}if("gap" in D){this.gap=D.gap
-}if("material" in D){var B=D.material;
-if(typeof B=="string"||B instanceof dojo.Color){this.material.color=B
-}else{this.material=B
-}}if("outline" in D){this.outline=D.outline
+if(E){if("depth" in E){this.depth=E.depth
+}if("gap" in E){this.gap=E.gap
+}if("material" in E){var C=E.material;
+if(typeof C=="string"||C instanceof dojo.Color){this.material.color=C
+}else{this.material=C
+}}if("outline" in E){this.outline=E.outline
 }}},getDepth:function(){if(this.depth=="auto"){var B=this.width;
 if(this.data&&this.data.length){B=B/this.data.length
 }return B-2*this.gap
 }return this.depth
-},generate:function(D,C){if(!this.data){return this
-}var E=this.width/this.data.length,G=0,F=this.height/A(this.data,Math.max);
-if(!C){C=D.view
+},generate:function(E,D){if(!this.data){return this
+}var F=this.width/this.data.length,C=0,G=this.height/A(this.data,Math.max);
+if(!D){D=E.view
 }for(var B=0;
 B<this.data.length;
-++B,G+=E){C.createCylinder({center:{x:G+E/2,y:0,z:0},radius:E/2-this.gap,height:this.data[B]*F}).setTransform(dojox.gfx3d.matrix.rotateXg(-90)).setFill(this.material).setStroke(this.outline)
+++B,C+=F){D.createCylinder({center:{x:C+F/2,y:0,z:0},radius:F/2-this.gap,height:this.data[B]*G}).setTransform(dojox.gfx3d.matrix.rotateXg(-90)).setFill(this.material).setStroke(this.outline)
 }}})
 })()
 };

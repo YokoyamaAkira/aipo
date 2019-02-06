@@ -3,24 +3,24 @@ A.provide("dijit.form.TextBox");
 A.require("dijit.form._FormWidget");
 A.declare("dijit.form.TextBox",dijit.form._FormWidget,{trim:false,uppercase:false,lowercase:false,propercase:false,maxLength:"",templateString:'<input class="dojoTextBox" dojoAttachPoint=\'textbox,focusNode\' name="${name}"\r\n\tdojoAttachEvent=\'onmouseenter:_onMouse,onmouseleave:_onMouse,onfocus:_onMouse,onblur:_onMouse,onkeyup,onkeypress:_onKeyPress\'\r\n\tautocomplete="off" type="${type}"\r\n\t/>\r\n',baseClass:"dijitTextBox",attributeMap:A.mixin(A.clone(dijit.form._FormWidget.prototype.attributeMap),{maxLength:"focusNode"}),getDisplayedValue:function(){return this.filter(this.textbox.value)
 },getValue:function(){return this.parse(this.getDisplayedValue(),this.constraints)
-},setValue:function(E,D,C){var B=this.filter(E);
-if((typeof B==typeof E)&&(C==null||C==undefined)){C=this.format(B,this.constraints)
-}if(C!=null&&C!=undefined){this.textbox.value=C
-}dijit.form.TextBox.superclass.setValue.call(this,B,D)
+},setValue:function(B,E,D){var C=this.filter(B);
+if((typeof C==typeof B)&&(D==null||D==undefined)){D=this.format(C,this.constraints)
+}if(D!=null&&D!=undefined){this.textbox.value=D
+}dijit.form.TextBox.superclass.setValue.call(this,C,E)
 },setDisplayedValue:function(B){this.textbox.value=B;
 this.setValue(this.getValue(),true)
 },forWaiValuenow:function(){return this.getDisplayedValue()
-},format:function(B,C){return((B==null||B==undefined)?"":(B.toString?B.toString():B))
-},parse:function(B,C){return B
+},format:function(C,B){return((C==null||C==undefined)?"":(C.toString?C.toString():C))
+},parse:function(C,B){return C
 },postCreate:function(){this.textbox.setAttribute("value",this.getDisplayedValue());
 this.inherited("postCreate",arguments);
 if(this.srcNodeRef){A.style(this.textbox,"cssText",this.style);
 this.textbox.className+=" "+this["class"]
 }this._layoutHack()
-},_layoutHack:function(){if(A.isFF==2&&this.domNode.tagName=="TABLE"){var C=this.domNode;
-var B=C.style.opacity;
-C.style.opacity="0.999";
-setTimeout(function(){C.style.opacity=B
+},_layoutHack:function(){if(A.isFF==2&&this.domNode.tagName=="TABLE"){var B=this.domNode;
+var C=B.style.opacity;
+B.style.opacity="0.999";
+setTimeout(function(){B.style.opacity=C
 },0)
 }},filter:function(B){if(B==undefined||B==null){return""
 }else{if(typeof B!="string"){return B

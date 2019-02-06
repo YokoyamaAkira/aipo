@@ -1,76 +1,76 @@
 if(!dojo._hasResource["dojox.dtl.tag.loader"]){dojo._hasResource["dojox.dtl.tag.loader"]=true;
 dojo.provide("dojox.dtl.tag.loader");
 dojo.require("dojox.dtl._base");
-dojox.dtl.tag.loader.BlockNode=function(A,B){this.name=A;
-this.nodelist=B
+dojox.dtl.tag.loader.BlockNode=function(B,A){this.name=B;
+this.nodelist=A
 };
-dojo.extend(dojox.dtl.tag.loader.BlockNode,{render:function(B,A){if(this.override){A=this.override.render(B,A,this);
+dojo.extend(dojox.dtl.tag.loader.BlockNode,{render:function(A,B){if(this.override){B=this.override.render(A,B,this);
 this.rendered=this.override
-}else{A=this.nodelist.render(B,A,this);
+}else{B=this.nodelist.render(A,B,this);
 this.rendered=this.nodelist
 }this.override=null;
-return A
-},unrender:function(B,A){return this.rendered.unrender(B,A)
+return B
+},unrender:function(A,B){return this.rendered.unrender(A,B)
 },setOverride:function(A){if(!this.override){this.override=A
 }},toString:function(){return"dojox.dtl.tag.loader.BlockNode"
 }});
-dojox.dtl.tag.loader.block=function(E,D){var C=D.split(" ");
-var A=C[1];
-E._blocks=E._blocks||{};
-E._blocks[A]=E._blocks[A]||[];
-E._blocks[A].push(A);
-var B=E.parse(["endblock","endblock "+A]);
-E.next();
-return new dojox.dtl.tag.loader.BlockNode(A,B)
+dojox.dtl.tag.loader.block=function(D,C){var B=C.split(" ");
+var E=B[1];
+D._blocks=D._blocks||{};
+D._blocks[E]=D._blocks[E]||[];
+D._blocks[E].push(E);
+var A=D.parse(["endblock","endblock "+E]);
+D.next();
+return new dojox.dtl.tag.loader.BlockNode(E,A)
 };
-dojox.dtl.tag.loader.ExtendsNode=function(A,D,E,C,B){this.getTemplate=A;
-this.nodelist=D;
-this.shared=E;
-this.parent=C;
-this.key=B
+dojox.dtl.tag.loader.ExtendsNode=function(E,C,D,B,A){this.getTemplate=E;
+this.nodelist=C;
+this.shared=D;
+this.parent=B;
+this.key=A
 };
-dojo.extend(dojox.dtl.tag.loader.ExtendsNode,{parents:{},getParent:function(A){if(!this.parent){this.parent=A.get(this.key,false);
+dojo.extend(dojox.dtl.tag.loader.ExtendsNode,{parents:{},getParent:function(B){if(!this.parent){this.parent=B.get(this.key,false);
 if(!this.parent){throw new Error("extends tag used a variable that did not resolve")
 }if(typeof this.parent=="object"){if(this.parent.url){if(this.parent.shared){this.shared=true
 }this.parent=this.parent.url.toString()
 }else{this.parent=this.parent.toString()
 }}if(this.parent&&this.parent.indexOf("shared:")==0){this.shared=true;
-this.parent=this.parent.substring(7,B.length)
-}}var B=this.parent;
-if(!B){throw new Error("Invalid template name in 'extends' tag.")
-}if(B.render){return B
-}if(this.parents[B]){return this.parents[B]
-}this.parent=this.getTemplate(dojox.dtl.text.getTemplateString(B));
-if(this.shared){this.parents[B]=this.parent
+this.parent=this.parent.substring(7,A.length)
+}}var A=this.parent;
+if(!A){throw new Error("Invalid template name in 'extends' tag.")
+}if(A.render){return A
+}if(this.parents[A]){return this.parents[A]
+}this.parent=this.getTemplate(dojox.dtl.text.getTemplateString(A));
+if(this.shared){this.parents[A]=this.parent
 }return this.parent
-},render:function(B,E){var J=dojox.dtl;
-var F=dojox.dtl.tag.loader;
-var I=this.getParent(B);
-var A=I.nodelist[0] instanceof this.constructor;
-var H={};
-for(var G=0,C;
-C=I.nodelist.contents[G];
-G++){if(C instanceof F.BlockNode){H[C.name]=C
-}}for(var G=0,C;
-C=this.nodelist.contents[G];
-G++){if(C instanceof F.BlockNode){var D=H[C.name];
-if(!D){if(A){I.nodelist[0].nodelist.append(C)
-}}else{if(this.shared){D.setOverride(C.nodelist)
-}else{D.nodelist=C.nodelist
-}}}}this.rendered=I;
-return I.render(B,E,this)
-},unrender:function(B,A){return this.rendered.unrender(B,A,this)
+},render:function(H,A){var F=dojox.dtl;
+var B=dojox.dtl.tag.loader;
+var E=this.getParent(H);
+var G=E.nodelist[0] instanceof this.constructor;
+var D={};
+for(var C=0,I;
+I=E.nodelist.contents[C];
+C++){if(I instanceof B.BlockNode){D[I.name]=I
+}}for(var C=0,I;
+I=this.nodelist.contents[C];
+C++){if(I instanceof B.BlockNode){var J=D[I.name];
+if(!J){if(G){E.nodelist[0].nodelist.append(I)
+}}else{if(this.shared){J.setOverride(I.nodelist)
+}else{J.nodelist=I.nodelist
+}}}}this.rendered=E;
+return E.render(H,A,this)
+},unrender:function(A,B){return this.rendered.unrender(A,B,this)
 },toString:function(){return"dojox.dtl.block.ExtendsNode"
 }});
-dojox.dtl.tag.loader.extends_=function(G,F){var E=F.split(" ");
-var D=false;
-var B=null;
-var A=null;
-if(E[1].charAt(0)=='"'||E[1].charAt(0)=="'"){B=E[1].substring(1,E[1].length-1)
-}else{A=E[1]
-}if(B&&B.indexOf("shared:")==0){D=true;
-B=B.substring(7,B.length)
-}var C=G.parse();
-return new dojox.dtl.tag.loader.ExtendsNode(G.getTemplate,C,D,B,A)
+dojox.dtl.tag.loader.extends_=function(D,C){var B=C.split(" ");
+var A=false;
+var F=null;
+var E=null;
+if(B[1].charAt(0)=='"'||B[1].charAt(0)=="'"){F=B[1].substring(1,B[1].length-1)
+}else{E=B[1]
+}if(F&&F.indexOf("shared:")==0){A=true;
+F=F.substring(7,F.length)
+}var G=D.parse();
+return new dojox.dtl.tag.loader.ExtendsNode(D.getTemplate,G,A,F,E)
 }
 };

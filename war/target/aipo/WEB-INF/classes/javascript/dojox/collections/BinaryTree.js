@@ -1,10 +1,10 @@
 if(!dojo._hasResource["dojox.collections.BinaryTree"]){dojo._hasResource["dojox.collections.BinaryTree"]=true;
 dojo.provide("dojox.collections.BinaryTree");
 dojo.require("dojox.collections._base");
-dojox.collections.BinaryTree=function(H){function E(J,K,I){this.value=J||null;
-this.right=K||null;
-this.left=I||null;
-this.clone=function(){var L=new E();
+dojox.collections.BinaryTree=function(C){function H(K,I,J){this.value=K||null;
+this.right=I||null;
+this.left=J||null;
+this.clone=function(){var L=new H();
 if(this.value.value){L.value=this.value.clone()
 }else{L.value=this.value
 }if(this.left!=null){L.left=this.left.clone()
@@ -19,105 +19,105 @@ this.compareData=function(L){if(this.value>L){return 1
 }if(this.value<L){return -1
 }return 0
 }
-}function C(J,I){if(J){C(J.left,I);
-I.push(J.value);
-C(J.right,I)
-}}function G(K,I){var J="";
-if(K){J=K.value.toString()+I;
-J+=G(K.left,I);
-J+=G(K.right,I)
-}return J
-}function F(K,I){var J="";
-if(K){J=F(K.left,I);
-J+=K.value.toString()+I;
-J+=F(K.right,I)
-}return J
-}function D(K,I){var J="";
-if(K){J=D(K.left,I);
-J+=D(K.right,I);
-J+=K.value.toString()+I
-}return J
-}function B(K,J){if(!K){return null
-}var I=K.compareData(J);
-if(I==0){return K
-}if(I>0){return B(K.left,J)
-}else{return B(K.right,J)
-}}this.add=function(K){var M=new E(K);
-var I;
-var L=A;
-var J=null;
-while(L){I=L.compare(M);
-if(I==0){return 
-}J=L;
-if(I>0){L=L.left
-}else{L=L.right
+}function F(I,J){if(I){F(I.left,J);
+J.push(I.value);
+F(I.right,J)
+}}function B(I,J){var K="";
+if(I){K=I.value.toString()+J;
+K+=B(I.left,J);
+K+=B(I.right,J)
+}return K
+}function A(I,J){var K="";
+if(I){K=A(I.left,J);
+K+=I.value.toString()+J;
+K+=A(I.right,J)
+}return K
+}function G(I,J){var K="";
+if(I){K=G(I.left,J);
+K+=G(I.right,J);
+K+=I.value.toString()+J
+}return K
+}function E(I,K){if(!I){return null
+}var J=I.compareData(K);
+if(J==0){return I
+}if(J>0){return E(I.left,K)
+}else{return E(I.right,K)
+}}this.add=function(M){var J=new H(M);
+var K;
+var I=D;
+var L=null;
+while(I){K=I.compare(J);
+if(K==0){return 
+}L=I;
+if(K>0){I=I.left
+}else{I=I.right
 }}this.count++;
-if(!J){A=M
-}else{I=J.compare(M);
-if(I>0){J.left=M
-}else{J.right=M
+if(!L){D=J
+}else{K=L.compare(J);
+if(K>0){L.left=J
+}else{L.right=J
 }}};
-this.clear=function(){A=null;
+this.clear=function(){D=null;
 this.count=0
 };
-this.clone=function(){var J=new dojox.collections.BinaryTree();
-var I=this.getIterator();
-while(!I.atEnd()){J.add(I.get())
-}return J
+this.clone=function(){var I=new dojox.collections.BinaryTree();
+var J=this.getIterator();
+while(!J.atEnd()){I.add(J.get())
+}return I
 };
 this.contains=function(I){return this.search(I)!=null
 };
-this.deleteData=function(M){var N=A;
-var J=null;
-var I=N.compareData(M);
-while(I!=0&&N!=null){if(I>0){J=N;
-N=N.left
-}else{if(I<0){J=N;
-N=N.right
-}}I=N.compareData(M)
-}if(!N){return 
+this.deleteData=function(J){var K=D;
+var M=null;
+var L=K.compareData(J);
+while(L!=0&&K!=null){if(L>0){M=K;
+K=K.left
+}else{if(L<0){M=K;
+K=K.right
+}}L=K.compareData(J)
+}if(!K){return 
 }this.count--;
-if(!N.right){if(!J){A=N.left
-}else{I=J.compare(N);
-if(I>0){J.left=N.left
-}else{if(I<0){J.right=N.left
-}}}}else{if(!N.right.left){if(!J){A=N.right
-}else{I=J.compare(N);
-if(I>0){J.left=N.right
-}else{if(I<0){J.right=N.right
-}}}}else{var L=N.right.left;
-var K=N.right;
-while(L.left!=null){K=L;
-L=L.left
-}K.left=L.right;
-L.left=N.left;
-L.right=N.right;
-if(!J){A=L
-}else{I=J.compare(N);
-if(I>0){J.left=L
-}else{if(I<0){J.right=L
+if(!K.right){if(!M){D=K.left
+}else{L=M.compare(K);
+if(L>0){M.left=K.left
+}else{if(L<0){M.right=K.left
+}}}}else{if(!K.right.left){if(!M){D=K.right
+}else{L=M.compare(K);
+if(L>0){M.left=K.right
+}else{if(L<0){M.right=K.right
+}}}}else{var I=K.right.left;
+var N=K.right;
+while(I.left!=null){N=I;
+I=I.left
+}N.left=I.right;
+I.left=K.left;
+I.right=K.right;
+if(!M){D=I
+}else{L=M.compare(K);
+if(L>0){M.left=I
+}else{if(L<0){M.right=I
 }}}}}};
 this.getIterator=function(){var I=[];
-C(A,I);
+F(D,I);
 return new dojox.collections.Iterator(I)
 };
-this.search=function(I){return B(A,I)
+this.search=function(I){return E(D,I)
 };
-this.toString=function(I,J){if(!I){I=dojox.collections.BinaryTree.TraversalMethods.Inorder
-}if(!J){J=","
-}var K="";
-switch(I){case dojox.collections.BinaryTree.TraversalMethods.Preorder:K=G(A,J);
+this.toString=function(J,K){if(!J){J=dojox.collections.BinaryTree.TraversalMethods.Inorder
+}if(!K){K=","
+}var I="";
+switch(J){case dojox.collections.BinaryTree.TraversalMethods.Preorder:I=B(D,K);
 break;
-case dojox.collections.BinaryTree.TraversalMethods.Inorder:K=F(A,J);
+case dojox.collections.BinaryTree.TraversalMethods.Inorder:I=A(D,K);
 break;
-case dojox.collections.BinaryTree.TraversalMethods.Postorder:K=D(A,J);
+case dojox.collections.BinaryTree.TraversalMethods.Postorder:I=G(D,K);
 break
-}if(K.length==0){return""
-}else{return K.substring(0,K.length-J.length)
+}if(I.length==0){return""
+}else{return I.substring(0,I.length-K.length)
 }};
 this.count=0;
-var A=this.root=null;
-if(H){this.add(H)
+var D=this.root=null;
+if(C){this.add(C)
 }};
 dojox.collections.BinaryTree.TraversalMethods={Preorder:1,Inorder:2,Postorder:3}
 };

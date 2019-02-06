@@ -1,37 +1,11 @@
-dojo._xdResourceLoaded({
-depends: [["provide", "dijit.form.NumberSpinner"],
-["require", "dijit.form._Spinner"],
-["require", "dijit.form.NumberTextBox"]],
-defineResource: function(dojo){if(!dojo._hasResource["dijit.form.NumberSpinner"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit.form.NumberSpinner"] = true;
-dojo.provide("dijit.form.NumberSpinner");
-
-dojo.require("dijit.form._Spinner");
-dojo.require("dijit.form.NumberTextBox");
-
-dojo.declare(
-"dijit.form.NumberSpinner",
-[dijit.form._Spinner, dijit.form.NumberTextBoxMixin],
-{
-	// summary: Number Spinner
-	// description: This widget is the same as NumberTextBox but with up/down arrows added
-
-	required: true,
-
-	adjust: function(/* Object */ val, /*Number*/ delta){
-		// summary: change Number val by the given amount
-		var newval = val+delta;
-		if(isNaN(val) || isNaN(newval)){ return val; }
-		if((typeof this.constraints.max == "number") && (newval > this.constraints.max)){
-			newval = this.constraints.max;
-		}
-		if((typeof this.constraints.min == "number") && (newval < this.constraints.min)){
-			newval = this.constraints.min;
-		}
-		return newval;
-	}
-});
-
-}
-
-}});
+dojo._xdResourceLoaded({depends:[["provide","dijit.form.NumberSpinner"],["require","dijit.form._Spinner"],["require","dijit.form.NumberTextBox"]],defineResource:function(A){if(!A._hasResource["dijit.form.NumberSpinner"]){A._hasResource["dijit.form.NumberSpinner"]=true;
+A.provide("dijit.form.NumberSpinner");
+A.require("dijit.form._Spinner");
+A.require("dijit.form.NumberTextBox");
+A.declare("dijit.form.NumberSpinner",[dijit.form._Spinner,dijit.form.NumberTextBoxMixin],{required:true,adjust:function(C,D){var B=C+D;
+if(isNaN(C)||isNaN(B)){return C
+}if((typeof this.constraints.max=="number")&&(B>this.constraints.max)){B=this.constraints.max
+}if((typeof this.constraints.min=="number")&&(B<this.constraints.min)){B=this.constraints.min
+}return B
+}})
+}}});

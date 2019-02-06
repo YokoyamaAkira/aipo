@@ -8,8 +8,8 @@ dojo.requireLocalization("dijit","common",null,"ROOT,cs,de,es,fr,hu,it,ja,ko,pl,
 dojo.deprecated("dijit.form.InlineEditBox is deprecated, use dijit.InlineEditBox instead","","1.1");
 dojo.declare("dijit.form.InlineEditBox",[dijit.form._FormWidget,dijit._Container],{templateString:'<span\r\n\t><fieldset dojoAttachPoint="editNode" style="display:none;" waiRole="presentation"\r\n\t\t><div dojoAttachPoint="containerNode" dojoAttachEvent="onkeypress:_onEditWidgetKeyPress"></div\r\n\t\t><div dojoAttachPoint="buttonContainer"\r\n\t\t\t><button class=\'saveButton\' dojoAttachPoint="saveButton" dojoType="dijit.form.Button" dojoAttachEvent="onClick:save">${buttonSave}</button\r\n\t\t\t><button class=\'cancelButton\' dojoAttachPoint="cancelButton" dojoType="dijit.form.Button" dojoAttachEvent="onClick:cancel">${buttonCancel}</button\r\n\t\t></div\r\n\t></fieldset\r\n\t><span tabIndex="0" dojoAttachPoint="textNode,focusNode" waiRole="button" style="display:none;"\r\n\t\tdojoAttachEvent="onkeypress:_onKeyPress,onclick:_onClick,onmouseout:_onMouseOut,onmouseover:_onMouseOver,onfocus:_onMouseOver,onblur:_onMouseOut"\r\n\t></span\r\n></span>\r\n',editing:false,autoSave:true,buttonSave:"",buttonCancel:"",renderAsHtml:false,widgetsInTemplate:true,_display:"",startup:function(){if(!this._started){if(this.editWidget){this.containerNode.appendChild(this.editWidget.domNode)
 }else{this.editWidget=this.getChildren()[0]
-}var A=dojo.getComputedStyle(this.domNode);
-dojo.forEach(["fontWeight","fontFamily","fontSize","fontStyle"],function(C){this.editWidget.focusNode.style[C]=A[C]
+}var B=dojo.getComputedStyle(this.domNode);
+dojo.forEach(["fontWeight","fontFamily","fontSize","fontStyle"],function(C){this.editWidget.focusNode.style[C]=B[C]
 },this);
 this._setEditValue=dojo.hitch(this.editWidget,this.editWidget.setDisplayedValue||this.editWidget.setValue);
 this._getEditValue=dojo.hitch(this.editWidget,this.editWidget.getDisplayedValue||this.editWidget.getValue);
@@ -18,9 +18,9 @@ this._isEditValid=dojo.hitch(this.editWidget,this.editWidget.isValid||function()
 });
 this.editWidget.onChange=dojo.hitch(this,"_onChange");
 if(!this.autoSave){this._oldSetValue=this.editWidget.setValue;
-var B=this;
-this.editWidget.setValue=dojo.hitch(this,function(C){B._oldSetValue.apply(B.editWidget,arguments);
-B._onEditWidgetKeyPress(null)
+var A=this;
+this.editWidget.setValue=dojo.hitch(this,function(C){A._oldSetValue.apply(A.editWidget,arguments);
+A._onEditWidgetKeyPress(null)
 })
 }this._showText();
 this._started=true
@@ -57,20 +57,20 @@ this.saveButton.setDisabled(true)
 },_visualize:function(){dojo.style(this.editNode,"display",this.editing?this._display:"none");
 if(this.editing){this._setEditFocus()
 }dojo.style(this.textNode,"display",this.editing?"none":this._display)
-},_showText:function(){var B=""+this._getEditValue();
-dijit.form.InlineEditBox.superclass.setValue.call(this,B);
-if(/^\s*$/.test(B)){B="?";
+},_showText:function(){var A=""+this._getEditValue();
+dijit.form.InlineEditBox.superclass.setValue.call(this,A);
+if(/^\s*$/.test(A)){A="?";
 this._isEmpty=true
 }else{this._isEmpty=false
-}if(this.renderAsHtml){this.textNode.innerHTML=B
+}if(this.renderAsHtml){this.textNode.innerHTML=A
 }else{this.textNode.innerHTML="";
-if(B.split){var C=this;
-var A=true;
-dojo.forEach(B.split("\n"),function(D){if(A){A=false
-}else{C.textNode.appendChild(document.createElement("BR"))
-}C.textNode.appendChild(document.createTextNode(D))
+if(A.split){var B=this;
+var C=true;
+dojo.forEach(A.split("\n"),function(D){if(C){C=false
+}else{B.textNode.appendChild(document.createElement("BR"))
+}B.textNode.appendChild(document.createTextNode(D))
 })
-}else{this.textNode.appendChild(document.createTextNode(B))
+}else{this.textNode.appendChild(document.createTextNode(A))
 }}this._visualize()
 },save:function(A){if(typeof A=="object"){dojo.stopEvent(A)
 }if(!this.enableSave()){return 
@@ -85,11 +85,11 @@ if(A){dijit.focus(this.focusNode)
 }},setValue:function(A){this._setEditValue(A);
 this.editing=false;
 this._showText()
-},_onEditWidgetKeyPress:function(A){if(!this.editing){return 
-}if(this.autoSave){if(A.keyCode==dojo.keys.ESCAPE){this.cancel(A)
-}else{if(A.keyCode==dojo.keys.ENTER){this.save(A)
-}}}else{var B=this;
-setTimeout(function(){B.saveButton.setDisabled(B._getEditValue()==B._initialText)
+},_onEditWidgetKeyPress:function(B){if(!this.editing){return 
+}if(this.autoSave){if(B.keyCode==dojo.keys.ESCAPE){this.cancel(B)
+}else{if(B.keyCode==dojo.keys.ENTER){this.save(B)
+}}}else{var A=this;
+setTimeout(function(){A.saveButton.setDisabled(A._getEditValue()==A._initialText)
 },100)
 }},_onBlur:function(){if(this.autoSave&&this.editing){if(this._getEditValue()==this._initialText){this.cancel()
 }else{this.save()
