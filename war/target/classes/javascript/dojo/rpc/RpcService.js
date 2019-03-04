@@ -14,20 +14,20 @@ if("strictArgChecks" in args){this.strictArgChecks=args.strictArgChecks
 }}}},strictArgChecks:true,serviceUrl:"",parseResults:function(A){return A
 },errorCallback:function(A){return function(B){A.errback(new Error(B.message))
 }
-},resultCallback:function(A){var B=dojo.hitch(this,function(C){if(C.error!=null){var D;
-if(typeof C.error=="object"){D=new Error(C.error.message);
-D.code=C.error.code;
-D.error=C.error.error
-}else{D=new Error(C.error)
-}D.id=C.id;
-D.errorObject=C;
-A.errback(D)
-}else{A.callback(this.parseResults(C))
+},resultCallback:function(B){var A=dojo.hitch(this,function(D){if(D.error!=null){var C;
+if(typeof D.error=="object"){C=new Error(D.error.message);
+C.code=D.error.code;
+C.error=D.error.error
+}else{C=new Error(D.error)
+}C.id=D.id;
+C.errorObject=D;
+B.errback(C)
+}else{B.callback(this.parseResults(D))
 }});
-return B
-},generateMethod:function(B,A,C){return dojo.hitch(this,function(){var D=new dojo.Deferred();
-if((this.strictArgChecks)&&(A!=null)&&(arguments.length!=A.length)){throw new Error("Invalid number of parameters for remote method.")
-}else{this.bind(B,dojo._toArray(arguments),D,C)
+return A
+},generateMethod:function(C,B,A){return dojo.hitch(this,function(){var D=new dojo.Deferred();
+if((this.strictArgChecks)&&(B!=null)&&(arguments.length!=B.length)){throw new Error("Invalid number of parameters for remote method.")
+}else{this.bind(C,dojo._toArray(arguments),D,A)
 }return D
 })
 },processSmd:function(A){if(A.methods){dojo.forEach(A.methods,function(B){if(B&&B.name){this[B.name]=this.generateMethod(B.name,B.parameters,B.url||B.serviceUrl||B.serviceURL);

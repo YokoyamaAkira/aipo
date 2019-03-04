@@ -2,73 +2,73 @@ dojo.provide("aipo.customize");
 aipo.customize.positionInitialize=function(){dojo.query(".body-child").forEach(function(A){dojo.place(A,dojo.query("body")[0],"last")
 })
 };
-aipo.customize.onReceiveMessage=function(A){if(!A){var B=dijit.byId("modalDialog");
-if(!!B){B.hide()
-}}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=A
+aipo.customize.onReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
+if(!!A){A.hide()
+}}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
 }};
-aipo.customize.showMenu=function(E){var C=dojo.query("#menubar_"+E);
-var A=dojo.query("#menubar_button_"+E);
-if(C.length==0||A.length==0){return 
-}var D=A[0].getBoundingClientRect();
-var B=document.documentElement.getBoundingClientRect();
+aipo.customize.showMenu=function(F){var D=dojo.query("#menubar_"+F);
+var B=dojo.query("#menubar_button_"+F);
+if(D.length==0||B.length==0){return 
+}var E=B[0].getBoundingClientRect();
+var C=document.documentElement.getBoundingClientRect();
+if(D.style("display")=="none"){dojo.query("div.menubar").style("display","none");
+var A={left:document.documentElement.scrollLeft||document.body.scrollLeft,top:document.documentElement.scrollTop||document.body.scrollTop};
+D.style("opacity","0");
+D.style("display","block");
+if(C.right-D[0].clientWidth>E.left){D.style("left",E.left+A.left+"px")
+}else{D.style("left",E.right-D[0].clientWidth+A.left+"px")
+}if(C.bottom-D[0].clientHeight>E.bottom){D.style("top",E.bottom+A.top+"px")
+}else{D.style("top",E.top-D[0].clientHeight+A.top+"px")
+}D.style("opacity","1");
+if(dojo.byId("timeline_"+F)&&(dojo.query("div.timeline").length==1)){dojo.query("#accessControlDelete_"+F).style("display","none")
+}}else{aipo.customize.hideMenu(F)
+}};
+aipo.customize.showMenuSchedule=function(D){var C=dojo.query("#menubar_"+D+"_date");
 if(C.style("display")=="none"){dojo.query("div.menubar").style("display","none");
-var F={left:document.documentElement.scrollLeft||document.body.scrollLeft,top:document.documentElement.scrollTop||document.body.scrollTop};
-C.style("opacity","0");
 C.style("display","block");
-if(B.right-C[0].clientWidth>D.left){C.style("left",D.left+F.left+"px")
-}else{C.style("left",D.right-C[0].clientWidth+F.left+"px")
-}if(B.bottom-C[0].clientHeight>D.bottom){C.style("top",D.bottom+F.top+"px")
-}else{C.style("top",D.top-C[0].clientHeight+F.top+"px")
-}C.style("opacity","1");
-if(dojo.byId("timeline_"+E)&&(dojo.query("div.timeline").length==1)){dojo.query("#accessControlDelete_"+E).style("display","none")
-}}else{aipo.customize.hideMenu(E)
+if(dojo.byId("timeline_"+D)&&(dojo.query("div.timeline").length==1)){dojo.query("#accessControlDelete_"+D).style("display","none")
+}var B=dojo.byId("indicateDate_"+D);
+if(dojo.isIE){var A=function(I){var H=0;
+while(I){H+=I.offsetLeft;
+I=I.offsetParent
+}return H
+};
+var E=function(I){var H=0;
+while(I){H+=I.offsetTop;
+I=I.offsetParent
+}return H
+};
+var G=A(B)-A(B.offsetParent.offsetParent);
+var F=E(B)-E(B.offsetParent.offsetParent)
+}else{var G=B.offsetLeft-B.clientLeft;
+var F=B.offsetTop-B.clientTop
+}C.style("left",G+"px");
+C.style("top",F+24+"px")
+}else{aipo.customize.hideMenu(D)
 }};
-aipo.customize.showMenuSchedule=function(A){var G=dojo.query("#menubar_"+A+"_date");
-if(G.style("display")=="none"){dojo.query("div.menubar").style("display","none");
-G.style("display","block");
-if(dojo.byId("timeline_"+A)&&(dojo.query("div.timeline").length==1)){dojo.query("#accessControlDelete_"+A).style("display","none")
-}var F=dojo.byId("indicateDate_"+A);
-if(dojo.isIE){var E=function(H){var I=0;
-while(H){I+=H.offsetLeft;
-H=H.offsetParent
-}return I
+aipo.customize.hideMenu=function(B){var A=dojo.query("div.menubar").style("display","none")
 };
-var B=function(H){var I=0;
-while(H){I+=H.offsetTop;
-H=H.offsetParent
-}return I
+aipo.customize.setController=function(F,C){var A=C.parentNode.id;
+dojo.query("form#form"+F+' input[name="controller"]')[0].value=A;
+var D=dojo.query("form#form"+F+" table.controllerTable td");
+var E=D.length;
+for(var B=0;
+B<E;
+B++){dojo.removeClass(D[B],"selected")
+}var G=dojo.query("form#form"+F+" td#"+A)[0];
+dojo.addClass(G,"selected")
 };
-var D=E(F)-E(F.offsetParent.offsetParent);
-var C=B(F)-B(F.offsetParent.offsetParent)
-}else{var D=F.offsetLeft-F.clientLeft;
-var C=F.offsetTop-F.clientTop
-}G.style("left",D+"px");
-G.style("top",C+24+"px")
-}else{aipo.customize.hideMenu(A)
+aipo.customize.deletesubmit=function(A,B,C){if(confirm("このアプリを削除してもよろしいですか？")){aipo.customize.submit(A,B,C)
 }};
-aipo.customize.hideMenu=function(A){var B=dojo.query("div.menubar").style("display","none")
-};
-aipo.customize.setController=function(C,G){var E=G.parentNode.id;
-dojo.query("form#form"+C+' input[name="controller"]')[0].value=E;
-var A=dojo.query("form#form"+C+" table.controllerTable td");
-var B=A.length;
-for(var F=0;
-F<B;
-F++){dojo.removeClass(A[F],"selected")
-}var D=dojo.query("form#form"+C+" td#"+E)[0];
-dojo.addClass(D,"selected")
-};
-aipo.customize.deletesubmit=function(C,A,B){if(confirm("このアプリを削除してもよろしいですか？")){aipo.customize.submit(C,A,B)
-}};
-aipo.customize.submit=function(D,A,C){try{dojo.xhrPost({url:D,timeout:30000,content:{portlet_id:A},encoding:"utf-8",handleAs:"json-comment-filtered",headers:{X_REQUESTED_WITH:"XMLHttpRequest"},load:function(G,F){var E="";
-if(dojo.isArray(G)&&G.length>0){if(G[0]=="PermissionError"){E+="<ul>";
-E+="<li><span class='caution'>"+G[1]+"</span></li>";
-E+="</ul>"
-}else{E+="<ul>";
-dojo.forEach(G,function(H){E+="<li><span class='caution'>"+H+"</span></li>"
+aipo.customize.submit=function(A,B,D){try{dojo.xhrPost({url:A,timeout:30000,content:{portlet_id:B},encoding:"utf-8",handleAs:"json-comment-filtered",headers:{X_REQUESTED_WITH:"XMLHttpRequest"},load:function(F,E){var G="";
+if(dojo.isArray(F)&&F.length>0){if(F[0]=="PermissionError"){G+="<ul>";
+G+="<li><span class='caution'>"+F[1]+"</span></li>";
+G+="</ul>"
+}else{G+="<ul>";
+dojo.forEach(F,function(H){G+="<li><span class='caution'>"+H+"</span></li>"
 });
-E+="</ul>"
-}}C.call(C,E);
-if(E!=""){aimluck.io.disableForm(form,false)
+G+="</ul>"
+}}D.call(D,G);
+if(G!=""){aimluck.io.disableForm(form,false)
 }},error:function(E){}})
-}catch(B){}};
+}catch(C){}};

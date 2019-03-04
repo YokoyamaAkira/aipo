@@ -2,54 +2,54 @@ if(!dojo._hasResource["dojox.gfx3d.scheduler"]){dojo._hasResource["dojox.gfx3d.s
 dojo.provide("dojox.gfx3d.scheduler");
 dojo.provide("dojox.gfx3d.drawer");
 dojo.require("dojox.gfx3d.vector");
-dojo.mixin(dojox.gfx3d.scheduler,{zOrder:function(A,B){B=B?B:dojox.gfx3d.scheduler.order;
-A.sort(function(C,D){return B(D)-B(C)
+dojo.mixin(dojox.gfx3d.scheduler,{zOrder:function(B,A){A=A?A:dojox.gfx3d.scheduler.order;
+B.sort(function(D,C){return A(C)-A(D)
 });
-return A
-},bsp:function(C,A){console.debug("BSP scheduler");
-A=A?A:dojox.gfx3d.scheduler.outline;
-var B=new dojox.gfx3d.scheduler.BinarySearchTree(C[0],A);
-dojo.forEach(C.slice(1),function(D){B.add(D,A)
+return B
+},bsp:function(A,B){console.debug("BSP scheduler");
+B=B?B:dojox.gfx3d.scheduler.outline;
+var C=new dojox.gfx3d.scheduler.BinarySearchTree(A[0],B);
+dojo.forEach(A.slice(1),function(D){C.add(D,B)
 });
-return B.iterate(A)
+return C.iterate(B)
 },order:function(A){return A.getZOrder()
 },outline:function(A){return A.getOutline()
 }});
-dojo.declare("dojox.gfx3d.scheduler.BinarySearchTree",null,{constructor:function(A,C){this.plus=null;
+dojo.declare("dojox.gfx3d.scheduler.BinarySearchTree",null,{constructor:function(B,A){this.plus=null;
 this.minus=null;
-this.object=A;
-var B=C(A);
-this.orient=B[0];
-this.normal=dojox.gfx3d.vector.normalize(B)
-},add:function(A,G){var D=0.5,B=G(A),F=dojox.gfx3d.vector,C=this.normal,E=this.orient;
-if(dojo.every(B,function(H){return Math.floor(D+F.dotProduct(C,F.substract(H,E)))<=0
-})){if(this.minus){this.minus.add(A,G)
-}else{this.minus=new dojox.gfx3d.scheduler.BinarySearchTree(A,G)
-}}else{if(dojo.every(B,function(H){return Math.floor(D+F.dotProduct(C,F.substract(H,E)))>=0
-})){if(this.plus){this.plus.add(A,G)
-}else{this.plus=new dojox.gfx3d.scheduler.BinarySearchTree(A,G)
-}}else{dojo.forEach(B,function(H){console.debug(F.dotProduct(C,F.substract(H,E)))
+this.object=B;
+var C=A(B);
+this.orient=C[0];
+this.normal=dojox.gfx3d.vector.normalize(C)
+},add:function(D,C){var G=0.5,E=C(D),B=dojox.gfx3d.vector,F=this.normal,A=this.orient;
+if(dojo.every(E,function(H){return Math.floor(G+B.dotProduct(F,B.substract(H,A)))<=0
+})){if(this.minus){this.minus.add(D,C)
+}else{this.minus=new dojox.gfx3d.scheduler.BinarySearchTree(D,C)
+}}else{if(dojo.every(E,function(H){return Math.floor(G+B.dotProduct(F,B.substract(H,A)))>=0
+})){if(this.plus){this.plus.add(D,C)
+}else{this.plus=new dojox.gfx3d.scheduler.BinarySearchTree(D,C)
+}}else{dojo.forEach(E,function(H){console.debug(B.dotProduct(F,B.substract(H,A)))
 });
 throw"The case: polygon cross siblings' plate is not implemneted yet"
-}}},iterate:function(D){var E=0.5;
-var B=dojox.gfx3d.vector;
-var A=[];
-var C=null;
-var F={x:0,y:0,z:-10000};
-if(Math.floor(E+B.dotProduct(this.normal,B.substract(F,this.orient)))<=0){C=[this.plus,this.minus]
-}else{C=[this.minus,this.plus]
-}if(C[0]){A=A.concat(C[0].iterate())
-}A.push(this.object);
-if(C[1]){A=A.concat(C[1].iterate())
-}return A
+}}},iterate:function(E){var F=0.5;
+var C=dojox.gfx3d.vector;
+var B=[];
+var D=null;
+var A={x:0,y:0,z:-10000};
+if(Math.floor(F+C.dotProduct(this.normal,C.substract(A,this.orient)))<=0){D=[this.plus,this.minus]
+}else{D=[this.minus,this.plus]
+}if(D[0]){B=B.concat(D[0].iterate())
+}B.push(this.object);
+if(D[1]){B=B.concat(D[1].iterate())
+}return B
 }});
-dojo.mixin(dojox.gfx3d.drawer,{conservative:function(A,B,C){console.debug("conservative draw");
+dojo.mixin(dojox.gfx3d.drawer,{conservative:function(B,C,A){console.debug("conservative draw");
 dojo.forEach(this.objects,function(D){D.destroy()
 });
-dojo.forEach(B,function(D){D.draw(C.lighting)
+dojo.forEach(C,function(D){D.draw(A.lighting)
 })
-},chart:function(A,B,C){console.debug("chart draw");
-dojo.forEach(this.todos,function(D){D.draw(C.lighting)
+},chart:function(B,C,A){console.debug("chart draw");
+dojo.forEach(this.todos,function(D){D.draw(A.lighting)
 })
 }})
 };

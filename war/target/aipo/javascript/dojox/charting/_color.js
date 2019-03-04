@@ -1,38 +1,62 @@
-if(!dojo._hasResource["dojox.charting._color"]){dojo._hasResource["dojox.charting._color"]=true;
+if(!dojo._hasResource["dojox.charting._color"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.charting._color"] = true;
 dojo.provide("dojox.charting._color");
+
 dojox.charting._color={};
-dojox.charting._color.fromHsb=function(D,B,E){D=Math.round(D);
-B=Math.round((B/100)*255);
-E=Math.round((E/100)*255);
-var A,C,F;
-if(B==0){A=C=F=E
-}else{var I=E,H=(255-B)*E/255,G=(I-H)*(D%60)/60;
-if(D<60){A=I,C=H+G,F=H
-}else{if(D<120){A=I-G,C=I,F=H
-}else{if(D<180){A=H,C=I,F=H+G
-}else{if(D<240){A=H,C=I-G,F=I
-}else{if(D<300){A=H+G,C=H,F=I
-}else{if(D<360){A=I,C=H,F=I-G
-}}}}}}}A=Math.round(A);
-C=Math.round(C);
-F=Math.round(F);
-return new dojo.Color({r:A,g:C,b:F})
+dojox.charting._color.fromHsb=function(/* int */hue, /* int */saturation, /* int */brightness){
+	//	summary
+	//	Creates an instance of dojo.Color based on HSB input (360, %, %)
+	hue=Math.round(hue);
+	saturation=Math.round((saturation/100)*255); 
+	brightness=Math.round((brightness/100)*255);
+
+	var r, g, b;
+	if(saturation==0){
+		r=g=b=brightness;
+	} else {
+		var tint1=brightness, 
+			tint2=(255-saturation)*brightness/255, 
+			tint3=(tint1-tint2)*(hue%60)/60;
+		if(hue<60){ r=tint1, g=tint2+tint3, b=tint2; }
+		else if(hue<120){ r=tint1-tint3, g=tint1, b=tint2; }
+		else if(hue<180){ r=tint2, g=tint1, b=tint2+tint3; }
+		else if(hue<240){ r=tint2, g=tint1-tint3, b=tint1; }
+		else if(hue<300){ r=tint2+tint3, g=tint2, b=tint1; }
+		else if(hue<360){ r=tint1, g=tint2, b=tint1-tint3; }
+	}
+
+	r=Math.round(r); g=Math.round(g); b=Math.round(b);
+	return new dojo.Color({ r:r, g:g, b:b });
 };
-dojox.charting._color.toHsb=function(B,C,K){var A=B,G=C,I=K;
-if(dojo.isObject(B)){A=B.r,G=B.g,I=B.b
-}var D=Math.min(A,G,I);
-var J=Math.max(A,G,I);
-var L=J-D;
-var F=0,E=(J!=0?L/J:0),H=J/255;
-if(E==0){F=0
-}else{if(A==J){F=((J-I)/L)-((J-G)/L)
-}else{if(G==J){F=2+(((J-A)/L)-((J-I)/L))
-}else{F=4+(((J-G)/L)-((J-A)/L))
-}}F/=6;
-if(F<0){F++
-}}F=Math.round(F*360);
-E=Math.round(E*100);
-H=Math.round(H*100);
-return{h:F,s:E,b:H,hue:F,saturation:E,brightness:H}
+
+dojox.charting._color.toHsb=function(/* int|Object|dojo.Color */ red, /* int? */ green, /* int? */blue){
+	//	summary
+	//	Returns the color in HSB representation (360, %, %)
+	var r=red,g=green,b=blue;
+	if(dojo.isObject(red)){
+		r=red.r,g=red.g,b=red.b;
+	}
+	var min=Math.min(r,g,b);
+	var max=Math.max(r,g,b);
+	var delta=max-min;
+
+	var hue=0, saturation=(max!=0?delta/max:0), brightness=max/255;
+	if(saturation==0){ hue=0; }
+	else {
+		if(r==max){ hue=((max-b)/delta)-((max-g)/delta); }
+		else if(g==max){ hue=2+(((max-r)/delta)-((max-b)/delta)); }
+		else { hue=4+(((max-g)/delta)-((max-r)/delta)); }
+		hue/=6;
+		if(hue<0) hue++;
+	}
+	
+	hue=Math.round(hue*360);
+	saturation=Math.round(saturation*100);
+	brightness=Math.round(brightness*100);
+	return { 
+		h:hue, s:saturation, b:brightness,
+		hue:hue, saturation:saturation, brightness:brightness
+	};	//	Object
+};
+
 }
-};

@@ -1,21 +1,56 @@
-if(!dojo._hasResource["dojox.uuid.generateRandomUuid"]){dojo._hasResource["dojox.uuid.generateRandomUuid"]=true;
+if(!dojo._hasResource["dojox.uuid.generateRandomUuid"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.uuid.generateRandomUuid"] = true;
 dojo.provide("dojox.uuid.generateRandomUuid");
-dojox.uuid.generateRandomUuid=function(){var B=16;
-function C(){var K=Math.floor((Math.random()%1)*Math.pow(2,32));
-var L=K.toString(B);
-while(L.length<8){L="0"+L
-}return L
-}var J="-";
-var E="4";
-var D="8";
-var I=C();
-var H=C();
-H=H.substring(0,4)+J+E+H.substring(5,8);
-var G=C();
-G=D+G.substring(1,4)+J+G.substring(4,8);
-var F=C();
-var A=I+J+H+J+G+F;
-A=A.toLowerCase();
-return A
-}
+
+dojox.uuid.generateRandomUuid = function(){
+	// summary:
+	//		This function generates random UUIDs, meaning "version 4" UUIDs.
+	// description:
+	//		A typical generated value would be something like this:
+	//		"3b12f1df-5232-4804-897e-917bf397618a"
+	//		
+	//		For more information about random UUIDs, see sections 4.4 and 
+	//		4.5 of RFC 4122: http://tools.ietf.org/html/rfc4122#section-4.4
+	//		
+	//		This generator function is designed to be small and fast,
+	//		but not necessarily good.
+	//		
+	//		Small: This generator has a small footprint. Once comments are
+	//		stripped, it's only about 25 lines of code, and it doesn't 
+	//		dojo.require() any other modules.
+	//		
+	//		Fast: This generator can generate lots of new UUIDs fairly quickly 
+	//		(at least, more quickly than the other dojo UUID generators).
+	//		
+	//		Not necessarily good: We use Math.random() as our source
+	//		of randomness, which may or may not provide much randomness. 
+	// examples: 
+	//		var string = dojox.uuid.generateRandomUuid();
+	var HEX_RADIX = 16;
+
+	function _generateRandomEightCharacterHexString(){
+		// Make random32bitNumber be a randomly generated floating point number
+		// between 0 and (4,294,967,296 - 1), inclusive.
+		var random32bitNumber = Math.floor( (Math.random() % 1) * Math.pow(2, 32) );
+		var eightCharacterHexString = random32bitNumber.toString(HEX_RADIX);
+		while(eightCharacterHexString.length < 8){
+			eightCharacterHexString = "0" + eightCharacterHexString;
+		}
+		return eightCharacterHexString; // for example: "3B12F1DF"
+	}
+
+	var hyphen = "-";
+	var versionCodeForRandomlyGeneratedUuids = "4"; // 8 == binary2hex("0100")
+	var variantCodeForDCEUuids = "8"; // 8 == binary2hex("1000")
+	var a = _generateRandomEightCharacterHexString();
+	var b = _generateRandomEightCharacterHexString();
+	b = b.substring(0, 4) + hyphen + versionCodeForRandomlyGeneratedUuids + b.substring(5, 8);
+	var c = _generateRandomEightCharacterHexString();
+	c = variantCodeForDCEUuids + c.substring(1, 4) + hyphen + c.substring(4, 8);
+	var d = _generateRandomEightCharacterHexString();
+	var returnValue = a + hyphen + b + hyphen + c + d;
+	returnValue = returnValue.toLowerCase();
+	return returnValue; // String
 };
+
+}

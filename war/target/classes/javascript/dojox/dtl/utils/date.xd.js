@@ -1,15 +1,15 @@
 dojo._xdResourceLoaded({depends:[["provide","dojox.dtl.utils.date"],["require","dojox.date.php"]],defineResource:function(A){if(!A._hasResource["dojox.dtl.utils.date"]){A._hasResource["dojox.dtl.utils.date"]=true;
 A.provide("dojox.dtl.utils.date");
 A.require("dojox.date.php");
-A.mixin(dojox.dtl.utils.date,{format:function(C,B){return dojox.date.php.format(C,B,dojox.dtl.utils.date._overrides)
-},timesince:function(G,D){if(!(G instanceof Date)){G=new Date(G.year,G.month,G.day)
-}if(!D){D=new Date()
-}var C=Math.abs(D.getTime()-G.getTime());
-for(var E=0,B;
-B=dojox.dtl.utils.date._chunks[E];
-E++){var F=Math.floor(C/B[0]);
-if(F){break
-}}return F+" "+B[1](F)
+A.mixin(dojox.dtl.utils.date,{format:function(B,C){return dojox.date.php.format(B,C,dojox.dtl.utils.date._overrides)
+},timesince:function(F,C){if(!(F instanceof Date)){F=new Date(F.year,F.month,F.day)
+}if(!C){C=new Date()
+}var G=Math.abs(C.getTime()-F.getTime());
+for(var D=0,B;
+B=dojox.dtl.utils.date._chunks[D];
+D++){var E=Math.floor(G/B[0]);
+if(E){break
+}}return E+" "+B[1](E)
 },_chunks:[[60*60*24*365*1000,function(B){return(B==1)?"year":"years"
 }],[60*60*24*30*1000,function(B){return(B==1)?"month":"months"
 }],[60*60*24*7*1000,function(B){return(B==1)?"week":"weeks"

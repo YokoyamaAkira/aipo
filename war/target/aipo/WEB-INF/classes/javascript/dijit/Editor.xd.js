@@ -25,45 +25,45 @@ this._plugins=[];
 this.toolbar.destroy();
 delete this.toolbar;
 this.inherited("destroy",arguments)
-},addPlugin:function(F,E){var D=A.isString(F)?{name:F}:F;
-if(!D.setEditor){var B={args:D,plugin:null,editor:this};
-A.publish("dijit.Editor.getPlugin",[B]);
-if(!B.plugin){var C=A.getObject(D.name);
-if(C){B.plugin=new C(D)
-}}if(!B.plugin){console.debug("Cannot find plugin",F);
+},addPlugin:function(E,D){var C=A.isString(E)?{name:E}:E;
+if(!C.setEditor){var F={args:C,plugin:null,editor:this};
+A.publish("dijit.Editor.getPlugin",[F]);
+if(!F.plugin){var B=A.getObject(C.name);
+if(B){F.plugin=new B(C)
+}}if(!F.plugin){console.debug("Cannot find plugin",E);
 return 
-}F=B.plugin
-}if(arguments.length>1){this._plugins[E]=F
-}else{this._plugins.push(F)
-}F.setEditor(this);
-if(A.isFunction(F.setToolbar)){F.setToolbar(this.toolbar)
+}E=F.plugin
+}if(arguments.length>1){this._plugins[D]=E
+}else{this._plugins.push(E)
+}E.setEditor(this);
+if(A.isFunction(E.setToolbar)){E.setToolbar(this.toolbar)
 }},customUndo:A.isIE,editActionInterval:3,beginEditing:function(B){if(!this._inEditing){this._inEditing=true;
 this._beginEditing(B)
 }if(this.editActionInterval>0){if(this._editTimer){clearTimeout(this._editTimer)
 }this._editTimer=setTimeout(A.hitch(this,this.endEditing),this._editInterval)
-}},_steps:[],_undoedSteps:[],execCommand:function(G){if(this.customUndo&&(G=="undo"||G=="redo")){return this[G]()
+}},_steps:[],_undoedSteps:[],execCommand:function(F){if(this.customUndo&&(F=="undo"||F=="redo")){return this[F]()
 }else{try{if(this.customUndo){this.endEditing();
 this._beginEditing()
-}var F=this.inherited("execCommand",arguments);
+}var E=this.inherited("execCommand",arguments);
 if(this.customUndo){this._endEditing()
-}return F
-}catch(C){if(A.isMoz&&/copy|cut|paste/.test(G)){var E=A.string.substitute,B={cut:"X",copy:"C",paste:"V"},D=navigator.userAgent.indexOf("Macintosh")!=-1;
-alert(E(this.commands.systemShortcutFF,[this.commands[G],E(this.commands[D?"appleKey":"ctrlKey"],[B[G]])]))
+}return E
+}catch(G){if(A.isMoz&&/copy|cut|paste/.test(F)){var D=A.string.substitute,B={cut:"X",copy:"C",paste:"V"},C=navigator.userAgent.indexOf("Macintosh")!=-1;
+alert(D(this.commands.systemShortcutFF,[this.commands[F],D(this.commands[C?"appleKey":"ctrlKey"],[B[F]])]))
 }return false
 }}},queryCommandEnabled:function(B){if(this.customUndo&&(B=="undo"||B=="redo")){return B=="undo"?(this._steps.length>1):(this._undoedSteps.length>0)
 }else{return this.inherited("queryCommandEnabled",arguments)
-}},_changeToStep:function(B,F){this.setValue(F.text);
-var C=F.bookmark;
-if(!C){return 
-}if(A.isIE){if(A.isArray(C)){var D=[];
-A.forEach(C,function(G){D.push(dijit.range.getNode(G,this.editNode))
+}},_changeToStep:function(F,E){this.setValue(E.text);
+var B=E.bookmark;
+if(!B){return 
+}if(A.isIE){if(A.isArray(B)){var C=[];
+A.forEach(B,function(G){C.push(dijit.range.getNode(G,this.editNode))
 },this);
-C=D
-}}else{var E=dijit.range.create();
-E.setStart(dijit.range.getNode(C.startContainer,this.editNode),C.startOffset);
-E.setEnd(dijit.range.getNode(C.endContainer,this.editNode),C.endOffset);
-C=E
-}A.withGlobal(this.window,"moveToBookmark",dijit,[C])
+B=C
+}}else{var D=dijit.range.create();
+D.setStart(dijit.range.getNode(B.startContainer,this.editNode),B.startOffset);
+D.setEnd(dijit.range.getNode(B.endContainer,this.editNode),B.endOffset);
+B=D
+}A.withGlobal(this.window,"moveToBookmark",dijit,[B])
 },undo:function(){this.endEditing(true);
 var B=this._steps.pop();
 if(this._steps.length>0){this.focus();
@@ -83,65 +83,65 @@ return true
 },endEditing:function(B){if(this._editTimer){clearTimeout(this._editTimer)
 }if(this._inEditing){this._endEditing(B);
 this._inEditing=false
-}},_getBookmark:function(){var C=A.withGlobal(this.window,dijit.getBookmark);
-if(A.isIE){if(A.isArray(C)){var B=[];
-A.forEach(C,function(D){B.push(dijit.range.getIndex(D,this.editNode).o)
+}},_getBookmark:function(){var B=A.withGlobal(this.window,dijit.getBookmark);
+if(A.isIE){if(A.isArray(B)){var C=[];
+A.forEach(B,function(D){C.push(dijit.range.getIndex(D,this.editNode).o)
 },this);
-C=B
-}}else{var B=dijit.range.getIndex(C.startContainer,this.editNode).o;
-C={startContainer:B,startOffset:C.startOffset,endContainer:C.endContainer===C.startContainer?B:dijit.range.getIndex(C.endContainer,this.editNode).o,endOffset:C.endOffset}
-}return C
+B=C
+}}else{var C=dijit.range.getIndex(B.startContainer,this.editNode).o;
+B={startContainer:C,startOffset:B.startOffset,endContainer:B.endContainer===B.startContainer?C:dijit.range.getIndex(B.endContainer,this.editNode).o,endOffset:B.endOffset}
+}return B
 },_beginEditing:function(B){if(this._steps.length===0){this._steps.push({text:this.savedContent,bookmark:this._getBookmark()})
-}},_endEditing:function(B){var C=this.getValue(true);
+}},_endEditing:function(C){var B=this.getValue(true);
 this._undoedSteps=[];
-this._steps.push({text:C,bookmark:this._getBookmark()})
-},onKeyDown:function(D){if(!this.customUndo){this.inherited("onKeyDown",arguments);
+this._steps.push({text:B,bookmark:this._getBookmark()})
+},onKeyDown:function(C){if(!this.customUndo){this.inherited("onKeyDown",arguments);
 return 
-}var C=D.keyCode,B=A.keys;
-if(D.ctrlKey){if(C===90||C===122){A.stopEvent(D);
+}var B=C.keyCode,D=A.keys;
+if(C.ctrlKey){if(B===90||B===122){A.stopEvent(C);
 this.undo();
 return 
-}else{if(C===89||C===121){A.stopEvent(D);
+}else{if(B===89||B===121){A.stopEvent(C);
 this.redo();
 return 
 }}}this.inherited("onKeyDown",arguments);
-switch(C){case B.ENTER:this.beginEditing();
+switch(B){case D.ENTER:this.beginEditing();
 break;
-case B.BACKSPACE:case B.DELETE:this.beginEditing();
+case D.BACKSPACE:case D.DELETE:this.beginEditing();
 break;
-case 88:case 86:if(D.ctrlKey&&!D.altKey&&!D.metaKey){this.endEditing();
-if(D.keyCode==88){this.beginEditing("cut");
+case 88:case 86:if(C.ctrlKey&&!C.altKey&&!C.metaKey){this.endEditing();
+if(C.keyCode==88){this.beginEditing("cut");
 setTimeout(A.hitch(this,this.endEditing),1)
 }else{this.beginEditing("paste");
 setTimeout(A.hitch(this,this.endEditing),1)
 }break
-}default:if(!D.ctrlKey&&!D.altKey&&!D.metaKey&&(D.keyCode<A.keys.F1||D.keyCode>A.keys.F15)){this.beginEditing();
+}default:if(!C.ctrlKey&&!C.altKey&&!C.metaKey&&(C.keyCode<A.keys.F1||C.keyCode>A.keys.F15)){this.beginEditing();
 break
-}case B.ALT:this.endEditing();
+}case D.ALT:this.endEditing();
 break;
-case B.UP_ARROW:case B.DOWN_ARROW:case B.LEFT_ARROW:case B.RIGHT_ARROW:case B.HOME:case B.END:case B.PAGE_UP:case B.PAGE_DOWN:this.endEditing(true);
+case D.UP_ARROW:case D.DOWN_ARROW:case D.LEFT_ARROW:case D.RIGHT_ARROW:case D.HOME:case D.END:case D.PAGE_UP:case D.PAGE_DOWN:this.endEditing(true);
 break;
-case B.CTRL:case B.SHIFT:case B.TAB:break
+case D.CTRL:case D.SHIFT:case D.TAB:break
 }},_onBlur:function(){this.inherited("_onBlur",arguments);
 this.endEditing(true)
 },onClick:function(){this.endEditing(true);
 this.inherited("onClick",arguments)
 }});
-A.subscribe("dijit.Editor.getPlugin",null,function(B){if(B.plugin){return 
-}var E=B.args,F;
-var C=dijit._editor._Plugin;
-var D=E.name;
-switch(D){case"undo":case"redo":case"cut":case"copy":case"paste":case"insertOrderedList":case"insertUnorderedList":case"indent":case"outdent":case"justifyCenter":case"justifyFull":case"justifyLeft":case"justifyRight":case"delete":case"selectAll":case"removeFormat":F=new C({command:D});
+A.subscribe("dijit.Editor.getPlugin",null,function(F){if(F.plugin){return 
+}var D=F.args,E;
+var B=dijit._editor._Plugin;
+var C=D.name;
+switch(C){case"undo":case"redo":case"cut":case"copy":case"paste":case"insertOrderedList":case"insertUnorderedList":case"indent":case"outdent":case"justifyCenter":case"justifyFull":case"justifyLeft":case"justifyRight":case"delete":case"selectAll":case"removeFormat":E=new B({command:C});
 break;
-case"bold":case"italic":case"underline":case"strikethrough":case"subscript":case"superscript":F=new C({buttonClass:dijit.form.ToggleButton,command:D});
+case"bold":case"italic":case"underline":case"strikethrough":case"subscript":case"superscript":E=new B({buttonClass:dijit.form.ToggleButton,command:C});
 break;
-case"|":F=new C({button:new dijit.ToolbarSeparator()});
+case"|":E=new B({button:new dijit.ToolbarSeparator()});
 break;
-case"createLink":F=new dijit._editor.plugins.LinkDialog({command:D});
+case"createLink":E=new dijit._editor.plugins.LinkDialog({command:C});
 break;
-case"foreColor":case"hiliteColor":F=new dijit._editor.plugins.TextColor({command:D});
+case"foreColor":case"hiliteColor":E=new dijit._editor.plugins.TextColor({command:C});
 break;
-case"fontName":case"fontSize":case"formatBlock":F=new dijit._editor.plugins.FontChoice({command:D})
-}B.plugin=F
+case"fontName":case"fontSize":case"formatBlock":E=new dijit._editor.plugins.FontChoice({command:C})
+}F.plugin=E
 })
 }}});

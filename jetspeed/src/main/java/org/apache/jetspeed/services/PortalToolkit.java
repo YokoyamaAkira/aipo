@@ -33,7 +33,7 @@ import org.apache.jetspeed.om.profile.Profile;
 /**
  * Commodity static wrapper around the PortalToolit service
  * 
- * @author <a href="mailto:raphael@apache.org">Raphaël Luta</a>
+ * @author <a href="mailto:raphael@apache.org">Rapha Luta</a>
  * @version $Id: PortalToolkit.java,v 1.5 2004/02/23 04:00:57 jford Exp $
  */
 public class PortalToolkit

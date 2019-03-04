@@ -16,37 +16,37 @@ this.parentMatrix=null
 },getStroke:function(){return this.strokeStyle
 },getParent:function(){return this.parent
 },getBoundingBox:function(){return this.bbox
-},getTransformedBoundingBox:function(){var D=this.getBoundingBox();
-if(!D){return null
-}var C=this._getRealMatrix();
-var B=[];
-var E=dojox.gfx.matrix;
-B.push(E.multiplyPoint(C,D.x,D.y));
-B.push(E.multiplyPoint(C,D.x+D.width,D.y));
-B.push(E.multiplyPoint(C,D.x+D.width,D.y+D.height));
-B.push(E.multiplyPoint(C,D.x,D.y+D.height));
-return B
+},getTransformedBoundingBox:function(){var C=this.getBoundingBox();
+if(!C){return null
+}var B=this._getRealMatrix();
+var E=[];
+var D=dojox.gfx.matrix;
+E.push(D.multiplyPoint(B,C.x,C.y));
+E.push(D.multiplyPoint(B,C.x+C.width,C.y));
+E.push(D.multiplyPoint(B,C.x+C.width,C.y+C.height));
+E.push(D.multiplyPoint(B,C.x,C.y+C.height));
+return E
 },getEventSource:function(){return this.rawNode
 },setShape:function(B){this.shape=dojox.gfx.makeParameters(this.shape,B);
 this.bbox=null;
 return this
-},setFill:function(B){if(!B){this.fillStyle=null;
+},setFill:function(C){if(!C){this.fillStyle=null;
 return this
-}var C=null;
-if(typeof (B)=="object"&&"type" in B){switch(B.type){case"linear":C=dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient,B);
+}var B=null;
+if(typeof (C)=="object"&&"type" in C){switch(C.type){case"linear":B=dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient,C);
 break;
-case"radial":C=dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient,B);
+case"radial":B=dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient,C);
 break;
-case"pattern":C=dojox.gfx.makeParameters(dojox.gfx.defaultPattern,B);
+case"pattern":B=dojox.gfx.makeParameters(dojox.gfx.defaultPattern,C);
 break
-}}else{C=dojox.gfx.normalizeColor(B)
-}this.fillStyle=C;
+}}else{B=dojox.gfx.normalizeColor(C)
+}this.fillStyle=B;
 return this
-},setStroke:function(B){if(!B){this.strokeStyle=null;
+},setStroke:function(C){if(!C){this.strokeStyle=null;
 return this
-}if(typeof B=="string"){B={color:B}
-}var C=this.strokeStyle=dojox.gfx.makeParameters(dojox.gfx.defaultStroke,B);
-C.color=dojox.gfx.normalizeColor(C.color);
+}if(typeof C=="string"){C={color:C}
+}var B=this.strokeStyle=dojox.gfx.makeParameters(dojox.gfx.defaultStroke,C);
+B.color=dojox.gfx.normalizeColor(B.color);
 return this
 },setTransform:function(B){this.matrix=dojox.gfx.matrix.clone(B?dojox.gfx.matrix.normalize(B):dojox.gfx.matrix.identity);
 return this._applyTransform()
@@ -64,43 +64,43 @@ this._moveToBack()
 },applyTransform:function(B){return B?this.setTransform([this.matrix,B]):this
 },removeShape:function(B){if(this.parent){this.parent.remove(this,B)
 }return this
-},_setParent:function(B,C){this.parent=B;
-return this._updateParentMatrix(C)
+},_setParent:function(C,B){this.parent=C;
+return this._updateParentMatrix(B)
 },_updateParentMatrix:function(B){this.parentMatrix=B?dojox.gfx.matrix.clone(B):null;
 return this._applyTransform()
-},_getRealMatrix:function(){var C=this.matrix;
-var B=this.parent;
-while(B){if(B.matrix){C=dojox.gfx.matrix.multiply(B.matrix,C)
-}B=B.parent
-}return C
+},_getRealMatrix:function(){var B=this.matrix;
+var C=this.parent;
+while(C){if(C.matrix){B=dojox.gfx.matrix.multiply(C.matrix,B)
+}C=C.parent
+}return B
 }});
-dojox.gfx.shape._eventsProcessing={connect:function(D,C,B){return arguments.length>2?A.connect(this.getEventSource(),D,C,B):A.connect(this.getEventSource(),D,C)
+dojox.gfx.shape._eventsProcessing={connect:function(C,B,D){return arguments.length>2?A.connect(this.getEventSource(),C,B,D):A.connect(this.getEventSource(),C,B)
 },disconnect:function(B){A.disconnect(B)
 }};
 A.extend(dojox.gfx.Shape,dojox.gfx.shape._eventsProcessing);
 dojox.gfx.shape.Container={_init:function(){this.children=[]
-},add:function(C){var B=C.getParent();
-if(B){B.remove(C,true)
-}this.children.push(C);
-return C._setParent(this,this._getRealMatrix())
-},remove:function(C,B){for(var D=0;
-D<this.children.length;
-++D){if(this.children[D]==C){if(B){}else{C._setParent(null,null)
-}this.children.splice(D,1);
+},add:function(B){var C=B.getParent();
+if(C){C.remove(B,true)
+}this.children.push(B);
+return B._setParent(this,this._getRealMatrix())
+},remove:function(B,D){for(var C=0;
+C<this.children.length;
+++C){if(this.children[C]==B){if(D){}else{B._setParent(null,null)
+}this.children.splice(C,1);
 break
 }}return this
 },clear:function(){this.children=[];
 return this
-},_moveChildToFront:function(C){for(var B=0;
-B<this.children.length;
-++B){if(this.children[B]==C){this.children.splice(B,1);
-this.children.push(C);
+},_moveChildToFront:function(B){for(var C=0;
+C<this.children.length;
+++C){if(this.children[C]==B){this.children.splice(C,1);
+this.children.push(B);
 break
 }}return this
-},_moveChildToBack:function(C){for(var B=0;
-B<this.children.length;
-++B){if(this.children[B]==C){this.children.splice(B,1);
-this.children.unshift(C);
+},_moveChildToBack:function(B){for(var C=0;
+C<this.children.length;
+++C){if(this.children[C]==B){this.children.splice(C,1);
+this.children.unshift(B);
 break
 }}return this
 }};
@@ -135,22 +135,22 @@ this.bbox={x:Math.min(B.x1,B.x2),y:Math.min(B.y1,B.y2),width:Math.abs(B.x2-B.x1)
 }});
 A.declare("dojox.gfx.shape.Polyline",dojox.gfx.Shape,{constructor:function(B){this.shape=A.clone(dojox.gfx.defaultPolyline);
 this.rawNode=B
-},setShape:function(B,C){if(B&&B instanceof Array){dojox.gfx.Shape.prototype.setShape.call(this,{points:B});
-if(C&&this.shape.points.length){this.shape.points.push(this.shape.points[0])
-}}else{dojox.gfx.Shape.prototype.setShape.call(this,B)
+},setShape:function(C,B){if(C&&C instanceof Array){dojox.gfx.Shape.prototype.setShape.call(this,{points:C});
+if(B&&this.shape.points.length){this.shape.points.push(this.shape.points[0])
+}}else{dojox.gfx.Shape.prototype.setShape.call(this,C)
 }return this
-},getBoundingBox:function(){if(!this.bbox&&this.shape.points.length){var F=this.shape.points;
-var C=F.length;
-var E=F[0];
-var B={l:E.x,t:E.y,r:E.x,b:E.y};
-for(var D=1;
-D<C;
-++D){E=F[D];
-if(B.l>E.x){B.l=E.x
-}if(B.r<E.x){B.r=E.x
-}if(B.t>E.y){B.t=E.y
-}if(B.b<E.y){B.b=E.y
-}}this.bbox={x:B.l,y:B.t,width:B.r-B.l,height:B.b-B.t}
+},getBoundingBox:function(){if(!this.bbox&&this.shape.points.length){var E=this.shape.points;
+var B=E.length;
+var D=E[0];
+var F={l:D.x,t:D.y,r:D.x,b:D.y};
+for(var C=1;
+C<B;
+++C){D=E[C];
+if(F.l>D.x){F.l=D.x
+}if(F.r<D.x){F.r=D.x
+}if(F.t>D.y){F.t=D.y
+}if(F.b<D.y){F.b=D.y
+}}this.bbox={x:F.l,y:F.t,width:F.r-F.l,height:F.b-F.t}
 }return this.bbox
 }});
 A.declare("dojox.gfx.shape.Image",dojox.gfx.Shape,{constructor:function(B){this.shape=A.clone(dojox.gfx.defaultImage);
@@ -186,6 +186,6 @@ case dojox.gfx.defaultTextPath.type:return this.createTextPath(B)
 },createText:function(B){return this.createObject(dojox.gfx.Text,B)
 },createPath:function(B){return this.createObject(dojox.gfx.Path,B)
 },createTextPath:function(B){return this.createObject(dojox.gfx.TextPath,{}).setText(B)
-},createObject:function(B,C){return null
+},createObject:function(C,B){return null
 }}
 }}});

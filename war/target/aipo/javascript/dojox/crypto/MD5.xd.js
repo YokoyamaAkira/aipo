@@ -1,143 +1,209 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.crypto.MD5"],["require","dojox.crypto._base"]],defineResource:function(A){if(!A._hasResource["dojox.crypto.MD5"]){A._hasResource["dojox.crypto.MD5"]=true;
-A.provide("dojox.crypto.MD5");
-A.require("dojox.crypto._base");
-dojox.crypto.MD5=new function(){var M=8;
-var Q=(1<<M)-1;
-function H(R){var S=[];
-for(var C=0;
-C<R.length*M;
-C+=M){S[C>>5]|=(R.charCodeAt(C/M)&Q)<<(C%32)
-}return S
-}function D(S){var R=[];
-for(var C=0;
-C<S.length*32;
-C+=M){R.push(String.fromCharCode((S[C>>5]>>>(C%32))&Q))
-}return R.join("")
-}function G(T){var S="0123456789abcdef";
-var R=[];
-for(var C=0;
-C<T.length*4;
-C++){R.push(S.charAt((T[C>>2]>>((C%4)*8+4))&15)+S.charAt((T[C>>2]>>((C%4)*8))&15))
-}return R.join("")
-}function P(W){var V="=";
-var U="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-var T=[];
-for(var S=0;
-S<W.length*4;
-S+=3){var R=(((W[S>>2]>>8*(S%4))&255)<<16)|(((W[S+1>>2]>>8*((S+1)%4))&255)<<8)|((W[S+2>>2]>>8*((S+2)%4))&255);
-for(var C=0;
-C<4;
-C++){if(S*8+C*6>W.length*32){T.push(V)
-}else{T.push(U.charAt((R>>6*(3-C))&63))
-}}}return T.join("")
-}function O(R,T){var S=(R&65535)+(T&65535);
-var C=(R>>16)+(T>>16)+(S>>16);
-return(C<<16)|(S&65535)
-}function J(R,C){return(R<<C)|(R>>>(32-C))
-}function B(V,S,R,C,U,T){return O(J(O(O(S,V),O(C,T)),U),R)
-}function L(S,R,W,V,C,U,T){return B((R&W)|((~R)&V),S,R,C,U,T)
-}function E(S,R,W,V,C,U,T){return B((R&V)|(W&(~V)),S,R,C,U,T)
-}function N(S,R,W,V,C,U,T){return B(R^W^V,S,R,C,U,T)
-}function I(S,R,W,V,C,U,T){return B(W^(R|(~V)),S,R,C,U,T)
-}function F(e,V){e[V>>5]|=128<<((V)%32);
-e[(((V+64)>>>9)<<4)+14]=V;
-var Z=1732584193;
-var Y=-271733879;
-var X=-1732584194;
-var W=271733878;
-for(var S=0;
-S<e.length;
-S+=16){var U=Z;
-var T=Y;
-var R=X;
-var C=W;
-Z=L(Z,Y,X,W,e[S+0],7,-680876936);
-W=L(W,Z,Y,X,e[S+1],12,-389564586);
-X=L(X,W,Z,Y,e[S+2],17,606105819);
-Y=L(Y,X,W,Z,e[S+3],22,-1044525330);
-Z=L(Z,Y,X,W,e[S+4],7,-176418897);
-W=L(W,Z,Y,X,e[S+5],12,1200080426);
-X=L(X,W,Z,Y,e[S+6],17,-1473231341);
-Y=L(Y,X,W,Z,e[S+7],22,-45705983);
-Z=L(Z,Y,X,W,e[S+8],7,1770035416);
-W=L(W,Z,Y,X,e[S+9],12,-1958414417);
-X=L(X,W,Z,Y,e[S+10],17,-42063);
-Y=L(Y,X,W,Z,e[S+11],22,-1990404162);
-Z=L(Z,Y,X,W,e[S+12],7,1804603682);
-W=L(W,Z,Y,X,e[S+13],12,-40341101);
-X=L(X,W,Z,Y,e[S+14],17,-1502002290);
-Y=L(Y,X,W,Z,e[S+15],22,1236535329);
-Z=E(Z,Y,X,W,e[S+1],5,-165796510);
-W=E(W,Z,Y,X,e[S+6],9,-1069501632);
-X=E(X,W,Z,Y,e[S+11],14,643717713);
-Y=E(Y,X,W,Z,e[S+0],20,-373897302);
-Z=E(Z,Y,X,W,e[S+5],5,-701558691);
-W=E(W,Z,Y,X,e[S+10],9,38016083);
-X=E(X,W,Z,Y,e[S+15],14,-660478335);
-Y=E(Y,X,W,Z,e[S+4],20,-405537848);
-Z=E(Z,Y,X,W,e[S+9],5,568446438);
-W=E(W,Z,Y,X,e[S+14],9,-1019803690);
-X=E(X,W,Z,Y,e[S+3],14,-187363961);
-Y=E(Y,X,W,Z,e[S+8],20,1163531501);
-Z=E(Z,Y,X,W,e[S+13],5,-1444681467);
-W=E(W,Z,Y,X,e[S+2],9,-51403784);
-X=E(X,W,Z,Y,e[S+7],14,1735328473);
-Y=E(Y,X,W,Z,e[S+12],20,-1926607734);
-Z=N(Z,Y,X,W,e[S+5],4,-378558);
-W=N(W,Z,Y,X,e[S+8],11,-2022574463);
-X=N(X,W,Z,Y,e[S+11],16,1839030562);
-Y=N(Y,X,W,Z,e[S+14],23,-35309556);
-Z=N(Z,Y,X,W,e[S+1],4,-1530992060);
-W=N(W,Z,Y,X,e[S+4],11,1272893353);
-X=N(X,W,Z,Y,e[S+7],16,-155497632);
-Y=N(Y,X,W,Z,e[S+10],23,-1094730640);
-Z=N(Z,Y,X,W,e[S+13],4,681279174);
-W=N(W,Z,Y,X,e[S+0],11,-358537222);
-X=N(X,W,Z,Y,e[S+3],16,-722521979);
-Y=N(Y,X,W,Z,e[S+6],23,76029189);
-Z=N(Z,Y,X,W,e[S+9],4,-640364487);
-W=N(W,Z,Y,X,e[S+12],11,-421815835);
-X=N(X,W,Z,Y,e[S+15],16,530742520);
-Y=N(Y,X,W,Z,e[S+2],23,-995338651);
-Z=I(Z,Y,X,W,e[S+0],6,-198630844);
-W=I(W,Z,Y,X,e[S+7],10,1126891415);
-X=I(X,W,Z,Y,e[S+14],15,-1416354905);
-Y=I(Y,X,W,Z,e[S+5],21,-57434055);
-Z=I(Z,Y,X,W,e[S+12],6,1700485571);
-W=I(W,Z,Y,X,e[S+3],10,-1894986606);
-X=I(X,W,Z,Y,e[S+10],15,-1051523);
-Y=I(Y,X,W,Z,e[S+1],21,-2054922799);
-Z=I(Z,Y,X,W,e[S+8],6,1873313359);
-W=I(W,Z,Y,X,e[S+15],10,-30611744);
-X=I(X,W,Z,Y,e[S+6],15,-1560198380);
-Y=I(Y,X,W,Z,e[S+13],21,1309151649);
-Z=I(Z,Y,X,W,e[S+4],6,-145523070);
-W=I(W,Z,Y,X,e[S+11],10,-1120210379);
-X=I(X,W,Z,Y,e[S+2],15,718787259);
-Y=I(Y,X,W,Z,e[S+9],21,-343485551);
-Z=O(Z,U);
-Y=O(Y,T);
-X=O(X,R);
-W=O(W,C)
-}return[Z,Y,X,W]
-}function K(V,S){var W=H(S);
-if(W.length>16){W=F(W,S.length*M)
-}var C=[],U=[];
-for(var R=0;
-R<16;
-R++){C[R]=W[R]^909522486;
-U[R]=W[R]^1549556828
-}var T=F(C.concat(H(V)),512+V.length*M);
-return F(U.concat(T),640)
-}this.compute=function(R,S){var C=S||dojox.crypto.outputTypes.Base64;
-switch(C){case dojox.crypto.outputTypes.Hex:return G(F(H(R),R.length*M));
-case dojox.crypto.outputTypes.String:return D(F(H(R),R.length*M));
-default:return P(F(H(R),R.length*M))
-}};
-this.getHMAC=function(S,R,T){var C=T||dojox.crypto.outputTypes.Base64;
-switch(C){case dojox.crypto.outputTypes.Hex:return G(K(S,R));
-case dojox.crypto.outputTypes.String:return D(K(S,R));
-default:return P(K(S,R))
-}}
-}()
-}}});
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.crypto.MD5"],
+["require", "dojox.crypto._base"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.crypto.MD5"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.crypto.MD5"] = true;
+dojo.provide("dojox.crypto.MD5");
+
+dojo.require("dojox.crypto._base");
+
+/*	Return to a port of Paul Johnstone's MD5 implementation
+ *	http://pajhome.org.uk/crypt/md5/index.html
+ *
+ *	Copyright (C) Paul Johnston 1999 - 2002.
+ *	Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+ * 	Distributed under the BSD License
+ *
+ *	Dojo port by Tom Trenka
+ *
+ *	2005-12-7
+ *	All conversions are internalized (no dependencies)
+ *	implemented getHMAC for message digest auth.
+ */
+dojox.crypto.MD5 = new function(){
+	//	summary
+	//	object for creating digests using the MD5 algorithm
+	var chrsz=8;
+	var mask=(1<<chrsz)-1;
+	function toWord(s) {
+	  var wa=[];
+	  for(var i=0; i<s.length*chrsz; i+=chrsz)
+		wa[i>>5]|=(s.charCodeAt(i/chrsz)&mask)<<(i%32);
+	  return wa;
+	}
+	function toString(wa){
+		var s=[];
+		for(var i=0; i<wa.length*32; i+=chrsz)
+			s.push(String.fromCharCode((wa[i>>5]>>>(i%32))&mask));
+		return s.join("");
+	}
+	function toHex(wa) {
+		var h="0123456789abcdef";
+		var s=[];
+		for(var i=0; i<wa.length*4; i++){
+			s.push(h.charAt((wa[i>>2]>>((i%4)*8+4))&0xF)+h.charAt((wa[i>>2]>>((i%4)*8))&0xF));
+		}
+		return s.join("");
+	}
+	function toBase64(wa){
+		var p="=";
+		var tab="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+		var s=[];
+		for(var i=0; i<wa.length*4; i+=3){
+			var t=(((wa[i>>2]>>8*(i%4))&0xFF)<<16)|(((wa[i+1>>2]>>8*((i+1)%4))&0xFF)<<8)|((wa[i+2>>2]>>8*((i+2)%4))&0xFF);
+			for(var j=0; j<4; j++){
+				if(i*8+j*6>wa.length*32) s.push(p);
+				else s.push(tab.charAt((t>>6*(3-j))&0x3F));
+			}
+		}
+		return s.join("");
+	}
+	function add(x,y) {
+		var l=(x&0xFFFF)+(y&0xFFFF);
+		var m=(x>>16)+(y>>16)+(l>>16);
+		return (m<<16)|(l&0xFFFF);
+	}
+	function R(n,c){ return (n<<c)|(n>>>(32-c)); }
+	function C(q,a,b,x,s,t){ return add(R(add(add(a,q),add(x,t)),s),b); }
+	function FF(a,b,c,d,x,s,t){ return C((b&c)|((~b)&d),a,b,x,s,t); }
+	function GG(a,b,c,d,x,s,t){ return C((b&d)|(c&(~d)),a,b,x,s,t); }
+	function HH(a,b,c,d,x,s,t){ return C(b^c^d,a,b,x,s,t); }
+	function II(a,b,c,d,x,s,t){ return C(c^(b|(~d)),a,b,x,s,t); }
+	function core(x,len){
+		x[len>>5]|=0x80<<((len)%32);
+		x[(((len+64)>>>9)<<4)+14]=len;
+		var a= 1732584193;
+		var b=-271733879;
+		var c=-1732584194;
+		var d= 271733878;
+		for(var i=0; i<x.length; i+=16){
+			var olda=a;
+			var oldb=b;
+			var oldc=c;
+			var oldd=d;
+
+			a=FF(a,b,c,d,x[i+ 0],7 ,-680876936);
+			d=FF(d,a,b,c,x[i+ 1],12,-389564586);
+			c=FF(c,d,a,b,x[i+ 2],17, 606105819);
+			b=FF(b,c,d,a,x[i+ 3],22,-1044525330);
+			a=FF(a,b,c,d,x[i+ 4],7 ,-176418897);
+			d=FF(d,a,b,c,x[i+ 5],12, 1200080426);
+			c=FF(c,d,a,b,x[i+ 6],17,-1473231341);
+			b=FF(b,c,d,a,x[i+ 7],22,-45705983);
+			a=FF(a,b,c,d,x[i+ 8],7 , 1770035416);
+			d=FF(d,a,b,c,x[i+ 9],12,-1958414417);
+			c=FF(c,d,a,b,x[i+10],17,-42063);
+			b=FF(b,c,d,a,x[i+11],22,-1990404162);
+			a=FF(a,b,c,d,x[i+12],7 , 1804603682);
+			d=FF(d,a,b,c,x[i+13],12,-40341101);
+			c=FF(c,d,a,b,x[i+14],17,-1502002290);
+			b=FF(b,c,d,a,x[i+15],22, 1236535329);
+
+			a=GG(a,b,c,d,x[i+ 1],5 ,-165796510);
+			d=GG(d,a,b,c,x[i+ 6],9 ,-1069501632);
+			c=GG(c,d,a,b,x[i+11],14, 643717713);
+			b=GG(b,c,d,a,x[i+ 0],20,-373897302);
+			a=GG(a,b,c,d,x[i+ 5],5 ,-701558691);
+			d=GG(d,a,b,c,x[i+10],9 , 38016083);
+			c=GG(c,d,a,b,x[i+15],14,-660478335);
+			b=GG(b,c,d,a,x[i+ 4],20,-405537848);
+			a=GG(a,b,c,d,x[i+ 9],5 , 568446438);
+			d=GG(d,a,b,c,x[i+14],9 ,-1019803690);
+			c=GG(c,d,a,b,x[i+ 3],14,-187363961);
+			b=GG(b,c,d,a,x[i+ 8],20, 1163531501);
+			a=GG(a,b,c,d,x[i+13],5 ,-1444681467);
+			d=GG(d,a,b,c,x[i+ 2],9 ,-51403784);
+			c=GG(c,d,a,b,x[i+ 7],14, 1735328473);
+			b=GG(b,c,d,a,x[i+12],20,-1926607734);
+
+			a=HH(a,b,c,d,x[i+ 5],4 ,-378558);
+			d=HH(d,a,b,c,x[i+ 8],11,-2022574463);
+			c=HH(c,d,a,b,x[i+11],16, 1839030562);
+			b=HH(b,c,d,a,x[i+14],23,-35309556);
+			a=HH(a,b,c,d,x[i+ 1],4 ,-1530992060);
+			d=HH(d,a,b,c,x[i+ 4],11, 1272893353);
+			c=HH(c,d,a,b,x[i+ 7],16,-155497632);
+			b=HH(b,c,d,a,x[i+10],23,-1094730640);
+			a=HH(a,b,c,d,x[i+13],4 , 681279174);
+			d=HH(d,a,b,c,x[i+ 0],11,-358537222);
+			c=HH(c,d,a,b,x[i+ 3],16,-722521979);
+			b=HH(b,c,d,a,x[i+ 6],23, 76029189);
+			a=HH(a,b,c,d,x[i+ 9],4 ,-640364487);
+			d=HH(d,a,b,c,x[i+12],11,-421815835);
+			c=HH(c,d,a,b,x[i+15],16, 530742520);
+			b=HH(b,c,d,a,x[i+ 2],23,-995338651);
+
+			a=II(a,b,c,d,x[i+ 0],6 ,-198630844);
+			d=II(d,a,b,c,x[i+ 7],10, 1126891415);
+			c=II(c,d,a,b,x[i+14],15,-1416354905);
+			b=II(b,c,d,a,x[i+ 5],21,-57434055);
+			a=II(a,b,c,d,x[i+12],6 , 1700485571);
+			d=II(d,a,b,c,x[i+ 3],10,-1894986606);
+			c=II(c,d,a,b,x[i+10],15,-1051523);
+			b=II(b,c,d,a,x[i+ 1],21,-2054922799);
+			a=II(a,b,c,d,x[i+ 8],6 , 1873313359);
+			d=II(d,a,b,c,x[i+15],10,-30611744);
+			c=II(c,d,a,b,x[i+ 6],15,-1560198380);
+			b=II(b,c,d,a,x[i+13],21, 1309151649);
+			a=II(a,b,c,d,x[i+ 4],6 ,-145523070);
+			d=II(d,a,b,c,x[i+11],10,-1120210379);
+			c=II(c,d,a,b,x[i+ 2],15, 718787259);
+			b=II(b,c,d,a,x[i+ 9],21,-343485551);
+
+			a = add(a,olda);
+			b = add(b,oldb);
+			c = add(c,oldc);
+			d = add(d,oldd);
+		}
+		return [a,b,c,d];
+	}
+	function hmac(data,key){
+		var wa=toWord(key);
+		if(wa.length>16) wa=core(wa,key.length*chrsz);
+		var l=[], r=[];
+		for(var i=0; i<16; i++){
+			l[i]=wa[i]^0x36363636;
+			r[i]=wa[i]^0x5c5c5c5c;
+		}
+		var h=core(l.concat(toWord(data)),512+data.length*chrsz);
+		return core(r.concat(h),640);
+	}
+
+	//	Public functions
+	this.compute=function(/* string */data, /* dojox.crypto.outputTypes */outputType){
+		//	summary
+		//	computes the digest of data, and returns the result as a string of type outputType
+		var out=outputType||dojox.crypto.outputTypes.Base64;
+		switch(out){
+			case dojox.crypto.outputTypes.Hex:{
+				return toHex(core(toWord(data),data.length*chrsz));	//	string
+			}
+			case dojox.crypto.outputTypes.String:{
+				return toString(core(toWord(data),data.length*chrsz));	//	string
+			}
+			default:{
+				return toBase64(core(toWord(data),data.length*chrsz));	//	string
+			}
+		}
+	};
+	this.getHMAC=function(/* string */data, /* string */key, /* dojox.crypto.outputTypes */outputType){
+		//	summary
+		//	computes a digest of data using key, and returns the result as a string of outputType
+		var out=outputType||dojox.crypto.outputTypes.Base64;
+		switch(out){
+			case dojox.crypto.outputTypes.Hex:{
+				return toHex(hmac(data,key));	//	string
+			}
+			case dojox.crypto.outputTypes.String:{
+				return toString(hmac(data,key));	//	string
+			}
+			default:{
+				return toBase64(hmac(data,key));	//	string
+			}
+		}
+	};
+}();
+
+}
+
+}});

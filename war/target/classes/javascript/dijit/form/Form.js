@@ -6,27 +6,27 @@ dojo.declare("dijit.form._FormMixin",null,{action:"",method:"",enctype:"",name:"
 this.onExecute();
 this.execute(this.getValues())
 },submit:function(){this.containerNode.submit()
-},setValues:function(D){var C={};
-dojo.forEach(this.getDescendants(),function(F){if(!F.name){return 
-}var G=C[F.name]||(C[F.name]=[]);
-G.push(F)
+},setValues:function(E){var D={};
+dojo.forEach(this.getDescendants(),function(G){if(!G.name){return 
+}var F=D[G.name]||(D[G.name]=[]);
+F.push(G)
 });
-for(var A in C){var B=C[A],E=dojo.getObject(A,false,D);
-if(!dojo.isArray(E)){E=[E]
-}if(B[0].setChecked){dojo.forEach(B,function(G,F){G.setChecked(dojo.indexOf(E,G.value)!=-1)
+for(var B in D){var C=D[B],A=dojo.getObject(B,false,E);
+if(!dojo.isArray(A)){A=[A]
+}if(C[0].setChecked){dojo.forEach(C,function(F,G){F.setChecked(dojo.indexOf(A,F.value)!=-1)
 })
-}else{dojo.forEach(B,function(G,F){G.setValue(E[F])
+}else{dojo.forEach(C,function(F,G){F.setValue(A[G])
 })
 }}},getValues:function(){var A={};
-dojo.forEach(this.getDescendants(),function(B){var E=B.getValue?B.getValue():B.value;
-var C=B.name;
-if(!C){return 
-}if(B.setChecked){if(/Radio/.test(B.declaredClass)){if(B.checked){dojo.setObject(C,E,A)
-}}else{var D=dojo.getObject(C,false,A);
-if(!D){D=[];
-dojo.setObject(C,D,A)
-}if(B.checked){D.push(E)
-}}}else{dojo.setObject(C,E,A)
+dojo.forEach(this.getDescendants(),function(E){var D=E.getValue?E.getValue():E.value;
+var B=E.name;
+if(!B){return 
+}if(E.setChecked){if(/Radio/.test(E.declaredClass)){if(E.checked){dojo.setObject(B,D,A)
+}}else{var C=dojo.getObject(B,false,A);
+if(!C){C=[];
+dojo.setObject(B,C,A)
+}if(E.checked){C.push(D)
+}}}else{dojo.setObject(B,D,A)
 }});
 return A
 },isValid:function(){return dojo.every(this.getDescendants(),function(A){return !A.isValid||A.isValid()

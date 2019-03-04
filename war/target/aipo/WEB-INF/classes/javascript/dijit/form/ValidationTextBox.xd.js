@@ -6,20 +6,20 @@ A.require("dijit.Tooltip");
 A.declare("dijit.form.ValidationTextBox",dijit.form.TextBox,{templateString:'<table style="display: -moz-inline-stack;" class="dijit dijitReset dijitInlineTable" cellspacing="0" cellpadding="0"\r\n\tid="widget_${id}" name="${name}"\r\n\tdojoAttachEvent="onmouseenter:_onMouse,onmouseleave:_onMouse" waiRole="presentation"\r\n\t><tr class="dijitReset"\r\n\t\t><td class="dijitReset dijitInputField" width="100%"\r\n\t\t\t><input dojoAttachPoint=\'textbox,focusNode\' dojoAttachEvent=\'onfocus,onblur:_onMouse,onkeyup,onkeypress:_onKeyPress\' autocomplete="off"\r\n\t\t\ttype=\'${type}\' name=\'${name}\'\r\n\t\t/></td\r\n\t\t><td class="dijitReset dijitValidationIconField" width="0%"\r\n\t\t\t><div dojoAttachPoint=\'iconNode\' class=\'dijitValidationIcon\'></div><div class=\'dijitValidationIconText\'>&Chi;</div\r\n\t\t></td\r\n\t></tr\r\n></table>\r\n',baseClass:"dijitTextBox",required:false,promptMessage:"",invalidMessage:"$_unset_$",constraints:{},regExp:".*",regExpGen:function(B){return this.regExp
 },state:"",setValue:function(){this.inherited("setValue",arguments);
 this.validate(false)
-},validator:function(C,B){return(new RegExp("^("+this.regExpGen(B)+")"+(this.required?"":"?")+"$")).test(C)&&(!this.required||!this._isEmpty(C))&&(this._isEmpty(C)||this.parse(C,B)!==null)
+},validator:function(B,C){return(new RegExp("^("+this.regExpGen(C)+")"+(this.required?"":"?")+"$")).test(B)&&(!this.required||!this._isEmpty(B))&&(this._isEmpty(B)||this.parse(B,C)!==null)
 },isValid:function(B){return this.validator(this.textbox.value,this.constraints)
 },_isEmpty:function(B){return/^\s*$/.test(B)
 },getErrorMessage:function(B){return this.invalidMessage
 },getPromptMessage:function(B){return this.promptMessage
-},validate:function(C){var D="";
-var E=this.isValid(C);
-var B=this._isEmpty(this.textbox.value);
-this.state=(E||(!this._hasBeenBlurred&&B))?"":"Error";
+},validate:function(B){var C="";
+var D=this.isValid(B);
+var E=this._isEmpty(this.textbox.value);
+this.state=(D||(!this._hasBeenBlurred&&E))?"":"Error";
 this._setStateClass();
-dijit.setWaiState(this.focusNode,"invalid",(E?"false":"true"));
-if(C){if(B){D=this.getPromptMessage(true)
-}if(!D&&!E){D=this.getErrorMessage(true)
-}}this._displayMessage(D)
+dijit.setWaiState(this.focusNode,"invalid",(D?"false":"true"));
+if(B){if(E){C=this.getPromptMessage(true)
+}if(!C&&!D){C=this.getErrorMessage(true)
+}}this._displayMessage(C)
 },_message:"",_displayMessage:function(B){if(this._message==B){return 
 }this._message=B;
 this.displayMessage(B)
@@ -39,26 +39,26 @@ if(this.invalidMessage=="$_unset_$"){this.invalidMessage=this.messages.invalidMe
 }var B=this.regExpGen(this.constraints);
 this.regExp=B
 }});
-A.declare("dijit.form.MappedTextBox",dijit.form.ValidationTextBox,{serialize:function(B,C){return(B.toString?B.toString():"")
+A.declare("dijit.form.MappedTextBox",dijit.form.ValidationTextBox,{serialize:function(C,B){return(C.toString?C.toString():"")
 },toString:function(){var B=this.filter(this.getValue());
 return(B!=null)?((typeof B=="string")?B:this.serialize(B,this.constraints)):""
 },validate:function(){this.valueNode.value=this.toString();
 this.inherited("validate",arguments)
-},postCreate:function(){var B=this.textbox;
-var C=(this.valueNode=document.createElement("input"));
-C.setAttribute("type",B.type);
-C.setAttribute("value",this.toString());
-A.style(C,"display","none");
-C.name=this.textbox.name;
+},postCreate:function(){var C=this.textbox;
+var B=(this.valueNode=document.createElement("input"));
+B.setAttribute("type",C.type);
+B.setAttribute("value",this.toString());
+A.style(B,"display","none");
+B.name=this.textbox.name;
 this.textbox.name="_"+this.textbox.name+"_displayed_";
 this.textbox.removeAttribute("name");
-A.place(C,B,"after");
+A.place(B,C,"after");
 this.inherited("postCreate",arguments)
 }});
-A.declare("dijit.form.RangeBoundTextBox",dijit.form.MappedTextBox,{rangeMessage:"",compare:function(B,C){return B-C
-},rangeCheck:function(C,B){var E=(typeof B.min!="undefined");
-var D=(typeof B.max!="undefined");
-if(E||D){return(!E||this.compare(C,B.min)>=0)&&(!D||this.compare(C,B.max)<=0)
+A.declare("dijit.form.RangeBoundTextBox",dijit.form.MappedTextBox,{rangeMessage:"",compare:function(C,B){return C-B
+},rangeCheck:function(B,E){var D=(typeof E.min!="undefined");
+var C=(typeof E.max!="undefined");
+if(D||C){return(!D||this.compare(B,E.min)>=0)&&(!C||this.compare(B,E.max)<=0)
 }else{return true
 }},isInRange:function(B){return this.rangeCheck(this.getValue(),this.constraints)
 },isValid:function(B){return this.inherited("isValid",arguments)&&((this._isEmpty(this.textbox.value)&&!this.required)||this.isInRange(B))

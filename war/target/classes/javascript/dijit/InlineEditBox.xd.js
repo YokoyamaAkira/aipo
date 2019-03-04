@@ -7,8 +7,8 @@ A.require("dijit.form.Button");
 A.require("dijit.form.TextBox");
 A.declare("dijit.InlineEditBox",dijit._Widget,{editing:false,autoSave:true,buttonSave:"",buttonCancel:"",renderAsHtml:false,editor:"dijit.form.TextBox",editorParams:{},onChange:function(B){},width:"100%",value:"",noValueIndicator:"<span style='font-family: wingdings; text-decoration: underline;'>&nbsp;&nbsp;&nbsp;&nbsp;&#x270d;&nbsp;&nbsp;&nbsp;&nbsp;</span>",postMixInProperties:function(){this.inherited("postMixInProperties",arguments);
 this.displayNode=this.srcNodeRef;
-var B={ondijitclick:"_onClick",onmouseover:"_onMouseOver",onmouseout:"_onMouseOut",onfocus:"_onMouseOver",onblur:"_onMouseOut"};
-for(var C in B){this.connect(this.displayNode,C,B[C])
+var C={ondijitclick:"_onClick",onmouseover:"_onMouseOver",onmouseout:"_onMouseOut",onfocus:"_onMouseOver",onblur:"_onMouseOut"};
+for(var B in C){this.connect(this.displayNode,B,C[B])
 }dijit.setWaiRole(this.displayNode,"button");
 if(!this.displayNode.getAttribute("tabIndex")){this.displayNode.setAttribute("tabIndex",0)
 }if(!this.value){this.value=this.displayNode.innerHTML
@@ -20,26 +20,26 @@ if(!this.displayNode.getAttribute("tabIndex")){this.displayNode.setAttribute("ta
 }this._onMouseOut();
 setTimeout(A.hitch(this,"_edit"),0)
 },_edit:function(){this.editing=true;
-var C=(this.renderAsHtml?this.value:this.value.replace(/\s*\r?\n\s*/g,"").replace(/<br\/?>/gi,"\n").replace(/&gt;/g,">").replace(/&lt;/g,"<").replace(/&amp;/g,"&"));
-var B=document.createElement("span");
-A.place(B,this.domNode,"before");
-var E=this.editWidget=new dijit._InlineEditor({value:A.trim(C),autoSave:this.autoSave,buttonSave:this.buttonSave,buttonCancel:this.buttonCancel,renderAsHtml:this.renderAsHtml,editor:this.editor,editorParams:this.editorParams,style:A.getComputedStyle(this.displayNode),save:A.hitch(this,"save"),cancel:A.hitch(this,"cancel"),width:this.width},B);
-var D=E.domNode.style;
+var B=(this.renderAsHtml?this.value:this.value.replace(/\s*\r?\n\s*/g,"").replace(/<br\/?>/gi,"\n").replace(/&gt;/g,">").replace(/&lt;/g,"<").replace(/&amp;/g,"&"));
+var E=document.createElement("span");
+A.place(E,this.domNode,"before");
+var D=this.editWidget=new dijit._InlineEditor({value:A.trim(B),autoSave:this.autoSave,buttonSave:this.buttonSave,buttonCancel:this.buttonCancel,renderAsHtml:this.renderAsHtml,editor:this.editor,editorParams:this.editorParams,style:A.getComputedStyle(this.displayNode),save:A.hitch(this,"save"),cancel:A.hitch(this,"cancel"),width:this.width},E);
+var C=D.domNode.style;
 this.displayNode.style.display="none";
-D.position="static";
-D.visibility="visible";
-this.domNode=E.domNode;
-setTimeout(function(){E.focus()
+C.position="static";
+C.visibility="visible";
+this.domNode=D.domNode;
+setTimeout(function(){D.focus()
 },100)
-},_showText:function(C){this.displayNode.style.display="";
-var D=this.editWidget.domNode.style;
-D.position="absolute";
-D.visibility="hidden";
+},_showText:function(B){this.displayNode.style.display="";
+var C=this.editWidget.domNode.style;
+C.position="absolute";
+C.visibility="hidden";
 this.domNode=this.displayNode;
-var B=this;
-setTimeout(function(){if(C){dijit.focus(B.displayNode)
-}B.editWidget.destroy();
-delete B.editWidget
+var D=this;
+setTimeout(function(){if(B){dijit.focus(D.displayNode)
+}D.editWidget.destroy();
+delete D.editWidget
 },100)
 },save:function(B){this.editing=false;
 this.value=this.editWidget.getValue()+"";
@@ -55,16 +55,16 @@ A.declare("dijit._InlineEditor",[dijit._Widget,dijit._Templated],{templateString
 this.messages=A.i18n.getLocalization("dijit","common",this.lang);
 A.forEach(["buttonSave","buttonCancel"],function(B){if(!this[B]){this[B]=this.messages[B]
 }},this)
-},postCreate:function(){var C=A.getObject(this.editor);
-var B=this.editWidget=new C(this.editorParams,this.editorPlaceholder);
-var D=this.style;
-A.forEach(["fontWeight","fontFamily","fontSize","fontStyle"],function(E){B.focusNode.style[E]=D[E]
+},postCreate:function(){var B=A.getObject(this.editor);
+var D=this.editWidget=new B(this.editorParams,this.editorPlaceholder);
+var C=this.style;
+A.forEach(["fontWeight","fontFamily","fontSize","fontStyle"],function(E){D.focusNode.style[E]=C[E]
 },this);
-A.forEach(["marginTop","marginBottom","marginLeft","marginRight"],function(E){this.domNode.style[E]=D[E]
+A.forEach(["marginTop","marginBottom","marginLeft","marginRight"],function(E){this.domNode.style[E]=C[E]
 },this);
-if(this.width=="100%"){B.domNode.style.width="100%";
+if(this.width=="100%"){D.domNode.style.width="100%";
 this.domNode.style.display="block"
-}else{B.domNode.style.width=this.width+(Number(this.width)==this.width?"px":"")
+}else{D.domNode.style.width=this.width+(Number(this.width)==this.width?"px":"")
 }this.connect(this.editWidget,"onChange","_onChange");
 this._ignoreNextOnChange=true;
 (this.editWidget.setDisplayedValue||this.editWidget.setValue).call(this.editWidget,this.value);
@@ -74,15 +74,15 @@ if(this.autoSave){this.buttonContainer.style.display="none"
 this.inherited(arguments)
 },getValue:function(){var B=this.editWidget;
 return B.getDisplayedValue?B.getDisplayedValue():B.getValue()
-},_onKeyPress:function(C){if(this._exitInProgress){return 
-}if(this.autoSave){if(C.keyCode==A.keys.ESCAPE){A.stopEvent(C);
+},_onKeyPress:function(B){if(this._exitInProgress){return 
+}if(this.autoSave){if(B.keyCode==A.keys.ESCAPE){A.stopEvent(B);
 this._exitInProgress=true;
 this.cancel(true)
-}else{if(C.keyCode==A.keys.ENTER){A.stopEvent(C);
+}else{if(B.keyCode==A.keys.ENTER){A.stopEvent(B);
 this._exitInProgress=true;
 this.save(true)
-}}}else{var B=this;
-setTimeout(function(){B.saveButton.setDisabled(B.getValue()==B._initialText)
+}}}else{var C=this;
+setTimeout(function(){C.saveButton.setDisabled(C.getValue()==C._initialText)
 },100)
 }},_onBlur:function(){if(this._exitInProgress){return 
 }if(this.autoSave){this._exitInProgress=true;
@@ -99,15 +99,15 @@ this.save(true)
 },focus:function(){this.editWidget.focus();
 dijit.selectInputText(this.editWidget.focusNode)
 }});
-dijit.selectInputText=function(E){var B=A.global;
-var C=A.doc;
-E=A.byId(E);
-if(C.selection&&A.body()["createTextRange"]){if(E.createTextRange){var D=E.createTextRange();
-D.moveStart("character",0);
-D.moveEnd("character",E.value.length);
-D.select()
-}}else{if(B.getSelection){var F=B.getSelection();
-if(E.setSelectionRange){E.setSelectionRange(0,E.value.length)
-}}}E.focus()
+dijit.selectInputText=function(D){var F=A.global;
+var B=A.doc;
+D=A.byId(D);
+if(B.selection&&A.body()["createTextRange"]){if(D.createTextRange){var C=D.createTextRange();
+C.moveStart("character",0);
+C.moveEnd("character",D.value.length);
+C.select()
+}}else{if(F.getSelection){var E=F.getSelection();
+if(D.setSelectionRange){D.setSelectionRange(0,D.value.length)
+}}}D.focus()
 }
 }}});

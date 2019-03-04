@@ -1,71 +1,71 @@
 dojo.provide("aipo.calendar.monthly");
 aipo.calendar.monthly_calendar_data={selected_month:"",selected_day:"",next_month:"",prev_month:"",json_url:"",portlet_id:"",oneday_link:""};
-aipo.calendar.showMonthlyCalendar=function(D){var C=aipo.calendar.monthly_calendar_data.json_url;
-C+="&monthly_calendar_month="+D;
-aipo.calendar.createMonthlyCalendar(C)
+aipo.calendar.showMonthlyCalendar=function(B){var A=aipo.calendar.monthly_calendar_data.json_url;
+A+="&monthly_calendar_month="+B;
+aipo.calendar.createMonthlyCalendar(A)
 };
 aipo.calendar.showNextMonthlyCalendar=function(){aipo.calendar.showMonthlyCalendar(aipo.calendar.monthly_calendar_data.next_month)
 };
 aipo.calendar.showPreviousMonthlyCalendar=function(){aipo.calendar.showMonthlyCalendar(aipo.calendar.monthly_calendar_data.prev_month)
 };
-aipo.calendar.initMonthlyCalendar=function(J,K,L,H,G){var I=aipo.calendar.monthly_calendar_data;
-I.portlet_id=J;
-I.json_url=K;
-I.oneday_link=L;
-I.selected_month=H;
-I.selected_day=G;
-dojo.xhrGet({portletId:I.portlet_id,url:K,encoding:"utf-8",handleAs:"json-comment-filtered",load:function(A,B){var C=A;
-I.next_month=C.next_month;
-I.prev_month=C.prev_month
+aipo.calendar.initMonthlyCalendar=function(D,C,B,F,A){var E=aipo.calendar.monthly_calendar_data;
+E.portlet_id=D;
+E.json_url=C;
+E.oneday_link=B;
+E.selected_month=F;
+E.selected_day=A;
+dojo.xhrGet({portletId:E.portlet_id,url:C,encoding:"utf-8",handleAs:"json-comment-filtered",load:function(I,H){var G=I;
+E.next_month=G.next_month;
+E.prev_month=G.prev_month
 }})
 };
 aipo.calendar.reloadMonthlyCalendar=function(){aipo.calendar.createMonthlyCalendar(aipo.calendar.monthly_calendar_data.json_url)
 };
-aipo.calendar.createMonthlyCalendar=function(C){var D=aipo.calendar.monthly_calendar_data;
-dojo.xhrGet({portletId:D.portlet_id,url:C,encoding:"utf-8",handleAs:"json-comment-filtered",load:function(W,B){var P=W;
-if(P.error==1){location.reload()
-}if(dojo.byId("mc_year").innerText){dojo.byId("mc_year").innerText=P.year;
-dojo.byId("mc_month").innerText=P.month
-}else{dojo.byId("mc_year").innerHTML=P.year;
-dojo.byId("mc_month").innerHTML=P.month
-}D.next_month=P.next_month;
-D.prev_month=P.prev_month;
-var Q=dojo.byId("mc_table");
-if(!aipo.calendar.monthly_calendar_data.is_first){var A=new Array();
-for(var V=0;
-V<Q.childNodes.length;
-V++){var Y=Q.childNodes[V];
-if(Y.className=="monthlyCalendarAutoTr"){A.push(Y)
-}}for(var V=0;
-V<A.length;
-V++){Q.removeChild(A[V])
-}for(var V=0;
-V<P.monthly_container.length;
-V++){var U=P.monthly_container[V];
-var Z=document.createElement("tr");
-Q.appendChild(Z);
-Z.className="monthlyCalendarAutoTr";
-for(var X=0;
-X<U.length;
-X++){var R=U[X];
-var S=document.createElement("td");
-Z.appendChild(S);
-if(R.is_holiday){S.className=S.className+" holiday"
-}else{if(X==0){S.className=S.className+" sunday"
-}if(X==6){S.className=S.className+" saturday"
-}}if(R.month!=P.month){S.className=S.className+" out"
-}if(R.today==P.today){S.className+=" today"
-}if(R.month==D.selected_month&&R.day==D.selected_day){S.className+=" selected"
-}var T=document.createElement("a");
-S.appendChild(T);
-T.setAttribute("href","javascript:void(0);");
-T.setAttribute("data-date",R.today);
-T.setAttribute("data-link",D.oneday_link+"&view_date="+R.today);
-dojo.query(T).onclick(function(){aipo.schedule.setIndicator(D.portlet_id);
-aipo.viewPage(this.getAttribute("data-link"),D.portlet_id)
+aipo.calendar.createMonthlyCalendar=function(A){var B=aipo.calendar.monthly_calendar_data;
+dojo.xhrGet({portletId:B.portlet_id,url:A,encoding:"utf-8",handleAs:"json-comment-filtered",load:function(H,C){var O=H;
+if(O.error==1){location.reload()
+}if(dojo.byId("mc_year").innerText){dojo.byId("mc_year").innerText=O.year;
+dojo.byId("mc_month").innerText=O.month
+}else{dojo.byId("mc_year").innerHTML=O.year;
+dojo.byId("mc_month").innerHTML=O.month
+}B.next_month=O.next_month;
+B.prev_month=O.prev_month;
+var N=dojo.byId("mc_table");
+if(!aipo.calendar.monthly_calendar_data.is_first){var D=new Array();
+for(var I=0;
+I<N.childNodes.length;
+I++){var F=N.childNodes[I];
+if(F.className=="monthlyCalendarAutoTr"){D.push(F)
+}}for(var I=0;
+I<D.length;
+I++){N.removeChild(D[I])
+}for(var I=0;
+I<O.monthly_container.length;
+I++){var J=O.monthly_container[I];
+var E=document.createElement("tr");
+N.appendChild(E);
+E.className="monthlyCalendarAutoTr";
+for(var G=0;
+G<J.length;
+G++){var M=J[G];
+var L=document.createElement("td");
+E.appendChild(L);
+if(M.is_holiday){L.className=L.className+" holiday"
+}else{if(G==0){L.className=L.className+" sunday"
+}if(G==6){L.className=L.className+" saturday"
+}}if(M.month!=O.month){L.className=L.className+" out"
+}if(M.today==O.today){L.className+=" today"
+}if(M.month==B.selected_month&&M.day==B.selected_day){L.className+=" selected"
+}var K=document.createElement("a");
+L.appendChild(K);
+K.setAttribute("href","javascript:void(0);");
+K.setAttribute("data-date",M.today);
+K.setAttribute("data-link",B.oneday_link+"&view_date="+M.today);
+dojo.query(K).onclick(function(){aipo.schedule.setIndicator(B.portlet_id);
+aipo.viewPage(this.getAttribute("data-link"),B.portlet_id)
 });
-if(T.innerText){T.innerText=R.day
-}else{T.innerHTML=R.day
+if(K.innerText){K.innerText=M.day
+}else{K.innerHTML=M.day
 }}}}aipo.calendar.monthly_calendar_data.is_first=false
 }})
 };

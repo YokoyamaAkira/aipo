@@ -21,104 +21,104 @@ return
 }if(!dojo.isIE){dijit.focus(this.sliderHandle)
 }dojo.stopEvent(A)
 },_isReversed:function(){return !(this._upsideDown||this.isLeftToRight())
-},_onBarClick:function(B){if(this.disabled||!this.clickSelect){return 
+},_onBarClick:function(C){if(this.disabled||!this.clickSelect){return 
 }dijit.focus(this.sliderHandle);
-dojo.stopEvent(B);
-var A=dojo.coords(this.sliderBarContainer,true);
-var C=B[this._mousePixelCoord]-A[this._startingPixelCoord];
-this._setPixelValue(this._isReversed()||this._upsideDown?(A[this._pixelCount]-C):C,A[this._pixelCount],true)
-},_setPixelValue:function(A,C,E){if(this.disabled){return 
-}A=A<0?0:C<A?C:A;
-var D=this.discreteValues;
-if(D<=1||D==Infinity){D=C
-}D--;
-var F=C/D;
-var B=Math.round(A/F);
-this.setValue((this.maximum-this.minimum)*B/D+this.minimum,E)
-},setValue:function(B,A){this.valueNode.value=this.value=B;
+dojo.stopEvent(C);
+var B=dojo.coords(this.sliderBarContainer,true);
+var A=C[this._mousePixelCoord]-B[this._startingPixelCoord];
+this._setPixelValue(this._isReversed()||this._upsideDown?(B[this._pixelCount]-A):A,B[this._pixelCount],true)
+},_setPixelValue:function(B,D,F){if(this.disabled){return 
+}B=B<0?0:D<B?D:B;
+var E=this.discreteValues;
+if(E<=1||E==Infinity){E=D
+}E--;
+var A=D/E;
+var C=Math.round(B/A);
+this.setValue((this.maximum-this.minimum)*C/E+this.minimum,F)
+},setValue:function(C,B){this.valueNode.value=this.value=C;
 this.inherited("setValue",arguments);
-var C=(B-this.minimum)/(this.maximum-this.minimum);
-this.progressBar.style[this._progressPixelSize]=(C*100)+"%";
-this.remainingBar.style[this._progressPixelSize]=((1-C)*100)+"%"
-},_bumpValue:function(C){if(this.disabled){return 
-}var E=dojo.getComputedStyle(this.sliderBarContainer);
-var D=dojo._getContentBox(this.sliderBarContainer,E);
-var A=this.discreteValues;
-if(A<=1||A==Infinity){A=D[this._pixelCount]
-}A--;
-var B=(this.value-this.minimum)*A/(this.maximum-this.minimum)+C;
-if(B<0){B=0
-}if(B>A){B=A
-}B=B*(this.maximum-this.minimum)/A+this.minimum;
-this.setValue(B,true)
+var A=(C-this.minimum)/(this.maximum-this.minimum);
+this.progressBar.style[this._progressPixelSize]=(A*100)+"%";
+this.remainingBar.style[this._progressPixelSize]=((1-A)*100)+"%"
+},_bumpValue:function(D){if(this.disabled){return 
+}var A=dojo.getComputedStyle(this.sliderBarContainer);
+var E=dojo._getContentBox(this.sliderBarContainer,A);
+var B=this.discreteValues;
+if(B<=1||B==Infinity){B=E[this._pixelCount]
+}B--;
+var C=(this.value-this.minimum)*B/(this.maximum-this.minimum)+D;
+if(C<0){C=0
+}if(C>B){C=B
+}C=C*(this.maximum-this.minimum)/B+this.minimum;
+this.setValue(C,true)
 },decrement:function(A){this._bumpValue(A.keyCode==dojo.keys.PAGE_DOWN?-this.pageIncrement:-1)
 },increment:function(A){this._bumpValue(A.keyCode==dojo.keys.PAGE_UP?this.pageIncrement:1)
-},_mouseWheeled:function(B){dojo.stopEvent(B);
-var A=0;
-if(typeof B.wheelDelta=="number"){A=B.wheelDelta
-}else{if(typeof B.detail=="number"){A=-B.detail
-}}if(A>0){this.increment(B)
-}else{if(A<0){this.decrement(B)
+},_mouseWheeled:function(A){dojo.stopEvent(A);
+var B=0;
+if(typeof A.wheelDelta=="number"){B=A.wheelDelta
+}else{if(typeof A.detail=="number"){B=-A.detail
+}}if(B>0){this.increment(A)
+}else{if(B<0){this.decrement(A)
 }}},startup:function(){dojo.forEach(this.getChildren(),function(A){if(this[A.container]!=this.containerNode){this[A.container].appendChild(A.domNode)
 }},this)
 },_onBlur:function(){dijit.form.HorizontalSlider.superclass.setValue.call(this,this.value,true)
 },postCreate:function(){if(this.showButtons){this.incrementButton.style.display="";
 this.decrementButton.style.display=""
 }this.connect(this.domNode,dojo.isIE?"onmousewheel":"DOMMouseScroll","_mouseWheeled");
-var B=this;
-var A=function(){dijit.form._SliderMover.apply(this,arguments);
-this.widget=B
+var A=this;
+var B=function(){dijit.form._SliderMover.apply(this,arguments);
+this.widget=A
 };
-dojo.extend(A,dijit.form._SliderMover.prototype);
-this._movable=new dojo.dnd.Moveable(this.sliderHandle,{mover:A});
+dojo.extend(B,dijit.form._SliderMover.prototype);
+this._movable=new dojo.dnd.Moveable(this.sliderHandle,{mover:B});
 this.inherited("postCreate",arguments)
 },destroy:function(){this._movable.destroy();
 this.inherited("destroy",arguments)
 }});
 dojo.declare("dijit.form.VerticalSlider",dijit.form.HorizontalSlider,{templateString:'<table class="dijitReset dijitSlider" cellspacing="0" cellpadding="0" border="0" rules="none"\r\n><tbody class="dijitReset"\r\n\t><tr class="dijitReset"\r\n\t\t><td class="dijitReset"></td\r\n\t\t><td class="dijitReset dijitSliderButtonContainer dijitVerticalSliderButtonContainer"\r\n\t\t\t><div class="dijitVerticalSliderIncrementIcon" tabIndex="-1" style="display:none" dojoAttachPoint="incrementButton" dojoAttachEvent="onclick: increment"><span class="dijitSliderButtonInner">+</span></div\r\n\t\t></td\r\n\t\t><td class="dijitReset"></td\r\n\t></tr\r\n\t><tr class="dijitReset"\r\n\t\t><td class="dijitReset"></td\r\n\t\t><td class="dijitReset"\r\n\t\t\t><center><div class="dijitSliderBar dijitSliderBumper dijitVerticalSliderBumper dijitSliderTopBumper dijitVerticalSliderTopBumper"></div></center\r\n\t\t></td\r\n\t\t><td class="dijitReset"></td\r\n\t></tr\r\n\t><tr class="dijitReset"\r\n\t\t><td dojoAttachPoint="leftDecoration" class="dijitReset" style="text-align:center;height:100%;"></td\r\n\t\t><td class="dijitReset" style="height:100%;"\r\n\t\t\t><input dojoAttachPoint="valueNode" type="hidden" name="${name}"\r\n\t\t\t/><center style="position:relative;height:100%;" dojoAttachPoint="sliderBarContainer"\r\n\t\t\t\t><div dojoAttachPoint="remainingBar" class="dijitSliderBar dijitVerticalSliderBar dijitSliderRemainingBar dijitVerticalSliderRemainingBar" dojoAttachEvent="onclick:_onBarClick"></div\r\n\t\t\t\t><div dojoAttachPoint="progressBar" class="dijitSliderBar dijitVerticalSliderBar dijitSliderProgressBar dijitVerticalSliderProgressBar" dojoAttachEvent="onclick:_onBarClick"\r\n\t\t\t\t\t><div dojoAttachPoint="sliderHandle,focusNode" class="dijitSliderMoveable" dojoAttachEvent="onkeypress:_onKeyPress,onclick:_onHandleClick" style="vertical-align:top;" waiRole="slider" valuemin="${minimum}" valuemax="${maximum}"\r\n\t\t\t\t\t\t><div class="dijitSliderImageHandle dijitVerticalSliderImageHandle"></div\r\n\t\t\t\t\t></div\r\n\t\t\t\t></div\r\n\t\t\t></center\r\n\t\t></td\r\n\t\t><td dojoAttachPoint="containerNode,rightDecoration" class="dijitReset" style="text-align:center;height:100%;"></td\r\n\t></tr\r\n\t><tr class="dijitReset"\r\n\t\t><td class="dijitReset"></td\r\n\t\t><td class="dijitReset"\r\n\t\t\t><center><div class="dijitSliderBar dijitSliderBumper dijitVerticalSliderBumper dijitSliderBottomBumper dijitVerticalSliderBottomBumper"></div></center\r\n\t\t></td\r\n\t\t><td class="dijitReset"></td\r\n\t></tr\r\n\t><tr class="dijitReset"\r\n\t\t><td class="dijitReset"></td\r\n\t\t><td class="dijitReset dijitSliderButtonContainer dijitVerticalSliderButtonContainer"\r\n\t\t\t><div class="dijitVerticalSliderDecrementIcon" tabIndex="-1" style="display:none" dojoAttachPoint="decrementButton" dojoAttachEvent="onclick: decrement"><span class="dijitSliderButtonInner">-</span></div\r\n\t\t></td\r\n\t\t><td class="dijitReset"></td\r\n\t></tr\r\n></tbody></table>\r\n',_mousePixelCoord:"pageY",_pixelCount:"h",_startingPixelCoord:"y",_startingPixelCount:"t",_handleOffsetCoord:"top",_progressPixelSize:"height",_upsideDown:true});
-dojo.declare("dijit.form._SliderMover",dojo.dnd.Mover,{onMouseMove:function(C){var B=this.widget;
-var D=this.constraintBox;
-if(!D){var G=B.sliderBarContainer;
-var A=dojo.getComputedStyle(G);
-var D=dojo._getContentBox(G,A);
-D[B._startingPixelCount]=0;
-this.constraintBox=D
-}var E=this.marginBox;
-var F=B._isReversed()?C[B._mousePixelCoord]-dojo._abs(B.sliderBarContainer).x:E[B._startingPixelCount]+C[B._mousePixelCoord];
-dojo.hitch(B,"_setPixelValue")(B._isReversed()||B._upsideDown?(D[B._pixelCount]-F):F,D[B._pixelCount])
-},destroy:function(A){var B=this.widget;
-B.setValue(B.value,true);
+dojo.declare("dijit.form._SliderMover",dojo.dnd.Mover,{onMouseMove:function(F){var E=this.widget;
+var G=this.constraintBox;
+if(!G){var C=E.sliderBarContainer;
+var D=dojo.getComputedStyle(C);
+var G=dojo._getContentBox(C,D);
+G[E._startingPixelCount]=0;
+this.constraintBox=G
+}var A=this.marginBox;
+var B=E._isReversed()?F[E._mousePixelCoord]-dojo._abs(E.sliderBarContainer).x:A[E._startingPixelCount]+F[E._mousePixelCoord];
+dojo.hitch(E,"_setPixelValue")(E._isReversed()||E._upsideDown?(G[E._pixelCount]-B):B,G[E._pixelCount])
+},destroy:function(B){var A=this.widget;
+A.setValue(A.value,true);
 dojo.dnd.Mover.prototype.destroy.call(this)
 }});
-dojo.declare("dijit.form.HorizontalRule",[dijit._Widget,dijit._Templated],{templateString:'<div class="RuleContainer HorizontalRuleContainer"></div>',count:3,container:"containerNode",ruleStyle:"",_positionPrefix:'<div class="RuleMark HorizontalRuleMark" style="left:',_positionSuffix:"%;",_suffix:'"></div>',_genHTML:function(A,B){return this._positionPrefix+A+this._positionSuffix+this.ruleStyle+this._suffix
-},_isHorizontal:true,postCreate:function(){if(this.count==1){var B=this._genHTML(50,0)
-}else{var C=100/(this.count-1);
-if(!this._isHorizontal||this.isLeftToRight()){var B=this._genHTML(0,0);
-for(var A=1;
-A<this.count-1;
-A++){B+=this._genHTML(C*A,A)
-}B+=this._genHTML(100,this.count-1)
-}else{var B=this._genHTML(100,0);
-for(var A=1;
-A<this.count-1;
-A++){B+=this._genHTML(100-C*A,A)
-}B+=this._genHTML(0,this.count-1)
-}}this.domNode.innerHTML=B
+dojo.declare("dijit.form.HorizontalRule",[dijit._Widget,dijit._Templated],{templateString:'<div class="RuleContainer HorizontalRuleContainer"></div>',count:3,container:"containerNode",ruleStyle:"",_positionPrefix:'<div class="RuleMark HorizontalRuleMark" style="left:',_positionSuffix:"%;",_suffix:'"></div>',_genHTML:function(B,A){return this._positionPrefix+B+this._positionSuffix+this.ruleStyle+this._suffix
+},_isHorizontal:true,postCreate:function(){if(this.count==1){var C=this._genHTML(50,0)
+}else{var A=100/(this.count-1);
+if(!this._isHorizontal||this.isLeftToRight()){var C=this._genHTML(0,0);
+for(var B=1;
+B<this.count-1;
+B++){C+=this._genHTML(A*B,B)
+}C+=this._genHTML(100,this.count-1)
+}else{var C=this._genHTML(100,0);
+for(var B=1;
+B<this.count-1;
+B++){C+=this._genHTML(100-A*B,B)
+}C+=this._genHTML(0,this.count-1)
+}}this.domNode.innerHTML=C
 }});
 dojo.declare("dijit.form.VerticalRule",dijit.form.HorizontalRule,{templateString:'<div class="RuleContainer VerticalRuleContainer"></div>',_positionPrefix:'<div class="RuleMark VerticalRuleMark" style="top:',_isHorizontal:false});
 dojo.declare("dijit.form.HorizontalRuleLabels",dijit.form.HorizontalRule,{templateString:'<div class="RuleContainer HorizontalRuleContainer"></div>',labelStyle:"",labels:[],numericMargin:0,minimum:0,maximum:1,constraints:{pattern:"#%"},_positionPrefix:'<div class="RuleLabelContainer HorizontalRuleLabelContainer" style="left:',_labelPrefix:'"><span class="RuleLabel HorizontalRuleLabel">',_suffix:"</span></div>",_calcPosition:function(A){return A
-},_genHTML:function(A,B){return this._positionPrefix+this._calcPosition(A)+this._positionSuffix+this.labelStyle+this._labelPrefix+this.labels[B]+this._suffix
-},getLabels:function(){var C=this.labels;
-if(!C.length){C=dojo.query("> li",this.srcNodeRef).map(function(E){return String(E.innerHTML)
+},_genHTML:function(B,A){return this._positionPrefix+this._calcPosition(B)+this._positionSuffix+this.labelStyle+this._labelPrefix+this.labels[A]+this._suffix
+},getLabels:function(){var D=this.labels;
+if(!D.length){D=dojo.query("> li",this.srcNodeRef).map(function(E){return String(E.innerHTML)
 })
 }this.srcNodeRef.innerHTML="";
-if(!C.length&&this.count>1){var B=this.minimum;
-var A=(this.maximum-B)/(this.count-1);
-for(var D=0;
-D<this.count;
-D++){C.push((D<this.numericMargin||D>=(this.count-this.numericMargin))?"":dojo.number.format(B,this.constraints));
-B+=A
-}}return C
+if(!D.length&&this.count>1){var C=this.minimum;
+var B=(this.maximum-C)/(this.count-1);
+for(var A=0;
+A<this.count;
+A++){D.push((A<this.numericMargin||A>=(this.count-this.numericMargin))?"":dojo.number.format(C,this.constraints));
+C+=B
+}}return D
 },postMixInProperties:function(){this.inherited("postMixInProperties",arguments);
 this.labels=this.getLabels();
 this.count=this.labels.length

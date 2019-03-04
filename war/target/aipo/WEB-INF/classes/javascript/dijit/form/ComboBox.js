@@ -6,16 +6,16 @@ dojo.requireLocalization("dijit.form","ComboBox",null,"ROOT,cs,de,es,fr,hu,it,ja
 dojo.declare("dijit.form.ComboBoxMixin",null,{item:null,pageSize:Infinity,store:null,query:{},autoComplete:true,searchDelay:100,searchAttr:"name",ignoreCase:true,hasDownArrow:true,_hasFocus:false,templateString:'<table class="dijit dijitReset dijitInlineTable dijitLeft" cellspacing="0" cellpadding="0"\r\n\tid="widget_${id}" name="${name}" dojoAttachEvent="onmouseenter:_onMouse,onmouseleave:_onMouse" waiRole="presentation"\r\n\t><tr class="dijitReset"\r\n\t\t><td class=\'dijitReset dijitStretch dijitInputField\' width="100%"\r\n\t\t\t><input type="text" autocomplete="off" name="${name}"\r\n\t\t\tdojoAttachEvent="onkeypress, onkeyup, onfocus, compositionend"\r\n\t\t\tdojoAttachPoint="textbox,focusNode" waiRole="combobox"\r\n\t\t/></td\r\n\t\t><td class="dijitReset dijitValidationIconField" width="0%"\r\n\t\t\t><div dojoAttachPoint=\'iconNode\' class=\'dijitValidationIcon\'></div\r\n\t\t\t><div class=\'dijitValidationIconText\'>&Chi;</div\r\n\t\t></td\r\n\t\t><td class=\'dijitReset dijitRight dijitButtonNode dijitDownArrowButton\' width="0%"\r\n\t\t\tdojoAttachPoint="downArrowNode"\r\n\t\t\tdojoAttachEvent="onmousedown:_onArrowMouseDown,onmouseup:_onMouse,onmouseenter:_onMouse,onmouseleave:_onMouse"\r\n\t\t\t><div class="dijitDownArrowButtonInner" waiRole="presentation"\r\n\t\t\t\t><div class="dijitDownArrowButtonChar">&#9660;</div\r\n\t\t\t></div\r\n\t\t></td\t\r\n\t></tr\r\n></table>\r\n',baseClass:"dijitComboBox",_lastDisplayedValue:"",getValue:function(){return dijit.form.TextBox.superclass.getValue.apply(this,arguments)
 },setDisplayedValue:function(A){this._lastDisplayedValue=A;
 this.setValue(A,true)
-},_getCaretPos:function(D){if(typeof (D.selectionStart)=="number"){return D.selectionStart
-}else{if(dojo.isIE){var B=document.selection.createRange().duplicate();
-var A=D.createTextRange();
+},_getCaretPos:function(A){if(typeof (A.selectionStart)=="number"){return A.selectionStart
+}else{if(dojo.isIE){var C=document.selection.createRange().duplicate();
+var B=A.createTextRange();
+C.move("character",0);
 B.move("character",0);
-A.move("character",0);
-try{A.setEndPoint("EndToEnd",B);
-return String(A.text).replace(/\r/g,"").length
-}catch(C){return 0
-}}}},_setCaretPos:function(A,B){B=parseInt(B);
-this._setSelectedRange(A,B,B)
+try{B.setEndPoint("EndToEnd",C);
+return String(B.text).replace(/\r/g,"").length
+}catch(D){return 0
+}}}},_setCaretPos:function(B,A){A=parseInt(A);
+this._setSelectedRange(B,A,A)
 },_setSelectedRange:function(element,start,end){if(!end){end=element.value.length
 }if(element.setSelectionRange){dijit.focus(element);
 element.setSelectionRange(start,end)
@@ -35,33 +35,33 @@ x<dist;
 x++){var te=document.createEvent("KeyEvents");
 te.initKeyEvent("keypress",true,true,null,false,false,false,false,tcc,tcc);
 element.dispatchEvent(te)
-}}}},onkeypress:function(D){if(D.altKey||(D.ctrlKey&&D.charCode!=118)){return 
-}var B=false;
+}}}},onkeypress:function(A){if(A.altKey||(A.ctrlKey&&A.charCode!=118)){return 
+}var C=false;
 this.item=null;
-if(this._isShowingNow){this._popupWidget.handleKey(D)
-}switch(D.keyCode){case dojo.keys.PAGE_DOWN:case dojo.keys.DOWN_ARROW:if(!this._isShowingNow||this._prev_key_esc){this._arrowPressed();
-B=true
+if(this._isShowingNow){this._popupWidget.handleKey(A)
+}switch(A.keyCode){case dojo.keys.PAGE_DOWN:case dojo.keys.DOWN_ARROW:if(!this._isShowingNow||this._prev_key_esc){this._arrowPressed();
+C=true
 }else{this._announceOption(this._popupWidget.getHighlightedOption())
-}dojo.stopEvent(D);
+}dojo.stopEvent(A);
 this._prev_key_backspace=false;
 this._prev_key_esc=false;
 break;
 case dojo.keys.PAGE_UP:case dojo.keys.UP_ARROW:if(this._isShowingNow){this._announceOption(this._popupWidget.getHighlightedOption())
-}dojo.stopEvent(D);
+}dojo.stopEvent(A);
 this._prev_key_backspace=false;
 this._prev_key_esc=false;
 break;
-case dojo.keys.ENTER:var C;
-if(this._isShowingNow&&(C=this._popupWidget.getHighlightedOption())){if(C==this._popupWidget.nextButton){this._nextSearch(1);
-dojo.stopEvent(D);
+case dojo.keys.ENTER:var D;
+if(this._isShowingNow&&(D=this._popupWidget.getHighlightedOption())){if(D==this._popupWidget.nextButton){this._nextSearch(1);
+dojo.stopEvent(A);
 break
-}else{if(C==this._popupWidget.previousButton){this._nextSearch(-1);
-dojo.stopEvent(D);
+}else{if(D==this._popupWidget.previousButton){this._nextSearch(-1);
+dojo.stopEvent(A);
 break
 }}}else{this.setDisplayedValue(this.getDisplayedValue())
-}D.preventDefault();
-case dojo.keys.TAB:var A=this.getDisplayedValue();
-if(this._popupWidget&&(A==this._popupWidget._messages.previousMessage||A==this._popupWidget._messages.nextMessage)){break
+}A.preventDefault();
+case dojo.keys.TAB:var B=this.getDisplayedValue();
+if(this._popupWidget&&(B==this._popupWidget._messages.previousMessage||B==this._popupWidget._messages.nextMessage)){break
 }if(this._isShowingNow){this._prev_key_backspace=false;
 this._prev_key_esc=false;
 if(this._popupWidget.getHighlightedOption()){this._popupWidget.setValue({target:this._popupWidget.getHighlightedOption()},true)
@@ -69,49 +69,49 @@ if(this._popupWidget.getHighlightedOption()){this._popupWidget.setValue({target:
 }break;
 case dojo.keys.SPACE:this._prev_key_backspace=false;
 this._prev_key_esc=false;
-if(this._isShowingNow&&this._popupWidget.getHighlightedOption()){dojo.stopEvent(D);
+if(this._isShowingNow&&this._popupWidget.getHighlightedOption()){dojo.stopEvent(A);
 this._selectOption();
 this._hideResultList()
-}else{B=true
+}else{C=true
 }break;
 case dojo.keys.ESCAPE:this._prev_key_backspace=false;
 this._prev_key_esc=true;
 this._hideResultList();
 if(this._lastDisplayedValue!=this.getDisplayedValue()){this.setDisplayedValue(this._lastDisplayedValue);
-dojo.stopEvent(D)
+dojo.stopEvent(A)
 }else{this.setValue(this.getValue(),false)
 }break;
 case dojo.keys.DELETE:case dojo.keys.BACKSPACE:this._prev_key_esc=false;
 this._prev_key_backspace=true;
-B=true;
+C=true;
 break;
 case dojo.keys.RIGHT_ARROW:case dojo.keys.LEFT_ARROW:this._prev_key_backspace=false;
 this._prev_key_esc=false;
 break;
 default:this._prev_key_backspace=false;
 this._prev_key_esc=false;
-if(dojo.isIE||D.charCode!=0){B=true
+if(dojo.isIE||A.charCode!=0){C=true
 }}if(this.searchTimer){clearTimeout(this.searchTimer)
-}if(B){this.searchTimer=setTimeout(dojo.hitch(this,this._startSearchFromInput),this.searchDelay)
-}},_autoCompleteText:function(B){this._setSelectedRange(this.focusNode,this.focusNode.value.length,this.focusNode.value.length);
-if(new RegExp("^"+escape(this.focusNode.value),this.ignoreCase?"i":"").test(escape(B))){var A=this._getCaretPos(this.focusNode);
-if((A+1)>this.focusNode.value.length){this.focusNode.value=B;
-this._setSelectedRange(this.focusNode,A,this.focusNode.value.length);
-dijit.setWaiState(this.focusNode,"valuenow",B)
-}}else{this.focusNode.value=B;
+}if(C){this.searchTimer=setTimeout(dojo.hitch(this,this._startSearchFromInput),this.searchDelay)
+}},_autoCompleteText:function(A){this._setSelectedRange(this.focusNode,this.focusNode.value.length,this.focusNode.value.length);
+if(new RegExp("^"+escape(this.focusNode.value),this.ignoreCase?"i":"").test(escape(A))){var B=this._getCaretPos(this.focusNode);
+if((B+1)>this.focusNode.value.length){this.focusNode.value=A;
+this._setSelectedRange(this.focusNode,B,this.focusNode.value.length);
+dijit.setWaiState(this.focusNode,"valuenow",A)
+}}else{this.focusNode.value=A;
 this._setSelectedRange(this.focusNode,0,this.focusNode.value.length);
-dijit.setWaiState(this.focusNode,"valuenow",B)
-}},_openResultList:function(C,A){if(this.disabled||A.query[this.searchAttr]!=this._lastQuery){return 
+dijit.setWaiState(this.focusNode,"valuenow",A)
+}},_openResultList:function(A,B){if(this.disabled||B.query[this.searchAttr]!=this._lastQuery){return 
 }this._popupWidget.clearResultList();
-if(!C.length){this._hideResultList();
+if(!A.length){this._hideResultList();
 return 
-}var B=new String(this.store.getValue(C[0],this.searchAttr));
-if(B&&this.autoComplete&&!this._prev_key_backspace&&(A.query[this.searchAttr]!="*")){this._autoCompleteText(B);
-dijit.setWaiState(this.focusNode||this.domNode,"valuenow",B)
-}this._popupWidget.createOptions(C,A,dojo.hitch(this,this._getMenuLabelFromItem));
+}var C=new String(this.store.getValue(A[0],this.searchAttr));
+if(C&&this.autoComplete&&!this._prev_key_backspace&&(B.query[this.searchAttr]!="*")){this._autoCompleteText(C);
+dijit.setWaiState(this.focusNode||this.domNode,"valuenow",C)
+}this._popupWidget.createOptions(A,B,dojo.hitch(this,this._getMenuLabelFromItem));
 this._showResultList();
-if(A.direction){if(A.direction==1){this._popupWidget.highlightFirstOption()
-}else{if(A.direction==-1){this._popupWidget.highlightLastOption()
+if(B.direction){if(B.direction==1){this._popupWidget.highlightFirstOption()
+}else{if(B.direction==-1){this._popupWidget.highlightLastOption()
 }}this._announceOption(this._popupWidget.getHighlightedOption())
 }},_showResultList:function(){this._hideResultList();
 var items=this._popupWidget.getItems(),visibleCount=Math.min(items.length,this.maxListLength);
@@ -137,20 +137,20 @@ if(this._popupWidget&&(A==this._popupWidget._messages.previousMessage||A==this._
 }else{this.setDisplayedValue(A)
 }},onfocus:function(A){this._hasFocus=true;
 this._onMouse(A)
-},_announceOption:function(B){if(B==null){return 
-}var A;
-if(B==this._popupWidget.nextButton||B==this._popupWidget.previousButton){A=B.innerHTML
-}else{A=this.store.getValue(B.item,this.searchAttr)
+},_announceOption:function(A){if(A==null){return 
+}var B;
+if(A==this._popupWidget.nextButton||A==this._popupWidget.previousButton){B=A.innerHTML
+}else{B=this.store.getValue(A.item,this.searchAttr)
 }this.focusNode.value=this.focusNode.value.substring(0,this._getCaretPos(this.focusNode));
-this._autoCompleteText(A)
-},_selectOption:function(B){var A=null;
-if(!B){B={target:this._popupWidget.getHighlightedOption()}
-}if(!B.target){this.setDisplayedValue(this.getDisplayedValue());
+this._autoCompleteText(B)
+},_selectOption:function(A){var B=null;
+if(!A){A={target:this._popupWidget.getHighlightedOption()}
+}if(!A.target){this.setDisplayedValue(this.getDisplayedValue());
 return 
-}else{A=B.target
-}if(!B.noHide){this._hideResultList();
-this._setCaretPos(this.focusNode,this.store.getValue(A.item,this.searchAttr).length)
-}this._doSelect(A)
+}else{B=A.target
+}if(!A.noHide){this._hideResultList();
+this._setCaretPos(this.focusNode,this.store.getValue(B.item,this.searchAttr).length)
+}this._doSelect(B)
 },_doSelect:function(A){this.item=A.item;
 this.setValue(this.store.getValue(A.item,this.searchAttr),true)
 },_onArrowMouseDown:function(A){if(this.disabled){return 
@@ -159,14 +159,14 @@ this.focus();
 if(this._isShowingNow){this._hideResultList()
 }else{this._startSearch("")
 }},_startSearchFromInput:function(){this._startSearch(this.focusNode.value)
-},_startSearch:function(D){if(!this._popupWidget){this._popupWidget=new dijit.form._ComboBoxMenu({onChange:dojo.hitch(this,this._selectOption)})
-}var B=this.query;
-this._lastQuery=B[this.searchAttr]=D+"*";
-var A=this.store.fetch({queryOptions:{ignoreCase:this.ignoreCase,deep:true},query:B,onComplete:dojo.hitch(this,"_openResultList"),start:0,count:this.pageSize});
-function C(F,E){F.start+=F.count*E;
-F.direction=E;
-F.store.fetch(F)
-}this._nextSearch=this._popupWidget.onPage=dojo.hitch(this,C,A)
+},_startSearch:function(A){if(!this._popupWidget){this._popupWidget=new dijit.form._ComboBoxMenu({onChange:dojo.hitch(this,this._selectOption)})
+}var C=this.query;
+this._lastQuery=C[this.searchAttr]=A+"*";
+var B=this.store.fetch({queryOptions:{ignoreCase:this.ignoreCase,deep:true},query:C,onComplete:dojo.hitch(this,"_openResultList"),start:0,count:this.pageSize});
+function D(E,F){E.start+=E.count*F;
+E.direction=F;
+E.store.fetch(E)
+}this._nextSearch=this._popupWidget.onPage=dojo.hitch(this,D,B)
 },_getValueField:function(){return this.searchAttr
 },_arrowPressed:function(){if(!this.disabled&&this.hasDownArrow){dojo.addClass(this.downArrowNode,"dijitArrowButtonActive")
 }},_arrowIdle:function(){if(!this.disabled&&this.hasDownArrow){dojo.removeClass(this.downArrowNode,"dojoArrowButtonPushed")
@@ -192,34 +192,34 @@ this.onChange(A)
 this.nextButton.innerHTML=this._messages.nextMessage;
 this.inherited("postCreate",arguments)
 },onClose:function(){this._blurOptionNode()
-},_createOption:function(B,A){var D=A(B);
-var C=document.createElement("div");
-if(D.html){C.innerHTML=D.label
-}else{C.appendChild(document.createTextNode(D.label))
-}if(C.innerHTML==""){C.innerHTML="&nbsp;"
-}C.item=B;
-return C
-},createOptions:function(A,B,D){this.previousButton.style.display=B.start==0?"none":"";
-var C=this;
-dojo.forEach(A,function(F){var E=C._createOption(F,D);
-E.className="dijitMenuItem";
-C.domNode.insertBefore(E,C.nextButton)
+},_createOption:function(C,B){var A=B(C);
+var D=document.createElement("div");
+if(A.html){D.innerHTML=A.label
+}else{D.appendChild(document.createTextNode(A.label))
+}if(D.innerHTML==""){D.innerHTML="&nbsp;"
+}D.item=C;
+return D
+},createOptions:function(B,C,A){this.previousButton.style.display=C.start==0?"none":"";
+var D=this;
+dojo.forEach(B,function(E){var F=D._createOption(E,A);
+F.className="dijitMenuItem";
+D.domNode.insertBefore(F,D.nextButton)
 });
-this.nextButton.style.display=B.count==A.length?"":"none"
+this.nextButton.style.display=C.count==B.length?"":"none"
 },clearResultList:function(){while(this.domNode.childNodes.length>2){this.domNode.removeChild(this.domNode.childNodes[this.domNode.childNodes.length-2])
 }},getItems:function(){return this.domNode.childNodes
 },getListLength:function(){return this.domNode.childNodes.length-2
 },onmousedown:function(A){dojo.stopEvent(A)
-},onmouseup:function(B){if(B.target===this.domNode){return 
-}else{if(B.target==this.previousButton){this.onPage(-1)
-}else{if(B.target==this.nextButton){this.onPage(1)
-}else{var A=B.target;
-while(!A.item){A=A.parentNode
-}this.setValue({target:A},true)
-}}}},onmouseover:function(B){if(B.target===this.domNode){return 
-}var A=B.target;
-if(!(A==this.previousButton||A==this.nextButton)){while(!A.item){A=A.parentNode
-}}this._focusOptionNode(A)
+},onmouseup:function(A){if(A.target===this.domNode){return 
+}else{if(A.target==this.previousButton){this.onPage(-1)
+}else{if(A.target==this.nextButton){this.onPage(1)
+}else{var B=A.target;
+while(!B.item){B=B.parentNode
+}this.setValue({target:B},true)
+}}}},onmouseover:function(A){if(A.target===this.domNode){return 
+}var B=A.target;
+if(!(B==this.previousButton||B==this.nextButton)){while(!B.item){B=B.parentNode
+}}this._focusOptionNode(B)
 },onmouseout:function(A){if(A.target===this.domNode){return 
 }this._blurOptionNode()
 },_focusOptionNode:function(A){if(this._highlighted_option!=A){this._blurOptionNode();
@@ -237,17 +237,17 @@ dijit.scrollIntoView(this._highlighted_option)
 },_highlightPrevOption:function(){if(!this.getHighlightedOption()){this._focusOptionNode(this.domNode.lastChild.style.display=="none"?this.domNode.lastChild.previousSibling:this.domNode.lastChild)
 }else{if(this._highlighted_option.previousSibling&&this._highlighted_option.previousSibling.style.display!="none"){this._focusOptionNode(this._highlighted_option.previousSibling)
 }}dijit.scrollIntoView(this._highlighted_option)
-},_page:function(A){var D=0;
-var B=this.domNode.scrollTop;
-var E=parseInt(dojo.getComputedStyle(this.domNode).height);
+},_page:function(B){var E=0;
+var C=this.domNode.scrollTop;
+var A=parseInt(dojo.getComputedStyle(this.domNode).height);
 if(!this.getHighlightedOption()){this._highlightNextOption()
-}while(D<E){if(A){if(!this.getHighlightedOption().previousSibling||this._highlighted_option.previousSibling.style.display=="none"){break
+}while(E<A){if(B){if(!this.getHighlightedOption().previousSibling||this._highlighted_option.previousSibling.style.display=="none"){break
 }this._highlightPrevOption()
 }else{if(!this.getHighlightedOption().nextSibling||this._highlighted_option.nextSibling.style.display=="none"){break
 }this._highlightNextOption()
-}var C=this.domNode.scrollTop;
-D+=(C-B)*(A?-1:1);
-B=C
+}var D=this.domNode.scrollTop;
+E+=(D-C)*(B?-1:1);
+C=D
 }},pageUp:function(){this._page(true)
 },pageDown:function(){this._page(false)
 },getHighlightedOption:function(){return this._highlighted_option&&this._highlighted_option.parentNode?this._highlighted_option:null

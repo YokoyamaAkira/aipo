@@ -71,24 +71,24 @@ import com.aimluck.eip.util.ALEipUtils;
 
 /**
  * A Velocity based portlet control which implements all PortletState action
- * 
+ *
  * <p>
  * To use this control you need to define in your registry the following entry
  * or similar:
  * </p>
- * 
+ *
  * <pre>
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  *              &lt;portlet-control-entry name=&quot;TitlePortletControl&quot;&gt;
  *                &lt;classname&gt;org.apache.jetspeed.portal.controls.VelocityPortletControl&lt;/classname&gt;
  *                &lt;parameter name=&quot;theme&quot; value=&quot;default.vm&quot;/&gt;
@@ -99,26 +99,26 @@ import com.aimluck.eip.util.ALEipUtils;
  *                &lt;/meta-info&gt;
  *                &lt;media-type ref=&quot;html&quot;/&gt;
  *              &lt;/portlet-control-entry&gt;
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  * </pre>
- * 
- * 
+ *
+ *
  * @author <a href="mailto:re_carrasco@bco011.sonda.cl">Roberto Carrasco </a>
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta </a>
  * @author <a href="mailto:morciuch@apache.org">Mark Orciuch </a>
- * 
- * 
+ *
+ *
  */
 public class ALVelocityPortletControl extends AbstractPortletControl {
 
@@ -127,8 +127,9 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ALVelocityPortletControl.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(ALVelocityPortletControl.class.getName());
 
   /** Disable content caching */
   @Override
@@ -164,9 +165,8 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
     if (portlet instanceof PortletWrapper) {
       PortletWrapper wrapper = (PortletWrapper) portlet;
       if (!wrapper.getAllowView(rundata)) {
-        if (JetspeedResources.getBoolean(
-          "defaultportletcontrol.hide.decorator",
-          true)) {
+        if (JetspeedResources
+          .getBoolean("defaultportletcontrol.hide.decorator", true)) {
           return new StringElement("");
         }
       }
@@ -192,10 +192,11 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
 
     // アクセス権限がなかった場合の削除表示フラグ
     boolean hasAuthority =
-      ALEipUtils.getHasAuthority(
-        rundata,
-        context,
-        ALAccessControlConstants.VALUE_ACL_DELETE);
+      ALEipUtils
+        .getHasAuthority(
+          rundata,
+          context,
+          ALAccessControlConstants.VALUE_ACL_DELETE);
     String showDelete = "false";
     if (hasAuthority) {
       showDelete = "true";
@@ -218,9 +219,10 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
       if (PersistenceManager.getInstance(portlet, jdata) == null) {
         context.put("portlet_instance", portlet);
       } else {
-        context.put("portlet_instance", PersistenceManager.getInstance(
-          portlet,
-          jdata));
+        context
+          .put(
+            "portlet_instance",
+            PersistenceManager.getInstance(portlet, jdata));
       }
     }
 
@@ -243,10 +245,10 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
       if (maximized && "true".equals(showTab)) {
         Portlets portlets =
           ((JetspeedRunData) rundata).getProfile().getDocument().getPortlets();
-        context.put("tabs", getTabs(
-          PortalToolkit.getSet(portlets),
-          rundata,
-          context));
+        context
+          .put(
+            "tabs",
+            getTabs(PortalToolkit.getSet(portlets), rundata, context));
         context.put("menus", getMenus(portlets, rundata, context));
       }
     } catch (Exception e) {
@@ -272,7 +274,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
   /**
    * This method allows subclasses of the VelocityPortletControl to populate the
    * context of this control before rendering by the template engine.
-   * 
+   *
    * @param rundata
    *          the RunData object for this request
    * @param context
@@ -285,7 +287,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
   /**
    * Builds a list of possible window actions for this portlet instance. For
    * best results, the portlet should also implement the PortletState interface.
-   * 
+   *
    * @param rundata
    *          the request RunData
    * @param the
@@ -293,7 +295,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
    * @return a list of ordered PortletAction objects describing the the actions
    *         available for this portlet
    */
-  @SuppressWarnings({ "deprecation", "null" })
+  @SuppressWarnings({ "deprecation" })
   protected List<PortletAction> buildActionList(RunData rundata,
       Portlet portlet, Context context) {
     List<PortletAction> actions = new Vector<PortletAction>();
@@ -387,9 +389,9 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
       // action.setLink( jsLink.setPortletById(portlet.getID())
       // .addQueryData("action", getAction( action.getName()))
       // .toString());
-      action.setLink(jsLink
-        .setAction(getAction(action.getName()), portlet)
-        .toString());
+      action
+        .setLink(
+          jsLink.setAction(getAction(action.getName()), portlet).toString());
       JetspeedLinkFactory.putInstance(jsLink);
       jsLink = null;
     }
@@ -400,12 +402,13 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
   // 修正 ：ノーマル表示時のポートレットの右上にメニューを配置できるように，
   // メソッド buildFunctionList を追加した．
   /**
-   * 
+   *
    * @param rundata
    * @param portlet
    * @return
    */
-  protected List<ALFunction> buildFunctionList(RunData rundata, Portlet portlet) {
+  protected List<ALFunction> buildFunctionList(RunData rundata,
+      Portlet portlet) {
     List<ALFunction> functions = new ArrayList<ALFunction>();
     try {
 
@@ -413,24 +416,33 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
       Map<?, ?> map = portlet.getPortletConfig().getInitParameters();
       while (map.containsKey("function_mode" + i)) {
         ALFunction function = new ALFunction();
-        function.setMode(portlet.getPortletConfig().getInitParameter(
-          "function_mode" + i));
-        function.setImage(portlet.getPortletConfig().getInitParameter(
-          "function_image" + i));
-        function.setCaption(portlet.getPortletConfig().getInitParameter(
-          "function_caption" + i));
+        function
+          .setMode(
+            portlet.getPortletConfig().getInitParameter("function_mode" + i));
+        function
+          .setImage(
+            portlet.getPortletConfig().getInitParameter("function_image" + i));
+        function
+          .setCaption(
+            portlet
+              .getPortletConfig()
+              .getInitParameter("function_caption" + i));
         if (map.containsKey("function_screen" + i)) {
           function.setScreen(true);
         }
         if (map.containsKey("function_before_function" + i)) {
-          function.setBeforeFunction(portlet
-            .getPortletConfig()
-            .getInitParameter("function_before_function" + i));
+          function
+            .setBeforeFunction(
+              portlet
+                .getPortletConfig()
+                .getInitParameter("function_before_function" + i));
         }
         if (map.containsKey("function_after_function" + i)) {
-          function.setAfterFunction(portlet
-            .getPortletConfig()
-            .getInitParameter("function_after_function" + i));
+          function
+            .setAfterFunction(
+              portlet
+                .getPortletConfig()
+                .getInitParameter("function_after_function" + i));
         }
         functions.add(function);
         i++;
@@ -468,7 +480,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
 
     /**
      * Constructor
-     * 
+     *
      * @param name
      *          Name of the action
      * @param alt
@@ -499,7 +511,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
 
   /**
    * iphoneメニュー用にすべてのポートレットのリストを取り出す。
-   * 
+   *
    * @param portlets
    * @param rundata
    * @param context
@@ -531,12 +543,13 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
         try {
           JetspeedLink jsLink = JetspeedLinkFactory.getInstance(rundata);
           DynamicURI duri =
-            jsLink.getLink(
-              JetspeedLink.CURRENT,
-              null,
-              null,
-              JetspeedLink.CURRENT,
-              null);
+            jsLink
+              .getLink(
+                JetspeedLink.CURRENT,
+                null,
+                null,
+                JetspeedLink.CURRENT,
+                null);
           // 最大化リンクを登録する
           // tab.setMaximizeLink(controller.getPortletURI(p,
           // rundata).addQueryData(
@@ -563,7 +576,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
    * 修正：ポートレットの最大化画面時にタブを表示するために， <br />
    * クラス org.apache.jetspeed.portal.controls.VelocityPortletSetControl <br />
    * のメソッドを元に修正を加えた．
-   * 
+   *
    * @param portlets
    * @param rundata
    * @param context
@@ -582,21 +595,26 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
 
     // アクセス権限
     boolean hasAuthority =
-      ALEipUtils.getHasAuthority(
-        rundata,
-        context,
-        ALAccessControlConstants.VALUE_ACL_LIST);
+      ALEipUtils
+        .getHasAuthority(
+          rundata,
+          context,
+          ALAccessControlConstants.VALUE_ACL_LIST);
 
     JetspeedRunData jdata = (JetspeedRunData) rundata;
 
     @SuppressWarnings("unused")
     int count = 0;
-    for (Enumeration<?> en = portlets.getPortlets(); en.hasMoreElements(); count++) {
+    for (Enumeration<?> en = portlets.getPortlets(); en
+      .hasMoreElements(); count++) {
       Portlet p = (Portlet) en.nextElement();
       PortalResource portalResource = new PortalResource(p);
       if ("Activity".equals(p.getName())
-        && portlets.getController().getConfig().getName().equals(
-          "TabController")) {
+        && portlets
+          .getController()
+          .getConfig()
+          .getName()
+          .equals("TabController")) {
         continue;
       }
       // Secure the tabs
@@ -610,15 +628,17 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
       }
 
       boolean hasView =
-        JetspeedSecurity.checkPermission(
-          (JetspeedUser) jdata.getUser(),
-          portalResource,
-          JetspeedSecurity.PERMISSION_VIEW);
+        JetspeedSecurity
+          .checkPermission(
+            (JetspeedUser) jdata.getUser(),
+            portalResource,
+            JetspeedSecurity.PERMISSION_VIEW);
       if (!hasView) {
         continue;
       }
       // skip any closed portlet
-      if ((p instanceof PortletState) && (((PortletState) p).isClosed(rundata))) {
+      if ((p instanceof PortletState)
+        && (((PortletState) p).isClosed(rundata))) {
         continue;
       }
 
@@ -668,9 +688,10 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
         } else if (jdata.getMode() == JetspeedRunData.MAXIMIZE) {
           // isSelected = controller.isSelected(p, rundata);
           isSelected =
-            containsPeid(rundata, (PortletSet) p, (String) jdata
-              .getUser()
-              .getTemp("js_peid"));
+            containsPeid(
+              rundata,
+              (PortletSet) p,
+              (String) jdata.getUser().getTemp("js_peid"));
         }
         tab.setSelected(isSelected);
 
@@ -678,48 +699,63 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
         // 最大化の情報をセッションから削除可能にするため，
         // URL にリストア処理用のクラスを付加した．
         if (getPortlet() == null) {
-          tab.setLink(controller.getPortletURI(p, rundata).toString()
-            + "?action=controls.Restore");
+          tab
+            .setLink(
+              controller.getPortletURI(p, rundata).toString()
+                + "?action=controls.Restore");
         } else {
           try {
             JetspeedLink jsLink = JetspeedLinkFactory.getInstance(rundata);
             DynamicURI duri =
-              jsLink.getLink(
-                JetspeedLink.CURRENT,
-                null,
-                null,
-                JetspeedLink.CURRENT,
-                null);
+              jsLink
+                .getLink(
+                  JetspeedLink.CURRENT,
+                  null,
+                  null,
+                  JetspeedLink.CURRENT,
+                  null);
             // 最大化リンクを登録する
-            tab.setMaximizeLink(controller
-              .getPortletURI(p, rundata)
-              .addQueryData("action", "controls.Maximize")
-              .toString());
+            tab
+              .setMaximizeLink(
+                controller
+                  .getPortletURI(p, rundata)
+                  .addQueryData("action", "controls.Maximize")
+                  .toString());
 
             isSelected =
               containsPeid(rundata, (PortletSet) p, getPortlet().getID());
             if (isSelected) {
               duri =
-                duri.addPathInfo(
-                  JetspeedResources.PATH_PANEID_KEY,
-                  getPortlet().getID()).addQueryData(
-                  JetspeedResources.PATH_ACTION_KEY,
-                  "controls.Restore");
+                duri
+                  .addPathInfo(
+                    JetspeedResources.PATH_PANEID_KEY,
+                    getPortlet().getID())
+                  .addQueryData(
+                    JetspeedResources.PATH_ACTION_KEY,
+                    "controls.Restore");
               tab.setLink(duri.toString());
             } else {
-              tab.setLink(controller.getPortletURI(p, rundata).addQueryData(
-                "action",
-                "controls.Restore").toString());
+              tab
+                .setLink(
+                  controller
+                    .getPortletURI(p, rundata)
+                    .addQueryData("action", "controls.Restore")
+                    .toString());
             }
           } catch (TurbineException e) {
-            tab.setLink(controller.getPortletURI(p, rundata).addQueryData(
-              "action",
-              "controls.Restore").toString());
+            tab
+              .setLink(
+                controller
+                  .getPortletURI(p, rundata)
+                  .addQueryData("action", "controls.Restore")
+                  .toString());
             // 最大化リンクを登録する
-            tab.setMaximizeLink(controller
-              .getPortletURI(p, rundata)
-              .addQueryData("action", "controls.Maximize")
-              .toString());
+            tab
+              .setMaximizeLink(
+                controller
+                  .getPortletURI(p, rundata)
+                  .addQueryData("action", "controls.Maximize")
+                  .toString());
           }
           // tab.setLink(controller.getPortletURI(p, rundata).addPathInfo(
           // "js_pane", getPortlet().getID()).addQueryData("action",
@@ -738,7 +774,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
 
   /**
    * 修正 ：第二引数の PortletSet に第三引数のポートレットが含まれるかを検証する．
-   * 
+   *
    * @param rundata
    * @param portlets
    *          タブ内に配置された Portlet 群
@@ -750,7 +786,8 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
       String selectedPeid) {
     @SuppressWarnings("unused")
     int count = 0;
-    for (Enumeration<?> en = portlets.getPortlets(); en.hasMoreElements(); count++) {
+    for (Enumeration<?> en = portlets.getPortlets(); en
+      .hasMoreElements(); count++) {
       Portlet p = (Portlet) en.nextElement();
       if (p.getID().equals(selectedPeid)) {
         // PortletSet set =
@@ -769,7 +806,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
 
   /**
    * 修正 ：第二引数で指定したポートレットの ID がタブの ID かどうかを検証する．
-   * 
+   *
    * @param rundata
    * @param peid
    * @return
@@ -794,7 +831,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
    * 修正 ：ポートレットの最大化画面時にタブを表示するために， <br />
    * クラス org.apache.jetspeed.portal.controls.VelocityPortletSetControl <br />
    * のメソッドをコピーした．
-   * 
+   *
    * @param rundata
    * @param portlets
    * @return
@@ -929,7 +966,7 @@ public class ALVelocityPortletControl extends AbstractPortletControl {
   public class PortletTabComparator implements Comparator<PortletTab> {
 
     /**
-     * 
+     *
      * @param o1
      * @param o2
      * @return

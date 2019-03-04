@@ -13,21 +13,21 @@ this.header=new dojox.grid.headerBuilder(this)
 this.inherited("destroy",arguments)
 },focus:function(){if(dojo.isSafari||dojo.isOpera){this.hiddenFocusNode.focus()
 }else{this.scrollboxNode.focus()
-}},setStructure:function(B){var A=this.structure=B;
-if(A.width&&dojo.isNumber(A.width)){this.viewWidth=A.width+"em"
-}else{this.viewWidth=A.width||this.viewWidth
-}this.onBeforeRow=A.onBeforeRow;
-this.noscroll=A.noscroll;
+}},setStructure:function(A){var B=this.structure=A;
+if(B.width&&dojo.isNumber(B.width)){this.viewWidth=B.width+"em"
+}else{this.viewWidth=B.width||this.viewWidth
+}this.onBeforeRow=B.onBeforeRow;
+this.noscroll=B.noscroll;
 if(this.noscroll){this.scrollboxNode.style.overflow="hidden"
 }this.testFlexCells();
 this.updateStructure()
 },testFlexCells:function(){this.flexCells=false;
-for(var A=0,C;
-(C=this.structure.rows[A]);
-A++){for(var B=0,D;
-(D=C[B]);
-B++){D.view=this;
-this.flexCells=this.flexCells||D.isFlex()
+for(var B=0,D;
+(D=this.structure.rows[B]);
+B++){for(var C=0,A;
+(A=D[C]);
+C++){A.view=this;
+this.flexCells=this.flexCells||A.isFlex()
 }}return this.flexCells
 },updateStructure:function(){this.header.update();
 this.content.update()
@@ -38,9 +38,9 @@ this.content.update()
 },render:function(){this.scrollboxNode.style.height="";
 this.renderHeader()
 },renderHeader:function(){this.headerContentNode.innerHTML=this.header.generateHtml(this._getHeaderContent)
-},_getHeaderContent:function(B){var A=B.name||B.grid.getCellName(B);
-if(B.index!=B.grid.getSortIndex()){return A
-}return['<div class="',B.grid.sortInfo>0?"dojoxGrid-sort-down":"dojoxGrid-sort-up",'">',A,"</div>"].join("")
+},_getHeaderContent:function(A){var B=A.name||A.grid.getCellName(A);
+if(A.index!=A.grid.getSortIndex()){return B
+}return['<div class="',A.grid.sortInfo>0?"dojoxGrid-sort-down":"dojoxGrid-sort-up",'">',B,"</div>"].join("")
 },resize:function(){this.resizeHeight();
 this.resizeWidth()
 },hasScrollbar:function(){return(this.scrollboxNode.clientHeight!=this.scrollboxNode.offsetHeight)
@@ -57,36 +57,36 @@ style.width=w
 }},setSize:function(w,h){with(this.domNode.style){if(w){width=w
 }height=(h>=0?h+"px":"")
 }with(this.headerNode.style){if(w){width=w
-}}},renderRow:function(B,C){var A=this.createRowNode(B);
-this.buildRow(B,A,C);
-this.grid.edit.restore(this,B);
-return A
-},createRowNode:function(A){var B=document.createElement("div");
-B.className=this.classTag+"-row";
-B[dojox.grid.rowIndexTag]=A;
-this.rowNodes[A]=B;
+}}},renderRow:function(C,A){var B=this.createRowNode(C);
+this.buildRow(C,B,A);
+this.grid.edit.restore(this,C);
 return B
-},buildRow:function(A,B){this.buildRowContent(A,B);
-this.styleRow(A,B)
-},buildRowContent:function(A,B){B.innerHTML=this.content.generateHtml(A,A);
-if(this.flexCells){B.firstChild.style.width=this.contentWidth
+},createRowNode:function(B){var A=document.createElement("div");
+A.className=this.classTag+"-row";
+A[dojox.grid.rowIndexTag]=B;
+this.rowNodes[B]=A;
+return A
+},buildRow:function(B,A){this.buildRowContent(B,A);
+this.styleRow(B,A)
+},buildRowContent:function(B,A){A.innerHTML=this.content.generateHtml(B,B);
+if(this.flexCells){A.firstChild.style.width=this.contentWidth
 }},rowRemoved:function(A){this.grid.edit.save(this,A);
 delete this.rowNodes[A]
 },getRowNode:function(A){return this.rowNodes[A]
-},getCellNode:function(B,C){var A=this.getRowNode(B);
-if(A){return this.content.getCellNode(A,C)
-}},styleRow:function(A,B){B._style=dojox.grid.getStyleText(B);
-this.styleRowNode(A,B)
-},styleRowNode:function(A,B){if(B){this.doStyleRowNode(A,B)
-}},doStyleRowNode:function(A,B){this.grid.styleRowNode(A,B)
-},updateRow:function(C,D,A){var B=this.getRowNode(C);
-if(B){B.style.height="";
-this.buildRow(C,B)
-}return B
+},getCellNode:function(C,A){var B=this.getRowNode(C);
+if(B){return this.content.getCellNode(B,A)
+}},styleRow:function(B,A){A._style=dojox.grid.getStyleText(A);
+this.styleRowNode(B,A)
+},styleRowNode:function(B,A){if(A){this.doStyleRowNode(B,A)
+}},doStyleRowNode:function(B,A){this.grid.styleRowNode(B,A)
+},updateRow:function(D,A,B){var C=this.getRowNode(D);
+if(C){C.style.height="";
+this.buildRow(D,C)
+}return C
 },updateRowStyles:function(A){this.styleRowNode(A,this.getRowNode(A))
-},lastTop:0,doscroll:function(B){this.headerNode.scrollLeft=this.scrollboxNode.scrollLeft;
-var A=this.scrollboxNode.scrollTop;
-if(A!=this.lastTop){this.grid.scrollTo(A)
+},lastTop:0,doscroll:function(A){this.headerNode.scrollLeft=this.scrollboxNode.scrollLeft;
+var B=this.scrollboxNode.scrollTop;
+if(B!=this.lastTop){this.grid.scrollTo(B)
 }},setScrollTop:function(A){this.lastTop=A;
 this.scrollboxNode.scrollTop=A;
 return this.scrollboxNode.scrollTop
@@ -94,7 +94,7 @@ return this.scrollboxNode.scrollTop
 }},doHeaderEvent:function(A){if(this.header.decorateEvent(A)){this.grid.onHeaderEvent(A)
 }},dispatchContentEvent:function(A){return this.content.dispatchEvent(A)
 },dispatchHeaderEvent:function(A){return this.header.dispatchEvent(A)
-},setColWidth:function(A,B){this.grid.setCellWidth(A,B+"px")
+},setColWidth:function(B,A){this.grid.setCellWidth(B,A+"px")
 },update:function(){var A=this.scrollboxNode.scrollLeft;
 this.content.update();
 this.grid.update();

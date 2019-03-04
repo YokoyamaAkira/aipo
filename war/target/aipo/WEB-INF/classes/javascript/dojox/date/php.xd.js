@@ -1,19 +1,19 @@
 dojo._xdResourceLoaded({depends:[["provide","dojox.date.php"],["require","dojo.date"]],defineResource:function(A){if(!A._hasResource["dojox.date.php"]){A._hasResource["dojox.date.php"]=true;
 A.provide("dojox.date.php");
 A.require("dojo.date");
-dojox.date.php.format=function(C,D,B){var E=new dojox.date.php.DateFormat(C);
-return E.format(D,B)
+dojox.date.php.format=function(B,C,E){var D=new dojox.date.php.DateFormat(B);
+return D.format(C,E)
 };
 dojox.date.php.DateFormat=function(B){this.date=B
 };
-A.extend(dojox.date.php.DateFormat,{weekdays:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],weekdays_3:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],months:["January","February","March","April","May","June","July","August","September","October","November","December"],months_3:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],monthdays:[31,28,31,30,31,30,31,31,30,31,30,31],format:function(F,B){var E=[];
-for(var C=0;
-C<F.length;
-C++){var D=F.charAt(C);
-if(B&&typeof B[D]=="function"){E.push(B[D].call(this))
-}else{if(typeof this[D]=="function"){E.push(this[D]())
-}else{E.push(D)
-}}}return E.join("")
+A.extend(dojox.date.php.DateFormat,{weekdays:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],weekdays_3:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],months:["January","February","March","April","May","June","July","August","September","October","November","December"],months_3:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],monthdays:[31,28,31,30,31,30,31,31,30,31,30,31],format:function(E,F){var D=[];
+for(var B=0;
+B<E.length;
+B++){var C=E.charAt(B);
+if(F&&typeof F[C]=="function"){D.push(F[C].call(this))
+}else{if(typeof this[C]=="function"){D.push(this[C]())
+}else{D.push(C)
+}}}return D.join("")
 },d:function(){var B=this.j();
 return(B.length==1)?"0"+B:B
 },D:function(){return this.weekdays_3[this.date.getDay()]
@@ -29,21 +29,21 @@ default:return"th"
 }},w:function(){return this.date.getDay()+""
 },z:function(){var B=this.date.getTime()-new Date(this.date.getFullYear(),0,1).getTime();
 return Math.floor(B/86400000)+""
-},W:function(){var F;
-var G=new Date(this.date.getFullYear(),0,1).getDay()+1;
-var H=this.date.getDay()+1;
-var C=parseInt(this.z());
-if(C<=(8-G)&&G>4){var E=new Date(this.date.getFullYear()-1,this.date.getMonth(),this.date.getDate());
-if(G==5||(G==6&&A.date.isLeapYear(E))){F=53
-}else{F=52
-}}else{var D;
-if(Boolean(this.L())){D=366
-}else{D=365
-}if((D-C)<(4-H)){F=1
-}else{var B=C+(7-H)+(G-1);
-F=Math.ceil(B/7);
-if(G>4){--F
-}}}return F
+},W:function(){var G;
+var B=new Date(this.date.getFullYear(),0,1).getDay()+1;
+var C=this.date.getDay()+1;
+var H=parseInt(this.z());
+if(H<=(8-B)&&B>4){var F=new Date(this.date.getFullYear()-1,this.date.getMonth(),this.date.getDate());
+if(B==5||(B==6&&A.date.isLeapYear(F))){G=53
+}else{G=52
+}}else{var E;
+if(Boolean(this.L())){E=366
+}else{E=365
+}if((E-H)<(4-C)){G=1
+}else{var D=H+(7-C)+(B-1);
+G=Math.ceil(D/7);
+if(B>4){--G
+}}}return G
 },F:function(){return this.months[this.date.getMonth()]
 },m:function(){var B=this.n();
 return(B.length==1)?"0"+B:B
@@ -55,11 +55,11 @@ return(B.length==1)?"0"+B:B
 },y:function(){return this.date.getFullYear.substsring(2,4)
 },a:function(){return this.date.getHours()>=12?"pm":"am"
 },b:function(){return this.a().toUpperCase()
-},B:function(){var B=this.date.getTimezoneOffset()+60;
-var C=(this.date.getHours()*3600)+(this.date.getMinutes()*60)+this.getSeconds()+(B*60);
-var D=Math.abs(Math.floor(C/86.4)%1000)+"";
-while(D.length<2){D="0"+D
-}return D
+},B:function(){var D=this.date.getTimezoneOffset()+60;
+var B=(this.date.getHours()*3600)+(this.date.getMinutes()*60)+this.getSeconds()+(D*60);
+var C=Math.abs(Math.floor(B/86.4)%1000)+"";
+while(C.length<2){C="0"+C
+}return C
 },g:function(){return(this.date.getHours()>12)?this.date.getHours()-12+"":this.date.getHours()+""
 },G:function(){return this.date.getHours()+""
 },h:function(){var B=this.g();
@@ -71,12 +71,12 @@ return(B.length==1)?"0"+B:B
 },s:function(){var B=this.date.getSeconds()+"";
 return(B.length==1)?"0"+B:B
 },e:function(){return A.date.getTimezoneName(this.date)
-},I:function(){},O:function(){var B=Math.abs(this.date.getTimezoneOffset());
-var C=Math.floor(B/60)+"";
-var D=(B%60)+"";
-if(C.length==1){C="0"+C
-}if(D.length==1){C="0"+D
-}return((this.date.getTimezoneOffset()<0)?"+":"-")+C+D
+},I:function(){},O:function(){var D=Math.abs(this.date.getTimezoneOffset());
+var B=Math.floor(D/60)+"";
+var C=(D%60)+"";
+if(B.length==1){B="0"+B
+}if(C.length==1){B="0"+C
+}return((this.date.getTimezoneOffset()<0)?"+":"-")+B+C
 },P:function(){var B=this.O();
 return B.substring(0,2)+":"+B.substring(2,4)
 },T:function(){return this.e().substring(0,3)

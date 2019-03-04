@@ -1,40 +1,92 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.gfx.utils"],["require","dojox.gfx"]],defineResource:function(A){if(!A._hasResource["dojox.gfx.utils"]){A._hasResource["dojox.gfx.utils"]=true;
-A.provide("dojox.gfx.utils");
-A.require("dojox.gfx");
-dojox.gfx.utils.serialize=function(D){var F={},C,B=D instanceof dojox.gfx.Surface;
-if(B||D instanceof dojox.gfx.Group){F.children=[];
-for(var E=0;
-E<D.children.length;
-++E){F.children.push(dojox.gfx.utils.serialize(D.children[E]))
-}if(B){return F.children
-}}else{F.shape=D.getShape()
-}if(D.getTransform){C=D.getTransform();
-if(C){F.transform=C
-}}if(D.getStroke){C=D.getStroke();
-if(C){F.stroke=C
-}}if(D.getFill){C=D.getFill();
-if(C){F.fill=C
-}}if(D.getFont){C=D.getFont();
-if(C){F.font=C
-}}return F
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.gfx.utils"],
+["require", "dojox.gfx"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.gfx.utils"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.gfx.utils"] = true;
+dojo.provide("dojox.gfx.utils");
+
+dojo.require("dojox.gfx");
+
+dojox.gfx.utils.serialize = function(
+	/* dojox.gfx.Surface || dojox.gfx.Shape */ object
+){
+	var t = {}, v, isSurface = object instanceof dojox.gfx.Surface;	
+	if(isSurface || object instanceof dojox.gfx.Group){
+		t.children = [];		
+		for(var i = 0; i < object.children.length; ++i){		
+			t.children.push(dojox.gfx.utils.serialize(object.children[i]));			
+		}		
+		if(isSurface){
+			return t.children;	// Array			
+		}		
+	}else{	
+		t.shape = object.getShape();		
+	}	
+	if(object.getTransform){	
+		v = object.getTransform();		
+		if(v){ t.transform = v; }		
+	}	
+	if(object.getStroke){	
+		v = object.getStroke();		
+		if(v){ t.stroke = v; }		
+	}	
+	if(object.getFill){	
+		v = object.getFill();		
+		if(v){ t.fill = v; }		
+	}	
+	if(object.getFont){	
+		v = object.getFont();		 
+		if(v){ t.font = v; }		
+	}	
+	return t;	// Object	
 };
-dojox.gfx.utils.toJson=function(B,C){return A.toJson(dojox.gfx.utils.serialize(B),C)
+
+dojox.gfx.utils.toJson = function(
+	/* dojox.gfx.Surface || dojox.gfx.Shape */ object, 
+	/* Boolean? */ prettyPrint
+){
+	return dojo.toJson(dojox.gfx.utils.serialize(object), prettyPrint);	// String
 };
-dojox.gfx.utils.deserialize=function(F,C){if(C instanceof Array){var E=[];
-for(var D=0;
-D<C.length;
-++D){E.push(dojox.gfx.utils.deserialize(F,C[D]))
-}return E
-}var B=("shape" in C)?F.createShape(C.shape):F.createGroup();
-if("transform" in C){B.setTransform(C.transform)
-}if("stroke" in C){B.setStroke(C.stroke)
-}if("fill" in C){B.setFill(C.fill)
-}if("font" in C){B.setFont(C.font)
-}if("children" in C){for(var D=0;
-D<C.children.length;
-++D){dojox.gfx.utils.deserialize(B,C.children[D])
-}}return B
+
+dojox.gfx.utils.deserialize = function(
+	/* dojox.gfx.Surface || dojox.gfx.Shape */ parent, 
+	/* dojox.gfx.Shape || Array */ object
+){
+	if(object instanceof Array){
+		var t = [];
+		for(var i = 0; i < object.length; ++i){
+			t.push(dojox.gfx.utils.deserialize(parent, object[i]));
+		}
+		return t;	// Array
+	}
+	var shape = ("shape" in object) ? parent.createShape(object.shape) : parent.createGroup();
+	if("transform" in object){
+		shape.setTransform(object.transform);
+	}
+	if("stroke" in object){
+		shape.setStroke(object.stroke);
+	}
+	if("fill" in object){
+		shape.setFill(object.fill);
+	}
+	if("font" in object){
+		shape.setFont(object.font);
+	}
+	if("children" in object){
+		for(var i = 0; i < object.children.length; ++i){
+			dojox.gfx.utils.deserialize(shape, object.children[i]);
+		}
+	}
+	return shape;	// dojox.gfx.Shape
 };
-dojox.gfx.utils.fromJson=function(C,B){return dojox.gfx.utils.deserialize(C,A.fromJson(B))
+
+dojox.gfx.utils.fromJson = function(
+	/* dojox.gfx.Surface || dojox.gfx.Shape */ parent, 
+	/* String */ json
+){
+	return dojox.gfx.utils.deserialize(parent, dojo.fromJson(json));	// Array || dojox.gfx.Shape
+};
+
 }
-}}});
+
+}});

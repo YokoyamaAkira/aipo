@@ -6,43 +6,43 @@ dojo.declare("dojox.grid.views",null,{constructor:function(A){this.grid=A
 this.normalizeHeaderNodeHeight()
 },addView:function(A){A.idx=this.views.length;
 this.views.push(A)
-},destroyViews:function(){for(var A=0,B;
-B=this.views[A];
-A++){B.destroy()
-}this.views=[]
-},getContentNodes:function(){var A=[];
-for(var B=0,C;
-C=this.views[B];
-B++){A.push(C.contentNode)
-}return A
-},forEach:function(C){for(var B=0,A;
+},destroyViews:function(){for(var B=0,A;
 A=this.views[B];
-B++){C(A,B)
-}},onEach:function(B,C){C=C||[];
-for(var A=0,D;
-D=this.views[A];
-A++){if(B in D){D[B].apply(D,C)
-}}},normalizeHeaderNodeHeight:function(){var B=[];
-for(var A=0,C;
-(C=this.views[A]);
-A++){if(C.headerContentNode.firstChild){B.push(C.headerContentNode)
-}}this.normalizeRowNodeHeights(B)
-},normalizeRowNodeHeights:function(C){var A=0;
-for(var F=0,E,D;
-(E=C[F]);
-F++){A=Math.max(A,(E.firstChild.clientHeight)||(E.firstChild.offsetHeight))
-}A=(A>=0?A:0);
-var B=A+"px";
-for(var F=0,E;
-(E=C[F]);
-F++){if(E.firstChild.clientHeight!=A){E.firstChild.style.height=B
-}}if(C&&C[0]){C[0].parentNode.offsetHeight
-}},renormalizeRow:function(C){var B=[];
-for(var A=0,E,D;
-(E=this.views[A])&&(D=E.getRowNode(C));
-A++){D.firstChild.style.height="";
-B.push(D)
-}this.normalizeRowNodeHeights(B)
+B++){A.destroy()
+}this.views=[]
+},getContentNodes:function(){var B=[];
+for(var C=0,A;
+A=this.views[C];
+C++){B.push(A.contentNode)
+}return B
+},forEach:function(A){for(var C=0,B;
+B=this.views[C];
+C++){A(B,C)
+}},onEach:function(C,D){D=D||[];
+for(var B=0,A;
+A=this.views[B];
+B++){if(C in A){A[C].apply(A,D)
+}}},normalizeHeaderNodeHeight:function(){var C=[];
+for(var B=0,A;
+(A=this.views[B]);
+B++){if(A.headerContentNode.firstChild){C.push(A.headerContentNode)
+}}this.normalizeRowNodeHeights(C)
+},normalizeRowNodeHeights:function(D){var B=0;
+for(var A=0,F,E;
+(F=D[A]);
+A++){B=Math.max(B,(F.firstChild.clientHeight)||(F.firstChild.offsetHeight))
+}B=(B>=0?B:0);
+var C=B+"px";
+for(var A=0,F;
+(F=D[A]);
+A++){if(F.firstChild.clientHeight!=B){F.firstChild.style.height=C
+}}if(D&&D[0]){D[0].parentNode.offsetHeight
+}},renormalizeRow:function(D){var C=[];
+for(var B=0,A,E;
+(A=this.views[B])&&(E=A.getRowNode(D));
+B++){E.firstChild.style.height="";
+C.push(E)
+}this.normalizeRowNodeHeights(C)
 },getViewWidth:function(A){return this.views[A].getWidth()||this.defaultWidth
 },measureHeader:function(){this.forEach(function(B){B.headerContentNode.style.height=""
 });
@@ -54,16 +54,16 @@ return A
 this.forEach(function(B){A=Math.max(B.domNode.offsetHeight,A)
 });
 return A
-},findClient:function(B){var C=this.grid.elasticView||-1;
-if(C<0){for(var A=1,D;
-(D=this.views[A]);
-A++){if(D.viewWidth){for(A=1;
-(D=this.views[A]);
-A++){if(!D.viewWidth){C=A;
+},findClient:function(C){var D=this.grid.elasticView||-1;
+if(D<0){for(var B=1,A;
+(A=this.views[B]);
+B++){if(A.viewWidth){for(B=1;
+(A=this.views[B]);
+B++){if(!A.viewWidth){D=B;
 break
 }}break
-}}}if(C<0){C=Math.floor(this.views.length/2)
-}return C
+}}}if(D<0){D=Math.floor(this.views.length/2)
+}return D
 },_arrange:function(l,t,w,h){var i,v,vw,len=this.views.length;
 var c=(w<=0?len:this.findClient());
 var setPosition=function(v,l,t){with(v.domNode.style){left=l+"px";
@@ -92,29 +92,29 @@ vw=Math.max(1,r-l);
 v.setSize(vw+"px",h);
 setPosition(v,l,t)
 }return l
-},arrange:function(A,B,D,C){var D=this._arrange(A,B,D,C);
+},arrange:function(B,C,A,D){var A=this._arrange(B,C,A,D);
 this.resize();
-return D
-},renderRow:function(C,B){var A=[];
-for(var F=0,E,D,G;
-(E=this.views[F])&&(D=B[F]);
-F++){G=E.renderRow(C);
-D.appendChild(G);
-A.push(G)
-}this.normalizeRowNodeHeights(A)
+return A
+},renderRow:function(F,E){var D=[];
+for(var B=0,A,G,C;
+(A=this.views[B])&&(G=E[B]);
+B++){C=A.renderRow(F);
+G.appendChild(C);
+D.push(C)
+}this.normalizeRowNodeHeights(D)
 },rowRemoved:function(A){this.onEach("rowRemoved",[A])
-},updateRow:function(C,B){for(var A=0,D;
-D=this.views[A];
-A++){D.updateRow(C,B)
-}this.renormalizeRow(C)
+},updateRow:function(D,C){for(var B=0,A;
+A=this.views[B];
+B++){A.updateRow(D,C)
+}this.renormalizeRow(D)
 },updateRowStyles:function(A){this.onEach("updateRowStyles",[A])
-},setScrollTop:function(B){var C=B;
-for(var A=0,D;
-D=this.views[A];
-A++){C=D.setScrollTop(B)
-}return C
-},getFirstScrollingView:function(){for(var A=0,B;
-(B=this.views[A]);
-A++){if(B.hasScrollbar()){return B
+},setScrollTop:function(C){var D=C;
+for(var B=0,A;
+A=this.views[B];
+B++){D=A.setScrollTop(C)
+}return D
+},getFirstScrollingView:function(){for(var B=0,A;
+(A=this.views[B]);
+B++){if(A.hasScrollbar()){return A
 }}}})
 };

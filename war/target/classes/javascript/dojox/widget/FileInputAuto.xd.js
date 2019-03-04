@@ -9,19 +9,19 @@ this.inherited("startup",arguments)
 }},_onBlur:function(){if(this._blurTimer){clearTimeout(this._blurTimer)
 }if(!this._sent){this._blurTimer=setTimeout(A.hitch(this,"_sendFile"),this.blurDelay)
 }},setMessage:function(B){if(!A.isIE){this.overlay.innerHTML=B
-}},_sendFile:function(B){if(!this.fileInput.value||this._sent){return 
+}},_sendFile:function(D){if(!this.fileInput.value||this._sent){return 
 }A.style(this.fakeNodeHolder,"display","none");
 A.style(this.overlay,"opacity","0");
 A.style(this.overlay,"display","block");
 this.setMessage(this.uploadMessage);
 A.fadeIn({node:this.overlay,duration:this.duration}).play();
-var C=document.createElement("form");
-C.setAttribute("enctype","multipart/form-data");
-var D=A.clone(this.fileInput);
-C.appendChild(this.fileInput);
-A.body().appendChild(C);
-A.io.iframe.send({url:this.url+"?name="+this.name,form:C,handleAs:"text",handle:A.hitch(this,"_handleSend")})
-},_handleSend:function(B,C){if(!A.isIE){this.overlay.innerHTML=""
+var B=document.createElement("form");
+B.setAttribute("enctype","multipart/form-data");
+var C=A.clone(this.fileInput);
+B.appendChild(this.fileInput);
+A.body().appendChild(B);
+A.io.iframe.send({url:this.url+"?name="+this.name,form:B,handleAs:"text",handle:A.hitch(this,"_handleSend")})
+},_handleSend:function(C,B){if(!A.isIE){this.overlay.innerHTML=""
 }this._sent=true;
 A.style(this.overlay,"opacity","0");
 A.style(this.overlay,"border","none");
@@ -32,14 +32,14 @@ this.fakeNodeHolder.style.display="none";
 A.fadeIn({node:this.overlay,duration:this.duration}).play(250);
 A.disconnect(this._blurListener);
 A.disconnect(this._focusListener);
-this.onComplete(B,C,this)
+this.onComplete(C,B,this)
 },_onClick:function(B){if(this._blurTimer){clearTimeout(this._blurTimer)
 }A.disconnect(this._blurListener);
 A.disconnect(this._focusListener);
 this.inherited("_onClick",arguments);
 this._blurListener=A.connect(this.fileInput,"onblur",this,"_onBlur");
 this._focusListener=A.connect(this.fileInput,"onfocus",this,"_onFocus")
-},onComplete:function(B,D,C){}});
+},onComplete:function(D,C,B){}});
 A.declare("dojox.widget.FileInputBlind",dojox.widget.FileInputAuto,{startup:function(){this.inherited("startup",arguments);
 this._off=A.style(this.inputNode,"width");
 this.inputNode.style.display="none";

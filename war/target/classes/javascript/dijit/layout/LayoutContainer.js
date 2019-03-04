@@ -2,7 +2,7 @@ if(!dojo._hasResource["dijit.layout.LayoutContainer"]){dojo._hasResource["dijit.
 dojo.provide("dijit.layout.LayoutContainer");
 dojo.require("dijit.layout._LayoutWidget");
 dojo.declare("dijit.layout.LayoutContainer",dijit.layout._LayoutWidget,{layout:function(){dijit.layout.layoutChildren(this.domNode,this._contentBox,this.getChildren())
-},addChild:function(A,B){dijit._Container.prototype.addChild.apply(this,arguments);
+},addChild:function(B,A){dijit._Container.prototype.addChild.apply(this,arguments);
 if(this._started){dijit.layout.layoutChildren(this.domNode,this._contentBox,this.getChildren())
 }},removeChild:function(A){dijit._Container.prototype.removeChild.apply(this,arguments);
 if(this._started){dijit.layout.layoutChildren(this.domNode,this._contentBox,this.getChildren())

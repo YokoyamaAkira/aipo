@@ -6,81 +6,81 @@ A.declare("dojox.storage.WhatWGStorageProvider",[dojox.storage.Provider],{initia
 }this._domain=(location.hostname=="localhost")?"localhost.localdomain":location.hostname;
 this.initialized=true;
 dojox.storage.manager.loaded()
-},isAvailable:function(){try{var B=globalStorage[((location.hostname=="localhost")?"localhost.localdomain":location.hostname)]
-}catch(C){this._available=false;
+},isAvailable:function(){try{var C=globalStorage[((location.hostname=="localhost")?"localhost.localdomain":location.hostname)]
+}catch(B){this._available=false;
 return this._available
 }this._available=true;
 return this._available
-},put:function(G,E,C,H){if(this.isValidKey(G)==false){throw new Error("Invalid key given: "+G)
-}H=H||this.DEFAULT_NAMESPACE;
-G=this.getFullKey(G,H);
-this._statusHandler=C;
-if(A.isString(E)){E="string:"+E
-}else{E=A.toJson(E)
-}var D=A.hitch(this,function(I){window.removeEventListener("storage",D,false);
-if(C){C.call(null,this.SUCCESS,G)
+},put:function(B,F,D,C){if(this.isValidKey(B)==false){throw new Error("Invalid key given: "+B)
+}C=C||this.DEFAULT_NAMESPACE;
+B=this.getFullKey(B,C);
+this._statusHandler=D;
+if(A.isString(F)){F="string:"+F
+}else{F=A.toJson(F)
+}var E=A.hitch(this,function(I){window.removeEventListener("storage",E,false);
+if(D){D.call(null,this.SUCCESS,B)
 }});
-window.addEventListener("storage",D,false);
-try{var B=globalStorage[this._domain];
-B.setItem(G,E)
-}catch(F){this._statusHandler.call(null,this.FAILED,G,F.toString())
-}},get:function(D,E){if(this.isValidKey(D)==false){throw new Error("Invalid key given: "+D)
-}E=E||this.DEFAULT_NAMESPACE;
-D=this.getFullKey(D,E);
-var B=globalStorage[this._domain];
-var C=B.getItem(D);
-if(C==null||C==""){return null
-}C=C.value;
-if(A.isString(C)&&(/^string:/.test(C))){C=C.substring("string:".length)
-}else{C=A.fromJson(C)
-}return C
-},getNamespaces:function(){var C=[this.DEFAULT_NAMESPACE];
-var E={};
-var F=globalStorage[this._domain];
-var G=/^__([^_]*)_/;
-for(var H=0;
-H<F.length;
-H++){var B=F.key(H);
-if(G.test(B)==true){var D=B.match(G)[1];
-if(typeof E[D]=="undefined"){E[D]=true;
-C.push(D)
-}}}return C
-},getKeys:function(E){E=E||this.DEFAULT_NAMESPACE;
-if(this.isValidKey(E)==false){throw new Error("Invalid namespace given: "+E)
-}var C;
-if(E==this.DEFAULT_NAMESPACE){C=new RegExp("^([^_]{2}.*)$")
-}else{C=new RegExp("^__"+E+"_(.*)$")
-}var F=globalStorage[this._domain];
-var B=[];
-for(var D=0;
-D<F.length;
-D++){var G=F.key(D);
-if(C.test(G)==true){G=G.match(C)[1];
-B.push(G)
-}}return B
-},clear:function(D){D=D||this.DEFAULT_NAMESPACE;
-if(this.isValidKey(D)==false){throw new Error("Invalid namespace given: "+D)
-}var B;
-if(D==this.DEFAULT_NAMESPACE){B=new RegExp("^[^_]{2}")
-}else{B=new RegExp("^__"+D+"_")
-}var F=globalStorage[this._domain];
-var E=[];
+window.addEventListener("storage",E,false);
+try{var H=globalStorage[this._domain];
+H.setItem(B,F)
+}catch(G){this._statusHandler.call(null,this.FAILED,B,G.toString())
+}},get:function(C,D){if(this.isValidKey(C)==false){throw new Error("Invalid key given: "+C)
+}D=D||this.DEFAULT_NAMESPACE;
+C=this.getFullKey(C,D);
+var E=globalStorage[this._domain];
+var B=E.getItem(C);
+if(B==null||B==""){return null
+}B=B.value;
+if(A.isString(B)&&(/^string:/.test(B))){B=B.substring("string:".length)
+}else{B=A.fromJson(B)
+}return B
+},getNamespaces:function(){var D=[this.DEFAULT_NAMESPACE];
+var F={};
+var G=globalStorage[this._domain];
+var B=/^__([^_]*)_/;
 for(var C=0;
-C<F.length;
-C++){if(B.test(F.key(C))==true){E[E.length]=F.key(C)
-}}A.forEach(E,A.hitch(F,"removeItem"))
-},remove:function(C,D){C=this.getFullKey(C,D);
-var B=globalStorage[this._domain];
-B.removeItem(C)
+C<G.length;
+C++){var H=G.key(C);
+if(B.test(H)==true){var E=H.match(B)[1];
+if(typeof F[E]=="undefined"){F[E]=true;
+D.push(E)
+}}}return D
+},getKeys:function(D){D=D||this.DEFAULT_NAMESPACE;
+if(this.isValidKey(D)==false){throw new Error("Invalid namespace given: "+D)
+}var G;
+if(D==this.DEFAULT_NAMESPACE){G=new RegExp("^([^_]{2}.*)$")
+}else{G=new RegExp("^__"+D+"_(.*)$")
+}var E=globalStorage[this._domain];
+var B=[];
+for(var C=0;
+C<E.length;
+C++){var F=E.key(C);
+if(G.test(F)==true){F=F.match(G)[1];
+B.push(F)
+}}return B
+},clear:function(C){C=C||this.DEFAULT_NAMESPACE;
+if(this.isValidKey(C)==false){throw new Error("Invalid namespace given: "+C)
+}var F;
+if(C==this.DEFAULT_NAMESPACE){F=new RegExp("^[^_]{2}")
+}else{F=new RegExp("^__"+C+"_")
+}var E=globalStorage[this._domain];
+var D=[];
+for(var B=0;
+B<E.length;
+B++){if(F.test(E.key(B))==true){D[D.length]=E.key(B)
+}}A.forEach(D,A.hitch(E,"removeItem"))
+},remove:function(B,C){B=this.getFullKey(B,C);
+var D=globalStorage[this._domain];
+D.removeItem(B)
 },isPermanent:function(){return true
 },getMaximumSize:function(){return this.SIZE_NO_LIMIT
 },hasSettingsUI:function(){return false
 },showSettingsUI:function(){throw new Error(this.declaredClass+" does not support a storage settings user-interface")
 },hideSettingsUI:function(){throw new Error(this.declaredClass+" does not support a storage settings user-interface")
-},getFullKey:function(C,B){B=B||this.DEFAULT_NAMESPACE;
-if(this.isValidKey(B)==false){throw new Error("Invalid namespace given: "+B)
-}if(B==this.DEFAULT_NAMESPACE){return C
-}else{return"__"+B+"_"+C
+},getFullKey:function(B,C){C=C||this.DEFAULT_NAMESPACE;
+if(this.isValidKey(C)==false){throw new Error("Invalid namespace given: "+C)
+}if(C==this.DEFAULT_NAMESPACE){return B
+}else{return"__"+C+"_"+B
 }}});
 dojox.storage.manager.register("dojox.storage.WhatWGStorageProvider",new dojox.storage.WhatWGStorageProvider())
 }}});

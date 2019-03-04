@@ -1,107 +1,107 @@
 if(!dojo._hasResource["dojox.validate.check"]){dojo._hasResource["dojox.validate.check"]=true;
 dojo.provide("dojox.validate.check");
 dojo.require("dojox.validate._base");
-dojox.validate.check=function(I,K){var N=[];
-var D=[];
-var O={isSuccessful:function(){return(!this.hasInvalid()&&!this.hasMissing())
-},hasMissing:function(){return(N.length>0)
-},getMissing:function(){return N
-},isMissing:function(P){for(var Q=0;
-Q<N.length;
-Q++){if(P==N[Q]){return true
+dojox.validate.check=function(B,D){var G=[];
+var L=[];
+var H={isSuccessful:function(){return(!this.hasInvalid()&&!this.hasMissing())
+},hasMissing:function(){return(G.length>0)
+},getMissing:function(){return G
+},isMissing:function(Q){for(var P=0;
+P<G.length;
+P++){if(Q==G[P]){return true
 }}return false
-},hasInvalid:function(){return(D.length>0)
-},getInvalid:function(){return D
-},isInvalid:function(P){for(var Q=0;
-Q<D.length;
-Q++){if(P==D[Q]){return true
+},hasInvalid:function(){return(L.length>0)
+},getInvalid:function(){return L
+},isInvalid:function(Q){for(var P=0;
+P<L.length;
+P++){if(Q==L[P]){return true
 }}return false
 }};
-var B=function(P,Q){return(typeof Q[P]=="undefined")
+var J=function(Q,P){return(typeof P[Q]=="undefined")
 };
-if(K.trim instanceof Array){for(var A=0;
-A<K.trim.length;
-A++){var J=I[K.trim[A]];
-if(B("type",J)||J.type!="text"&&J.type!="textarea"&&J.type!="password"){continue
-}J.value=J.value.replace(/(^\s*|\s*$)/g,"")
-}}if(K.uppercase instanceof Array){for(var A=0;
-A<K.uppercase.length;
-A++){var J=I[K.uppercase[A]];
-if(B("type",J)||J.type!="text"&&J.type!="textarea"&&J.type!="password"){continue
-}J.value=J.value.toUpperCase()
-}}if(K.lowercase instanceof Array){for(var A=0;
-A<K.lowercase.length;
-A++){var J=I[K.lowercase[A]];
-if(B("type",J)||J.type!="text"&&J.type!="textarea"&&J.type!="password"){continue
-}J.value=J.value.toLowerCase()
-}}if(K.ucfirst instanceof Array){for(var A=0;
-A<K.ucfirst.length;
-A++){var J=I[K.ucfirst[A]];
-if(B("type",J)||J.type!="text"&&J.type!="textarea"&&J.type!="password"){continue
-}J.value=J.value.replace(/\b\w+\b/g,function(P){return P.substring(0,1).toUpperCase()+P.substring(1).toLowerCase()
+if(D.trim instanceof Array){for(var I=0;
+I<D.trim.length;
+I++){var C=B[D.trim[I]];
+if(J("type",C)||C.type!="text"&&C.type!="textarea"&&C.type!="password"){continue
+}C.value=C.value.replace(/(^\s*|\s*$)/g,"")
+}}if(D.uppercase instanceof Array){for(var I=0;
+I<D.uppercase.length;
+I++){var C=B[D.uppercase[I]];
+if(J("type",C)||C.type!="text"&&C.type!="textarea"&&C.type!="password"){continue
+}C.value=C.value.toUpperCase()
+}}if(D.lowercase instanceof Array){for(var I=0;
+I<D.lowercase.length;
+I++){var C=B[D.lowercase[I]];
+if(J("type",C)||C.type!="text"&&C.type!="textarea"&&C.type!="password"){continue
+}C.value=C.value.toLowerCase()
+}}if(D.ucfirst instanceof Array){for(var I=0;
+I<D.ucfirst.length;
+I++){var C=B[D.ucfirst[I]];
+if(J("type",C)||C.type!="text"&&C.type!="textarea"&&C.type!="password"){continue
+}C.value=C.value.replace(/\b\w+\b/g,function(P){return P.substring(0,1).toUpperCase()+P.substring(1).toLowerCase()
 })
-}}if(K.digit instanceof Array){for(var A=0;
-A<K.digit.length;
-A++){var J=I[K.digit[A]];
-if(B("type",J)||J.type!="text"&&J.type!="textarea"&&J.type!="password"){continue
-}J.value=J.value.replace(/\D/g,"")
-}}if(K.required instanceof Array){for(var A=0;
-A<K.required.length;
-A++){if(!dojo.isString(K.required[A])){continue
-}var J=I[K.required[A]];
-if(!B("type",J)&&(J.type=="text"||J.type=="textarea"||J.type=="password"||J.type=="file")&&/^\s*$/.test(J.value)){N[N.length]=J.name
-}else{if(!B("type",J)&&(J.type=="select-one"||J.type=="select-multiple")&&(J.selectedIndex==-1||/^\s*$/.test(J.options[J.selectedIndex].value))){N[N.length]=J.name
-}else{if(J instanceof Array){var E=false;
-for(var M=0;
-M<J.length;
-M++){if(J[M].checked){E=true
-}}if(!E){N[N.length]=J[0].name
-}}}}}}if(K.required instanceof Array){for(var A=0;
-A<K.required.length;
-A++){if(!dojo.isObject(K.required[A])){continue
-}var J,G;
-for(var H in K.required[A]){J=I[H];
-G=K.required[A][H]
-}if(J instanceof Array){var E=0;
-for(var M=0;
-M<J.length;
-M++){if(J[M].checked){E++
-}}if(E<G){N[N.length]=J[0].name
-}}else{if(!B("type",J)&&J.type=="select-multiple"){var L=0;
-for(var M=0;
-M<J.options.length;
-M++){if(J.options[M].selected&&!/^\s*$/.test(J.options[M].value)){L++
-}}if(L<G){N[N.length]=J.name
-}}}}}if(dojo.isObject(K.dependencies)){for(H in K.dependencies){var J=I[H];
-if(B("type",J)){continue
-}if(J.type!="text"&&J.type!="textarea"&&J.type!="password"){continue
-}if(/\S+/.test(J.value)){continue
-}if(O.isMissing(J.name)){continue
-}var C=I[K.dependencies[H]];
-if(C.type!="text"&&C.type!="textarea"&&C.type!="password"){continue
-}if(/^\s*$/.test(C.value)){continue
-}N[N.length]=J.name
-}}if(dojo.isObject(K.constraints)){for(H in K.constraints){var J=I[H];
-if(!J){continue
-}if(!B("tagName",J)&&(J.tagName.toLowerCase().indexOf("input")>=0||J.tagName.toLowerCase().indexOf("textarea")>=0)&&/^\s*$/.test(J.value)){continue
-}var F=true;
-if(dojo.isFunction(K.constraints[H])){F=K.constraints[H](J.value)
-}else{if(dojo.isArray(K.constraints[H])){if(dojo.isArray(K.constraints[H][0])){for(var A=0;
-A<K.constraints[H].length;
-A++){F=dojox.validate.evaluateConstraint(K,K.constraints[H][A],H,J);
-if(!F){break
-}}}else{F=dojox.validate.evaluateConstraint(K,K.constraints[H],H,J)
-}}}if(!F){D[D.length]=J.name
-}}}if(dojo.isObject(K.confirm)){for(H in K.confirm){var J=I[H];
-var C=I[K.confirm[H]];
-if(B("type",J)||B("type",C)||(J.type!="text"&&J.type!="textarea"&&J.type!="password")||(C.type!=J.type)||(C.value==J.value)||(O.isInvalid(J.name))||(/^\s*$/.test(C.value))){continue
-}D[D.length]=J.name
-}}return O
+}}if(D.digit instanceof Array){for(var I=0;
+I<D.digit.length;
+I++){var C=B[D.digit[I]];
+if(J("type",C)||C.type!="text"&&C.type!="textarea"&&C.type!="password"){continue
+}C.value=C.value.replace(/\D/g,"")
+}}if(D.required instanceof Array){for(var I=0;
+I<D.required.length;
+I++){if(!dojo.isString(D.required[I])){continue
+}var C=B[D.required[I]];
+if(!J("type",C)&&(C.type=="text"||C.type=="textarea"||C.type=="password"||C.type=="file")&&/^\s*$/.test(C.value)){G[G.length]=C.name
+}else{if(!J("type",C)&&(C.type=="select-one"||C.type=="select-multiple")&&(C.selectedIndex==-1||/^\s*$/.test(C.options[C.selectedIndex].value))){G[G.length]=C.name
+}else{if(C instanceof Array){var M=false;
+for(var F=0;
+F<C.length;
+F++){if(C[F].checked){M=true
+}}if(!M){G[G.length]=C[0].name
+}}}}}}if(D.required instanceof Array){for(var I=0;
+I<D.required.length;
+I++){if(!dojo.isObject(D.required[I])){continue
+}var C,O;
+for(var A in D.required[I]){C=B[A];
+O=D.required[I][A]
+}if(C instanceof Array){var M=0;
+for(var F=0;
+F<C.length;
+F++){if(C[F].checked){M++
+}}if(M<O){G[G.length]=C[0].name
+}}else{if(!J("type",C)&&C.type=="select-multiple"){var E=0;
+for(var F=0;
+F<C.options.length;
+F++){if(C.options[F].selected&&!/^\s*$/.test(C.options[F].value)){E++
+}}if(E<O){G[G.length]=C.name
+}}}}}if(dojo.isObject(D.dependencies)){for(A in D.dependencies){var C=B[A];
+if(J("type",C)){continue
+}if(C.type!="text"&&C.type!="textarea"&&C.type!="password"){continue
+}if(/\S+/.test(C.value)){continue
+}if(H.isMissing(C.name)){continue
+}var K=B[D.dependencies[A]];
+if(K.type!="text"&&K.type!="textarea"&&K.type!="password"){continue
+}if(/^\s*$/.test(K.value)){continue
+}G[G.length]=C.name
+}}if(dojo.isObject(D.constraints)){for(A in D.constraints){var C=B[A];
+if(!C){continue
+}if(!J("tagName",C)&&(C.tagName.toLowerCase().indexOf("input")>=0||C.tagName.toLowerCase().indexOf("textarea")>=0)&&/^\s*$/.test(C.value)){continue
+}var N=true;
+if(dojo.isFunction(D.constraints[A])){N=D.constraints[A](C.value)
+}else{if(dojo.isArray(D.constraints[A])){if(dojo.isArray(D.constraints[A][0])){for(var I=0;
+I<D.constraints[A].length;
+I++){N=dojox.validate.evaluateConstraint(D,D.constraints[A][I],A,C);
+if(!N){break
+}}}else{N=dojox.validate.evaluateConstraint(D,D.constraints[A],A,C)
+}}}if(!N){L[L.length]=C.name
+}}}if(dojo.isObject(D.confirm)){for(A in D.confirm){var C=B[A];
+var K=B[D.confirm[A]];
+if(J("type",C)||J("type",K)||(C.type!="text"&&C.type!="textarea"&&C.type!="password")||(K.type!=C.type)||(K.value==C.value)||(H.isInvalid(C.name))||(/^\s*$/.test(K.value))){continue
+}L[L.length]=C.name
+}}return H
 };
-dojox.validate.evaluateConstraint=function(F,B,E,A){var D=B[0];
-var C=B.slice(1);
-C.unshift(A.value);
-if(typeof D!="undefined"){return D.apply(null,C)
+dojox.validate.evaluateConstraint=function(A,C,F,B){var E=C[0];
+var D=C.slice(1);
+D.unshift(B.value);
+if(typeof E!="undefined"){return E.apply(null,D)
 }return false
 }
 };

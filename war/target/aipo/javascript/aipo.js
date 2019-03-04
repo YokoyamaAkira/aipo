@@ -5817,73 +5817,73 @@ aimluck.io.createOptions(this.memberFromId,C)
 };
 dojo.provide("aipo.workflow.MemberNormalSelectList");
 dojo.require("aipo.widget.MemberNormalSelectList");
-dojo.declare("aipo.workflow.MemberNormalSelectList",[aipo.widget.MemberNormalSelectList],{addMember:function(J,N){if(document.all){var H=J.options;
-var I=N.options;
-if(H.length==1&&H[0].value==""){return 
+dojo.declare("aipo.workflow.MemberNormalSelectList",[aipo.widget.MemberNormalSelectList],{addMember:function(F,B){if(document.all){var A=F.options;
+var G=B.options;
+if(A.length==1&&A[0].value==""){return 
 }for(i=0;
-i<H.length;
-i++){if(!H[i].selected){continue
-}var K=false;
+i<A.length;
+i++){if(!A[i].selected){continue
+}var E=false;
 for(j=0;
-j<I.length;
-j++){if(I[j].value==H[i].value){K=true;
+j<G.length;
+j++){if(G[j].value==A[i].value){E=true;
 break
-}}if(K){continue
-}var M=document.createElement("OPTION");
-M.value=H[i].value;
-M.text=H[i].text;
-M.selected=true;
-if(I.length==1&&I[0].value==""){I.remove(0)
-}if(this.memberLimit!=0&&N.options.length>=this.memberLimit){return 
-}var L=document.createElement("OPTION");
-L.value=H[i].value;
-L.text=(j+1)+". "+H[i].text;
-L.selected=true;
-I.add(L,I.length)
-}}else{var H=J.options;
-var I=N.options;
-if(H.length==1&&H[0].value==""){return 
+}}if(E){continue
+}var C=document.createElement("OPTION");
+C.value=A[i].value;
+C.text=A[i].text;
+C.selected=true;
+if(G.length==1&&G[0].value==""){G.remove(0)
+}if(this.memberLimit!=0&&B.options.length>=this.memberLimit){return 
+}var D=document.createElement("OPTION");
+D.value=A[i].value;
+D.text=(j+1)+". "+A[i].text;
+D.selected=true;
+G.add(D,G.length)
+}}else{var A=F.options;
+var G=B.options;
+if(A.length==1&&A[0].value==""){return 
 }for(i=0;
-i<H.length;
-i++){if(!H[i].selected){continue
-}var K=false;
+i<A.length;
+i++){if(!A[i].selected){continue
+}var E=false;
 for(j=0;
-j<I.length;
-j++){if(I[j].value==H[i].value){K=true;
+j<G.length;
+j++){if(G[j].value==A[i].value){E=true;
 break
-}}if(K){continue
-}var M=document.createElement("OPTION");
-M.value=H[i].value;
-M.text=H[i].text;
-M.selected=true;
-if(N.options.length==1&&N.options[0].value==""){N.removeChild(N.options[0])
-}if(this.memberLimit!=0&&N.options.length>=this.memberLimit){return 
-}var L=document.createElement("OPTION");
-L.value=H[i].value;
-L.text=(j+1)+". "+H[i].text;
-L.selected=true;
-N.insertBefore(L,I[I.length])
-}}},removeMemberSync:function(){var C=dojo.byId(this.memberToId);
-if(document.all){var D=C.options;
+}}if(E){continue
+}var C=document.createElement("OPTION");
+C.value=A[i].value;
+C.text=A[i].text;
+C.selected=true;
+if(B.options.length==1&&B.options[0].value==""){B.removeChild(B.options[0])
+}if(this.memberLimit!=0&&B.options.length>=this.memberLimit){return 
+}var D=document.createElement("OPTION");
+D.value=A[i].value;
+D.text=(j+1)+". "+A[i].text;
+D.selected=true;
+B.insertBefore(D,G[G.length])
+}}},removeMemberSync:function(){var A=dojo.byId(this.memberToId);
+if(document.all){var B=A.options;
 for(i=0;
-i<D.length;
-i++){if(D[i].selected){D.remove(i);
+i<B.length;
+i++){if(B[i].selected){B.remove(i);
 i-=1;
-if(i+1<D.length){for(j=i+1;
-j<D.length;
-j++){if(j<9){D[j].text=D[j].text.slice(3)
-}else{D[j].text=D[j].text.slice(4)
-}D[j].text=(j+1)+". "+D[j].text
-}}}}}else{var D=C.options;
+if(i+1<B.length){for(j=i+1;
+j<B.length;
+j++){if(j<9){B[j].text=B[j].text.slice(3)
+}else{B[j].text=B[j].text.slice(4)
+}B[j].text=(j+1)+". "+B[j].text
+}}}}}else{var B=A.options;
 for(i=0;
-i<D.length;
-i++){if(D[i].selected){C.removeChild(D[i]);
+i<B.length;
+i++){if(B[i].selected){A.removeChild(B[i]);
 i-=1;
-if(i+1<D.length){for(j=i+1;
-j<D.length;
-j++){if(j<9){D[j].text=D[j].text.slice(3)
-}else{D[j].text=D[j].text.slice(4)
-}D[j].text=(j+1)+". "+D[j].text
+if(i+1<B.length){for(j=i+1;
+j<B.length;
+j++){if(j<9){B[j].text=B[j].text.slice(3)
+}else{B[j].text=B[j].text.slice(4)
+}B[j].text=(j+1)+". "+B[j].text
 }}}}}}});
 if(!dojo._hasResource["aipo.widget.DateCalendar"]){dojo._hasResource["aipo.widget.DateCalendar"]=true;
 dojo.provide("aipo.widget.DateCalendar");
@@ -6174,9 +6174,9 @@ dojo.declare("aipo.fileupload.widget.FileuploadDialogUnderlay",[aimluck.widget.D
 dojo.declare("aipo.fileupload.widget.FileuploadDialog",[aimluck.widget.Dialog],{loadingMessage:"<div class='indicator'>読み込み中...</div>",templateCssString:"fileuploadDialog",templateString:"<div id='fileuploadDialog' class='${templateCssString}' dojoattachpoint='wrapper'><span dojoattachpoint='tabStartOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap'tabindex='0'></span><span dojoattachpoint='tabStart' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><div dojoattachpoint='containerNode' style='position: relative; z-index: 2;'></div><span dojoattachpoint='tabEnd' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><span dojoattachpoint='tabEndOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span></div>",_setup:function(){this._modalconnects=[];
 if(this.titleBar){this._moveable=new dojo.dnd.Moveable(this.domNode,{handle:this.titleBar})
 }this._underlay=new aipo.fileupload.widget.FileuploadDialogUnderlay();
-var B=this.domNode;
-this._fadeIn=dojo.fx.combine([dojo.fadeIn({node:B,duration:this.duration}),dojo.fadeIn({node:this._underlay.domNode,duration:this.duration,onBegin:dojo.hitch(this._underlay,"show")})]);
-this._fadeOut=dojo.fx.combine([dojo.fadeOut({node:B,duration:this.duration,onEnd:function(){B.style.display="none"
+var A=this.domNode;
+this._fadeIn=dojo.fx.combine([dojo.fadeIn({node:A,duration:this.duration}),dojo.fadeIn({node:this._underlay.domNode,duration:this.duration,onBegin:dojo.hitch(this._underlay,"show")})]);
+this._fadeOut=dojo.fx.combine([dojo.fadeOut({node:A,duration:this.duration,onEnd:function(){A.style.display="none"
 }}),dojo.fadeOut({node:this._underlay.domNode,duration:this.duration,onEnd:dojo.hitch(this._underlay,"hide")})])
 }});
 if(!dojo._hasResource["aipo.widget.FileuploadViewDialog"]){dojo._hasResource["aipo.widget.FileuploadViewDialog"]=true;
@@ -6187,9 +6187,9 @@ dojo.declare("aipo.fileupload.widget.FileuploadViewDialogUnderlay",[aimluck.widg
 dojo.declare("aipo.fileupload.widget.FileuploadViewDialog",[aimluck.widget.Dialog],{loadingMessage:"<div class='indicator'>読み込み中...</div>",templateCssString:"auiPopup imgPopup fileuploadViewDialog",templateString:"<div id='fileuploadViewDialog' class='${templateCssString}' dojoattachpoint='wrapper' onclick='aipo.fileupload.hideImageDialog()'><span dojoattachpoint='tabStartOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap'tabindex='0'></span><span dojoattachpoint='tabStart' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><div dojoattachpoint='containerNode' style='position: relative; z-index: 2;'></div><span dojoattachpoint='tabEnd' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><span dojoattachpoint='tabEndOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span></div>",_setup:function(){this._modalconnects=[];
 if(this.titleBar){this._moveable=new dojo.dnd.Moveable(this.domNode,{handle:this.titleBar})
 }this._underlay=new aipo.fileupload.widget.FileuploadViewDialogUnderlay();
-var B=this.domNode;
-this._fadeIn=dojo.fx.combine([dojo.fadeIn({node:B,duration:this.duration}),dojo.fadeIn({node:this._underlay.domNode,duration:this.duration,onBegin:dojo.hitch(this._underlay,"show")})]);
-this._fadeOut=dojo.fx.combine([dojo.fadeOut({node:B,duration:this.duration,onEnd:function(){B.style.display="none"
+var A=this.domNode;
+this._fadeIn=dojo.fx.combine([dojo.fadeIn({node:A,duration:this.duration}),dojo.fadeIn({node:this._underlay.domNode,duration:this.duration,onBegin:dojo.hitch(this._underlay,"show")})]);
+this._fadeOut=dojo.fx.combine([dojo.fadeOut({node:A,duration:this.duration,onEnd:function(){A.style.display="none"
 }}),dojo.fadeOut({node:this._underlay.domNode,duration:this.duration,onEnd:dojo.hitch(this._underlay,"hide")})])
 },onLoad:function(){this._position();
 aimluck.widget.Dialog.superclass.onLoad.call(this)

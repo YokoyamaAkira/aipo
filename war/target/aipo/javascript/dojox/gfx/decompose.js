@@ -1,56 +1,139 @@
-if(!dojo._hasResource["dojox.gfx.decompose"]){dojo._hasResource["dojox.gfx.decompose"]=true;
+if(!dojo._hasResource["dojox.gfx.decompose"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.gfx.decompose"] = true;
 dojo.provide("dojox.gfx.decompose");
+
 dojo.require("dojox.gfx.matrix");
-(function(){var B=dojox.gfx.matrix;
-var A=function(J,I){return Math.abs(J-I)<=0.000001*(Math.abs(J)+Math.abs(I))
-};
-var H=function(K,L,I,J){if(!isFinite(K)){return I
-}else{if(!isFinite(I)){return K
-}}L=Math.abs(L),J=Math.abs(J);
-return(L*K+J*I)/(L+J)
-};
-var C=function(I){var J=new B.Matrix2D(I);
-return dojo.mixin(J,{dx:0,dy:0,xy:J.yx,yx:J.xy})
-};
-var F=function(I){return(I.xx*I.yy<0||I.xy*I.yx>0)?-1:1
-};
-var E=function(V){var P=B.normalize(V),T=-P.xx-P.yy,R=P.xx*P.yy-P.xy*P.yx,Q=Math.sqrt(T*T-4*R),L=-(T+(T<0?-Q:Q))/2,K=R/L,U=P.xy/(L-P.xx),O=1,S=P.xy/(K-P.xx),N=1;
-if(A(L,K)){U=1,O=0,S=0,N=1
-}if(!isFinite(U)){U=1,O=(L-P.xx)/P.xy;
-if(!isFinite(O)){U=(L-P.yy)/P.yx,O=1;
-if(!isFinite(U)){U=1,O=P.yx/(L-P.yy)
-}}}if(!isFinite(S)){S=1,N=(K-P.xx)/P.xy;
-if(!isFinite(N)){S=(K-P.yy)/P.yx,N=1;
-if(!isFinite(S)){S=1,N=P.yx/(K-P.yy)
-}}}var J=Math.sqrt(U*U+O*O),I=Math.sqrt(S*S+N*N);
-if(!isFinite(U/=J)){U=0
-}if(!isFinite(O/=J)){O=0
-}if(!isFinite(S/=I)){S=0
-}if(!isFinite(N/=I)){N=0
-}return{value1:L,value2:K,vector1:{x:U,y:O},vector2:{x:S,y:N}}
-};
-var G=function(O,I){var K=F(O),J=I.angle1=(Math.atan2(O.yx,O.yy)+Math.atan2(-K*O.xy,K*O.xx))/2,N=Math.cos(J),L=Math.sin(J);
-I.sx=H(O.xx/N,N,-O.xy/L,L);
-I.sy=H(O.yy/N,N,O.yx/L,L);
-return I
-};
-var D=function(O,I){var K=F(O),J=I.angle2=(Math.atan2(K*O.yx,K*O.xx)+Math.atan2(-O.xy,O.yy))/2,N=Math.cos(J),L=Math.sin(J);
-I.sx=H(O.xx/N,N,O.yx/L,L);
-I.sy=H(O.yy/N,N,-O.xy/L,L);
-return I
-};
-dojox.gfx.decompose=function(O){var N=B.normalize(O),R={dx:N.dx,dy:N.dy,sx:1,sy:1,angle1:0,angle2:0};
-if(A(N.xy,0)&&A(N.yx,0)){return dojo.mixin(R,{sx:N.xx,sy:N.yy})
-}if(A(N.xx*N.yx,-N.xy*N.yy)){return G(N,R)
-}if(A(N.xx*N.xy,-N.yx*N.yy)){return D(N,R)
-}var L=C(N),Q=E([N,L]),P=E([L,N]),I=new B.Matrix2D({xx:Q.vector1.x,xy:Q.vector2.x,yx:Q.vector1.y,yy:Q.vector2.y}),K=new B.Matrix2D({xx:P.vector1.x,xy:P.vector1.y,yx:P.vector2.x,yy:P.vector2.y}),J=new B.Matrix2D([B.invert(I),N,B.invert(K)]);
-G(K,R);
-J.xx*=R.sx;
-J.yy*=R.sy;
-D(I,R);
-J.xx*=R.sx;
-J.yy*=R.sy;
-return dojo.mixin(R,{sx:J.xx,sy:J.yy})
+
+(function(){
+	var m = dojox.gfx.matrix;
+
+	var eq = function(/* Number */ a, /* Number */ b){
+		// summary: compare two FP numbers for equality
+		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
+	};
+	
+	var calcFromValues = function(/* Number */ r1, /* Number */ m1, /* Number */ r2, /* Number */ m2){
+		// summary: uses two close FP ration and their original magnitudes to approximate the result
+		if(!isFinite(r1)){
+			return r2;	// Number
+		}else if(!isFinite(r2)){
+			return r1;	// Number
+		}
+		m1 = Math.abs(m1), m2 = Math.abs(m2);
+		return (m1 * r1 + m2 * r2) / (m1 + m2);	// Number
+	};
+	
+	var transpose = function(/* dojox.gfx.matrix.Matrix2D */ matrix){
+		// matrix: dojox.gfx.matrix.Matrix2D: a 2D matrix-like object
+		var M = new m.Matrix2D(matrix);
+		return dojo.mixin(M, {dx: 0, dy: 0, xy: M.yx, yx: M.xy});	// dojox.gfx.matrix.Matrix2D
+	};
+	
+	var scaleSign = function(/* dojox.gfx.matrix.Matrix2D */ matrix){
+		return (matrix.xx * matrix.yy < 0 || matrix.xy * matrix.yx > 0) ? -1 : 1;	// Number
+	};
+	
+	var eigenvalueDecomposition = function(/* dojox.gfx.matrix.Matrix2D */ matrix){
+		// matrix: dojox.gfx.matrix.Matrix2D: a 2D matrix-like object
+		var M = m.normalize(matrix),
+			b = -M.xx - M.yy,
+			c = M.xx * M.yy - M.xy * M.yx,
+			d = Math.sqrt(b * b - 4 * c),
+			l1 = -(b + (b < 0 ? -d : d)) / 2,
+			l2 = c / l1,
+			vx1 = M.xy / (l1 - M.xx), vy1 = 1,
+			vx2 = M.xy / (l2 - M.xx), vy2 = 1;
+		if(eq(l1, l2)){
+			vx1 = 1, vy1 = 0, vx2 = 0, vy2 = 1;
+		}
+		if(!isFinite(vx1)){
+			vx1 = 1, vy1 = (l1 - M.xx) / M.xy;
+			if(!isFinite(vy1)){
+				vx1 = (l1 - M.yy) / M.yx, vy1 = 1;
+				if(!isFinite(vx1)){
+					vx1 = 1, vy1 = M.yx / (l1 - M.yy);
+				}
+			}
+		}
+		if(!isFinite(vx2)){
+			vx2 = 1, vy2 = (l2 - M.xx) / M.xy;
+			if(!isFinite(vy2)){
+				vx2 = (l2 - M.yy) / M.yx, vy2 = 1;
+				if(!isFinite(vx2)){
+					vx2 = 1, vy2 = M.yx / (l2 - M.yy);
+				}
+			}
+		}
+		var d1 = Math.sqrt(vx1 * vx1 + vy1 * vy1),
+			d2 = Math.sqrt(vx2 * vx2 + vy2 * vy2);
+		if(!isFinite(vx1 /= d1)){ vx1 = 0; }
+		if(!isFinite(vy1 /= d1)){ vy1 = 0; }
+		if(!isFinite(vx2 /= d2)){ vx2 = 0; }
+		if(!isFinite(vy2 /= d2)){ vy2 = 0; }
+		return {	// Object
+			value1: l1,
+			value2: l2,
+			vector1: {x: vx1, y: vy1},
+			vector2: {x: vx2, y: vy2}
+		};
+	};
+	
+	var decomposeSR = function(/* dojox.gfx.matrix.Matrix2D */ M, /* Object */ result){
+		// summary: decomposes a matrix into [scale, rotate]; no checks are done.
+		var sign = scaleSign(M),
+			a = result.angle1 = (Math.atan2(M.yx, M.yy) + Math.atan2(-sign * M.xy, sign * M.xx)) / 2,
+			cos = Math.cos(a), sin = Math.sin(a);
+		result.sx = calcFromValues(M.xx / cos, cos, -M.xy / sin, sin);
+		result.sy = calcFromValues(M.yy / cos, cos,  M.yx / sin, sin);
+		return result;	// Object
+	};
+	
+	var decomposeRS = function(/* dojox.gfx.matrix.Matrix2D */ M, /* Object */ result){
+		// summary: decomposes a matrix into [rotate, scale]; no checks are done
+		var sign = scaleSign(M),
+			a = result.angle2 = (Math.atan2(sign * M.yx, sign * M.xx) + Math.atan2(-M.xy, M.yy)) / 2,
+			cos = Math.cos(a), sin = Math.sin(a);
+		result.sx = calcFromValues(M.xx / cos, cos,  M.yx / sin, sin);
+		result.sy = calcFromValues(M.yy / cos, cos, -M.xy / sin, sin);
+		return result;	// Object
+	};
+	
+	dojox.gfx.decompose = function(matrix){
+		// summary: decompose a 2D matrix into translation, scaling, and rotation components
+		// description: this function decompose a matrix into four logical components: 
+		//	translation, rotation, scaling, and one more rotation using SVD.
+		//	The components should be applied in following order:
+		//	| [translate, rotate(angle2), scale, rotate(angle1)]
+		// matrix: dojox.gfx.matrix.Matrix2D: a 2D matrix-like object
+		var M = m.normalize(matrix), 
+			result = {dx: M.dx, dy: M.dy, sx: 1, sy: 1, angle1: 0, angle2: 0};
+		// detect case: [scale]
+		if(eq(M.xy, 0) && eq(M.yx, 0)){
+			return dojo.mixin(result, {sx: M.xx, sy: M.yy});	// Object
+		}
+		// detect case: [scale, rotate]
+		if(eq(M.xx * M.yx, -M.xy * M.yy)){
+			return decomposeSR(M, result);	// Object
+		}
+		// detect case: [rotate, scale]
+		if(eq(M.xx * M.xy, -M.yx * M.yy)){
+			return decomposeRS(M, result);	// Object
+		}
+		// do SVD
+		var	MT = transpose(M),
+			u  = eigenvalueDecomposition([M, MT]),
+			v  = eigenvalueDecomposition([MT, M]),
+			U  = new m.Matrix2D({xx: u.vector1.x, xy: u.vector2.x, yx: u.vector1.y, yy: u.vector2.y}),
+			VT = new m.Matrix2D({xx: v.vector1.x, xy: v.vector1.y, yx: v.vector2.x, yy: v.vector2.y}),
+			S = new m.Matrix2D([m.invert(U), M, m.invert(VT)]);
+		decomposeSR(VT, result);
+		S.xx *= result.sx;
+		S.yy *= result.sy;
+		decomposeRS(U, result);
+		S.xx *= result.sx;
+		S.yy *= result.sy;
+		return dojo.mixin(result, {sx: S.xx, sy: S.yy});	// Object
+	};
+})();
+
 }
-})()
-};

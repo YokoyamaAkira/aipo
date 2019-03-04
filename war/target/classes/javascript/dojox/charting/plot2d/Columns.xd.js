@@ -4,40 +4,40 @@ A.require("dojox.charting.plot2d.common");
 A.require("dojox.charting.plot2d.Base");
 A.require("dojox.lang.utils");
 A.require("dojox.lang.functional");
-(function(){var B=dojox.lang.functional,D=dojox.lang.utils,C=dojox.charting.plot2d.common,E=B.lambda("item.purgeGroup()");
+(function(){var E=dojox.lang.functional,C=dojox.lang.utils,B=dojox.charting.plot2d.common,D=E.lambda("item.purgeGroup()");
 A.declare("dojox.charting.plot2d.Columns",dojox.charting.plot2d.Base,{defaultParams:{hAxis:"x",vAxis:"y",gap:0,shadows:null},optionalParams:{},constructor:function(G,F){this.opt=A.clone(this.defaultParams);
-D.updateWithObject(this.opt,F);
+C.updateWithObject(this.opt,F);
 this.series=[];
 this.hAxis=this.opt.hAxis;
 this.vAxis=this.opt.vAxis
-},calculateAxes:function(G){var F=C.collectSimpleStats(this.series);
+},calculateAxes:function(G){var F=B.collectSimpleStats(this.series);
 F.hmin-=0.5;
 F.hmax+=0.5;
 this._calc(G,F);
 return this
-},render:function(W,K){if(this.dirty){A.forEach(this.series,E);
+},render:function(T,H){if(this.dirty){A.forEach(this.series,D);
 this.cleanGroup();
-var O=this.group;
-B.forEachReversed(this.series,function(a){a.cleanGroup(O)
+var L=this.group;
+E.forEachReversed(this.series,function(a){a.cleanGroup(L)
 })
-}var N=this.chart.theme,U,L,V,G,S=this.opt.gap<this._hScaler.scale/3?this.opt.gap:0;
-for(var Y=this.series.length-1;
-Y>=0;
---Y){var P=this.series[Y];
-if(!this.dirty&&!P.dirty){continue
-}P.cleanGroup();
-var O=P.group;
-if(!P.fill||!P.stroke){U=P.dyn.color=new A.Color(N.next("color"))
-}L=P.stroke?P.stroke:C.augmentStroke(N.series.stroke,U);
-V=P.fill?P.fill:C.augmentFill(N.series.fill,U);
-var Q=Math.max(0,this._vScaler.bounds.lower),F=K.l+this._hScaler.scale*(0.5-this._hScaler.bounds.lower)+S,I=W.height-K.b-this._vScaler.scale*(Q-this._vScaler.bounds.lower);
-for(var X=0;
-X<P.data.length;
-++X){var M=P.data[X],T=this._hScaler.scale-2*S,R=this._vScaler.scale*(M-Q),Z=Math.abs(R);
-if(T>=1&&Z>=1){var J={x:F+this._hScaler.scale*X,y:I-(R<0?0:R),width:T,height:Z},H=O.createRect(J).setFill(V).setStroke(L);
-P.dyn.fill=H.getFill();
-P.dyn.stroke=H.getStroke()
-}}P.dirty=false
+}var K=this.chart.theme,R,I,S,Y,P=this.opt.gap<this._hScaler.scale/3?this.opt.gap:0;
+for(var V=this.series.length-1;
+V>=0;
+--V){var M=this.series[V];
+if(!this.dirty&&!M.dirty){continue
+}M.cleanGroup();
+var L=M.group;
+if(!M.fill||!M.stroke){R=M.dyn.color=new A.Color(K.next("color"))
+}I=M.stroke?M.stroke:B.augmentStroke(K.series.stroke,R);
+S=M.fill?M.fill:B.augmentFill(K.series.fill,R);
+var N=Math.max(0,this._vScaler.bounds.lower),X=H.l+this._hScaler.scale*(0.5-this._hScaler.bounds.lower)+P,Z=T.height-H.b-this._vScaler.scale*(N-this._vScaler.bounds.lower);
+for(var U=0;
+U<M.data.length;
+++U){var J=M.data[U],Q=this._hScaler.scale-2*P,O=this._vScaler.scale*(J-N),W=Math.abs(O);
+if(Q>=1&&W>=1){var G={x:X+this._hScaler.scale*U,y:Z-(O<0?0:O),width:Q,height:W},F=L.createRect(G).setFill(S).setStroke(I);
+M.dyn.fill=F.getFill();
+M.dyn.stroke=F.getStroke()
+}}M.dirty=false
 }this.dirty=false;
 return this
 }})

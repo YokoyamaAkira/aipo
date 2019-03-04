@@ -1,47 +1,47 @@
 if(!dojo._hasResource["dojo._base.window"]){dojo._hasResource["dojo._base.window"]=true;
 dojo.provide("dojo._base.window");
-dojo._gearsObject=function(){var D;
-var A;
-var C=dojo.getObject("google.gears");
-if(C){return C
-}if(typeof GearsFactory!="undefined"){D=new GearsFactory()
-}else{if(dojo.isIE){try{D=new ActiveXObject("Gears.Factory")
-}catch(B){}}else{if(navigator.mimeTypes["application/x-googlegears"]){D=document.createElement("object");
-D.setAttribute("type","application/x-googlegears");
-D.setAttribute("width",0);
-D.setAttribute("height",0);
-D.style.display="none";
-document.documentElement.appendChild(D)
-}}}if(!D){return null
-}dojo.setObject("google.gears.factory",D);
+dojo._gearsObject=function(){var A;
+var B;
+var D=dojo.getObject("google.gears");
+if(D){return D
+}if(typeof GearsFactory!="undefined"){A=new GearsFactory()
+}else{if(dojo.isIE){try{A=new ActiveXObject("Gears.Factory")
+}catch(C){}}else{if(navigator.mimeTypes["application/x-googlegears"]){A=document.createElement("object");
+A.setAttribute("type","application/x-googlegears");
+A.setAttribute("width",0);
+A.setAttribute("height",0);
+A.style.display="none";
+document.documentElement.appendChild(A)
+}}}if(!A){return null
+}dojo.setObject("google.gears.factory",A);
 return dojo.getObject("google.gears")
 };
 dojo.isGears=(!!dojo._gearsObject())||0;
 dojo.doc=window.document||null;
 dojo.body=function(){return dojo.doc.body||dojo.doc.getElementsByTagName("body")[0]
 };
-dojo.setContext=function(A,B){dojo.global=A;
-dojo.doc=B
+dojo.setContext=function(B,A){dojo.global=B;
+dojo.doc=A
 };
-dojo._fireCallback=function(B,C,A){if(C&&dojo.isString(B)){B=C[B]
-}return(C?B.apply(C,A||[]):B())
+dojo._fireCallback=function(C,A,B){if(A&&dojo.isString(C)){C=A[C]
+}return(A?C.apply(A,B||[]):C())
 };
-dojo.withGlobal=function(D,C,G,B){var A;
-var E=dojo.global;
-var F=dojo.doc;
-try{dojo.setContext(D,D.document);
-A=dojo._fireCallback(C,G,B)
-}finally{dojo.setContext(E,F)
-}return A
+dojo.withGlobal=function(G,F,C,E){var D;
+var A=dojo.global;
+var B=dojo.doc;
+try{dojo.setContext(G,G.document);
+D=dojo._fireCallback(F,C,E)
+}finally{dojo.setContext(A,B)
+}return D
 };
-dojo.withDoc=function(F,E,B,D){var C;
-var A=dojo.doc;
-try{dojo.doc=F;
-C=dojo._fireCallback(E,B,D)
-}finally{dojo.doc=A
-}return C
+dojo.withDoc=function(A,F,C,E){var D;
+var B=dojo.doc;
+try{dojo.doc=A;
+D=dojo._fireCallback(F,C,E)
+}finally{dojo.doc=B
+}return D
 };
-(function(){var B=djConfig.modulePaths;
-if(B){for(var A in B){dojo.registerModulePath(A,B[A])
+(function(){var A=djConfig.modulePaths;
+if(A){for(var B in A){dojo.registerModulePath(B,A[B])
 }}})()
 };

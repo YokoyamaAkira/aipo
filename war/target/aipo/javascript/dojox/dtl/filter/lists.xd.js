@@ -1,48 +1,136 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.dtl.filter.lists"],["require","dojox.dtl._base"]],defineResource:function(A){if(!A._hasResource["dojox.dtl.filter.lists"]){A._hasResource["dojox.dtl.filter.lists"]=true;
-A.provide("dojox.dtl.filter.lists");
-A.require("dojox.dtl._base");
-A.mixin(dojox.dtl.filter.lists,{_dictsort:function(C,B){if(C[0]==B[0]){return 0
-}return(C[0]<B[0])?-1:1
-},dictsort:function(H,B){if(!B){return H
-}var D=[];
-for(var F in H){D.push([dojox.dtl.resolveVariable("var."+B,new dojox.dtl.Context({"var":H[F]})),H[F]])
-}D.sort(dojox.dtl.filter.lists._dictsort);
-var C=[];
-for(var E=0,G;
-G=D[E];
-E++){C.push(G[1])
-}return C
-},dictsortreversed:function(D,B){if(!B){return D
-}var C=dojox.dtl.filter.lists.dictsort(D,B);
-return C.reverse()
-},first:function(B){return(B.length)?B[0]:""
-},join:function(C,B){return C.join(B||",")
-},length:function(B){return(isNaN(B.length))?(B+"").length:B.length
-},length_is:function(C,B){return C.length==parseInt(B)
-},random:function(B){return B[Math.floor(Math.random()*B.length)]
-},slice:function(E,B){B=B||"";
-var F=B.split(":");
-var D=[];
-for(var C=0;
-C<F.length;
-C++){if(!F[C].length){D.push(null)
-}else{D.push(parseInt(F[C]))
-}}if(D[0]===null){D[0]=0
-}if(D[0]<0){D[0]=E.length+D[0]
-}if(D.length<2||D[1]===null){D[1]=E.length
-}if(D[1]<0){D[1]=E.length+D[1]
-}return E.slice(D[0],D[1])
-},_unordered_list:function(F,D){var G=dojox.dtl.filter.lists;
-var B="";
-for(var C=0;
-C<D;
-C++){B+="\t"
-}if(F[1]&&F[1].length){var E=[];
-for(var C=0;
-C<F[1].length;
-C++){E.push(G._unordered_list(F[1][C],D+1))
-}return B+"<li>"+F[0]+"\n"+B+"<ul>\n"+E.join("\n")+"\n"+B+"</ul>\n"+B+"</li>"
-}else{return B+"<li>"+F[0]+"</li>"
-}},unordered_list:function(B){return dojox.dtl.filter.lists._unordered_list(B,1)
-}})
-}}});
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.dtl.filter.lists"],
+["require", "dojox.dtl._base"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.dtl.filter.lists"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.dtl.filter.lists"] = true;
+dojo.provide("dojox.dtl.filter.lists")
+
+dojo.require("dojox.dtl._base");
+
+dojo.mixin(dojox.dtl.filter.lists, {
+	_dictsort: function(a, b){
+		if(a[0] == b[0]) return 0;
+		return (a[0] < b[0]) ? -1 : 1;
+	},
+	dictsort: function(value, arg){
+		// summary: Takes a list of dicts, returns that list sorted by the property given in the argument.
+		if(!arg) return value;
+
+		var items = [];
+		for(var key in value){
+			items.push([dojox.dtl.resolveVariable('var.' + arg, new dojox.dtl.Context({ 'var' : value[key]})), value[key]]);
+		}
+		items.sort(dojox.dtl.filter.lists._dictsort);
+		var output = [];
+		for(var i = 0, item; item = items[i]; i++){
+			output.push(item[1]);
+		}
+		return output;
+	},
+	dictsortreversed: function(value, arg){
+		// summary: Takes a list of dicts, returns that list sorted in reverse order by the property given in the argument.
+		if(!arg) return value;
+
+		var dictsort = dojox.dtl.filter.lists.dictsort(value, arg);
+		return dictsort.reverse();
+	},
+	first: function(value){
+		// summary: Returns the first item in a list
+		return (value.length) ? value[0] : "";
+	},
+	join: function(value, arg){
+		// summary: Joins a list with a string, like Python's ``str.join(list)``
+		// description:
+		//		Django throws a compile error, but JS can't do arg checks
+		//		so we're left with run time errors, which aren't wise for something
+		//		as trivial here as an empty arg.
+		return value.join(arg || ",");
+	},
+	length: function(value){
+		// summary: Returns the length of the value - useful for lists
+		return (isNaN(value.length)) ? (value + "").length : value.length;
+	},
+	length_is: function(value, arg){
+		// summary: Returns a boolean of whether the value's length is the argument
+		return value.length == parseInt(arg);
+	},
+	random: function(value){
+		// summary: Returns a random item from the list
+		return value[Math.floor(Math.random() * value.length)];
+	},
+	slice: function(value, arg){
+		// summary: Returns a slice of the list.
+		// description:
+		//		Uses the same syntax as Python's list slicing; see
+		//		http://diveintopython.org/native_data_types/lists.html#odbchelper.list.slice
+		//		for an introduction.
+		//		Also uses the optional third value to denote every X item.
+		arg = arg || "";
+		var parts = arg.split(":");
+		var bits = [];
+		for(var i = 0; i < parts.length; i++){
+			if(!parts[i].length){
+				bits.push(null);
+			}else{
+				bits.push(parseInt(parts[i]));
+			}
+		}
+
+		if(bits[0] === null){
+			bits[0] = 0;
+		}
+		if(bits[0] < 0){
+			bits[0] = value.length + bits[0];
+		}
+		if(bits.length < 2 || bits[1] === null){
+			bits[1] = value.length;
+		}
+		if(bits[1] < 0){
+			bits[1] = value.length + bits[1];
+		}
+		
+		return value.slice(bits[0], bits[1]);
+	},
+	_unordered_list: function(value, tabs){
+		var ddl = dojox.dtl.filter.lists;
+		var indent = "";
+		for(var i = 0; i < tabs; i++){
+			indent += "\t";
+		}
+		if(value[1] && value[1].length){
+			var recurse = [];
+			for(var i = 0; i < value[1].length; i++){
+				recurse.push(ddl._unordered_list(value[1][i], tabs + 1))
+			}
+			return indent + "<li>" + value[0] + "\n" + indent + "<ul>\n" + recurse.join("\n") + "\n" + indent + "</ul>\n" + indent + "</li>";
+		}else{
+			return indent + "<li>" + value[0] + "</li>";
+		}
+	},
+	unordered_list: function(value){
+		// summary:
+		//		Recursively takes a self-nested list and returns an HTML unordered list --
+		//		WITHOUT opening and closing <ul> tags.
+		//	description:
+		//		The list is assumed to be in the proper format. For example, if ``var`` contains
+		//		``['States', [['Kansas', [['Lawrence', []], ['Topeka', []]]], ['Illinois', []]]]``,
+		//		then ``{{ var|unordered_list }}`` would return::
+		//
+		//		<li>States
+		//		<ul>
+		//			<li>Kansas
+		//			<ul>
+		//				<li>Lawrence</li>
+		//				<li>Topeka</li>
+		//			</ul>
+		//			</li>
+		//			<li>Illinois</li>
+		//		</ul>
+		//		</li>
+		return dojox.dtl.filter.lists._unordered_list(value, 1);
+	}
+});
+
+}
+
+}});

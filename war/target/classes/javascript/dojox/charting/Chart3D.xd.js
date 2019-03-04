@@ -1,9 +1,9 @@
 dojo._xdResourceLoaded({depends:[["provide","dojox.charting.Chart3D"],["require","dojox.gfx3d"]],defineResource:function(A){if(!A._hasResource["dojox.charting.Chart3D"]){A._hasResource["dojox.charting.Chart3D"]=true;
 A.provide("dojox.charting.Chart3D");
 A.require("dojox.gfx3d");
-(function(){var D={x:0,y:0,z:1},C=dojox.gfx3d.vector,B=dojox.gfx.normalizedLength;
+(function(){var C={x:0,y:0,z:1},B=dojox.gfx3d.vector,D=dojox.gfx.normalizedLength;
 A.declare("dojox.charting.Chart3D",null,{constructor:function(G,E,F,H){this.node=A.byId(G);
-this.surface=dojox.gfx.createSurface(this.node,B(this.node.style.width),B(this.node.style.height));
+this.surface=dojox.gfx.createSurface(this.node,D(this.node.style.width),D(this.node.style.height));
 this.view=this.surface.createViewport();
 this.view.setLights(E.lights,E.ambient,E.specular);
 this.view.setCameraTransform(F);
@@ -28,7 +28,7 @@ this.view.invalidate()
 return E.length<G.length?(G=E,this.invalidate()):this
 },_generateWalls:function(){for(var E=0;
 E<this.walls.length;
-++E){if(C.dotProduct(D,this.walls[E].normal)>0){this.walls[E].generate(this)
+++E){if(B.dotProduct(C,this.walls[E].normal)>0){this.walls[E].generate(this)
 }}return this
 },_generatePlots:function(){var H=0,E=dojox.gfx3d.matrix,F=0;
 for(;

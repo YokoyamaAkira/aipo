@@ -1,24 +1,24 @@
 dojo.provide("aipo.eventlog");
-aipo.eventlog.onReceiveMessage=function(D){if(!D){var C=dijit.byId("modalDialog");
-if(C){C.hide()
+aipo.eventlog.onReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
+if(A){A.hide()
 }aipo.portletReload("eventlog")
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=D
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
 }};
-aipo.eventlog.downloadCvn=function(F,D,E){if(F){alert("一覧の総数が"+D+"件を超えています。\n日付の範囲を変更してください。")
-}else{window.location.href=E
+aipo.eventlog.downloadCvn=function(B,A,C){if(B){alert("一覧の総数が"+A+"件を超えています。\n日付の範囲を変更してください。")
+}else{window.location.href=C
 }};
-aipo.eventlog.onChangeDate=function(R,W){var S=dojo.byId("start_date_year");
-var M=dojo.byId("start_date_month");
-var U=dojo.byId("start_date_day");
-var T=S.options[S.selectedIndex].value;
-var P=M.options[M.selectedIndex].value;
-var Q=U.options[U.selectedIndex].value;
-S=dojo.byId("end_date_year");
-M=dojo.byId("end_date_month");
-U=dojo.byId("end_date_day");
-var N=S.options[S.selectedIndex].value;
-var V=M.options[M.selectedIndex].value;
-var O=U.options[U.selectedIndex].value;
-var X=R+"&start_date_year="+T+"&start_date_month="+P+"&start_date_day="+Q+"&end_date_year="+N+"&end_date_month="+V+"&end_date_day="+O;
-aipo.viewPage(X,W)
+aipo.eventlog.onChangeDate=function(K,F){var J=dojo.byId("start_date_year");
+var D=dojo.byId("start_date_month");
+var H=dojo.byId("start_date_day");
+var I=J.options[J.selectedIndex].value;
+var A=D.options[D.selectedIndex].value;
+var L=H.options[H.selectedIndex].value;
+J=dojo.byId("end_date_year");
+D=dojo.byId("end_date_month");
+H=dojo.byId("end_date_day");
+var C=J.options[J.selectedIndex].value;
+var G=D.options[D.selectedIndex].value;
+var B=H.options[H.selectedIndex].value;
+var E=K+"&start_date_year="+I+"&start_date_month="+A+"&start_date_day="+L+"&end_date_year="+C+"&end_date_month="+G+"&end_date_day="+B;
+aipo.viewPage(E,F)
 };

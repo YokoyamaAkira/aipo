@@ -1,48 +1,48 @@
 dojo.provide("aipo.fileupload");
-aipo.fileupload.getFolderName=function(){var B=dojo.byId("folderName")
+aipo.fileupload.getFolderName=function(){var A=dojo.byId("folderName")
 };
-aipo.fileupload.onAddFileInfo=function(F,G,I,J){var H=dojo.byId("attachments_"+J);
-if(H.nodeName.toLowerCase()=="ul"){aimluck.io.addFileToList(H,G,I)
-}else{aimluck.io.addOption(H,G,I,false)
-}dojo.byId("folderName_"+J).value=F
+aipo.fileupload.onAddFileInfo=function(A,E,C,B){var D=dojo.byId("attachments_"+B);
+if(D.nodeName.toLowerCase()=="ul"){aimluck.io.addFileToList(D,E,C)
+}else{aimluck.io.addOption(D,E,C,false)
+}dojo.byId("folderName_"+B).value=A
 };
-aipo.fileupload.replaceFileInfo=function(F,G,I,J){var H=dojo.byId("attachments_"+J);
-if(H.nodeName.toLowerCase()=="ul"){aimluck.io.replaceFileToList(H,G,I)
-}else{aimluck.io.addOption(H,G,I,false)
-}dojo.byId("folderName_"+J).value=F
+aipo.fileupload.replaceFileInfo=function(A,E,C,B){var D=dojo.byId("attachments_"+B);
+if(D.nodeName.toLowerCase()=="ul"){aimluck.io.replaceFileToList(D,E,C)
+}else{aimluck.io.addOption(D,E,C,false)
+}dojo.byId("folderName_"+B).value=A
 };
-aipo.fileupload.openAttachment=function(N,S){var T=430;
-var K=130;
-var P=(screen.width-T)/2;
-var Q=(screen.height-K)/2;
-var R=dojo.byId("attachments_"+S);
-if(R.nodeName.toLowerCase()=="ul"){var O=R.children.length
-}else{var O=R.options.length;
-if(O==1&&R.options[0].value==""){O=0
-}}var L=dojo.byId("folderName_"+S).value;
-var M=window.open(N+"&nsize="+O+"&folderName="+L,"attachment_window","left="+P+",top="+Q+",width="+T+",height="+K+",resizable=yes,status=yes");
-M.focus()
+aipo.fileupload.openAttachment=function(A,F){var E=430;
+var D=130;
+var I=(screen.width-E)/2;
+var H=(screen.height-D)/2;
+var G=dojo.byId("attachments_"+F);
+if(G.nodeName.toLowerCase()=="ul"){var J=G.children.length
+}else{var J=G.options.length;
+if(J==1&&G.options[0].value==""){J=0
+}}var C=dojo.byId("folderName_"+F).value;
+var B=window.open(A+"&nsize="+J+"&folderName="+C,"attachment_window","left="+I+",top="+H+",width="+E+",height="+D+",resizable=yes,status=yes");
+B.focus()
 };
 aipo.fileupload.ImageDialog;
-aipo.fileupload.showImageDialog=function(E,G,F){var H=dojo.byId("imageDialog");
+aipo.fileupload.showImageDialog=function(A,C,D){var B=dojo.byId("imageDialog");
 dojo.query("#imageDialog").addClass("preLoadImage");
 aipo.fileupload.ImageDialog=dijit.byId("imageDialog");
 dojo.query(".roundBlockContent").addClass("mb_dialoghide");
 dojo.query("#imageDialog").addClass("mb_dialog");
-if(!aipo.fileupload.ImageDialog){aipo.fileupload.ImageDialog=new aipo.fileupload.widget.FileuploadViewDialog({widgetId:"imageDialog",_portlet_id:G,_callback:F},"imageDialog")
-}else{aipo.fileupload.ImageDialog.setCallback(G,F)
-}if(aipo.fileupload.ImageDialog){aipo.fileupload.ImageDialog.setHref(E);
+if(!aipo.fileupload.ImageDialog){aipo.fileupload.ImageDialog=new aipo.fileupload.widget.FileuploadViewDialog({widgetId:"imageDialog",_portlet_id:C,_callback:D},"imageDialog")
+}else{aipo.fileupload.ImageDialog.setCallback(C,D)
+}if(aipo.fileupload.ImageDialog){aipo.fileupload.ImageDialog.setHref(A);
 aipo.fileupload.ImageDialog.show()
 }};
-aipo.fileupload.hideImageDialog=function(){var B=dijit.byId("imageDialog");
-if(B){B.hide()
+aipo.fileupload.hideImageDialog=function(){var A=dijit.byId("imageDialog");
+if(A){A.hide()
 }};
-aipo.fileupload.onLoadImage=function(D){var C=dojo.byId("imageDialog");
-C.style.width=D.width+"px";
-C.style.height=D.height+"px";
+aipo.fileupload.onLoadImage=function(B){var A=dojo.byId("imageDialog");
+A.style.width=B.width+"px";
+A.style.height=B.height+"px";
 aipo.fileupload.ImageDialog._position();
 dojo.query("#imageDialog").removeClass("preLoadImage")
 };
-aipo.fileupload.removeFileFromList=function(E,D,F){dojo.style("facephoto_"+F,"display","none");
-return E.removeChild(D)
+aipo.fileupload.removeFileFromList=function(C,A,B){dojo.style("facephoto_"+B,"display","none");
+return C.removeChild(A)
 };

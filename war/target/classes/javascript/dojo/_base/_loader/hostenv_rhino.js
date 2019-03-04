@@ -4,9 +4,9 @@ if(djConfig.baseUrl){dojo.baseUrl=djConfig.baseUrl
 dojo._name="rhino";
 dojo.isRhino=true;
 if(typeof print=="function"){console.debug=print
-}if(typeof dojo.byId=="undefined"){dojo.byId=function(A,B){if(A&&(typeof A=="string"||A instanceof String)){if(!B){B=document
-}return B.getElementById(A)
-}return A
+}if(typeof dojo.byId=="undefined"){dojo.byId=function(B,A){if(B&&(typeof B=="string"||B instanceof String)){if(!A){A=document
+}return A.getElementById(B)
+}return B
 }
 }dojo._loadUri=function(uri,cb){try{var local=(new java.io.File(uri)).exists();
 if(!local){try{var stream=(new java.net.URL(uri)).openStream();
@@ -21,34 +21,34 @@ return false
 }};
 dojo.exit=function(A){quit(A)
 };
-dojo._rhinoCurrentScriptViaJava=function(B){var E=Packages.org.mozilla.javascript.Context.getCurrentContext().getOptimizationLevel();
-var A=new java.io.CharArrayWriter();
-var G=new java.io.PrintWriter(A);
-var D=new java.lang.Exception();
-var F=A.toString();
-var H=F.match(/[^\(]*\.js\)/gi);
-if(!H){throw Error("cannot parse printStackTrace output: "+F)
-}var C=((typeof B!="undefined")&&(B))?H[B+1]:H[H.length-1];
-var C=H[3];
-if(!C){C=H[1]
-}if(!C){throw Error("could not find js file in printStackTrace output: "+F)
-}return C
+dojo._rhinoCurrentScriptViaJava=function(G){var B=Packages.org.mozilla.javascript.Context.getCurrentContext().getOptimizationLevel();
+var F=new java.io.CharArrayWriter();
+var D=new java.io.PrintWriter(F);
+var A=new java.lang.Exception();
+var C=F.toString();
+var E=C.match(/[^\(]*\.js\)/gi);
+if(!E){throw Error("cannot parse printStackTrace output: "+C)
+}var H=((typeof G!="undefined")&&(G))?E[G+1]:E[E.length-1];
+var H=E[3];
+if(!H){H=E[1]
+}if(!H){throw Error("could not find js file in printStackTrace output: "+C)
+}return H
 };
-function readText(B,A){A=A||"utf-8";
-var C=new java.io.File(B);
-var D=new java.io.FileInputStream(C);
-return dj_readInputStream(D,A)
-}function readUri(C,B){var A=(new java.net.URL(C)).openConnection();
-B=B||A.getContentEncoding()||"utf-8";
-var D=A.getInputStream();
-return dj_readInputStream(D,B)
-}function dj_readInputStream(C,B){var A=new java.io.BufferedReader(new java.io.InputStreamReader(C,B));
-try{var D=new java.lang.StringBuffer();
-var E="";
-while((E=A.readLine())!==null){D.append(E);
-D.append(java.lang.System.getProperty("line.separator"))
-}return D.toString()
-}finally{A.close()
+function readText(C,B){B=B||"utf-8";
+var D=new java.io.File(C);
+var A=new java.io.FileInputStream(D);
+return dj_readInputStream(A,B)
+}function readUri(D,C){var B=(new java.net.URL(D)).openConnection();
+C=C||B.getContentEncoding()||"utf-8";
+var A=B.getInputStream();
+return dj_readInputStream(A,C)
+}function dj_readInputStream(D,C){var B=new java.io.BufferedReader(new java.io.InputStreamReader(D,C));
+try{var E=new java.lang.StringBuffer();
+var A="";
+while((A=B.readLine())!==null){E.append(A);
+E.append(java.lang.System.getProperty("line.separator"))
+}return E.toString()
+}finally{B.close()
 }}if(!djConfig.libraryScriptUri.length){try{djConfig.libraryScriptUri=dojo._rhinoCurrentScriptViaJava(1)
 }catch(e){if(djConfig.isDebug){print("\n");
 print("we have no idea where Dojo is located.");
@@ -65,14 +65,14 @@ dojo.body=function(){return document.body
 dojo._timeouts=[];
 function clearTimeout(A){if(!dojo._timeouts[A]){return 
 }dojo._timeouts[A].stop()
-}function setTimeout(B,A){var D={sleepTime:A,hasSlept:false,run:function(){if(!this.hasSlept){this.hasSlept=true;
+}function setTimeout(C,B){var E={sleepTime:B,hasSlept:false,run:function(){if(!this.hasSlept){this.hasSlept=true;
 java.lang.Thread.currentThread().sleep(this.sleepTime)
-}try{B()
+}try{C()
 }catch(F){console.debug("Error running setTimeout thread:"+F)
 }}};
-var C=new java.lang.Runnable(D);
-var E=new java.lang.Thread(C);
-E.start();
-return dojo._timeouts.push(E)-1
+var D=new java.lang.Runnable(E);
+var A=new java.lang.Thread(D);
+A.start();
+return dojo._timeouts.push(A)-1
 }if(djConfig.modulePaths){for(var param in djConfig.modulePaths){dojo.registerModulePath(param,djConfig.modulePaths[param])
 }};

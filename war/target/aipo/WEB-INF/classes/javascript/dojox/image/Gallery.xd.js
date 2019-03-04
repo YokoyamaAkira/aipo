@@ -20,17 +20,17 @@ A.subscribe(this.thumbPicker.getShowTopicName(),function(C){B.slideShow.moveImag
 A.subscribe(this.slideShow.getLoadTopicName(),function(C){B.thumbPicker.markImageLoaded(C)
 });
 this._centerChildren()
-},setDataStore:function(C,D,B){this.thumbPicker.setDataStore(C,D,B);
-this.slideShow.setDataStore(C,D,B)
+},setDataStore:function(B,C,D){this.thumbPicker.setDataStore(B,C,D);
+this.slideShow.setDataStore(B,C,D)
 },reset:function(){this.slideShow.reset();
 this.thumbPicker.reset()
 },showNextImage:function(B){this.slideShow.showNextImage()
 },toggleSlideshow:function(){this.slideShow.toggleSlideshow()
-},showImage:function(C,B){this.slideShow.showImage(C,B)
-},_centerChildren:function(){var C=A.marginBox(this.thumbPicker.outerNode);
-var D=A.marginBox(this.slideShow.outerNode);
-var B=(C.w-D.w)/2;
-if(B>0){A.style(this.slideShow.outerNode,"marginLeft",B+"px")
-}else{if(B<0){A.style(this.thumbPicker.outerNode,"marginLeft",(B*-1)+"px")
+},showImage:function(B,C){this.slideShow.showImage(B,C)
+},_centerChildren:function(){var B=A.marginBox(this.thumbPicker.outerNode);
+var C=A.marginBox(this.slideShow.outerNode);
+var D=(B.w-C.w)/2;
+if(D>0){A.style(this.slideShow.outerNode,"marginLeft",D+"px")
+}else{if(D<0){A.style(this.thumbPicker.outerNode,"marginLeft",(D*-1)+"px")
 }}}})
 }}});

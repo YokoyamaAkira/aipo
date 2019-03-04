@@ -1,203 +1,543 @@
-dojo._xdResourceLoaded({depends:[["provide","dijit.layout.SplitContainer"],["require","dojo.cookie"],["require","dijit.layout._LayoutWidget"]],defineResource:function(A){if(!A._hasResource["dijit.layout.SplitContainer"]){A._hasResource["dijit.layout.SplitContainer"]=true;
-A.provide("dijit.layout.SplitContainer");
-A.require("dojo.cookie");
-A.require("dijit.layout._LayoutWidget");
-A.declare("dijit.layout.SplitContainer",dijit.layout._LayoutWidget,{activeSizing:false,sizerWidth:7,orientation:"horizontal",persist:true,postMixInProperties:function(){this.inherited("postMixInProperties",arguments);
-this.isHorizontal=(this.orientation=="horizontal")
-},postCreate:function(){this.inherited("postCreate",arguments);
-this.sizers=[];
-A.addClass(this.domNode,"dijitSplitContainer");
-if(A.isMozilla){this.domNode.style.overflow="-moz-scrollbars-none"
-}if(typeof this.sizerWidth=="object"){try{this.sizerWidth=parseInt(this.sizerWidth.toString())
-}catch(C){this.sizerWidth=7
-}}var B=this.virtualSizer=document.createElement("div");
-B.style.position="relative";
-B.style.zIndex=10;
-B.className=this.isHorizontal?"dijitSplitContainerVirtualSizerH":"dijitSplitContainerVirtualSizerV";
-this.domNode.appendChild(B);
-A.setSelectable(B,false)
-},startup:function(){if(this._started){return 
-}A.forEach(this.getChildren(),function(D,C,B){this._injectChild(D);
-if(C<B.length-1){this._addSizer()
-}},this);
-if(this.persist){this._restoreState()
-}this.inherited("startup",arguments);
-this._started=true
-},_injectChild:function(B){B.domNode.style.position="absolute";
-A.addClass(B.domNode,"dijitSplitPane")
-},_addSizer:function(){var D=this.sizers.length;
-var F=this.sizers[D]=document.createElement("div");
-F.className=this.isHorizontal?"dijitSplitContainerSizerH":"dijitSplitContainerSizerV";
-var C=document.createElement("div");
-C.className="thumb";
-F.appendChild(C);
-var B=this;
-var E=(function(){var G=D;
-return function(H){B.beginSizing(H,G)
+dojo._xdResourceLoaded({
+depends: [["provide", "dijit.layout.SplitContainer"],
+["require", "dojo.cookie"],
+["require", "dijit.layout._LayoutWidget"]],
+defineResource: function(dojo){if(!dojo._hasResource["dijit.layout.SplitContainer"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dijit.layout.SplitContainer"] = true;
+dojo.provide("dijit.layout.SplitContainer");
+
+//
+// FIXME: make it prettier
+// FIXME: active dragging upwards doesn't always shift other bars (direction calculation is wrong in this case)
+//
+
+dojo.require("dojo.cookie");
+dojo.require("dijit.layout._LayoutWidget");
+
+dojo.declare("dijit.layout.SplitContainer",
+	dijit.layout._LayoutWidget,
+	{
+	// summary: 
+	//	A Container widget with sizing handles in-between each child
+	// description:
+	//		Contains multiple children widgets, all of which are displayed side by side
+	//		(either horizontally or vertically); there's a bar between each of the children,
+	//		and you can adjust the relative size of each child by dragging the bars.
+	//
+	//		You must specify a size (width and height) for the SplitContainer.
+	//
+	// activeSizing: Boolean
+	//		If true, the children's size changes as you drag the bar;
+	//		otherwise, the sizes don't change until you drop the bar (by mouse-up)
+	activeSizing: false,
+
+	// sizerWidth: Integer
+	//		Size in pixels of the bar between each child
+	sizerWidth: 7, // FIXME: this should be a CSS attribute (at 7 because css wants it to be 7 until we fix to css)
+
+	// orientation: String
+	//		either 'horizontal' or vertical; indicates whether the children are
+	//		arranged side-by-side or up/down.
+	orientation: 'horizontal',
+
+	// persist: Boolean
+	//		Save splitter positions in a cookie
+	persist: true,
+
+	postMixInProperties: function(){
+		this.inherited("postMixInProperties",arguments);
+		this.isHorizontal = (this.orientation == 'horizontal');
+	},
+
+	postCreate: function(){
+		this.inherited("postCreate",arguments);
+		this.sizers = [];
+		dojo.addClass(this.domNode, "dijitSplitContainer");
+		// overflow has to be explicitly hidden for splitContainers using gekko (trac #1435)
+		// to keep other combined css classes from inadvertantly making the overflow visible
+		if(dojo.isMozilla){
+			this.domNode.style.overflow = '-moz-scrollbars-none'; // hidden doesn't work
+		}
+
+		// create the fake dragger
+		if(typeof this.sizerWidth == "object"){
+			try{ //FIXME: do this without a try/catch
+				this.sizerWidth = parseInt(this.sizerWidth.toString());
+			}catch(e){ this.sizerWidth = 7; }
+		}
+		var sizer = this.virtualSizer = document.createElement('div');
+		sizer.style.position = 'relative';
+
+		// #1681: work around the dreaded 'quirky percentages in IE' layout bug
+		// If the splitcontainer's dimensions are specified in percentages, it
+		// will be resized when the virtualsizer is displayed in _showSizingLine
+		// (typically expanding its bounds unnecessarily). This happens because
+		// we use position: relative for .dijitSplitContainer.
+		// The workaround: instead of changing the display style attribute,
+		// switch to changing the zIndex (bring to front/move to back)
+
+		sizer.style.zIndex = 10;
+		sizer.className = this.isHorizontal ? 'dijitSplitContainerVirtualSizerH' : 'dijitSplitContainerVirtualSizerV';
+		this.domNode.appendChild(sizer);
+		dojo.setSelectable(sizer, false);
+	},
+
+	startup: function(){
+		if(this._started){ return; }
+		dojo.forEach(this.getChildren(), function(child, i, children){
+			// attach the children and create the draggers
+			this._injectChild(child);
+
+			if(i < children.length-1){
+				this._addSizer();
+			}
+		}, this);
+
+		if(this.persist){
+			this._restoreState();
+		}
+		this.inherited("startup",arguments); 
+		this._started = true;
+	},
+
+	_injectChild: function(child){
+		child.domNode.style.position = "absolute";
+		dojo.addClass(child.domNode, "dijitSplitPane");
+	},
+
+	_addSizer: function(){
+		var i = this.sizers.length;
+
+		// TODO: use a template for this!!!
+		var sizer = this.sizers[i] = document.createElement('div');
+		sizer.className = this.isHorizontal ? 'dijitSplitContainerSizerH' : 'dijitSplitContainerSizerV';
+
+		// add the thumb div
+		var thumb = document.createElement('div');
+		thumb.className = 'thumb';
+		sizer.appendChild(thumb);
+
+		// FIXME: are you serious? why aren't we using mover start/stop combo?
+		var self = this;
+		var handler = (function(){ var sizer_i = i; return function(e){ self.beginSizing(e, sizer_i); } })();
+		dojo.connect(sizer, "onmousedown", handler);
+
+		this.domNode.appendChild(sizer);
+		dojo.setSelectable(sizer, false);
+	},
+
+	removeChild: function(widget){
+		// summary: Remove sizer, but only if widget is really our child and
+		// we have at least one sizer to throw away
+		if(this.sizers.length && dojo.indexOf(this.getChildren(), widget) != -1){
+			var i = this.sizers.length - 1;
+			dojo._destroyElement(this.sizers[i]);
+			this.sizers.length--;
+		}
+
+		// Remove widget and repaint
+		this.inherited("removeChild",arguments); 
+		if(this._started){
+			this.layout();
+		}
+	},
+
+	addChild: function(/*Widget*/ child, /*Integer?*/ insertIndex){
+		// summary: Add a child widget to the container
+		// child: a widget to add
+		// insertIndex: postion in the "stack" to add the child widget
+		
+		this.inherited("addChild",arguments); 
+
+		if(this._started){
+			// Do the stuff that startup() does for each widget
+			this._injectChild(child);
+			var children = this.getChildren();
+			if(children.length > 1){
+				this._addSizer();
+			}
+
+			// and then reposition (ie, shrink) every pane to make room for the new guy
+			this.layout();
+		}
+	},
+
+	layout: function(){
+		// summary:
+		//		Do layout of panels
+
+		// base class defines this._contentBox on initial creation and also
+		// on resize
+		this.paneWidth = this._contentBox.w;
+		this.paneHeight = this._contentBox.h;
+
+		var children = this.getChildren();
+		if(!children.length){ return; }
+
+		//
+		// calculate space
+		//
+
+		var space = this.isHorizontal ? this.paneWidth : this.paneHeight;
+		if(children.length > 1){
+			space -= this.sizerWidth * (children.length - 1);
+		}
+
+		//
+		// calculate total of SizeShare values
+		//
+		var outOf = 0;
+		dojo.forEach(children, function(child){
+			outOf += child.sizeShare;
+		});
+
+		//
+		// work out actual pixels per sizeshare unit
+		//
+		var pixPerUnit = space / outOf;
+
+		//
+		// set the SizeActual member of each pane
+		//
+		var totalSize = 0;
+		dojo.forEach(children.slice(0, children.length - 1), function(child){
+			var size = Math.round(pixPerUnit * child.sizeShare);
+			child.sizeActual = size;
+			totalSize += size;
+		});
+
+		children[children.length-1].sizeActual = space - totalSize;
+
+		//
+		// make sure the sizes are ok
+		//
+		this._checkSizes();
+
+		//
+		// now loop, positioning each pane and letting children resize themselves
+		//
+
+		var pos = 0;
+		var size = children[0].sizeActual;
+		this._movePanel(children[0], pos, size);
+		children[0].position = pos;
+		pos += size;
+
+		// if we don't have any sizers, our layout method hasn't been called yet
+		// so bail until we are called..TODO: REVISIT: need to change the startup
+		// algorithm to guaranteed the ordering of calls to layout method
+		if(!this.sizers){
+			return;
+		}
+
+		dojo.some(children.slice(1), function(child, i){
+			// error-checking
+			if(!this.sizers[i]){
+				return true;
+			}
+			// first we position the sizing handle before this pane
+			this._moveSlider(this.sizers[i], pos, this.sizerWidth);
+			this.sizers[i].position = pos;
+			pos += this.sizerWidth;
+
+			size = child.sizeActual;
+			this._movePanel(child, pos, size);
+			child.position = pos;
+			pos += size;
+		}, this);
+	},
+
+	_movePanel: function(panel, pos, size){
+		if(this.isHorizontal){
+			panel.domNode.style.left = pos + 'px';	// TODO: resize() takes l and t parameters too, don't need to set manually
+			panel.domNode.style.top = 0;
+			var box = {w: size, h: this.paneHeight};
+			if(panel.resize){
+				panel.resize(box);
+			}else{
+				dojo.marginBox(panel.domNode, box);
+			}
+		}else{
+			panel.domNode.style.left = 0;	// TODO: resize() takes l and t parameters too, don't need to set manually
+			panel.domNode.style.top = pos + 'px';
+			var box = {w: this.paneWidth, h: size};
+			if(panel.resize){
+				panel.resize(box);
+			}else{
+				dojo.marginBox(panel.domNode, box);
+			}
+		}
+	},
+
+	_moveSlider: function(slider, pos, size){
+		if(this.isHorizontal){
+			slider.style.left = pos + 'px';
+			slider.style.top = 0;
+			dojo.marginBox(slider, { w: size, h: this.paneHeight });
+		}else{
+			slider.style.left = 0;
+			slider.style.top = pos + 'px';
+			dojo.marginBox(slider, { w: this.paneWidth, h: size });
+		}
+	},
+
+	_growPane: function(growth, pane){
+		if(growth > 0){
+			if(pane.sizeActual > pane.sizeMin){
+				if((pane.sizeActual - pane.sizeMin) > growth){
+
+					// stick all the growth in this pane
+					pane.sizeActual = pane.sizeActual - growth;
+					growth = 0;
+				}else{
+					// put as much growth in here as we can
+					growth -= pane.sizeActual - pane.sizeMin;
+					pane.sizeActual = pane.sizeMin;
+				}
+			}
+		}
+		return growth;
+	},
+
+	_checkSizes: function(){
+
+		var totalMinSize = 0;
+		var totalSize = 0;
+		var children = this.getChildren();
+
+		dojo.forEach(children, function(child){
+			totalSize += child.sizeActual;
+			totalMinSize += child.sizeMin;
+		});
+
+		// only make adjustments if we have enough space for all the minimums
+
+		if(totalMinSize <= totalSize){
+
+			var growth = 0;
+
+			dojo.forEach(children, function(child){
+				if(child.sizeActual < child.sizeMin){
+					growth += child.sizeMin - child.sizeActual;
+					child.sizeActual = child.sizeMin;
+				}
+			});
+
+			if(growth > 0){
+				var list = this.isDraggingLeft ? children.reverse() : children;
+				dojo.forEach(list, function(child){
+					growth = this._growPane(growth, child);
+				}, this);
+			}
+		}else{
+			dojo.forEach(children, function(child){
+				child.sizeActual = Math.round(totalSize * (child.sizeMin / totalMinSize));
+			});
+		}
+	},
+
+	beginSizing: function(e, i){
+		var children = this.getChildren();
+		this.paneBefore = children[i];
+		this.paneAfter = children[i+1];
+
+		this.isSizing = true;
+		this.sizingSplitter = this.sizers[i];
+
+		if(!this.cover){
+			this.cover = dojo.doc.createElement('div');
+			this.domNode.appendChild(this.cover);
+			var s = this.cover.style;
+			s.position = 'absolute';
+			s.zIndex = 1;
+			s.top = 0;
+			s.left = 0;
+			s.width = "100%";
+			s.height = "100%";
+		}else{
+			this.cover.style.zIndex = 1;
+		}
+		this.sizingSplitter.style.zIndex = 2;
+
+		// TODO: REVISIT - we want MARGIN_BOX and core hasn't exposed that yet (but can't we use it anyway if we pay attention? we do elsewhere.)
+		this.originPos = dojo.coords(children[0].domNode, true);
+		if(this.isHorizontal){
+			var client = (e.layerX ? e.layerX : e.offsetX);
+			var screen = e.pageX;
+			this.originPos = this.originPos.x;
+		}else{
+			var client = (e.layerY ? e.layerY : e.offsetY);
+			var screen = e.pageY;
+			this.originPos = this.originPos.y;
+		}
+		this.startPoint = this.lastPoint = screen;
+		this.screenToClientOffset = screen - client;
+		this.dragOffset = this.lastPoint - this.paneBefore.sizeActual - this.originPos - this.paneBefore.position;
+
+		if(!this.activeSizing){
+			this._showSizingLine();
+		}
+
+		//					
+		// attach mouse events
+		//
+		this._connects = [];
+		this._connects.push(dojo.connect(document.documentElement, "onmousemove", this, "changeSizing"));
+		this._connects.push(dojo.connect(document.documentElement, "onmouseup", this, "endSizing"));
+
+		dojo.stopEvent(e);
+	},
+
+	changeSizing: function(e){
+		if(!this.isSizing){ return; }
+		this.lastPoint = this.isHorizontal ? e.pageX : e.pageY;
+		this.movePoint();
+		if(this.activeSizing){
+			this._updateSize();
+		}else{
+			this._moveSizingLine();
+		}
+		dojo.stopEvent(e);
+	},
+
+	endSizing: function(e){
+		if(!this.isSizing){ return; }
+		if(this.cover){
+			this.cover.style.zIndex = -1;
+		}
+		if(!this.activeSizing){
+			this._hideSizingLine();
+		}
+
+		this._updateSize();
+
+		this.isSizing = false;
+
+		if(this.persist){
+			this._saveState(this);
+		}
+
+		dojo.forEach(this._connects,dojo.disconnect); 
+	},
+
+	movePoint: function(){
+
+		// make sure lastPoint is a legal point to drag to
+		var p = this.lastPoint - this.screenToClientOffset;
+
+		var a = p - this.dragOffset;
+		a = this.legaliseSplitPoint(a);
+		p = a + this.dragOffset;
+
+		this.lastPoint = p + this.screenToClientOffset;
+	},
+
+	legaliseSplitPoint: function(a){
+
+		a += this.sizingSplitter.position;
+
+		this.isDraggingLeft = !!(a > 0);
+
+		if(!this.activeSizing){
+			var min = this.paneBefore.position + this.paneBefore.sizeMin;
+			if(a < min){
+				a = min;
+			}
+
+			var max = this.paneAfter.position + (this.paneAfter.sizeActual - (this.sizerWidth + this.paneAfter.sizeMin));
+			if(a > max){
+				a = max;
+			}
+		}
+
+		a -= this.sizingSplitter.position;
+
+		this._checkSizes();
+
+		return a;
+	},
+
+	_updateSize: function(){
+	//FIXME: sometimes this.lastPoint is NaN
+		var pos = this.lastPoint - this.dragOffset - this.originPos;
+
+		var start_region = this.paneBefore.position;
+		var end_region   = this.paneAfter.position + this.paneAfter.sizeActual;
+
+		this.paneBefore.sizeActual = pos - start_region;
+		this.paneAfter.position	= pos + this.sizerWidth;
+		this.paneAfter.sizeActual  = end_region - this.paneAfter.position;
+
+		dojo.forEach(this.getChildren(), function(child){
+			child.sizeShare = child.sizeActual;
+		});
+
+		if(this._started){
+			this.layout();
+		}
+	},
+
+	_showSizingLine: function(){
+
+		this._moveSizingLine();
+
+		dojo.marginBox(this.virtualSizer,
+			this.isHorizontal ? { w: this.sizerWidth, h: this.paneHeight } : { w: this.paneWidth, h: this.sizerWidth });
+
+		this.virtualSizer.style.display = 'block';
+	},
+
+	_hideSizingLine: function(){
+		this.virtualSizer.style.display = 'none';
+	},
+
+	_moveSizingLine: function(){
+		var pos = (this.lastPoint - this.startPoint) + this.sizingSplitter.position;
+		dojo.style(this.virtualSizer,(this.isHorizontal ? "left" : "top"),pos+"px");
+		// this.virtualSizer.style[ this.isHorizontal ? "left" : "top" ] = pos + 'px'; // FIXME: remove this line if the previous is better
+	},
+
+	_getCookieName: function(i){
+		return this.id + "_" + i;
+	},
+
+	_restoreState: function(){
+		dojo.forEach(this.getChildren(), function(child, i){
+			var cookieName = this._getCookieName(i);
+			var cookieValue = dojo.cookie(cookieName);
+			if(cookieValue){
+				var pos = parseInt(cookieValue);
+				if(typeof pos == "number"){
+					child.sizeShare = pos;
+				}
+			}
+		}, this);
+	},
+
+	_saveState: function(){
+		dojo.forEach(this.getChildren(), function(child, i){
+			dojo.cookie(this._getCookieName(i), child.sizeShare);
+		}, this);
+	}
+});
+
+// These arguments can be specified for the children of a SplitContainer.
+// Since any widget can be specified as a SplitContainer child, mix them
+// into the base widget class.  (This is a hack, but it's effective.)
+dojo.extend(dijit._Widget, {
+	// sizeMin: Integer
+	//	Minimum size (width or height) of a child of a SplitContainer.
+	//	The value is relative to other children's sizeShare properties.
+	sizeMin: 10,
+
+	// sizeShare: Integer
+	//	Size (width or height) of a child of a SplitContainer.
+	//	The value is relative to other children's sizeShare properties.
+	//	For example, if there are two children and each has sizeShare=10, then
+	//	each takes up 50% of the available space.
+	sizeShare: 10
+});
+
 }
-})();
-A.connect(F,"onmousedown",E);
-this.domNode.appendChild(F);
-A.setSelectable(F,false)
-},removeChild:function(C){if(this.sizers.length&&A.indexOf(this.getChildren(),C)!=-1){var B=this.sizers.length-1;
-A._destroyElement(this.sizers[B]);
-this.sizers.length--
-}this.inherited("removeChild",arguments);
-if(this._started){this.layout()
-}},addChild:function(D,B){this.inherited("addChild",arguments);
-if(this._started){this._injectChild(D);
-var C=this.getChildren();
-if(C.length>1){this._addSizer()
-}this.layout()
-}},layout:function(){this.paneWidth=this._contentBox.w;
-this.paneHeight=this._contentBox.h;
-var D=this.getChildren();
-if(!D.length){return 
-}var F=this.isHorizontal?this.paneWidth:this.paneHeight;
-if(D.length>1){F-=this.sizerWidth*(D.length-1)
-}var E=0;
-A.forEach(D,function(I){E+=I.sizeShare
-});
-var G=F/E;
-var B=0;
-A.forEach(D.slice(0,D.length-1),function(J){var I=Math.round(G*J.sizeShare);
-J.sizeActual=I;
-B+=I
-});
-D[D.length-1].sizeActual=F-B;
-this._checkSizes();
-var H=0;
-var C=D[0].sizeActual;
-this._movePanel(D[0],H,C);
-D[0].position=H;
-H+=C;
-if(!this.sizers){return 
-}A.some(D.slice(1),function(J,I){if(!this.sizers[I]){return true
-}this._moveSlider(this.sizers[I],H,this.sizerWidth);
-this.sizers[I].position=H;
-H+=this.sizerWidth;
-C=J.sizeActual;
-this._movePanel(J,H,C);
-J.position=H;
-H+=C
-},this)
-},_movePanel:function(B,E,C){if(this.isHorizontal){B.domNode.style.left=E+"px";
-B.domNode.style.top=0;
-var D={w:C,h:this.paneHeight};
-if(B.resize){B.resize(D)
-}else{A.marginBox(B.domNode,D)
-}}else{B.domNode.style.left=0;
-B.domNode.style.top=E+"px";
-var D={w:this.paneWidth,h:C};
-if(B.resize){B.resize(D)
-}else{A.marginBox(B.domNode,D)
-}}},_moveSlider:function(C,D,B){if(this.isHorizontal){C.style.left=D+"px";
-C.style.top=0;
-A.marginBox(C,{w:B,h:this.paneHeight})
-}else{C.style.left=0;
-C.style.top=D+"px";
-A.marginBox(C,{w:this.paneWidth,h:B})
-}},_growPane:function(B,C){if(B>0){if(C.sizeActual>C.sizeMin){if((C.sizeActual-C.sizeMin)>B){C.sizeActual=C.sizeActual-B;
-B=0
-}else{B-=C.sizeActual-C.sizeMin;
-C.sizeActual=C.sizeMin
-}}}return B
-},_checkSizes:function(){var E=0;
-var C=0;
-var D=this.getChildren();
-A.forEach(D,function(G){C+=G.sizeActual;
-E+=G.sizeMin
-});
-if(E<=C){var B=0;
-A.forEach(D,function(G){if(G.sizeActual<G.sizeMin){B+=G.sizeMin-G.sizeActual;
-G.sizeActual=G.sizeMin
+
 }});
-if(B>0){var F=this.isDraggingLeft?D.reverse():D;
-A.forEach(F,function(G){B=this._growPane(B,G)
-},this)
-}}else{A.forEach(D,function(G){G.sizeActual=Math.round(C*(G.sizeMin/E))
-})
-}},beginSizing:function(G,E){var D=this.getChildren();
-this.paneBefore=D[E];
-this.paneAfter=D[E+1];
-this.isSizing=true;
-this.sizingSplitter=this.sizers[E];
-if(!this.cover){this.cover=A.doc.createElement("div");
-this.domNode.appendChild(this.cover);
-var F=this.cover.style;
-F.position="absolute";
-F.zIndex=1;
-F.top=0;
-F.left=0;
-F.width="100%";
-F.height="100%"
-}else{this.cover.style.zIndex=1
-}this.sizingSplitter.style.zIndex=2;
-this.originPos=A.coords(D[0].domNode,true);
-if(this.isHorizontal){var B=(G.layerX?G.layerX:G.offsetX);
-var C=G.pageX;
-this.originPos=this.originPos.x
-}else{var B=(G.layerY?G.layerY:G.offsetY);
-var C=G.pageY;
-this.originPos=this.originPos.y
-}this.startPoint=this.lastPoint=C;
-this.screenToClientOffset=C-B;
-this.dragOffset=this.lastPoint-this.paneBefore.sizeActual-this.originPos-this.paneBefore.position;
-if(!this.activeSizing){this._showSizingLine()
-}this._connects=[];
-this._connects.push(A.connect(document.documentElement,"onmousemove",this,"changeSizing"));
-this._connects.push(A.connect(document.documentElement,"onmouseup",this,"endSizing"));
-A.stopEvent(G)
-},changeSizing:function(B){if(!this.isSizing){return 
-}this.lastPoint=this.isHorizontal?B.pageX:B.pageY;
-this.movePoint();
-if(this.activeSizing){this._updateSize()
-}else{this._moveSizingLine()
-}A.stopEvent(B)
-},endSizing:function(B){if(!this.isSizing){return 
-}if(this.cover){this.cover.style.zIndex=-1
-}if(!this.activeSizing){this._hideSizingLine()
-}this._updateSize();
-this.isSizing=false;
-if(this.persist){this._saveState(this)
-}A.forEach(this._connects,A.disconnect)
-},movePoint:function(){var C=this.lastPoint-this.screenToClientOffset;
-var B=C-this.dragOffset;
-B=this.legaliseSplitPoint(B);
-C=B+this.dragOffset;
-this.lastPoint=C+this.screenToClientOffset
-},legaliseSplitPoint:function(C){C+=this.sizingSplitter.position;
-this.isDraggingLeft=!!(C>0);
-if(!this.activeSizing){var D=this.paneBefore.position+this.paneBefore.sizeMin;
-if(C<D){C=D
-}var B=this.paneAfter.position+(this.paneAfter.sizeActual-(this.sizerWidth+this.paneAfter.sizeMin));
-if(C>B){C=B
-}}C-=this.sizingSplitter.position;
-this._checkSizes();
-return C
-},_updateSize:function(){var D=this.lastPoint-this.dragOffset-this.originPos;
-var B=this.paneBefore.position;
-var C=this.paneAfter.position+this.paneAfter.sizeActual;
-this.paneBefore.sizeActual=D-B;
-this.paneAfter.position=D+this.sizerWidth;
-this.paneAfter.sizeActual=C-this.paneAfter.position;
-A.forEach(this.getChildren(),function(E){E.sizeShare=E.sizeActual
-});
-if(this._started){this.layout()
-}},_showSizingLine:function(){this._moveSizingLine();
-A.marginBox(this.virtualSizer,this.isHorizontal?{w:this.sizerWidth,h:this.paneHeight}:{w:this.paneWidth,h:this.sizerWidth});
-this.virtualSizer.style.display="block"
-},_hideSizingLine:function(){this.virtualSizer.style.display="none"
-},_moveSizingLine:function(){var B=(this.lastPoint-this.startPoint)+this.sizingSplitter.position;
-A.style(this.virtualSizer,(this.isHorizontal?"left":"top"),B+"px")
-},_getCookieName:function(B){return this.id+"_"+B
-},_restoreState:function(){A.forEach(this.getChildren(),function(F,B){var E=this._getCookieName(B);
-var C=A.cookie(E);
-if(C){var D=parseInt(C);
-if(typeof D=="number"){F.sizeShare=D
-}}},this)
-},_saveState:function(){A.forEach(this.getChildren(),function(C,B){A.cookie(this._getCookieName(B),C.sizeShare)
-},this)
-}});
-A.extend(dijit._Widget,{sizeMin:10,sizeShare:10})
-}}});

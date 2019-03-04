@@ -2,18 +2,18 @@ if(!dojo._hasResource["dojo._base.html"]){dojo._hasResource["dojo._base.html"]=t
 dojo.require("dojo._base.lang");
 dojo.provide("dojo._base.html");
 try{document.execCommand("BackgroundImageCache",false,true)
-}catch(e){}if(dojo.isIE||dojo.isOpera){dojo.byId=function(E,C){if(dojo.isString(E)){var A=C||dojo.doc;
-var D=A.getElementById(E);
-if(D&&D.attributes.id.value==E){return D
-}else{var F=A.all[E];
-if(!F){return 
-}if(!F.length){return F
-}var B=0;
-while((D=F[B++])){if(D.attributes.id.value==E){return D
-}}}}else{return E
+}catch(e){}if(dojo.isIE||dojo.isOpera){dojo.byId=function(F,D){if(dojo.isString(F)){var B=D||dojo.doc;
+var E=B.getElementById(F);
+if(E&&E.attributes.id.value==F){return E
+}else{var A=B.all[F];
+if(!A){return 
+}if(!A.length){return A
+}var C=0;
+while((E=A[C++])){if(E.attributes.id.value==F){return E
+}}}}else{return F
 }}
-}else{dojo.byId=function(A,B){if(dojo.isString(A)){return(B||dojo.doc).getElementById(A)
-}else{return A
+}else{dojo.byId=function(B,A){if(dojo.isString(B)){return(A||dojo.doc).getElementById(B)
+}else{return B
 }}
 }(function(){var _destroyContainer=null;
 dojo._destroyElement=function(node){node=dojo.byId(node);
@@ -247,17 +247,17 @@ mb.y=abs.y;
 return mb
 }
 })();
-dojo.hasClass=function(A,B){return((" "+dojo.byId(A).className+" ").indexOf(" "+B+" ")>=0)
+dojo.hasClass=function(B,A){return((" "+dojo.byId(B).className+" ").indexOf(" "+A+" ")>=0)
 };
-dojo.addClass=function(B,A){B=dojo.byId(B);
-var C=B.className;
-if((" "+C+" ").indexOf(" "+A+" ")<0){B.className=C+(C?" ":"")+A
+dojo.addClass=function(C,B){C=dojo.byId(C);
+var A=C.className;
+if((" "+A+" ").indexOf(" "+B+" ")<0){C.className=A+(A?" ":"")+B
 }};
-dojo.removeClass=function(B,A){B=dojo.byId(B);
-var C=dojo.trim((" "+B.className+" ").replace(" "+A+" "," "));
-if(B.className!=C){B.className=C
+dojo.removeClass=function(C,B){C=dojo.byId(C);
+var A=dojo.trim((" "+C.className+" ").replace(" "+B+" "," "));
+if(C.className!=A){C.className=A
 }};
-dojo.toggleClass=function(A,C,B){if(B===undefined){B=!dojo.hasClass(A,C)
-}dojo[B?"addClass":"removeClass"](A,C)
+dojo.toggleClass=function(B,A,C){if(C===undefined){C=!dojo.hasClass(B,A)
+}dojo[C?"addClass":"removeClass"](B,A)
 }
 };

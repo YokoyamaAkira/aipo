@@ -8,29 +8,29 @@ A.require("dojo.dnd.move");
 A.require("dojox.layout.ResizeHandle");
 A.declare("dojox.layout.FloatingPane",[dojox.layout.ContentPane,dijit._Templated],{closable:true,dockable:true,resizable:false,maxable:false,resizeAxis:"xy",title:"",dockTo:null,duration:400,_showAnim:null,_hideAnim:null,_dockNode:null,iconSrc:null,contentClass:"dojoxFloatingPaneContent",templateString:null,templateString:'<div class="dojoxFloatingPane" id="${id}">\r\n\t<div tabindex="0" waiRole="button" class="dojoxFloatingPaneTitle" dojoAttachPoint="focusNode">\r\n\t\t<span dojoAttachPoint="closeNode" dojoAttachEvent="onclick: close" class="dojoxFloatingCloseIcon"></span>\r\n\t\t<span dojoAttachPoint="maxNode" dojoAttachEvent="onclick: maximize" class="dojoxFloatingMaximizeIcon"></span>\r\n\t\t<span dojoAttachPoint="restoreNode" dojoAttachEvent="onclick: _restore" class="dojoxFloatingRestoreIcon"></span>\t\r\n\t\t<span dojoAttachPoint="dockNode" dojoAttachEvent="onclick: minimize" class="dojoxFloatingMinimizeIcon"></span>\r\n\t\t<span dojoAttachPoint="titleNode" class="dijitInline dijitTitleNode"></span>\r\n\t</div>\r\n\t<div dojoAttachPoint="canvas" class="dojoxFloatingPaneCanvas">\r\n\t\t<div dojoAttachPoint="containerNode" waiRole="region" tabindex="-1" class="${contentClass}">\r\n\t\t</div>\r\n\t\t<span dojoAttachPoint="resizeHandle" class="dojoxFloatingResizeHandle"></span>\r\n\t</div>\r\n</div>\r\n',_restoreState:{},_allFPs:[],postCreate:function(){this.setTitle(this.title);
 this.inherited("postCreate",arguments);
-var C=new A.dnd.Moveable(this.domNode,{handle:this.focusNode});
+var B=new A.dnd.Moveable(this.domNode,{handle:this.focusNode});
 if(!this.dockable){this.dockNode.style.display="none"
 }if(!this.closable){this.closeNode.style.display="none"
 }if(!this.maxable){this.maxNode.style.display="none";
 this.restoreNode.style.display="none"
 }if(!this.resizable){this.resizeHandle.style.display="none"
-}else{var B=A.marginBox(this.domNode);
-this.domNode.style.width=B.w+"px"
+}else{var C=A.marginBox(this.domNode);
+this.domNode.style.width=C.w+"px"
 }this._allFPs.push(this)
 },startup:function(){this.inherited("startup",arguments);
 if(this.resizable){if(A.isIE){this.canvas.style.overflow="auto"
 }else{this.containerNode.style.overflow="auto"
-}var C=new dojox.layout.ResizeHandle({targetId:this.id,resizeAxis:this.resizeAxis},this.resizeHandle)
+}var B=new dojox.layout.ResizeHandle({targetId:this.id,resizeAxis:this.resizeAxis},this.resizeHandle)
 }if(this.dockable){tmpName=this.dockTo;
 if(this.dockTo){this.dockTo=dijit.byId(this.dockTo)
 }else{this.dockTo=dijit.byId("dojoxGlobalFloatingDock")
-}if(!this.dockTo){if(tmpName){var B=tmpName;
-var D=A.byId(tmpName)
-}else{var D=document.createElement("div");
-A.body().appendChild(D);
-A.addClass(D,"dojoxFloatingDockDefault");
-var B="dojoxGlobalFloatingDock"
-}this.dockTo=new dojox.layout.Dock({id:B,autoPosition:"south"},D);
+}if(!this.dockTo){if(tmpName){var D=tmpName;
+var C=A.byId(tmpName)
+}else{var C=document.createElement("div");
+A.body().appendChild(C);
+A.addClass(C,"dojoxFloatingDockDefault");
+var D="dojoxGlobalFloatingDock"
+}this.dockTo=new dojox.layout.Dock({id:D,autoPosition:"south"},C);
 this.dockTo.startup()
 }if((this.domNode.style.display=="none")||(this.domNode.style.visibility=="hidden")){this.minimize()
 }}this.connect(this.focusNode,"onmousedown","bringToTop");
@@ -44,11 +44,11 @@ this.domNode.style.visibility="hidden";
 if(this.dockTo){this.dockTo._positionDock(null)
 }if(B){B()
 }})}).play()
-},show:function(B){var C=A.fadeIn({node:this.domNode,duration:this.duration,beforeBegin:A.hitch(this,function(){this.domNode.style.display="";
+},show:function(C){var B=A.fadeIn({node:this.domNode,duration:this.duration,beforeBegin:A.hitch(this,function(){this.domNode.style.display="";
 this.domNode.style.visibility="visible";
 this.dockTo._positionDock(null);
 if(this.dockTo){this.dockTo._positionDock(null)
-}if(typeof B=="function"){B()
+}if(typeof C=="function"){C()
 }this._isDocked=false;
 if(this._dockNode){this._dockNode.destroy();
 this._dockNode=null
@@ -67,14 +67,14 @@ A.removeClass(this.focusNode,"floatingPaneMaximized");
 this._maximized=false
 }},_dock:function(){if(!this._isDocked){this._dockNode=this.dockTo.addNode(this);
 this._isDocked=true
-}},resize:function(B){this._currentState=B;
-var C=this.domNode.style;
-C.top=B.t+"px";
-C.left=B.l+"px";
-C.width=B.w+"px";
-this.canvas.style.width=B.w+"px";
-C.height=B.h+"px";
-this.canvas.style.height=(B.h-this.focusNode.offsetHeight)+"px"
+}},resize:function(C){this._currentState=C;
+var B=this.domNode.style;
+B.top=C.t+"px";
+B.left=C.l+"px";
+B.width=C.w+"px";
+this.canvas.style.width=C.w+"px";
+B.height=C.h+"px";
+this.canvas.style.height=(C.h-this.focusNode.offsetHeight)+"px"
 },_startZ:100,bringToTop:function(){var B=A.filter(this._allFPs,function(C){return C!==this
 },this);
 B.sort(function(D,C){return D.domNode.style.zIndex-C.domNode.style.zIndex
@@ -87,11 +87,11 @@ A.addClass(this.domNode,"dojoxFloatingPaneFg")
 },destroy:function(){this._allFPs.splice(A.indexOf(this._allFPs,this),1);
 this.inherited("destroy",arguments)
 }});
-A.declare("dojox.layout.Dock",[dijit._Widget,dijit._Templated],{templateString:'<div class="dojoxDock"><ul dojoAttachPoint="containerNode" class="dojoxDockList"></ul></div>',_docked:[],_inPositioning:false,autoPosition:false,addNode:function(C){var B=document.createElement("li");
-this.containerNode.appendChild(B);
-var D=new dojox.layout._DockNode({title:C.title,paneRef:C},B);
-D.startup();
-return D
+A.declare("dojox.layout.Dock",[dijit._Widget,dijit._Templated],{templateString:'<div class="dojoxDock"><ul dojoAttachPoint="containerNode" class="dojoxDockList"></ul></div>',_docked:[],_inPositioning:false,autoPosition:false,addNode:function(B){var D=document.createElement("li");
+this.containerNode.appendChild(D);
+var C=new dojox.layout._DockNode({title:B.title,paneRef:B},D);
+C.startup();
+return C
 },startup:function(){if(this.id=="dojoxGlobalFloatingDock"||this.isFixedDock){A.connect(window,"onresize",this,"_positionDock");
 A.connect(window,"onscroll",this,"_positionDock");
 if(A.isIE){A.connect(this.domNode,"onresize",this,"_positionDock")

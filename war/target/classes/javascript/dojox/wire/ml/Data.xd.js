@@ -5,28 +5,28 @@ A.require("dijit._Widget");
 A.require("dijit._Container");
 A.require("dojox.wire.ml.util");
 A.declare("dojox.wire.ml.Data",[dijit._Widget,dijit._Container],{startup:function(){this._initializeProperties()
-},_initializeProperties:function(E){if(!this._properties||E){this._properties={}
-}var D=this.getChildren();
-for(var C in D){var B=D[C];
-if((B instanceof dojox.wire.ml.DataProperty)&&B.name){this.setPropertyValue(B.name,B.getValue())
+},_initializeProperties:function(D){if(!this._properties||D){this._properties={}
+}var C=this.getChildren();
+for(var B in C){var E=C[B];
+if((E instanceof dojox.wire.ml.DataProperty)&&E.name){this.setPropertyValue(E.name,E.getValue())
 }}},getPropertyValue:function(B){return this._properties[B]
-},setPropertyValue:function(B,C){this._properties[B]=C
+},setPropertyValue:function(C,B){this._properties[C]=B
 }});
-A.declare("dojox.wire.ml.DataProperty",[dijit._Widget,dijit._Container],{name:"",type:"",value:"",getValue:function(){var E=this.value;
-if(this.type){if(this.type=="number"){E=parseInt(E)
-}else{if(this.type=="boolean"){E=(E=="true")
-}else{if(this.type=="array"){E=[];
-var D=this.getChildren();
-for(var C in D){var B=D[C];
-if(B instanceof dojox.wire.ml.DataProperty){E.push(B.getValue())
-}}}else{if(this.type=="object"){E={};
-var D=this.getChildren();
-for(var C in D){var B=D[C];
-if((B instanceof dojox.wire.ml.DataProperty)&&B.name){E[B.name]=B.getValue()
-}}}else{if(this.type=="element"){E=new dojox.wire.ml.XmlElement(E);
-var D=this.getChildren();
-for(var C in D){var B=D[C];
-if((B instanceof dojox.wire.ml.DataProperty)&&B.name){E.setPropertyValue(B.name,B.getValue())
-}}}}}}}}return E
+A.declare("dojox.wire.ml.DataProperty",[dijit._Widget,dijit._Container],{name:"",type:"",value:"",getValue:function(){var D=this.value;
+if(this.type){if(this.type=="number"){D=parseInt(D)
+}else{if(this.type=="boolean"){D=(D=="true")
+}else{if(this.type=="array"){D=[];
+var C=this.getChildren();
+for(var B in C){var E=C[B];
+if(E instanceof dojox.wire.ml.DataProperty){D.push(E.getValue())
+}}}else{if(this.type=="object"){D={};
+var C=this.getChildren();
+for(var B in C){var E=C[B];
+if((E instanceof dojox.wire.ml.DataProperty)&&E.name){D[E.name]=E.getValue()
+}}}else{if(this.type=="element"){D=new dojox.wire.ml.XmlElement(D);
+var C=this.getChildren();
+for(var B in C){var E=C[B];
+if((E instanceof dojox.wire.ml.DataProperty)&&E.name){D.setPropertyValue(E.name,E.getValue())
+}}}}}}}}return D
 }})
 }}});

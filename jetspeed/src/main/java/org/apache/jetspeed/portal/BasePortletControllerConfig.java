@@ -21,7 +21,7 @@ import org.apache.jetspeed.util.BaseConfig;
 /**
  * The PortletController configuration object default implementation
  * 
- * @author <a href="mailto:raphael@apache.org">Raphaël Luta</a>
+ * @author <a href="mailto:raphael@apache.org">Rapha Luta</a>
  * @version $Id: BasePortletControllerConfig.java,v 1.2 2004/02/23 04:05:35 jford Exp $
  */
 public class BasePortletControllerConfig extends BaseConfig

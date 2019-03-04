@@ -1,97 +1,97 @@
 if(!dojo._hasResource["dojox.collections.SortedList"]){dojo._hasResource["dojox.collections.SortedList"]=true;
 dojo.provide("dojox.collections.SortedList");
 dojo.require("dojox.collections._base");
-dojox.collections.SortedList=function(B){var H=this;
-var A={};
-var F=[];
-var E=function(J,K){if(J.key>K.key){return 1
-}if(J.key<K.key){return -1
+dojox.collections.SortedList=function(F){var C=this;
+var E={};
+var A=[];
+var I=function(K,J){if(K.key>J.key){return 1
+}if(K.key<J.key){return -1
 }return 0
 };
-var C=function(){F=[];
-var J=H.getIterator();
-while(!J.atEnd()){F.push(J.get())
-}F.sort(E)
+var G=function(){A=[];
+var J=C.getIterator();
+while(!J.atEnd()){A.push(J.get())
+}A.sort(I)
 };
-var G={};
-this.count=F.length;
-this.add=function(J,K){if(!A[J]){A[J]=new dojox.collections.DictionaryEntry(J,K);
-this.count=F.push(A[J]);
-F.sort(E)
+var B={};
+this.count=A.length;
+this.add=function(K,J){if(!E[K]){E[K]=new dojox.collections.DictionaryEntry(K,J);
+this.count=A.push(E[K]);
+A.sort(I)
 }};
-this.clear=function(){A={};
-F=[];
-this.count=F.length
+this.clear=function(){E={};
+A=[];
+this.count=A.length
 };
 this.clone=function(){return new dojox.collections.SortedList(this)
 };
-this.contains=this.containsKey=function(J){if(G[J]){return false
-}return(A[J]!=null)
+this.contains=this.containsKey=function(J){if(B[J]){return false
+}return(E[J]!=null)
 };
-this.containsValue=function(J){var L=this.getIterator();
-while(!L.atEnd()){var K=L.get();
-if(K.value==J){return true
+this.containsValue=function(L){var K=this.getIterator();
+while(!K.atEnd()){var J=K.get();
+if(J.value==L){return true
 }}return false
 };
-this.copyTo=function(M,J){var K=this.getIterator();
-var L=J;
-while(!K.atEnd()){M.splice(L,0,K.get());
-L++
+this.copyTo=function(K,L){var M=this.getIterator();
+var J=L;
+while(!M.atEnd()){K.splice(J,0,M.get());
+J++
 }};
-this.entry=function(J){return A[J]
+this.entry=function(J){return E[J]
 };
-this.forEach=function(J,K){dojo.forEach(F,J,K)
+this.forEach=function(K,J){dojo.forEach(A,K,J)
 };
-this.getByIndex=function(J){return F[J].valueOf()
+this.getByIndex=function(J){return A[J].valueOf()
 };
-this.getIterator=function(){return new dojox.collections.DictionaryIterator(A)
+this.getIterator=function(){return new dojox.collections.DictionaryIterator(E)
 };
-this.getKey=function(J){return F[J].key
+this.getKey=function(J){return A[J].key
 };
-this.getKeyList=function(){var K=[];
-var J=this.getIterator();
-while(!J.atEnd()){K.push(J.get().key)
-}return K
+this.getKeyList=function(){var J=[];
+var K=this.getIterator();
+while(!K.atEnd()){J.push(K.get().key)
+}return J
 };
-this.getValueList=function(){var K=[];
-var J=this.getIterator();
-while(!J.atEnd()){K.push(J.get().value)
-}return K
+this.getValueList=function(){var J=[];
+var K=this.getIterator();
+while(!K.atEnd()){J.push(K.get().value)
+}return J
 };
-this.indexOfKey=function(K){for(var J=0;
-J<F.length;
-J++){if(F[J].key==K){return J
+this.indexOfKey=function(J){for(var K=0;
+K<A.length;
+K++){if(A[K].key==J){return K
 }}return -1
 };
-this.indexOfValue=function(J){for(var K=0;
-K<F.length;
-K++){if(F[K].value==J){return K
+this.indexOfValue=function(K){for(var J=0;
+J<A.length;
+J++){if(A[J].value==K){return J
 }}return -1
 };
-this.item=function(J){if(J in A&&!G[J]){return A[J].valueOf()
+this.item=function(J){if(J in E&&!B[J]){return E[J].valueOf()
 }return undefined
 };
-this.remove=function(J){delete A[J];
-C();
-this.count=F.length
+this.remove=function(J){delete E[J];
+G();
+this.count=A.length
 };
-this.removeAt=function(J){delete A[F[J].key];
-C();
-this.count=F.length
+this.removeAt=function(J){delete E[A[J].key];
+G();
+this.count=A.length
 };
-this.replace=function(J,K){if(!A[J]){this.add(J,K);
+this.replace=function(K,J){if(!E[K]){this.add(K,J);
 return false
-}else{A[J]=new dojox.collections.DictionaryEntry(J,K);
-C();
+}else{E[K]=new dojox.collections.DictionaryEntry(K,J);
+G();
 return true
 }};
-this.setByIndex=function(K,J){A[F[K].key].value=J;
-C();
-this.count=F.length
+this.setByIndex=function(J,K){E[A[J].key].value=K;
+G();
+this.count=A.length
 };
-if(B){var I=B.getIterator();
-while(!I.atEnd()){var D=I.get();
-F[F.length]=A[D.key]=new dojox.collections.DictionaryEntry(D.key,D.value)
-}F.sort(E)
+if(F){var D=F.getIterator();
+while(!D.atEnd()){var H=D.get();
+A[A.length]=E[H.key]=new dojox.collections.DictionaryEntry(H.key,H.value)
+}A.sort(I)
 }}
 };

@@ -1,4 +1,12 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.fx"],["require","dojox.fx._base"]],defineResource:function(A){if(!A._hasResource["dojox.fx"]){A._hasResource["dojox.fx"]=true;
-A.provide("dojox.fx");
-A.require("dojox.fx._base")
-}}});
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.fx"],
+["require", "dojox.fx._base"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.fx"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.fx"] = true;
+dojo.provide("dojox.fx");
+
+dojo.require("dojox.fx._base"); 
+
+}
+
+}});

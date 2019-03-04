@@ -17,26 +17,26 @@ return this
 },addSeries:function(C){return this
 },calculateAxes:function(C){return this
 },getRequiredColors:function(){return 0
-},render:function(J,I){if(!this.dirty){return this
+},render:function(H,G){if(!this.dirty){return this
 }this.cleanGroup();
-var H=this.group,F=this.chart.theme.axis,D=this._vAxis.getScaler();
-if(this.opt.hMinorLines&&D.minor.tick){for(var G=0;
-G<D.minor.count;
-++G){var C=J.height-I.b-D.scale*(D.minor.start-D.bounds.lower+G*D.minor.tick);
-H.createLine({x1:I.l,y1:C,x2:J.width-I.r,y2:C}).setStroke(F.minorTick)
-}}if(this.opt.hMajorLines&&D.major.tick){for(var G=0;
-G<D.major.count;
-++G){var C=J.height-I.b-D.scale*(D.major.start-D.bounds.lower+G*D.major.tick);
-H.createLine({x1:I.l,y1:C,x2:J.width-I.r,y2:C}).setStroke(F.majorTick)
-}}D=this._hAxis.getScaler();
-if(this.opt.vMinorLines&&D.minor.tick){for(var G=0;
-G<D.minor.count;
-++G){var E=I.l+D.scale*(D.minor.start-D.bounds.lower+G*D.minor.tick);
-H.createLine({x1:E,y1:I.t,x2:E,y2:J.height-I.b}).setStroke(F.minorTick)
-}}if(this.opt.vMajorLines&&D.major.tick){for(var G=0;
-G<D.major.count;
-++G){var E=I.l+D.scale*(D.major.start-D.bounds.lower+G*D.major.tick);
-H.createLine({x1:E,y1:I.t,x2:E,y2:J.height-I.b}).setStroke(F.majorTick)
+var F=this.group,D=this.chart.theme.axis,J=this._vAxis.getScaler();
+if(this.opt.hMinorLines&&J.minor.tick){for(var E=0;
+E<J.minor.count;
+++E){var I=H.height-G.b-J.scale*(J.minor.start-J.bounds.lower+E*J.minor.tick);
+F.createLine({x1:G.l,y1:I,x2:H.width-G.r,y2:I}).setStroke(D.minorTick)
+}}if(this.opt.hMajorLines&&J.major.tick){for(var E=0;
+E<J.major.count;
+++E){var I=H.height-G.b-J.scale*(J.major.start-J.bounds.lower+E*J.major.tick);
+F.createLine({x1:G.l,y1:I,x2:H.width-G.r,y2:I}).setStroke(D.majorTick)
+}}J=this._hAxis.getScaler();
+if(this.opt.vMinorLines&&J.minor.tick){for(var E=0;
+E<J.minor.count;
+++E){var C=G.l+J.scale*(J.minor.start-J.bounds.lower+E*J.minor.tick);
+F.createLine({x1:C,y1:G.t,x2:C,y2:H.height-G.b}).setStroke(D.minorTick)
+}}if(this.opt.vMajorLines&&J.major.tick){for(var E=0;
+E<J.major.count;
+++E){var C=G.l+J.scale*(J.major.start-J.bounds.lower+E*J.major.tick);
+F.createLine({x1:C,y1:G.t,x2:C,y2:H.height-G.b}).setStroke(D.majorTick)
 }}this.dirty=false;
 return this
 }})

@@ -5,40 +5,40 @@ A.declare("aipo.widget.DateCalendar",[dijit._Calendar],{dateId:"",callback:funct
 },onChange:function(B){this.onChangeNoCallback(B);
 this.callback(B)
 },onValueSelected:function(B){this.onChange(B)
-},onChangeNoCallback:function(C){var I=C.getFullYear();
-var B=1+C.getMonth();
-var L=C.getDate();
-var K=A.date.locale.getNames("days",this.dayWidth,"standAlone",this.lang);
-var H=K[C.getDay()];
-var E=A.byId(this.dateId+"_view");
-E.innerHTML=I+"\u5e74"+B+"\u6708"+L+"\u65e5\uff08"+H+"\uff09";
-var J=A.byId(this.dateId);
-J.value=I+"/"+B+"/"+L;
-var G=A.byId(this.dateId+"_year");
-G.value=I;
-var F=A.byId(this.dateId+"_month");
-F.value=B;
-var D=A.byId(this.dateId+"_day");
-D.value=L;
+},onChangeNoCallback:function(E){var K=E.getFullYear();
+var D=1+E.getMonth();
+var C=E.getDate();
+var B=A.date.locale.getNames("days",this.dayWidth,"standAlone",this.lang);
+var J=B[E.getDay()];
+var G=A.byId(this.dateId+"_view");
+G.innerHTML=K+"\u5e74"+D+"\u6708"+C+"\u65e5\uff08"+J+"\uff09";
+var L=A.byId(this.dateId);
+L.value=K+"/"+D+"/"+C;
+var I=A.byId(this.dateId+"_year");
+I.value=K;
+var H=A.byId(this.dateId+"_month");
+H.value=D;
+var F=A.byId(this.dateId+"_day");
+F.value=C;
 A.byId(this.dateId+"_flag").checked=false
-},disabledCalendar:function(B){if(B){var D=A.byId(this.dateId+"_view");
-D.innerHTML="---- \u5e74 -- \u6708 -- \u65e5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-var G=A.byId(this.dateId+"_year");
+},disabledCalendar:function(D){if(D){var F=A.byId(this.dateId+"_view");
+F.innerHTML="---- \u5e74 -- \u6708 -- \u65e5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+var I=A.byId(this.dateId+"_year");
+I.value="";
+var G=A.byId(this.dateId+"_month");
 G.value="";
-var E=A.byId(this.dateId+"_month");
+var E=A.byId(this.dateId+"_day");
 E.value="";
-var C=A.byId(this.dateId+"_day");
-C.value="";
 this.value="";
 if(!A.byId(this.dateId+"_flag").checked){A.byId(this.dateId+"_flag").checked=true
-}}else{var J=A.byId(this.dateId);
-if((!J.value)||(J.value=="")){this.setValue(new Date())
-}else{var I=J.value.split("/");
-if(I.length==3){var H=I[0];
-var L=I[1]-1;
-var F=I[2];
-var K=new Date(H,L,F);
-this.setValue(K)
+}}else{var L=A.byId(this.dateId);
+if((!L.value)||(L.value=="")){this.setValue(new Date())
+}else{var K=L.value.split("/");
+if(K.length==3){var J=K[0];
+var C=K[1]-1;
+var H=K[2];
+var B=new Date(J,C,H);
+this.setValue(B)
 }}}},clearDate:function(){this.value=null
 }})
 }}});

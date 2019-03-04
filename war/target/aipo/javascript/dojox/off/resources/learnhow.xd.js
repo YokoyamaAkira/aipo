@@ -1,24 +1,47 @@
-dojo._xdResourceLoaded({defineResource:function(A){window.onload=function(){var C=window.location.href;
-var H=C.match(/appName=([a-z0-9 \%]*)/i);
-var J="Application";
-if(H&&H.length>0){J=decodeURIComponent(H[1])
-}var I=document.getElementById("dot-learn-how-app-name");
-I.innerHTML="";
-I.appendChild(document.createTextNode(J));
-H=C.match(/hasOfflineCache=(true|false)/);
-var F=false;
-if(H&&H.length>0){F=H[1];
-F=(F=="true")?true:false
-}if(F==true){var E=document.getElementById("dot-download-step");
-var G=document.getElementById("dot-install-step");
-E.parentNode.removeChild(E);
-G.parentNode.removeChild(G)
-}H=C.match(/runLink=([^\&]*)\&runLinkText=([^\&]*)/);
-if(H&&H.length>0){var D=decodeURIComponent(H[1]);
-var B=document.getElementById("dot-learn-how-run-link");
-B.setAttribute("href",D);
-var K=decodeURIComponent(H[2]);
-B.innerHTML="";
-B.appendChild(document.createTextNode(K))
-}}
+dojo._xdResourceLoaded({
+
+defineResource: function(dojo){window.onload = function(){
+	// get the app name from our URL
+	var href = window.location.href;
+	var matches = href.match(/appName=([a-z0-9 \%]*)/i);
+	var appName = "Application";
+	if(matches && matches.length > 0){
+		appName = decodeURIComponent(matches[1]);
+	}
+	
+	// set it in our UI
+	var appNameSpan = document.getElementById("dot-learn-how-app-name");
+	appNameSpan.innerHTML = "";
+	appNameSpan.appendChild(document.createTextNode(appName));
+	
+	// if we need an offline cache, and we already have one installed,
+	// update the UI
+	matches = href.match(/hasOfflineCache=(true|false)/);
+	var hasOfflineCache = false;
+	if(matches && matches.length > 0){
+		hasOfflineCache = matches[1];
+		// convert to boolean
+		hasOfflineCache = (hasOfflineCache == "true") ? true : false;
+	}
+	if(hasOfflineCache == true){
+		// delete the download and install steps
+		var downloadStep = document.getElementById("dot-download-step");
+		var installStep = document.getElementById("dot-install-step");
+		downloadStep.parentNode.removeChild(downloadStep);
+		installStep.parentNode.removeChild(installStep);
+	}
+	
+	// get our run link info and update the UI
+	matches = href.match(/runLink=([^\&]*)\&runLinkText=([^\&]*)/);
+	if(matches && matches.length > 0){
+		var runLink = decodeURIComponent(matches[1]);
+		var runLinkElem = document.getElementById("dot-learn-how-run-link");
+		runLinkElem.setAttribute("href", runLink);
+		
+		var runLinkText = decodeURIComponent(matches[2]);
+		runLinkElem.innerHTML = "";
+		runLinkElem.appendChild(document.createTextNode(runLinkText));
+	}
+}
+
 }});

@@ -2,65 +2,65 @@ if(!dojo._hasResource["aipo.widget.DropdownGrouppicker"]){dojo._hasResource["aip
 dojo.provide("aipo.widget.DropdownGrouppicker");
 dojo.require("aimluck.widget.Dropdown");
 dojo.require("aipo.widget.GroupSelectList");
-dojo.declare("aipo.widget.DropdownGrouppicker",[aimluck.widget.Dropdown],{inputWidth:"250px",hiddenId:"",hiddenValue:"",iconURL:"",iconAlt:"",selectId:"",inputId:"",inputValue:"",buttonAddId:"",buttonRemoveId:"",memberFromTitle:"",memberFromId:"",memberToTitle:"",memberToId:"",memberFromUrl:"",memberFromOptionKey:"",memberFromOptionValue:"",groupSelectId:"",groupSelectOptionKey:"",groupSelectOptionValue:"",memberGroupUrl:"",changeGroupUrl:"",listWidgetId:"",templateString:'<div class="dijit dijitLeft dijitInline"\n\tdojoAttachEvent="onmouseenter:_onMouse,onmouseleave:_onMouse,onmousedown:_onMouse,onclick:_onDropDownClick,onkeydown:_onDropDownKeydown,onblur:_onDropDownBlur,onkeypress:_onKey"\n\t><div class=\'dijitRight\'>\n\t<span class="" type="${type}"\n\t\tdojoAttachPoint="focusNode,titleNode" waiRole="button" waiState="haspopup-true,labelledby-${id}_label"\n\t\t><span class="" \tdojoAttachPoint="containerNode,popupStateNode"\n\t\tid="${id}_label"><img src="${iconURL}" alt="${iconAlt}" style="cursor:pointer;cursor:hand;padding-right:2px" align="top" />\n\t</span><select name="${selectId}" id="${selectId}" size="10" multiple="multiple" style="display:none" dojoAttachPoint="selectNode"></select><input type="hidden" id="${hiddenId}" name="${hiddenId}" value="${hiddenValue}" dojoAttachPoint="valueNode" /><span name="${inputId}" id="${inputId}" dojoAttachPoint="inputNode">${inputValue}</span>\n</div></div>\n',postCreate:function(){var A={widgetId:this.listWidgetId,selectId:this.selectId,inputId:this.inputId,buttonAddId:this.buttonAddId,buttonRemoveId:this.buttonRemoveId,memberFromTitle:this.memberFromTitle,memberFromId:this.memberFromId,memberToTitle:this.memberToTitle,memberToId:this.memberToId,memberFromUrl:this.memberFromUrl,memberFromOptionKey:this.memberFromOptionKey,memberFromOptionValue:this.memberFromOptionValue};
-var B=dijit.byId(this.listWidgetId);
-if(B){this.dropDown=B;
-var C=dojo.byId(B.selectId);
-this.removeAllOptions(C);
-C=dojo.byId(B.memberToId);
-this.removeAllOptions(C)
-}else{this.dropDown=new aipo.widget.GroupSelectList(A,this.listWidgetId)
+dojo.declare("aipo.widget.DropdownGrouppicker",[aimluck.widget.Dropdown],{inputWidth:"250px",hiddenId:"",hiddenValue:"",iconURL:"",iconAlt:"",selectId:"",inputId:"",inputValue:"",buttonAddId:"",buttonRemoveId:"",memberFromTitle:"",memberFromId:"",memberToTitle:"",memberToId:"",memberFromUrl:"",memberFromOptionKey:"",memberFromOptionValue:"",groupSelectId:"",groupSelectOptionKey:"",groupSelectOptionValue:"",memberGroupUrl:"",changeGroupUrl:"",listWidgetId:"",templateString:'<div class="dijit dijitLeft dijitInline"\n\tdojoAttachEvent="onmouseenter:_onMouse,onmouseleave:_onMouse,onmousedown:_onMouse,onclick:_onDropDownClick,onkeydown:_onDropDownKeydown,onblur:_onDropDownBlur,onkeypress:_onKey"\n\t><div class=\'dijitRight\'>\n\t<span class="" type="${type}"\n\t\tdojoAttachPoint="focusNode,titleNode" waiRole="button" waiState="haspopup-true,labelledby-${id}_label"\n\t\t><span class="" \tdojoAttachPoint="containerNode,popupStateNode"\n\t\tid="${id}_label"><img src="${iconURL}" alt="${iconAlt}" style="cursor:pointer;cursor:hand;padding-right:2px" align="top" />\n\t</span><select name="${selectId}" id="${selectId}" size="10" multiple="multiple" style="display:none" dojoAttachPoint="selectNode"></select><input type="hidden" id="${hiddenId}" name="${hiddenId}" value="${hiddenValue}" dojoAttachPoint="valueNode" /><span name="${inputId}" id="${inputId}" dojoAttachPoint="inputNode">${inputValue}</span>\n</div></div>\n',postCreate:function(){var B={widgetId:this.listWidgetId,selectId:this.selectId,inputId:this.inputId,buttonAddId:this.buttonAddId,buttonRemoveId:this.buttonRemoveId,memberFromTitle:this.memberFromTitle,memberFromId:this.memberFromId,memberToTitle:this.memberToTitle,memberToId:this.memberToId,memberFromUrl:this.memberFromUrl,memberFromOptionKey:this.memberFromOptionKey,memberFromOptionValue:this.memberFromOptionValue};
+var C=dijit.byId(this.listWidgetId);
+if(C){this.dropDown=C;
+var A=dojo.byId(C.selectId);
+this.removeAllOptions(A);
+A=dojo.byId(C.memberToId);
+this.removeAllOptions(A)
+}else{this.dropDown=new aipo.widget.GroupSelectList(B,this.listWidgetId)
 }this.inherited(arguments)
-},removeAllOptions:function(C){var A;
-if(document.all){var B=C.options;
-for(A=0;
-A<B.length;
-A++){B.remove(A);
-A-=1
-}}else{var B=C.options;
-for(A=0;
-A<B.length;
-A++){C.removeChild(B[A]);
-A-=1
-}}},addOptionSync:function(B,C,D){var F=dojo.byId(this.memberToId);
-var E=dojo.byId(this.selectId);
-if(this.memberLimit!=0&&F.options.length>=this.memberLimit){return 
-}if(document.all){var A=document.createElement("OPTION");
-A.value=B;
-A.text=C;
-A.selected=D;
-var G=document.createElement("OPTION");
-G.value=B;
-G.text=C;
-G.selected=D;
-if(F.options.length==1&&F.options[0].value==""){F.options.remove(0);
-E.options.remove(0)
-}F.add(A,F.options.length);
-E.add(G,E.options.length)
-}else{var A=document.createElement("OPTION");
-A.value=B;
-A.text=C;
-A.selected=D;
-var G=document.createElement("OPTION");
-G.value=B;
-G.text=C;
-G.selected=D;
-if(F.options.length==1&&F.options[0].value==""){F.removeChild(F.options[0]);
-E.removeChild(F.options[0])
-}F.insertBefore(A,F.options[F.options.length]);
-E.insertBefore(G,E.options[E.options.length])
+},removeAllOptions:function(A){var B;
+if(document.all){var C=A.options;
+for(B=0;
+B<C.length;
+B++){C.remove(B);
+B-=1
+}}else{var C=A.options;
+for(B=0;
+B<C.length;
+B++){A.removeChild(C[B]);
+B-=1
+}}},addOptionSync:function(E,F,G){var B=dojo.byId(this.memberToId);
+var A=dojo.byId(this.selectId);
+if(this.memberLimit!=0&&B.options.length>=this.memberLimit){return 
+}if(document.all){var D=document.createElement("OPTION");
+D.value=E;
+D.text=F;
+D.selected=G;
+var C=document.createElement("OPTION");
+C.value=E;
+C.text=F;
+C.selected=G;
+if(B.options.length==1&&B.options[0].value==""){B.options.remove(0);
+A.options.remove(0)
+}B.add(D,B.options.length);
+A.add(C,A.options.length)
+}else{var D=document.createElement("OPTION");
+D.value=E;
+D.text=F;
+D.selected=G;
+var C=document.createElement("OPTION");
+C.value=E;
+C.text=F;
+C.selected=G;
+if(B.options.length==1&&B.options[0].value==""){B.removeChild(B.options[0]);
+A.removeChild(B.options[0])
+}B.insertBefore(D,B.options[B.options.length]);
+A.insertBefore(C,A.options[A.options.length])
 }this.inputMemberSync()
-},inputMemberSync:function(){var A=dojo.byId(this.selectId);
-var B=dojo.byId(this.inputId);
-var D="";
-var E=A.options;
-var C=0;
-var F=E.length;
-if(F<=0){return 
-}for(C=0;
-C<F;
-C++){if(C!=0){D+=", "
-}D+=E[C].text
-}B.innerHTML=D
+},inputMemberSync:function(){var B=dojo.byId(this.selectId);
+var C=dojo.byId(this.inputId);
+var E="";
+var F=B.options;
+var D=0;
+var A=F.length;
+if(A<=0){return 
+}for(D=0;
+D<A;
+D++){if(D!=0){E+=", "
+}E+=F[D].text
+}C.innerHTML=E
 }})
 };

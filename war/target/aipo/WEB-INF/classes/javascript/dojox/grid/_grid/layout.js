@@ -2,33 +2,33 @@ if(!dojo._hasResource["dojox.grid._grid.layout"]){dojo._hasResource["dojox.grid.
 dojo.provide("dojox.grid._grid.layout");
 dojo.require("dojox.grid._grid.cell");
 dojo.declare("dojox.grid.layout",null,{constructor:function(A){this.grid=A
-},cells:null,structure:null,defaultWidth:"6em",setStructure:function(E){this.fieldIndex=0;
+},cells:null,structure:null,defaultWidth:"6em",setStructure:function(A){this.fieldIndex=0;
 this.cells=[];
-var B=this.structure=[];
-for(var A=0,D,C;
-(D=E[A]);
-A++){B.push(this.addViewDef(D))
+var C=this.structure=[];
+for(var B=0,E,D;
+(E=A[B]);
+B++){C.push(this.addViewDef(E))
 }this.cellCount=this.cells.length
 },addViewDef:function(A){this._defaultCellProps=A.defaultCell||{};
 return dojo.mixin({},A,{rows:this.addRowsDef(A.rows||A.cells)})
-},addRowsDef:function(B){var D=[];
-for(var A=0,C;
-B&&(C=B[A]);
-A++){D.push(this.addRowDef(A,C))
-}return D
-},addRowDef:function(E,C){var A=[];
-for(var B=0,D,F;
-(D=C[B]);
-B++){F=this.addCellDef(E,B,D);
-A.push(F);
-this.cells.push(F)
+},addRowsDef:function(C){var A=[];
+for(var B=0,D;
+C&&(D=C[B]);
+B++){A.push(this.addRowDef(B,D))
 }return A
-},addCellDef:function(D,A,C){var E=0;
-if(C.colSpan>1){E=0
-}else{if(!isNaN(C.width)){E=C.width+"em"
-}else{E=C.width||this.defaultWidth
-}}var B=C.field!=undefined?C.field:(C.get?-1:this.fieldIndex);
-if((C.field!=undefined)||!C.get){this.fieldIndex=(C.field>-1?C.field:this.fieldIndex)+1
-}return new dojox.grid.cell(dojo.mixin({},this._defaultCellProps,C,{grid:this.grid,subrow:D,layoutIndex:A,index:this.cells.length,fieldIndex:B,unitWidth:E}))
+},addRowDef:function(F,D){var B=[];
+for(var C=0,E,A;
+(E=D[C]);
+C++){A=this.addCellDef(F,C,E);
+B.push(A);
+this.cells.push(A)
+}return B
+},addCellDef:function(E,B,D){var A=0;
+if(D.colSpan>1){A=0
+}else{if(!isNaN(D.width)){A=D.width+"em"
+}else{A=D.width||this.defaultWidth
+}}var C=D.field!=undefined?D.field:(D.get?-1:this.fieldIndex);
+if((D.field!=undefined)||!D.get){this.fieldIndex=(D.field>-1?D.field:this.fieldIndex)+1
+}return new dojox.grid.cell(dojo.mixin({},this._defaultCellProps,D,{grid:this.grid,subrow:E,layoutIndex:B,index:this.cells.length,fieldIndex:C,unitWidth:A}))
 }})
 };

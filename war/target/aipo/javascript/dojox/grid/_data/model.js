@@ -1,221 +1,600 @@
-if(!dojo._hasResource["dojox.grid._data.model"]){dojo._hasResource["dojox.grid._data.model"]=true;
-dojo.provide("dojox.grid._data.model");
-dojo.require("dojox.grid._data.fields");
-dojo.declare("dojox.grid.data.Model",null,{constructor:function(B,A){this.observers=[];
-this.fields=new dojox.grid.data.Fields();
-if(B){this.fields.set(B)
-}this.setData(A)
-},count:0,updating:0,observer:function(B,A){this.observers.push({o:B,p:A||"model"})
-},notObserver:function(B){for(var C=0,A,D;
-(D=this.observers[C]);
-C++){if(D.o==B){this.observers.splice(C,1);
-return 
-}}},notify:function(E,D){if(!this.isUpdating()){var B=D||[];
-for(var C=0,A,F;
-(F=this.observers[C]);
-C++){A=F.p+E,F=F.o;
-(A in F)&&(F[A].apply(F,B))
-}}},clear:function(){this.fields.clear();
-this.clearData()
-},beginUpdate:function(){this.updating++
-},endUpdate:function(){if(this.updating){this.updating--
-}},isUpdating:function(){return Boolean(this.updating)
-},clearData:function(){this.setData(null)
-},change:function(){this.notify("Change",arguments)
-},insertion:function(){this.notify("Insertion",arguments);
-this.notify("Change",arguments)
-},removal:function(){this.notify("Removal",arguments);
-this.notify("Change",arguments)
-},insert:function(A){if(!this._insert.apply(this,arguments)){return false
-}this.insertion.apply(this,dojo._toArray(arguments,1));
-return true
-},remove:function(A){if(!this._remove.apply(this,arguments)){return false
-}this.removal.apply(this,arguments);
-return true
-},canSort:function(){return this.sort!=null
-},makeComparator:function(E){var B,C,F,A=null;
-for(var D=E.length-1;
-D>=0;
-D--){B=E[D];
-C=Math.abs(B)-1;
-if(C>=0){F=this.fields.get(C);
-A=this.generateComparator(F.compare,F.key,B>0,A)
-}}return A
-},sort:null,dummy:0});
-dojo.declare("dojox.grid.data.Rows",dojox.grid.data.Model,{allChange:function(){this.notify("AllChange",arguments);
-this.notify("Change",arguments)
-},rowChange:function(){this.notify("RowChange",arguments)
-},datumChange:function(){this.notify("DatumChange",arguments)
-},beginModifyRow:function(A){if(!this.cache[A]){this.cache[A]=this.copyRow(A)
-}},endModifyRow:function(C){var A=this.cache[C];
-if(A){var B=this.getRow(C);
-if(!dojox.grid.arrayCompare(A,B)){this.update(A,B,C)
-}delete this.cache[C]
-}},cancelModifyRow:function(B){var A=this.cache[B];
-if(A){this.setRow(A,B);
-delete this.cache[B]
-}},generateComparator:function(B,C,A,D){return function(F,E){var G=B(F[C],E[C]);
-return G?(A?G:-G):D&&D(F,E)
+if(!dojo._hasResource['dojox.grid._data.model']){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource['dojox.grid._data.model'] = true;
+dojo.provide('dojox.grid._data.model');
+dojo.require('dojox.grid._data.fields');
+
+dojo.declare("dojox.grid.data.Model", null, {
+	// summary:
+	//	Base abstract grid data model.
+	//	Makes no assumptions about the structure of grid data.
+	constructor: function(inFields, inData){
+		this.observers = [];
+		this.fields = new dojox.grid.data.Fields();
+		if(inFields){
+			this.fields.set(inFields);
+		}
+		this.setData(inData);
+	},
+	count: 0,
+	updating: 0,
+	// observers 
+	observer: function(inObserver, inPrefix){
+		this.observers.push({o: inObserver, p: inPrefix||'model' });
+	},
+	notObserver: function(inObserver){
+		for(var i=0, m, o; (o=this.observers[i]); i++){
+			if(o.o==inObserver){
+				this.observers.splice(i, 1);
+				return;
+			}
+		}
+	},
+	notify: function(inMsg, inArgs){
+		if(!this.isUpdating()){
+			var a = inArgs || [];
+			for(var i=0, m, o; (o=this.observers[i]); i++){
+				m = o.p + inMsg, o = o.o;
+				(m in o)&&(o[m].apply(o, a));
+			}
+		}
+	},
+	// updates
+	clear: function(){
+		this.fields.clear();
+		this.clearData();
+	},
+	beginUpdate: function(){
+		this.updating++;
+	},
+	endUpdate: function(){
+		if(this.updating){
+			this.updating--;
+		}
+		/*if(this.updating){
+			if(!(--this.updating)){
+				this.change();
+			}
+		}
+		}*/
+	},
+	isUpdating: function(){
+		return Boolean(this.updating);
+	},
+	// data
+	clearData: function(){
+		this.setData(null);
+	},
+	// observer events
+	change: function(){
+		this.notify("Change", arguments);
+	},
+	insertion: function(/* index */){
+		this.notify("Insertion", arguments);
+		this.notify("Change", arguments);
+	},
+	removal: function(/* keys */){
+		this.notify("Removal", arguments);
+		this.notify("Change", arguments);
+	},
+	// insert
+	insert: function(inData /*, index */){
+		if(!this._insert.apply(this, arguments)){
+			return false;
+		}
+		this.insertion.apply(this, dojo._toArray(arguments, 1));
+		return true;
+	},
+	// remove
+	remove: function(inData /*, index */){
+		if(!this._remove.apply(this, arguments)){
+			return false;
+		}
+		this.removal.apply(this, arguments);
+		return true;
+	},
+	// sort
+	canSort: function(/* (+|-)column_index+1, ... */){
+		return this.sort != null;
+	},
+	makeComparator: function(inIndices){
+		var idx, col, field, result = null;
+		for(var i=inIndices.length-1; i>=0; i--){
+			idx = inIndices[i];
+			col = Math.abs(idx) - 1;
+			if(col >= 0){
+				field = this.fields.get(col);
+				result = this.generateComparator(field.compare, field.key, idx > 0, result);
+			}
+		}
+		return result;
+	},
+	sort: null,
+	dummy: 0
+});
+
+dojo.declare("dojox.grid.data.Rows", dojox.grid.data.Model, {
+	// observer events
+	allChange: function(){
+		this.notify("AllChange", arguments);
+		this.notify("Change", arguments);
+	},
+	rowChange: function(){
+		this.notify("RowChange", arguments);
+	},
+	datumChange: function(){
+		this.notify("DatumChange", arguments);
+	},
+	// copyRow: function(inRowIndex); // abstract
+	// update
+	beginModifyRow: function(inRowIndex){
+		if(!this.cache[inRowIndex]){
+			this.cache[inRowIndex] = this.copyRow(inRowIndex);
+		}
+	},
+	endModifyRow: function(inRowIndex){
+		var cache = this.cache[inRowIndex];
+		if(cache){
+			var data = this.getRow(inRowIndex);
+			if(!dojox.grid.arrayCompare(cache, data)){
+				this.update(cache, data, inRowIndex);
+			}
+			delete this.cache[inRowIndex];
+		}
+	},
+	cancelModifyRow: function(inRowIndex){
+		var cache = this.cache[inRowIndex];
+		if(cache){
+			this.setRow(cache, inRowIndex);
+			delete this.cache[inRowIndex];
+		}
+	},
+	generateComparator: function(inCompare, inField, inTrueForAscend, inSubCompare){
+		return function(a, b){
+			var ineq = inCompare(a[inField], b[inField]);
+			return ineq ? (inTrueForAscend ? ineq : -ineq) : inSubCompare && inSubCompare(a, b);
+		}
+	}
+});
+
+dojo.declare("dojox.grid.data.Table", dojox.grid.data.Rows, {
+	// summary:
+	//	Basic grid data model for static data in the form of an array of rows
+	//	that are arrays of cell data
+	constructor: function(){
+		this.cache = [];
+	},
+	colCount: 0, // tables introduce cols
+	data: null,
+	cache: null,
+	// morphology
+	measure: function(){
+		this.count = this.getRowCount();
+		this.colCount = this.getColCount();
+		this.allChange();
+		//this.notify("Measure");
+	},
+	getRowCount: function(){
+		return (this.data ? this.data.length : 0);
+	},
+	getColCount: function(){
+		return (this.data && this.data.length ? this.data[0].length : this.fields.count());
+	},
+	badIndex: function(inCaller, inDescriptor){
+		console.debug('dojox.grid.data.Table: badIndex');
+	},
+	isGoodIndex: function(inRowIndex, inColIndex){
+		return (inRowIndex >= 0 && inRowIndex < this.count && (arguments.length < 2 || (inColIndex >= 0 && inColIndex < this.colCount)));
+	},
+	// access
+	getRow: function(inRowIndex){
+		return this.data[inRowIndex];
+	},
+	copyRow: function(inRowIndex){
+		return this.getRow(inRowIndex).slice(0);
+	},
+	getDatum: function(inRowIndex, inColIndex){
+		return this.data[inRowIndex][inColIndex];
+	},
+	get: function(){
+		throw('Plain "get" no longer supported. Use "getRow" or "getDatum".');
+	},
+	setData: function(inData){
+		this.data = (inData || []);
+		this.allChange();
+	},
+	setRow: function(inData, inRowIndex){
+		this.data[inRowIndex] = inData;
+		this.rowChange(inData, inRowIndex);
+		this.change();
+	},
+	setDatum: function(inDatum, inRowIndex, inColIndex){
+		this.data[inRowIndex][inColIndex] = inDatum;
+		this.datumChange(inDatum, inRowIndex, inColIndex);
+	},
+	set: function(){
+		throw('Plain "set" no longer supported. Use "setData", "setRow", or "setDatum".');
+	},
+	setRows: function(inData, inRowIndex){
+		for(var i=0, l=inData.length, r=inRowIndex; i<l; i++, r++){
+			this.setRow(inData[i], r);
+		}
+	},
+	// update
+	update: function(inOldData, inNewData, inRowIndex){
+		//delete this.cache[inRowIndex];	
+		//this.setRow(inNewData, inRowIndex);
+		return true;
+	},
+	// insert
+	_insert: function(inData, inRowIndex){
+		dojox.grid.arrayInsert(this.data, inRowIndex, inData);
+		this.count++;
+		return true;
+	},
+	// remove
+	_remove: function(inKeys){
+		for(var i=inKeys.length-1; i>=0; i--){
+			dojox.grid.arrayRemove(this.data, inKeys[i]);
+		}
+		this.count -= inKeys.length;
+		return true;
+	},
+	// sort
+	sort: function(/* (+|-)column_index+1, ... */){
+		this.data.sort(this.makeComparator(arguments));
+	},
+	swap: function(inIndexA, inIndexB){
+		dojox.grid.arraySwap(this.data, inIndexA, inIndexB);
+		this.rowChange(this.getRow(inIndexA), inIndexA);
+		this.rowChange(this.getRow(inIndexB), inIndexB);
+		this.change();
+	},
+	dummy: 0
+});
+
+dojo.declare("dojox.grid.data.Objects", dojox.grid.data.Table, {
+	constructor: function(inFields, inData, inKey){
+		if(!inFields){
+			this.autoAssignFields();
+		}
+	},
+	autoAssignFields: function(){
+		var d = this.data[0], i = 0;
+		for(var f in d){
+			this.fields.get(i++).key = f;
+		}
+	},
+	getDatum: function(inRowIndex, inColIndex){
+		return this.data[inRowIndex][this.fields.get(inColIndex).key];
+	}
+});
+
+dojo.declare("dojox.grid.data.Dynamic", dojox.grid.data.Table, {
+	// summary:
+	//	Grid data model for dynamic data such as data retrieved from a server.
+	//	Retrieves data automatically when requested and provides notification when data is received
+	constructor: function(){
+		this.page = [];
+		this.pages = [];
+	},
+	page: null,
+	pages: null,
+	rowsPerPage: 100,
+	requests: 0,
+	bop: -1,
+	eop: -1,
+	// data
+	clearData: function(){
+		this.pages = [];
+		this.bop = this.eop = -1;
+		this.setData([]);
+	},
+	getRowCount: function(){
+		return this.count;
+	},
+	getColCount: function(){
+		return this.fields.count();
+	},
+	setRowCount: function(inCount){
+		this.count = inCount;
+		this.change();
+	},
+	// paging
+	requestsPending: function(inBoolean){
+	},
+	rowToPage: function(inRowIndex){
+		return (this.rowsPerPage ? Math.floor(inRowIndex / this.rowsPerPage) : inRowIndex);
+	},
+	pageToRow: function(inPageIndex){
+		return (this.rowsPerPage ? this.rowsPerPage * inPageIndex : inPageIndex);
+	},
+	requestRows: function(inRowIndex, inCount){
+		// summary:
+		//		stub. Fill in to perform actual data row fetching logic. The
+		//		returning logic must provide the data back to the system via
+		//		setRow
+	},
+	rowsProvided: function(inRowIndex, inCount){
+		this.requests--;
+		if(this.requests == 0){
+			this.requestsPending(false);
+		}
+	},
+	requestPage: function(inPageIndex){
+		var row = this.pageToRow(inPageIndex);
+		var count = Math.min(this.rowsPerPage, this.count - row);
+		if(count > 0){
+			this.requests++;
+			this.requestsPending(true);
+			setTimeout(dojo.hitch(this, "requestRows", row, count), 1);
+			//this.requestRows(row, count);
+		}
+	},
+	needPage: function(inPageIndex){
+		if(!this.pages[inPageIndex]){
+			this.pages[inPageIndex] = true;
+			this.requestPage(inPageIndex);
+		}
+	},
+	preparePage: function(inRowIndex, inColIndex){
+		if(inRowIndex < this.bop || inRowIndex >= this.eop){
+			var pageIndex = this.rowToPage(inRowIndex);
+			this.needPage(pageIndex);
+			this.bop = pageIndex * this.rowsPerPage;
+			this.eop = this.bop + (this.rowsPerPage || this.count);
+		}
+	},
+	isRowLoaded: function(inRowIndex){
+		return Boolean(this.data[inRowIndex]);
+	},
+	// removal
+	removePages: function(inRowIndexes){
+		for(var i=0, r; ((r=inRowIndexes[i]) != undefined); i++){
+			this.pages[this.rowToPage(r)] = false;
+		}
+		this.bop = this.eop =-1;
+	},
+	remove: function(inRowIndexes){
+		this.removePages(inRowIndexes);
+		dojox.grid.data.Table.prototype.remove.apply(this, arguments);
+	},
+	// access
+	getRow: function(inRowIndex){
+		var row = this.data[inRowIndex];
+		if(!row){
+			this.preparePage(inRowIndex);
+		}
+		return row;
+	},
+	getDatum: function(inRowIndex, inColIndex){
+		var row = this.getRow(inRowIndex);
+		return (row ? row[inColIndex] : this.fields.get(inColIndex).na);
+	},
+	setDatum: function(inDatum, inRowIndex, inColIndex){
+		var row = this.getRow(inRowIndex);
+		if(row){
+			row[inColIndex] = inDatum;
+			this.datumChange(inDatum, inRowIndex, inColIndex);
+		}else{
+			console.debug('[' + this.declaredClass + '] dojox.grid.data.dynamic.set: cannot set data on an non-loaded row');
+		}
+	},
+	// sort
+	canSort: function(){
+		return false;
+	}
+});
+
+// FIXME: deprecated: (included for backward compatibility only)
+dojox.grid.data.table = dojox.grid.data.Table;
+dojox.grid.data.dynamic = dojox.grid.data.Dyanamic;
+
+// we treat dojo.data stores as dynamic stores because no matter how they got
+// here, they should always fill that contract
+dojo.declare("dojox.grid.data.DojoData", dojox.grid.data.Dynamic, {
+	//	summary:
+	//		A grid data model for dynamic data retreived from a store which
+	//		implements the dojo.data API set. Retrieves data automatically when
+	//		requested and provides notification when data is received
+	//	description:
+	//		This store subclasses the Dynamic grid data object in order to
+	//		provide paginated data access support, notification and view
+	//		updates for stores which support those features, and simple
+	//		field/column mapping for all dojo.data stores.
+	constructor: function(inFields, inData, args){
+		this.count = 1;
+		this._rowIdentities = {};
+		if(args){
+			dojo.mixin(this, args);
+		}
+		if(this.store){
+			// NOTE: we assume Read and Identity APIs for all stores!
+			var f = this.store.getFeatures();
+			this._canNotify = f['dojo.data.api.Notification'];
+			this._canWrite = f['dojo.data.api.Write'];
+
+			if(this._canNotify){
+				dojo.connect(this.store, "onSet", this, "_storeDatumChange");
+			}
+		}
+	},
+	markupFactory: function(args, node){
+		return new dojox.grid.data.DojoData(null, null, args);
+	},
+	query: { name: "*" }, // default, stupid query
+	store: null,
+	_canNotify: false,
+	_canWrite: false,
+	_rowIdentities: {},
+	clientSort: false,
+	// data
+	setData: function(inData){
+		this.store = inData;
+		this.data = [];
+		this.allChange();
+	},
+	setRowCount: function(inCount){
+		//console.debug("inCount:", inCount);
+		this.count = inCount;
+		this.allChange();
+	},
+	beginReturn: function(inCount){
+		if(this.count != inCount){
+			// this.setRowCount(0);
+			// this.clear();
+			// console.debug(this.count, inCount);
+			this.setRowCount(inCount);
+		}
+	},
+	_setupFields: function(dataItem){
+		// abort if we already have setup fields
+		if(this.fields._nameMaps){
+			return;
+		}
+		// set up field/index mappings
+		var m = {};
+		//console.debug("setting up fields", m);
+		var fields = dojo.map(this.store.getAttributes(dataItem),
+			function(item, idx){ 
+				m[item] = idx;
+				m[idx+".idx"] = item;
+				// name == display name, key = property name
+				return { name: item, key: item };
+			},
+			this
+		);
+		this.fields._nameMaps = m;
+		// console.debug("new fields:", fields);
+		this.fields.set(fields);
+		this.notify("FieldsChange");
+	},
+	_getRowFromItem: function(item){
+		// gets us the row object (and row index) of an item
+	},
+	processRows: function(items, store){
+		// console.debug(arguments);
+		if(!items){ return; }
+		this._setupFields(items[0]);
+		dojo.forEach(items, function(item, idx){
+			var row = {}; 
+			row.__dojo_data_item = item;
+			dojo.forEach(this.fields.values, function(a){
+				row[a.name] = this.store.getValue(item, a.name)||"";
+			}, this);
+			// FIXME: where else do we need to keep this in sync?
+			this._rowIdentities[this.store.getIdentity(item)] = store.start+idx;
+			this.setRow(row, store.start+idx);
+		}, this);
+		// FIXME: 
+		//	Q: scott, steve, how the hell do we actually get this to update
+		//		the visible UI for these rows?
+		//	A: the goal is that Grid automatically updates to reflect changes
+		//		in model. In this case, setRow -> rowChanged -> (observed by) Grid -> modelRowChange -> updateRow
+	},
+	// request data 
+	requestRows: function(inRowIndex, inCount){
+		var row  = inRowIndex || 0;
+		var params = { 
+			start: row,
+			count: this.rowsPerPage,
+			query: this.query,
+			onBegin: dojo.hitch(this, "beginReturn"),
+			//	onItem: dojo.hitch(console, "debug"),
+			onComplete: dojo.hitch(this, "processRows") // add to deferred?
+		}
+		// console.debug("requestRows:", row, this.rowsPerPage);
+		this.store.fetch(params);
+	},
+	getDatum: function(inRowIndex, inColIndex){
+		//console.debug("getDatum", inRowIndex, inColIndex);
+		var row = this.getRow(inRowIndex);
+		var field = this.fields.values[inColIndex];
+		return row && field ? row[field.name] : field ? field.na : '?';
+		//var idx = row && this.fields._nameMaps[inColIndex+".idx"];
+		//return (row ? row[idx] : this.fields.get(inColIndex).na);
+	},
+	setDatum: function(inDatum, inRowIndex, inColIndex){
+		var n = this.fields._nameMaps[inColIndex+".idx"];
+		// console.debug("setDatum:", "n:"+n, inDatum, inRowIndex, inColIndex);
+		if(n){
+			this.data[inRowIndex][n] = inDatum;
+			this.datumChange(inDatum, inRowIndex, inColIndex);
+		}
+	},
+	// modification, update and store eventing
+	copyRow: function(inRowIndex){
+		var row = {};
+		var backstop = {};
+		var src = this.getRow(inRowIndex);
+		for(var x in src){
+			if(src[x] != backstop[x]){
+				row[x] = src[x];
+			}
+		}
+		return row;
+	},
+	_attrCompare: function(cache, data){
+		dojo.forEach(this.fields.values, function(a){
+			if(cache[a.name] != data[a.name]){ return false; }
+		}, this);
+		return true;
+	},
+	endModifyRow: function(inRowIndex){
+		var cache = this.cache[inRowIndex];
+		if(cache){
+			var data = this.getRow(inRowIndex);
+			if(!this._attrCompare(cache, data)){
+				this.update(cache, data, inRowIndex);
+			}
+			delete this.cache[inRowIndex];
+		}
+	},
+	cancelModifyRow: function(inRowIndex){
+		// console.debug("cancelModifyRow", arguments);
+		var cache = this.cache[inRowIndex];
+		if(cache){
+			this.setRow(cache, inRowIndex);
+			delete this.cache[inRowIndex];
+		}
+	},
+	_storeDatumChange: function(item, attr, oldVal, newVal){
+		// the store has changed some data under us, need to update the display
+		var rowId = this._rowIdentities[this.store.getIdentity(item)];
+		var row = this.getRow(rowId);
+		row[attr] = newVal;
+		var colId = this.fields._nameMaps[attr];
+		this.notify("DatumChange", [ newVal, rowId, colId ]);
+	},
+	datumChange: function(value, rowIdx, colIdx){
+		if(this._canWrite){
+			// we're chaning some data, which means we need to write back
+			var row = this.getRow(rowIdx);
+			var field = this.fields._nameMaps[colIdx+".idx"];
+			this.store.setValue(row.__dojo_data_item, field, value);
+			// we don't need to call DatumChange, an eventing store will tell
+			// us about the row change events
+		}else{
+			// we can't write back, so just go ahead and change our local copy
+			// of the data
+			this.notify("DatumChange", arguments);
+		}
+	},
+	insertion: function(/* index */){
+		console.debug("Insertion", arguments);
+		this.notify("Insertion", arguments);
+		this.notify("Change", arguments);
+	},
+	removal: function(/* keys */){
+		console.debug("Removal", arguments);
+		this.notify("Removal", arguments);
+		this.notify("Change", arguments);
+	},
+	// sort
+	canSort: function(){
+		// Q: Return true and re-issue the queries?
+		// A: Return true only. Re-issue the query in 'sort'.
+		return this.clientSort;
+	}
+});
+
 }
-}});
-dojo.declare("dojox.grid.data.Table",dojox.grid.data.Rows,{constructor:function(){this.cache=[]
-},colCount:0,data:null,cache:null,measure:function(){this.count=this.getRowCount();
-this.colCount=this.getColCount();
-this.allChange()
-},getRowCount:function(){return(this.data?this.data.length:0)
-},getColCount:function(){return(this.data&&this.data.length?this.data[0].length:this.fields.count())
-},badIndex:function(A,B){console.debug("dojox.grid.data.Table: badIndex")
-},isGoodIndex:function(B,A){return(B>=0&&B<this.count&&(arguments.length<2||(A>=0&&A<this.colCount)))
-},getRow:function(A){return this.data[A]
-},copyRow:function(A){return this.getRow(A).slice(0)
-},getDatum:function(B,A){return this.data[B][A]
-},get:function(){throw ('Plain "get" no longer supported. Use "getRow" or "getDatum".')
-},setData:function(A){this.data=(A||[]);
-this.allChange()
-},setRow:function(A,B){this.data[B]=A;
-this.rowChange(A,B);
-this.change()
-},setDatum:function(C,B,A){this.data[B][A]=C;
-this.datumChange(C,B,A)
-},set:function(){throw ('Plain "set" no longer supported. Use "setData", "setRow", or "setDatum".')
-},setRows:function(A,E){for(var C=0,B=A.length,D=E;
-C<B;
-C++,D++){this.setRow(A[C],D)
-}},update:function(B,A,C){return true
-},_insert:function(A,B){dojox.grid.arrayInsert(this.data,B,A);
-this.count++;
-return true
-},_remove:function(B){for(var A=B.length-1;
-A>=0;
-A--){dojox.grid.arrayRemove(this.data,B[A])
-}this.count-=B.length;
-return true
-},sort:function(){this.data.sort(this.makeComparator(arguments))
-},swap:function(B,A){dojox.grid.arraySwap(this.data,B,A);
-this.rowChange(this.getRow(B),B);
-this.rowChange(this.getRow(A),A);
-this.change()
-},dummy:0});
-dojo.declare("dojox.grid.data.Objects",dojox.grid.data.Table,{constructor:function(C,A,B){if(!C){this.autoAssignFields()
-}},autoAssignFields:function(){var C=this.data[0],A=0;
-for(var B in C){this.fields.get(A++).key=B
-}},getDatum:function(B,A){return this.data[B][this.fields.get(A).key]
-}});
-dojo.declare("dojox.grid.data.Dynamic",dojox.grid.data.Table,{constructor:function(){this.page=[];
-this.pages=[]
-},page:null,pages:null,rowsPerPage:100,requests:0,bop:-1,eop:-1,clearData:function(){this.pages=[];
-this.bop=this.eop=-1;
-this.setData([])
-},getRowCount:function(){return this.count
-},getColCount:function(){return this.fields.count()
-},setRowCount:function(A){this.count=A;
-this.change()
-},requestsPending:function(A){},rowToPage:function(A){return(this.rowsPerPage?Math.floor(A/this.rowsPerPage):A)
-},pageToRow:function(A){return(this.rowsPerPage?this.rowsPerPage*A:A)
-},requestRows:function(B,A){},rowsProvided:function(B,A){this.requests--;
-if(this.requests==0){this.requestsPending(false)
-}},requestPage:function(C){var B=this.pageToRow(C);
-var A=Math.min(this.rowsPerPage,this.count-B);
-if(A>0){this.requests++;
-this.requestsPending(true);
-setTimeout(dojo.hitch(this,"requestRows",B,A),1)
-}},needPage:function(A){if(!this.pages[A]){this.pages[A]=true;
-this.requestPage(A)
-}},preparePage:function(C,B){if(C<this.bop||C>=this.eop){var A=this.rowToPage(C);
-this.needPage(A);
-this.bop=A*this.rowsPerPage;
-this.eop=this.bop+(this.rowsPerPage||this.count)
-}},isRowLoaded:function(A){return Boolean(this.data[A])
-},removePages:function(C){for(var A=0,B;
-((B=C[A])!=undefined);
-A++){this.pages[this.rowToPage(B)]=false
-}this.bop=this.eop=-1
-},remove:function(A){this.removePages(A);
-dojox.grid.data.Table.prototype.remove.apply(this,arguments)
-},getRow:function(B){var A=this.data[B];
-if(!A){this.preparePage(B)
-}return A
-},getDatum:function(C,A){var B=this.getRow(C);
-return(B?B[A]:this.fields.get(A).na)
-},setDatum:function(D,C,A){var B=this.getRow(C);
-if(B){B[A]=D;
-this.datumChange(D,C,A)
-}else{console.debug("["+this.declaredClass+"] dojox.grid.data.dynamic.set: cannot set data on an non-loaded row")
-}},canSort:function(){return false
-}});
-dojox.grid.data.table=dojox.grid.data.Table;
-dojox.grid.data.dynamic=dojox.grid.data.Dyanamic;
-dojo.declare("dojox.grid.data.DojoData",dojox.grid.data.Dynamic,{constructor:function(C,A,B){this.count=1;
-this._rowIdentities={};
-if(B){dojo.mixin(this,B)
-}if(this.store){var D=this.store.getFeatures();
-this._canNotify=D["dojo.data.api.Notification"];
-this._canWrite=D["dojo.data.api.Write"];
-if(this._canNotify){dojo.connect(this.store,"onSet",this,"_storeDatumChange")
-}}},markupFactory:function(A,B){return new dojox.grid.data.DojoData(null,null,A)
-},query:{name:"*"},store:null,_canNotify:false,_canWrite:false,_rowIdentities:{},clientSort:false,setData:function(A){this.store=A;
-this.data=[];
-this.allChange()
-},setRowCount:function(A){this.count=A;
-this.allChange()
-},beginReturn:function(A){if(this.count!=A){this.setRowCount(A)
-}},_setupFields:function(C){if(this.fields._nameMaps){return 
-}var B={};
-var A=dojo.map(this.store.getAttributes(C),function(E,D){B[E]=D;
-B[D+".idx"]=E;
-return{name:E,key:E}
-},this);
-this.fields._nameMaps=B;
-this.fields.set(A);
-this.notify("FieldsChange")
-},_getRowFromItem:function(A){},processRows:function(B,A){if(!B){return 
-}this._setupFields(B[0]);
-dojo.forEach(B,function(D,C){var E={};
-E.__dojo_data_item=D;
-dojo.forEach(this.fields.values,function(F){E[F.name]=this.store.getValue(D,F.name)||""
-},this);
-this._rowIdentities[this.store.getIdentity(D)]=A.start+C;
-this.setRow(E,A.start+C)
-},this)
-},requestRows:function(D,A){var C=D||0;
-var B={start:C,count:this.rowsPerPage,query:this.query,onBegin:dojo.hitch(this,"beginReturn"),onComplete:dojo.hitch(this,"processRows")};
-this.store.fetch(B)
-},getDatum:function(D,A){var C=this.getRow(D);
-var B=this.fields.values[A];
-return C&&B?C[B.name]:B?B.na:"?"
-},setDatum:function(C,B,A){var D=this.fields._nameMaps[A+".idx"];
-if(D){this.data[B][D]=C;
-this.datumChange(C,B,A)
-}},copyRow:function(E){var D={};
-var B={};
-var C=this.getRow(E);
-for(var A in C){if(C[A]!=B[A]){D[A]=C[A]
-}}return D
-},_attrCompare:function(A,B){dojo.forEach(this.fields.values,function(C){if(A[C.name]!=B[C.name]){return false
-}},this);
-return true
-},endModifyRow:function(C){var A=this.cache[C];
-if(A){var B=this.getRow(C);
-if(!this._attrCompare(A,B)){this.update(A,B,C)
-}delete this.cache[C]
-}},cancelModifyRow:function(B){var A=this.cache[B];
-if(A){this.setRow(A,B);
-delete this.cache[B]
-}},_storeDatumChange:function(E,A,B,C){var F=this._rowIdentities[this.store.getIdentity(E)];
-var G=this.getRow(F);
-G[A]=C;
-var D=this.fields._nameMaps[A];
-this.notify("DatumChange",[C,F,D])
-},datumChange:function(B,A,E){if(this._canWrite){var D=this.getRow(A);
-var C=this.fields._nameMaps[E+".idx"];
-this.store.setValue(D.__dojo_data_item,C,B)
-}else{this.notify("DatumChange",arguments)
-}},insertion:function(){console.debug("Insertion",arguments);
-this.notify("Insertion",arguments);
-this.notify("Change",arguments)
-},removal:function(){console.debug("Removal",arguments);
-this.notify("Removal",arguments);
-this.notify("Change",arguments)
-},canSort:function(){return this.clientSort
-}})
-};

@@ -1,32 +1,32 @@
 if(!dojo._hasResource["dojo.data.util.simpleFetch"]){dojo._hasResource["dojo.data.util.simpleFetch"]=true;
 dojo.provide("dojo.data.util.simpleFetch");
 dojo.require("dojo.data.util.sorter");
-dojo.data.util.simpleFetch.fetch=function(C){C=C||{};
-if(!C.store){C.store=this
-}var A=this;
-var B=function(E,F){if(F.onError){var G=F.scope||dojo.global;
-F.onError.call(G,E,F)
+dojo.data.util.simpleFetch.fetch=function(D){D=D||{};
+if(!D.store){D.store=this
+}var B=this;
+var C=function(G,E){if(E.onError){var F=E.scope||dojo.global;
+E.onError.call(F,G,E)
 }};
-var D=function(M,N){var G=N.abort||null;
-var I=false;
-var E=N.start?N.start:0;
-var L=N.count?(E+N.count):M.length;
-N.abort=function(){I=true;
-if(G){G.call(N)
+var A=function(I,J){var M=J.abort||null;
+var E=false;
+var K=J.start?J.start:0;
+var H=J.count?(K+J.count):I.length;
+J.abort=function(){E=true;
+if(M){M.call(J)
 }};
-var H=N.scope||dojo.global;
-if(!N.store){N.store=A
-}if(N.onBegin){N.onBegin.call(H,M.length,N)
-}if(N.sort){M.sort(dojo.data.util.sorter.createSortFunction(N.sort,A))
-}if(N.onItem){for(var K=E;
-(K<M.length)&&(K<L);
-++K){var F=M[K];
-if(!I){N.onItem.call(H,F,N)
-}}}if(N.onComplete&&!I){var J=null;
-if(!N.onItem){J=M.slice(E,L)
-}N.onComplete.call(H,J,N)
+var N=J.scope||dojo.global;
+if(!J.store){J.store=B
+}if(J.onBegin){J.onBegin.call(N,I.length,J)
+}if(J.sort){I.sort(dojo.data.util.sorter.createSortFunction(J.sort,B))
+}if(J.onItem){for(var G=K;
+(G<I.length)&&(G<H);
+++G){var L=I[G];
+if(!E){J.onItem.call(N,L,J)
+}}}if(J.onComplete&&!E){var F=null;
+if(!J.onItem){F=I.slice(K,H)
+}J.onComplete.call(N,F,J)
 }};
-this._fetchItems(C,D,B);
-return C
+this._fetchItems(D,A,C);
+return D
 }
 };

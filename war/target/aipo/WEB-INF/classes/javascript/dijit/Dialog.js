@@ -8,15 +8,15 @@ dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.form.Form");
 dojo.declare("dijit.DialogUnderlay",[dijit._Widget,dijit._Templated],{templateString:"<div class=dijitDialogUnderlayWrapper id='${id}_underlay'><div class=dijitDialogUnderlay dojoAttachPoint='node'></div></div>",postCreate:function(){dojo.body().appendChild(this.domNode);
 this.bgIframe=new dijit.BackgroundIframe(this.domNode)
-},layout:function(){var D=dijit.getViewport();
-var B=this.node.style,C=this.domNode.style;
-C.top=D.t+"px";
-C.left=D.l+"px";
-B.width=D.w+"px";
-B.height=D.h+"px";
-var A=dijit.getViewport();
-if(D.w!=A.w){B.width=A.w+"px"
-}if(D.h!=A.h){B.height=A.h+"px"
+},layout:function(){var A=dijit.getViewport();
+var C=this.node.style,D=this.domNode.style;
+D.top=A.t+"px";
+D.left=A.l+"px";
+C.width=A.w+"px";
+C.height=A.h+"px";
+var B=dijit.getViewport();
+if(A.w!=B.w){C.width=B.w+"px"
+}if(A.h!=B.h){C.height=B.h+"px"
 }},show:function(){this.domNode.style.display="block";
 this.layout();
 if(this.bgIframe.iframe){this.bgIframe.iframe.style.display="block"
@@ -42,23 +42,23 @@ this._fadeOut=dojo.fx.combine([dojo.fadeOut({node:A,duration:this.duration,onEnd
 }}),dojo.fadeOut({node:this._underlay.domNode,duration:this.duration,onEnd:dojo.hitch(this._underlay,"hide")})])
 },uninitialize:function(){if(this._underlay){this._underlay.destroy()
 }},_position:function(){if(dojo.hasClass(dojo.body(),"dojoMove")){return 
-}var C=dijit.getViewport();
-var B=dojo.marginBox(this.domNode);
-var A=this.domNode.style;
-A.left=Math.floor((C.l+(C.w-B.w)/2))+"px";
-A.top=Math.floor((C.t+(C.h-B.h)/2))+"px"
+}var A=dijit.getViewport();
+var C=dojo.marginBox(this.domNode);
+var B=this.domNode.style;
+B.left=Math.floor((A.l+(A.w-C.w)/2))+"px";
+B.top=Math.floor((A.t+(A.h-C.h)/2))+"px"
 },_findLastFocus:function(A){this._lastFocused=A.target
 },_cycleFocus:function(A){if(!this._lastFocusItem){this._lastFocusItem=this._lastFocused
 }this.titleBar.focus()
-},_onKey:function(C){if(C.keyCode){var A=C.target;
-if(A==this.titleBar&&C.shiftKey&&C.keyCode==dojo.keys.TAB){if(this._lastFocusItem){this._lastFocusItem.focus()
-}dojo.stopEvent(C)
-}else{while(A){if(A==this.domNode){if(C.keyCode==dojo.keys.ESCAPE){this.hide()
+},_onKey:function(A){if(A.keyCode){var B=A.target;
+if(B==this.titleBar&&A.shiftKey&&A.keyCode==dojo.keys.TAB){if(this._lastFocusItem){this._lastFocusItem.focus()
+}dojo.stopEvent(A)
+}else{while(B){if(B==this.domNode){if(A.keyCode==dojo.keys.ESCAPE){this.hide()
 }else{return 
-}}A=A.parentNode
-}if(C.keyCode!=dojo.keys.TAB){dojo.stopEvent(C)
+}}B=B.parentNode
+}if(A.keyCode!=dojo.keys.TAB){dojo.stopEvent(A)
 }else{if(!dojo.isOpera){try{this.titleBar.focus()
-}catch(B){}}}}}},show:function(){if(!this._alreadyInitialized){this._setup();
+}catch(C){}}}}}},show:function(){if(!this._alreadyInitialized){this._setup();
 this._alreadyInitialized=true
 }if(this._fadeOut.status()=="playing"){this._fadeOut.stop()
 }this._modalconnects.push(dojo.connect(window,"onscroll",this,"layout"));

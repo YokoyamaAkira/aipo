@@ -1,38 +1,38 @@
 dojo._xdResourceLoaded({depends:[["provide","dojox.gfx.arc"],["require","dojox.gfx.matrix"]],defineResource:function(A){if(!A._hasResource["dojox.gfx.arc"]){A._hasResource["dojox.gfx.arc"]=true;
 A.provide("dojox.gfx.arc");
 A.require("dojox.gfx.matrix");
-(function(){var G=dojox.gfx.matrix,F=function(L){var J=Math.cos(L),I=Math.sin(L),K={x:J+(4/3)*(1-J),y:I-(4/3)*J*(1-J)/I};
+(function(){var B=dojox.gfx.matrix,G=function(L){var J=Math.cos(L),I=Math.sin(L),K={x:J+(4/3)*(1-J),y:I-(4/3)*J*(1-J)/I};
 return{s:{x:J,y:-I},c1:{x:K.x,y:-K.y},c2:K,e:{x:J,y:I}}
-},C=2*Math.PI,E=Math.PI/4,H=Math.PI/8,D=E+H,B=F(H);
-A.mixin(dojox.gfx.arc,{unitArcAsBezier:F,curvePI4:B,arcAsBezier:function(N,Y,X,l,I,f,T,R){I=Boolean(I);
-f=Boolean(f);
-var K=G._degToRad(l),j=Y*Y,O=X*X,J=G.multiplyPoint(G.rotate(-K),{x:(N.x-T)/2,y:(N.y-R)/2}),L=J.x*J.x,a=J.y*J.y,Z=Math.sqrt((j*O-j*a-O*L)/(j*a+O*L));
-if(isNaN(Z)){Z=0
-}var U={x:Z*Y*J.y/X,y:-Z*X*J.x/Y};
-if(I==f){U={x:-U.x,y:-U.y}
-}var k=G.multiplyPoint([G.translate((N.x+T)/2,(N.y+R)/2),G.rotate(K)],U);
-var S=G.normalize([G.translate(k.x,k.y),G.rotate(K),G.scale(Y,X)]);
-var n=G.invert(S),g=G.multiplyPoint(n,N),m=G.multiplyPoint(n,T,R),d=Math.atan2(g.y,g.x),W=Math.atan2(m.y,m.x),p=d-W;
-if(f){p=-p
-}if(p<0){p+=C
-}else{if(p>C){p-=C
-}}var Q=H,M=B,b=f?Q:-Q,V=[];
-for(var h=p;
-h>0;
-h-=E){if(h<D){Q=h/2;
-M=F(Q);
-b=f?Q:-Q;
-h=0
-}var Z,P,i,o=G.normalize([S,G.rotate(d+b)]);
-if(f){Z=G.multiplyPoint(o,M.c1);
-P=G.multiplyPoint(o,M.c2);
-i=G.multiplyPoint(o,M.e)
-}else{Z=G.multiplyPoint(o,M.c2);
-P=G.multiplyPoint(o,M.c1);
-i=G.multiplyPoint(o,M.s)
-}V.push([Z.x,Z.y,P.x,P.y,i.x,i.y]);
-d+=2*b
-}return V
+},D=2*Math.PI,F=Math.PI/4,C=Math.PI/8,E=F+C,H=G(C);
+A.mixin(dojox.gfx.arc,{unitArcAsBezier:G,curvePI4:H,arcAsBezier:function(U,Q,P,o,I,Z,W,V){I=Boolean(I);
+Z=Boolean(Z);
+var a=B._degToRad(o),m=Q*Q,L=P*P,J=B.multiplyPoint(B.rotate(-a),{x:(U.x-W)/2,y:(U.y-V)/2}),K=J.x*J.x,Y=J.y*J.y,h=Math.sqrt((m*L-m*Y-L*K)/(m*Y+L*K));
+if(isNaN(h)){h=0
+}var f={x:h*Q*J.y/P,y:-h*P*J.x/Q};
+if(I==Z){f={x:-f.x,y:-f.y}
+}var n=B.multiplyPoint([B.translate((U.x+W)/2,(U.y+V)/2),B.rotate(a)],f);
+var O=B.normalize([B.translate(n.x,n.y),B.rotate(a),B.scale(Q,P)]);
+var q=B.invert(O),j=B.multiplyPoint(q,U),p=B.multiplyPoint(q,W,V),i=Math.atan2(j.y,j.x),g=Math.atan2(p.y,p.x),T=i-g;
+if(Z){T=-T
+}if(T<0){T+=D
+}else{if(T>D){T-=D
+}}var N=C,b=H,R=Z?N:-N,X=[];
+for(var k=T;
+k>0;
+k-=F){if(k<E){N=k/2;
+b=G(N);
+R=Z?N:-N;
+k=0
+}var h,d,l,S=B.normalize([O,B.rotate(i+R)]);
+if(Z){h=B.multiplyPoint(S,b.c1);
+d=B.multiplyPoint(S,b.c2);
+l=B.multiplyPoint(S,b.e)
+}else{h=B.multiplyPoint(S,b.c2);
+d=B.multiplyPoint(S,b.c1);
+l=B.multiplyPoint(S,b.s)
+}X.push([h.x,h.y,d.x,d.y,l.x,l.y]);
+i+=2*R
+}return X
 }})
 })()
 }}});

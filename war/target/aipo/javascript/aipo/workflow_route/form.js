@@ -1,30 +1,30 @@
 dojo.provide("aipo.workflow_route");
 dojo.require("aipo.workflow.MemberNormalSelectList");
 dojo.require("dijit.form.ComboBox");
-aipo.workflow_route.onLoadWorkflowRouteDialog=function(I){var K=dijit.byId("membernormalselect");
-if(K){var G=dojo.byId("init_memberlist");
-var J;
-var L=G.options;
-if(L.length==1&&L[0].value==""){return 
-}for(J=0;
-J<L.length;
-J++){K.addOptionSync(L[J].value,L[J].text,true)
-}}var H=dojo.byId("route_name");
-if(H){H.focus()
+aipo.workflow_route.onLoadWorkflowRouteDialog=function(E){var C=dijit.byId("membernormalselect");
+if(C){var A=dojo.byId("init_memberlist");
+var D;
+var B=A.options;
+if(B.length==1&&B[0].value==""){return 
+}for(D=0;
+D<B.length;
+D++){C.addOptionSync(B[D].value,B[D].text,true)
+}}var F=dojo.byId("route_name");
+if(F){F.focus()
 }};
-aipo.workflow_route.onReceiveMessage=function(D){if(!D){var C=dijit.byId("modalDialog");
-if(C){C.hide()
+aipo.workflow_route.onReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
+if(A){A.hide()
 }aipo.portletReload("workflow_route")
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=D
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
 }};
-aipo.workflow_route.submit_list=function(E){var D=E.member_to.options;
-var F="";
+aipo.workflow_route.submit_list=function(C){var A=C.member_to.options;
+var B="";
 for(i=0;
-i<D.length;
-i++){D[i].selected=false
-}if(D.length>0){for(i=0;
-i<D.length-1;
-i++){F=F+D[i].value+","
-}F=F+D[D.length-1].value
-}E.positions.value=F
+i<A.length;
+i++){A[i].selected=false
+}if(A.length>0){for(i=0;
+i<A.length-1;
+i++){B=B+A[i].value+","
+}B=B+A[A.length-1].value
+}C.positions.value=B
 };

@@ -5,10 +5,10 @@ A.require("dojox.charting.axis2d.common");
 A.require("dojox.charting.plot2d.common");
 A.require("dojox.lang.functional");
 A.require("dojox.gfx");
-(function(){var C=dojox.lang.functional,F=dojox.lang.utils,D=dojox.charting.plot2d.common,E=dojox.charting.axis2d.common,G=dojox.gfx,B=0.8;
+(function(){var G=dojox.lang.functional,E=dojox.lang.utils,C=dojox.charting.plot2d.common,D=dojox.charting.axis2d.common,F=dojox.gfx,B=0.8;
 A.declare("dojox.charting.plot2d.Pie",dojox.charting.Element,{defaultParams:{labels:true,ticks:false,fixed:true,precision:1,labelOffset:20,labelStyle:"default",htmlLabels:true},optionalParams:{font:"",fontColor:"",radius:0},constructor:function(I,H){this.opt=A.clone(this.defaultParams);
-F.updateWithObject(this.opt,H);
-F.updateWithPattern(this.opt,H,this.optionalParams);
+E.updateWithObject(this.opt,H);
+E.updateWithPattern(this.opt,H,this.optionalParams);
 this.run=null;
 this.dyn=[]
 },clear:function(){this.dirty=true;
@@ -19,47 +19,47 @@ return this
 return this
 },calculateAxes:function(H){return this
 },getRequiredColors:function(){return this.run?this.run.data.length:0
-},render:function(J,W){if(!this.dirty){return this
+},render:function(X,P){if(!this.dirty){return this
 }this.dirty=false;
 this.cleanGroup();
-var Z=this.group,I,Y=this.chart.theme;
-var V=(J.width-W.l-W.r)/2,U=(J.height-W.t-W.b)/2,b=Math.min(V,U),N="font" in this.opt?this.opt.font:Y.axis.font,Q="fontColor" in this.opt?this.opt.fontColor:Y.axis.fontColor,R=C.foldl1(this.run.data,"+"),T=0,X,P=A.map(this.run.data,function(c){return c/R
-}),K,H,a;
-if(this.opt.labels){var M=A.map(P,function(c){return this._getLabel(c*100)+"%"
+var S=this.group,W,R=this.chart.theme;
+var O=(X.width-P.l-P.r)/2,N=(X.height-P.t-P.b)/2,U=Math.min(O,N),b="font" in this.opt?this.opt.font:R.axis.font,J="fontColor" in this.opt?this.opt.fontColor:R.axis.fontColor,K=G.foldl1(this.run.data,"+"),M=0,Q,I=A.map(this.run.data,function(c){return c/K
+}),Y,V,T;
+if(this.opt.labels){var a=A.map(I,function(c){return this._getLabel(c*100)+"%"
 },this);
-K=C.foldl1(A.map(M,C.pluck("length")),"x, y -> Math.max(x, y)");
-H=N?G.normalizedLength(G.splitFontString(N).size):0;
-K=Math.max(K*B,1)/2*H;
-if(this.opt.labelOffset<0){b=Math.min(V-2*K,U-H)+this.opt.labelOffset
-}a=b-this.opt.labelOffset
-}if("radius" in this.opt){b=this.opt.radius;
-a=b-this.opt.labelOffset
-}var S={cx:W.l+V,cy:W.t+U,r:b};
+Y=G.foldl1(A.map(a,G.pluck("length")),"x, y -> Math.max(x, y)");
+V=b?F.normalizedLength(F.splitFontString(b).size):0;
+Y=Math.max(Y*B,1)/2*V;
+if(this.opt.labelOffset<0){U=Math.min(O-2*Y,N-V)+this.opt.labelOffset
+}T=U-this.opt.labelOffset
+}if("radius" in this.opt){U=this.opt.radius;
+T=U-this.opt.labelOffset
+}var L={cx:P.l+O,cy:P.t+N,r:U};
 this.dyn=[];
 if(!this.run||!this.run.data.length){return this
-}if(this.run.data.length==1){I=new A.Color(Y.next("color"));
-var O=Z.createCircle(S).setFill(D.augmentFill(Y.run.fill,I)).setStroke(D.augmentStroke(Y.series.stroke,I));
-this.dyn.push({color:I,fill:O.getFill(),stroke:O.getStroke()});
-if(this.opt.labels){var K=4,N="font" in this.opt?this.opt.font:Y.axis.font,Q="fontColor" in this.opt?this.opt.fontColor:Y.axis.fontColor,H=N?G.normalizedLength(G.splitFontString(N).size):0;
-K=Math.max(K*B,1)/2*H;
-var L=E.createText[this.opt.htmlLabels?"html":"gfx"](this.chart,Z,S.cx,S.cy+H/2,"middle","100%",N,Q);
-if(this.opt.htmlLabels){this.htmlElements.push(L)
+}if(this.run.data.length==1){W=new A.Color(R.next("color"));
+var H=S.createCircle(L).setFill(C.augmentFill(R.run.fill,W)).setStroke(C.augmentStroke(R.series.stroke,W));
+this.dyn.push({color:W,fill:H.getFill(),stroke:H.getStroke()});
+if(this.opt.labels){var Y=4,b="font" in this.opt?this.opt.font:R.axis.font,J="fontColor" in this.opt?this.opt.fontColor:R.axis.fontColor,V=b?F.normalizedLength(F.splitFontString(b).size):0;
+Y=Math.max(Y*B,1)/2*V;
+var Z=D.createText[this.opt.htmlLabels?"html":"gfx"](this.chart,S,L.cx,L.cy+V/2,"middle","100%",b,J);
+if(this.opt.htmlLabels){this.htmlElements.push(Z)
 }}return this
-}A.forEach(P,function(k,g){var f=T+k*2*Math.PI;
-if(g+1==P.length){f=2*Math.PI
-}var e=f-T,d=S.cx+b*Math.cos(T),j=S.cy+b*Math.sin(T),c=S.cx+b*Math.cos(f),i=S.cy+b*Math.sin(f);
-I=new A.Color(Y.next("color"));
-var h=Z.createPath({}).moveTo(S.cx,S.cy).lineTo(d,j).arcTo(b,b,0,e>Math.PI,true,c,i).lineTo(S.cx,S.cy).closePath().setFill(D.augmentFill(Y.series.fill,I)).setStroke(D.augmentStroke(Y.series.stroke,I));
-this.dyn.push({color:I,fill:h.getFill(),stroke:h.getStroke()});
-T=f
+}A.forEach(I,function(l,g){var f=M+l*2*Math.PI;
+if(g+1==I.length){f=2*Math.PI
+}var e=f-M,d=L.cx+U*Math.cos(M),k=L.cy+U*Math.sin(M),c=L.cx+U*Math.cos(f),j=L.cy+U*Math.sin(f);
+W=new A.Color(R.next("color"));
+var h=S.createPath({}).moveTo(L.cx,L.cy).lineTo(d,k).arcTo(U,U,0,e>Math.PI,true,c,j).lineTo(L.cx,L.cy).closePath().setFill(C.augmentFill(R.series.fill,W)).setStroke(C.augmentStroke(R.series.stroke,W));
+this.dyn.push({color:W,fill:h.getFill(),stroke:h.getStroke()});
+M=f
 },this);
-if(this.opt.labels){T=0;
-A.forEach(P,function(c,f){var d=T+c*2*Math.PI;
-if(f+1==P.length){d=2*Math.PI
-}var e=(T+d)/2,c=S.cx+a*Math.cos(e),h=S.cy+a*Math.sin(e)+H/2;
-var g=E.createText[this.opt.htmlLabels?"html":"gfx"](this.chart,Z,c,h,"middle",M[f],N,Q);
+if(this.opt.labels){M=0;
+A.forEach(I,function(c,f){var d=M+c*2*Math.PI;
+if(f+1==I.length){d=2*Math.PI
+}var e=(M+d)/2,c=L.cx+T*Math.cos(e),h=L.cy+T*Math.sin(e)+V/2;
+var g=D.createText[this.opt.htmlLabels?"html":"gfx"](this.chart,S,c,h,"middle",a[f],b,J);
 if(this.opt.htmlLabels){this.htmlElements.push(g)
-}T=d
+}M=d
 },this)
 }return this
 },_getLabel:function(H){return this.opt.fixed?H.toFixed(this.opt.precision):H.toString()

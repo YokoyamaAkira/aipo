@@ -14,40 +14,40 @@ this.invalidMessage=A.i18n.getLocalization("dijit._editor","LinkDialog",this.lan
 },getValue:function(){if(!/^(https?|ftps?)/.test(this.textbox.value)){this.textbox.value="http://"+this.textbox.value
 }return this.textbox.value
 }});
-A.declare("dijit._editor.plugins.LinkDialog",dijit._editor._Plugin,{buttonClass:dijit._editor.plugins.DualStateDropDownButton,useDefaultCommand:false,command:"createLink",linkDialogTemplate:["<label for='urlInput'>${url}&nbsp;</label>","<input dojoType=dijit._editor.plugins.UrlTextBox name='urlInput'><br>","<label for='textInput'>${text}&nbsp;</label>","<input dojoType=dijit.form.TextBox name='textInput'>","<br>","<button dojoType=dijit.form.Button type='submit'>${set}</button>"].join(""),constructor:function(){var B=this;
-var C=A.i18n.getLocalization("dijit._editor","LinkDialog",this.lang);
-this.dropDown=new dijit.TooltipDialog({title:C.title,execute:A.hitch(this,"setValue"),onOpen:function(){B._onOpenDialog();
+A.declare("dijit._editor.plugins.LinkDialog",dijit._editor._Plugin,{buttonClass:dijit._editor.plugins.DualStateDropDownButton,useDefaultCommand:false,command:"createLink",linkDialogTemplate:["<label for='urlInput'>${url}&nbsp;</label>","<input dojoType=dijit._editor.plugins.UrlTextBox name='urlInput'><br>","<label for='textInput'>${text}&nbsp;</label>","<input dojoType=dijit.form.TextBox name='textInput'>","<br>","<button dojoType=dijit.form.Button type='submit'>${set}</button>"].join(""),constructor:function(){var C=this;
+var B=A.i18n.getLocalization("dijit._editor","LinkDialog",this.lang);
+this.dropDown=new dijit.TooltipDialog({title:B.title,execute:A.hitch(this,"setValue"),onOpen:function(){C._onOpenDialog();
 dijit.TooltipDialog.prototype.onOpen.apply(this,arguments)
-},onCancel:function(){setTimeout(A.hitch(B,"_onCloseDialog"),0)
+},onCancel:function(){setTimeout(A.hitch(C,"_onCloseDialog"),0)
 },onClose:A.hitch(this,"_onCloseDialog")});
-this.dropDown.setContent(A.string.substitute(this.linkDialogTemplate,C));
+this.dropDown.setContent(A.string.substitute(this.linkDialogTemplate,B));
 this.dropDown.startup()
-},setValue:function(D){this._onCloseDialog();
-if(A.isIE){var C=A.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,["a"]);
-if(C){A.withGlobal(this.editor.window,"selectElement",dijit._editor.selection,[C])
-}}var B='href="'+D.urlInput+'" _djrealurl="'+D.urlInput+'"';
-this.editor.execCommand("inserthtml","<a "+B+">"+D.textInput+"</a>")
-},_onCloseDialog:function(){if(A.isIE){if(this._savedSelection){var C=this._savedSelection;
+},setValue:function(C){this._onCloseDialog();
+if(A.isIE){var B=A.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,["a"]);
+if(B){A.withGlobal(this.editor.window,"selectElement",dijit._editor.selection,[B])
+}}var D='href="'+C.urlInput+'" _djrealurl="'+C.urlInput+'"';
+this.editor.execCommand("inserthtml","<a "+D+">"+C.textInput+"</a>")
+},_onCloseDialog:function(){if(A.isIE){if(this._savedSelection){var B=this._savedSelection;
 this._savedSelection=null;
 this.editor.focus();
-var B=this.editor.document.selection.createRange();
-B.moveToBookmark(C);
-B.select()
+var C=this.editor.document.selection.createRange();
+C.moveToBookmark(B);
+C.select()
 }}else{this.editor.focus()
-}},_onOpenDialog:function(){var C=A.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,["a"]);
-var E="",B="";
-if(C){E=C.getAttribute("_djrealurl");
-B=C.textContent||C.innerText;
-A.withGlobal(this.editor.window,"selectElement",dijit._editor.selection,[C,true])
-}else{B=A.withGlobal(this.editor.window,dijit._editor.selection.getSelectedText)
-}if(A.isIE){var D=this.editor.document.selection.createRange();
-this._savedSelection=D.getBookmark()
-}this.dropDown.setValues({urlInput:E,textInput:B})
-},updateState:function(){var C=this.editor;
-if(!C){return 
-}if(!C.isLoaded){return 
-}if(this.button){try{var D=A.withGlobal(this.editor.window,"hasAncestorElement",dijit._editor.selection,["a"]);
-this.button.setChecked(D)
-}catch(B){console.debug(B)
+}},_onOpenDialog:function(){var B=A.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,["a"]);
+var D="",E="";
+if(B){D=B.getAttribute("_djrealurl");
+E=B.textContent||B.innerText;
+A.withGlobal(this.editor.window,"selectElement",dijit._editor.selection,[B,true])
+}else{E=A.withGlobal(this.editor.window,dijit._editor.selection.getSelectedText)
+}if(A.isIE){var C=this.editor.document.selection.createRange();
+this._savedSelection=C.getBookmark()
+}this.dropDown.setValues({urlInput:D,textInput:E})
+},updateState:function(){var B=this.editor;
+if(!B){return 
+}if(!B.isLoaded){return 
+}if(this.button){try{var C=A.withGlobal(this.editor.window,"hasAncestorElement",dijit._editor.selection,["a"]);
+this.button.setChecked(C)
+}catch(D){console.debug(D)
 }}}})
 }}});

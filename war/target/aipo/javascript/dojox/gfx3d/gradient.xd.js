@@ -1,17 +1,47 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.gfx3d.gradient"],["require","dojox.gfx3d.vector"],["require","dojox.gfx3d.matrix"]],defineResource:function(A){if(!A._hasResource["dojox.gfx3d.gradient"]){A._hasResource["dojox.gfx3d.gradient"]=true;
-A.provide("dojox.gfx3d.gradient");
-A.require("dojox.gfx3d.vector");
-A.require("dojox.gfx3d.matrix");
-(function(){var C=function(E,D){return Math.sqrt(Math.pow(D.x-E.x,2)+Math.pow(D.y-E.y,2))
-};
-var B=32;
-dojox.gfx3d.gradient=function(E,J,X,F,R,D,S){var Q=dojox.gfx3d.matrix,I=dojox.gfx3d.vector,L=Q.normalize(S),U=Q.multiplyPoint(L,F*Math.cos(R)+X.x,F*Math.sin(R)+X.y,X.z),K=Q.multiplyPoint(L,F*Math.cos(D)+X.x,F*Math.sin(D)+X.y,X.z),W=Q.multiplyPoint(L,X.x,X.y,X.z),G=(D-R)/B,N=C(U,K)/2,Z=E[J.type],T=J.finish,O=J.color,H=[{offset:0,color:Z.call(E,I.substract(U,W),T,O)}];
-for(var Y=R+G;
-Y<D;
-Y+=G){var P=Q.multiplyPoint(L,F*Math.cos(Y)+X.x,F*Math.sin(Y)+X.y,X.z),V=C(U,P),M=C(K,P);
-H.push({offset:V/(V+M),color:Z.call(E,I.substract(P,W),T,O)})
-}H.push({offset:1,color:Z.call(E,I.substract(K,W),T,O)});
-return{type:"linear",x1:0,y1:-N,x2:0,y2:N,colors:H}
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.gfx3d.gradient"],
+["require", "dojox.gfx3d.vector"],
+["require", "dojox.gfx3d.matrix"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.gfx3d.gradient"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.gfx3d.gradient"] = true;
+dojo.provide("dojox.gfx3d.gradient");
+
+dojo.require("dojox.gfx3d.vector");
+dojo.require("dojox.gfx3d.matrix");
+
+(function(){
+	var dist = function(a, b){ return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)); };
+	var N = 32;
+
+	dojox.gfx3d.gradient = function(model, material, center, radius, from, to, matrix){
+		// summary: calculate a cylindrical gradient
+		// model: dojox.gfx3d.lighting.Model: color model
+		// material: Object: defines visual properties
+		// center: Object: center of the cylinder's bottom
+		// radius: Number: radius of the cylinder
+		// from: Number: from position in radians
+		// to: Number: from position in radians
+		// matrix: dojox.gfx3d.Matrix3D: the cumulative transformation matrix
+		// tolerance: Number: tolerable diffirence in colors between gradient steps
+
+		var m = dojox.gfx3d.matrix, v = dojox.gfx3d.vector, mx = m.normalize(matrix),
+			f = m.multiplyPoint(mx, radius * Math.cos(from) + center.x, radius * Math.sin(from) + center.y, center.z),
+			t = m.multiplyPoint(mx, radius * Math.cos(to)   + center.x, radius * Math.sin(to)   + center.y, center.z),
+			c = m.multiplyPoint(mx, center.x, center.y, center.z), step = (to - from) / N, r = dist(f, t) / 2,
+			mod = model[material.type], fin = material.finish, pmt = material.color,
+			colors = [{offset: 0, color: mod.call(model, v.substract(f, c), fin, pmt)}];
+
+		for(var a = from + step; a < to; a += step){
+			var p = m.multiplyPoint(mx, radius * Math.cos(a) + center.x, radius * Math.sin(a) + center.y, center.z),
+				df = dist(f, p), dt = dist(t, p);
+			colors.push({offset: df / (df + dt), color: mod.call(model, v.substract(p, c), fin, pmt)});
+		}
+		colors.push({offset: 1, color: mod.call(model, v.substract(t, c), fin, pmt)});
+
+		return {type: "linear", x1: 0, y1: -r, x2: 0, y2: r, colors: colors};
+	};
+})();
+
 }
-})()
-}}});
+
+}});

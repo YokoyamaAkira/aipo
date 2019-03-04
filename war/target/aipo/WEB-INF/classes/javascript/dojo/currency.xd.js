@@ -3,20 +3,20 @@ A.provide("dojo.currency");
 A.require("dojo.number");
 A.require("dojo.i18n");
 A.require("dojo.cldr.monetary");
-A.currency._mixInDefaults=function(D){D=D||{};
-D.type="currency";
-var C=A.i18n.getLocalization("dojo.cldr","currency",D.locale)||{};
-var E=D.currency;
-var B=A.cldr.monetary.getData(E);
-A.forEach(["displayName","symbol","group","decimal"],function(F){B[F]=C[E+"_"+F]
+A.currency._mixInDefaults=function(C){C=C||{};
+C.type="currency";
+var B=A.i18n.getLocalization("dojo.cldr","currency",C.locale)||{};
+var D=C.currency;
+var E=A.cldr.monetary.getData(D);
+A.forEach(["displayName","symbol","group","decimal"],function(F){E[F]=B[D+"_"+F]
 });
-B.fractional=[true,false];
-return A.mixin(B,D)
+E.fractional=[true,false];
+return A.mixin(E,C)
 };
-A.currency.format=function(B,C){return A.number.format(B,A.currency._mixInDefaults(C))
+A.currency.format=function(C,B){return A.number.format(C,A.currency._mixInDefaults(B))
 };
 A.currency.regexp=function(B){return A.number.regexp(A.currency._mixInDefaults(B))
 };
-A.currency.parse=function(B,C){return A.number.parse(B,A.currency._mixInDefaults(C))
+A.currency.parse=function(C,B){return A.number.parse(C,A.currency._mixInDefaults(B))
 }
 }}});

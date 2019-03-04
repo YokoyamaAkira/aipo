@@ -1,179 +1,179 @@
 if(!dojo._hasResource["dijit._editor.plugins.EnterKeyHandling"]){dojo._hasResource["dijit._editor.plugins.EnterKeyHandling"]=true;
 dojo.provide("dijit._editor.plugins.EnterKeyHandling");
 dojo.declare("dijit._editor.plugins.EnterKeyHandling",null,{blockNodeForEnter:"P",constructor:function(A){if(A){dojo.mixin(this,A)
-}},setEditor:function(A){this.editor=A;
-if(this.blockNodeForEnter=="BR"){if(dojo.isIE){A.contentDomPreFilters.push(dojo.hitch(this,"regularPsToSingleLinePs"));
-A.contentDomPostFilters.push(dojo.hitch(this,"singleLinePsToRegularPs"));
-A.onLoadDeferred.addCallback(dojo.hitch(this,"_fixNewLineBehaviorForIE"))
-}else{A.onLoadDeferred.addCallback(dojo.hitch(this,function(C){try{this.editor.document.execCommand("insertBrOnReturn",false,true)
-}catch(D){}return C
+}},setEditor:function(B){this.editor=B;
+if(this.blockNodeForEnter=="BR"){if(dojo.isIE){B.contentDomPreFilters.push(dojo.hitch(this,"regularPsToSingleLinePs"));
+B.contentDomPostFilters.push(dojo.hitch(this,"singleLinePsToRegularPs"));
+B.onLoadDeferred.addCallback(dojo.hitch(this,"_fixNewLineBehaviorForIE"))
+}else{B.onLoadDeferred.addCallback(dojo.hitch(this,function(D){try{this.editor.document.execCommand("insertBrOnReturn",false,true)
+}catch(C){}return D
 }))
 }}else{if(this.blockNodeForEnter){dojo.require("dijit._editor.range");
-var B=dojo.hitch(this,this.handleEnterKey);
-A.addKeyHandler(13,0,B);
-A.addKeyHandler(13,2,B);
+var A=dojo.hitch(this,this.handleEnterKey);
+B.addKeyHandler(13,0,A);
+B.addKeyHandler(13,2,A);
 this.connect(this.editor,"onKeyPressed","onKeyPressed")
-}}},connect:function(B,C,A){if(!this._connects){this._connects=[]
-}this._connects.push(dojo.connect(B,C,this,A))
+}}},connect:function(C,A,B){if(!this._connects){this._connects=[]
+}this._connects.push(dojo.connect(C,A,this,B))
 },destroy:function(){dojo.forEach(this._connects,dojo.disconnect);
 this._connects=[]
-},onKeyPressed:function(A){if(this._checkListLater){if(dojo.withGlobal(this.editor.window,"isCollapsed",dijit._editor.selection)){if(!dojo.withGlobal(this.editor.window,"hasAncestorElement",dijit._editor.selection,["LI"])){dijit._editor.RichText.prototype.execCommand.apply(this.editor,["formatblock",this.blockNodeForEnter]);
-var B=dojo.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,[this.blockNodeForEnter]);
-if(B){B.innerHTML=this.bogusHtmlContent;
-if(dojo.isIE){var C=this.editor.document.selection.createRange();
-C.move("character",-1);
-C.select()
+},onKeyPressed:function(B){if(this._checkListLater){if(dojo.withGlobal(this.editor.window,"isCollapsed",dijit._editor.selection)){if(!dojo.withGlobal(this.editor.window,"hasAncestorElement",dijit._editor.selection,["LI"])){dijit._editor.RichText.prototype.execCommand.apply(this.editor,["formatblock",this.blockNodeForEnter]);
+var C=dojo.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,[this.blockNodeForEnter]);
+if(C){C.innerHTML=this.bogusHtmlContent;
+if(dojo.isIE){var A=this.editor.document.selection.createRange();
+A.move("character",-1);
+A.select()
 }}else{alert("onKeyPressed: Can not find the new block node")
 }}}this._checkListLater=false
 }else{if(this._pressedEnterInBlock){this.removeTrailingBr(this._pressedEnterInBlock.previousSibling);
 delete this._pressedEnterInBlock
-}}},bogusHtmlContent:"&nbsp;",blockNodes:/^(?:H1|H2|H3|H4|H5|H6|LI)$/,handleEnterKey:function(I){if(!this.blockNodeForEnter){return true
-}if(I.shiftKey||this.blockNodeForEnter=="BR"){var A=dojo.withGlobal(this.editor.window,"getParentElement",dijit._editor.selection);
-var G=dijit.range.getAncestor(A,this.editor.blockNodes);
-if(G){if(G.tagName=="LI"){return true
-}var B=dijit.range.getSelection(this.editor.window);
-var H=B.getRangeAt(0);
-if(!H.collapsed){H.deleteContents()
-}if(dijit.range.atBeginningOfContainer(G,H.startContainer,H.startOffset)){dojo.place(this.editor.document.createElement("br"),G,"before")
-}else{if(dijit.range.atEndOfContainer(G,H.startContainer,H.startOffset)){dojo.place(this.editor.document.createElement("br"),G,"after");
-var E=dijit.range.create();
-E.setStartAfter(G);
-B.removeAllRanges();
-B.addRange(E)
+}}},bogusHtmlContent:"&nbsp;",blockNodes:/^(?:H1|H2|H3|H4|H5|H6|LI)$/,handleEnterKey:function(D){if(!this.blockNodeForEnter){return true
+}if(D.shiftKey||this.blockNodeForEnter=="BR"){var E=dojo.withGlobal(this.editor.window,"getParentElement",dijit._editor.selection);
+var B=dijit.range.getAncestor(E,this.editor.blockNodes);
+if(B){if(B.tagName=="LI"){return true
+}var F=dijit.range.getSelection(this.editor.window);
+var C=F.getRangeAt(0);
+if(!C.collapsed){C.deleteContents()
+}if(dijit.range.atBeginningOfContainer(B,C.startContainer,C.startOffset)){dojo.place(this.editor.document.createElement("br"),B,"before")
+}else{if(dijit.range.atEndOfContainer(B,C.startContainer,C.startOffset)){dojo.place(this.editor.document.createElement("br"),B,"after");
+var I=dijit.range.create();
+I.setStartAfter(B);
+F.removeAllRanges();
+F.addRange(I)
 }else{return true
 }}}else{dijit._editor.RichText.prototype.execCommand.call(this.editor,"inserthtml","<br>")
 }return false
-}var C=true;
-var B=dijit.range.getSelection(this.editor.window);
-var H=B.getRangeAt(0);
-if(!H.collapsed){H.deleteContents()
-}var F=dijit.range.getBlockAncestor(H.endContainer,null,this.editor.editNode);
-if(F.blockNode&&F.blockNode.tagName=="LI"){this._checkListLater=true;
+}var G=true;
+var F=dijit.range.getSelection(this.editor.window);
+var C=F.getRangeAt(0);
+if(!C.collapsed){C.deleteContents()
+}var A=dijit.range.getBlockAncestor(C.endContainer,null,this.editor.editNode);
+if(A.blockNode&&A.blockNode.tagName=="LI"){this._checkListLater=true;
 return true
 }else{this._checkListLater=false
-}if(!F.blockNode){this.editor.document.execCommand("formatblock",false,this.blockNodeForEnter);
-F={blockNode:dojo.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,[this.blockNodeForEnter]),blockContainer:this.editor.editNode};
-if(F.blockNode){if((F.blockNode.textContent||F.blockNode.innerHTML).replace(/^\s+|\s+$/g,"").length==0){this.removeTrailingBr(F.blockNode);
+}if(!A.blockNode){this.editor.document.execCommand("formatblock",false,this.blockNodeForEnter);
+A={blockNode:dojo.withGlobal(this.editor.window,"getAncestorElement",dijit._editor.selection,[this.blockNodeForEnter]),blockContainer:this.editor.editNode};
+if(A.blockNode){if((A.blockNode.textContent||A.blockNode.innerHTML).replace(/^\s+|\s+$/g,"").length==0){this.removeTrailingBr(A.blockNode);
 return false
-}}else{F.blockNode=this.editor.editNode
-}B=dijit.range.getSelection(this.editor.window);
-H=B.getRangeAt(0)
-}var D=this.editor.document.createElement(this.blockNodeForEnter);
-D.innerHTML=this.bogusHtmlContent;
-this.removeTrailingBr(F.blockNode);
-if(dijit.range.atEndOfContainer(F.blockNode,H.endContainer,H.endOffset)){if(F.blockNode===F.blockContainer){F.blockNode.appendChild(D)
-}else{dojo.place(D,F.blockNode,"after")
-}C=false;
-var E=dijit.range.create();
-E.setStart(D,0);
-B.removeAllRanges();
-B.addRange(E);
-if(this.editor.height){D.scrollIntoView(false)
-}}else{if(dijit.range.atBeginningOfContainer(F.blockNode,H.startContainer,H.startOffset)){if(F.blockNode===F.blockContainer){dojo.place(D,F.blockNode,"first")
-}else{dojo.place(D,F.blockNode,"before")
-}if(this.editor.height){D.scrollIntoView(false)
-}C=false
-}else{if(dojo.isMoz){this._pressedEnterInBlock=F.blockNode
-}}}return C
-},removeTrailingBr:function(A){if(/P|DIV|LI/i.test(A.tagName)){var B=A
-}else{var B=dijit._editor.selection.getParentOfType(A,["P","DIV","LI"])
-}if(!B){return 
-}if(B.lastChild){if(B.childNodes.length>1&&B.lastChild.nodeType==3&&/^[\s\xAD]*$/.test(B.lastChild.nodeValue)){dojo._destroyElement(B.lastChild)
-}if(B.lastChild&&B.lastChild.tagName=="BR"){dojo._destroyElement(B.lastChild)
-}}if(B.childNodes.length==0){B.innerHTML=this.bogusHtmlContent
-}},_fixNewLineBehaviorForIE:function(A){if(typeof this.editor.document.__INSERTED_EDITIOR_NEWLINE_CSS=="undefined"){var C="p{margin:0 !important;}";
-var B=function(J,E,D){if(!J){return 
-}if(!E){E=document
-}var I=E.createElement("style");
+}}else{A.blockNode=this.editor.editNode
+}F=dijit.range.getSelection(this.editor.window);
+C=F.getRangeAt(0)
+}var H=this.editor.document.createElement(this.blockNodeForEnter);
+H.innerHTML=this.bogusHtmlContent;
+this.removeTrailingBr(A.blockNode);
+if(dijit.range.atEndOfContainer(A.blockNode,C.endContainer,C.endOffset)){if(A.blockNode===A.blockContainer){A.blockNode.appendChild(H)
+}else{dojo.place(H,A.blockNode,"after")
+}G=false;
+var I=dijit.range.create();
+I.setStart(H,0);
+F.removeAllRanges();
+F.addRange(I);
+if(this.editor.height){H.scrollIntoView(false)
+}}else{if(dijit.range.atBeginningOfContainer(A.blockNode,C.startContainer,C.startOffset)){if(A.blockNode===A.blockContainer){dojo.place(H,A.blockNode,"first")
+}else{dojo.place(H,A.blockNode,"before")
+}if(this.editor.height){H.scrollIntoView(false)
+}G=false
+}else{if(dojo.isMoz){this._pressedEnterInBlock=A.blockNode
+}}}return G
+},removeTrailingBr:function(B){if(/P|DIV|LI/i.test(B.tagName)){var A=B
+}else{var A=dijit._editor.selection.getParentOfType(B,["P","DIV","LI"])
+}if(!A){return 
+}if(A.lastChild){if(A.childNodes.length>1&&A.lastChild.nodeType==3&&/^[\s\xAD]*$/.test(A.lastChild.nodeValue)){dojo._destroyElement(A.lastChild)
+}if(A.lastChild&&A.lastChild.tagName=="BR"){dojo._destroyElement(A.lastChild)
+}}if(A.childNodes.length==0){A.innerHTML=this.bogusHtmlContent
+}},_fixNewLineBehaviorForIE:function(B){if(typeof this.editor.document.__INSERTED_EDITIOR_NEWLINE_CSS=="undefined"){var A="p{margin:0 !important;}";
+var C=function(E,J,F){if(!E){return 
+}if(!J){J=document
+}var I=J.createElement("style");
 I.setAttribute("type","text/css");
-var F=E.getElementsByTagName("head")[0];
-if(!F){console.debug("No head tag in document, aborting styles");
+var G=J.getElementsByTagName("head")[0];
+if(!G){console.debug("No head tag in document, aborting styles");
 return 
-}else{F.appendChild(I)
-}if(I.styleSheet){var H=function(){try{I.styleSheet.cssText=J
+}else{G.appendChild(I)
+}if(I.styleSheet){var D=function(){try{I.styleSheet.cssText=E
 }catch(K){dojo.debug(K)
 }};
-if(I.styleSheet.disabled){setTimeout(H,10)
-}else{H()
-}}else{var G=E.createTextNode(J);
-I.appendChild(G)
+if(I.styleSheet.disabled){setTimeout(D,10)
+}else{D()
+}}else{var H=J.createTextNode(E);
+I.appendChild(H)
 }return I
 };
-B(C,this.editor.document);
+C(A,this.editor.document);
 this.editor.document.__INSERTED_EDITIOR_NEWLINE_CSS=true;
-return A
-}},regularPsToSingleLinePs:function(A,F){function E(K){function I(M){var O=M[0].ownerDocument.createElement("p");
+return B
+}},regularPsToSingleLinePs:function(B,A){function F(J){function H(M){var O=M[0].ownerDocument.createElement("p");
 M[0].parentNode.insertBefore(O,M[0]);
 for(var N=0;
 N<M.length;
 N++){O.appendChild(M[N])
-}}var G=0;
-var L=[];
-var J;
-while(G<K.childNodes.length){J=K.childNodes[G];
-if((J.nodeName!="BR")&&(J.nodeType==1)&&(dojo.style(J,"display")!="block")){L.push(J)
-}else{var H=J.nextSibling;
-if(L.length){I(L);
-G=(G+1)-L.length;
-if(J.nodeName=="BR"){dojo._destroyElement(J)
-}}L=[]
-}G++
-}if(L.length){I(L)
-}}function D(K){var J=null;
-var H=[];
-var G=K.childNodes.length-1;
-for(var I=G;
-I>=0;
-I--){J=K.childNodes[I];
-if(J.nodeName=="BR"){var L=J.ownerDocument.createElement("p");
-dojo.place(L,K,"after");
-if(H.length==0&&I!=G){L.innerHTML="&nbsp;"
-}dojo.forEach(H,function(M){L.appendChild(M)
+}}var L=0;
+var K=[];
+var I;
+while(L<J.childNodes.length){I=J.childNodes[L];
+if((I.nodeName!="BR")&&(I.nodeType==1)&&(dojo.style(I,"display")!="block")){K.push(I)
+}else{var G=I.nextSibling;
+if(K.length){H(K);
+L=(L+1)-K.length;
+if(I.nodeName=="BR"){dojo._destroyElement(I)
+}}K=[]
+}L++
+}if(K.length){H(K)
+}}function E(J){var I=null;
+var G=[];
+var L=J.childNodes.length-1;
+for(var H=L;
+H>=0;
+H--){I=J.childNodes[H];
+if(I.nodeName=="BR"){var K=I.ownerDocument.createElement("p");
+dojo.place(K,J,"after");
+if(G.length==0&&H!=L){K.innerHTML="&nbsp;"
+}dojo.forEach(G,function(M){K.appendChild(M)
 });
-dojo._destroyElement(J);
-H=[]
-}else{H.unshift(J)
-}}}var B=[];
-var C=A.getElementsByTagName("p");
-dojo.forEach(C,function(G){B.push(G)
+dojo._destroyElement(I);
+G=[]
+}else{G.unshift(I)
+}}}var C=[];
+var D=B.getElementsByTagName("p");
+dojo.forEach(D,function(G){C.push(G)
 });
-dojo.forEach(B,function(G){if((G.previousSibling)&&(G.previousSibling.nodeName=="P"||dojo.style(G.previousSibling,"display")!="block")){var H=G.parentNode.insertBefore(this.document.createElement("p"),G);
-H.innerHTML=F?"":"&nbsp;"
-}D(G)
+dojo.forEach(C,function(H){if((H.previousSibling)&&(H.previousSibling.nodeName=="P"||dojo.style(H.previousSibling,"display")!="block")){var G=H.parentNode.insertBefore(this.document.createElement("p"),H);
+G.innerHTML=A?"":"&nbsp;"
+}E(H)
 },this.editor);
-E(A);
-return A
-},singleLinePsToRegularPs:function(B){function G(L){var N=L.getElementsByTagName("p");
-var J=[];
-for(var K=0;
-K<N.length;
-K++){var M=N[K];
-var P=false;
-for(var O=0;
-O<J.length;
-O++){if(J[O]===M.parentNode){P=true;
+F(B);
+return B
+},singleLinePsToRegularPs:function(F){function B(N){var P=N.getElementsByTagName("p");
+var L=[];
+for(var M=0;
+M<P.length;
+M++){var O=P[M];
+var K=false;
+for(var J=0;
+J<L.length;
+J++){if(L[J]===O.parentNode){K=true;
 break
-}}if(!P){J.push(M.parentNode)
-}}return J
-}function A(J){if(J.nodeType!=1||J.tagName!="P"){return(dojo.style(J,"display")=="block")
+}}if(!K){L.push(O.parentNode)
+}}return L
+}function E(J){if(J.nodeType!=1||J.tagName!="P"){return(dojo.style(J,"display")=="block")
 }else{if(!J.childNodes.length||J.innerHTML=="&nbsp;"){return true
-}}}var I=G(B);
-for(var C=0;
-C<I.length;
-C++){var F=I[C];
-var E=null;
-var H=F.firstChild;
-var D=null;
-while(H){if(H.nodeType!="1"||H.tagName!="P"){E=null
-}else{if(A(H)){D=H;
-E=null
-}else{if(E==null){E=H
-}else{if((!E.lastChild||E.lastChild.nodeName!="BR")&&(H.firstChild)&&(H.firstChild.nodeName!="BR")){E.appendChild(this.editor.document.createElement("br"))
-}while(H.firstChild){E.appendChild(H.firstChild)
-}D=H
-}}}H=H.nextSibling;
-if(D){dojo._destroyElement(D);
-D=null
-}}}return B
+}}}var D=B(F);
+for(var G=0;
+G<D.length;
+G++){var A=D[G];
+var I=null;
+var C=A.firstChild;
+var H=null;
+while(C){if(C.nodeType!="1"||C.tagName!="P"){I=null
+}else{if(E(C)){H=C;
+I=null
+}else{if(I==null){I=C
+}else{if((!I.lastChild||I.lastChild.nodeName!="BR")&&(C.firstChild)&&(C.firstChild.nodeName!="BR")){I.appendChild(this.editor.document.createElement("br"))
+}while(C.firstChild){I.appendChild(C.firstChild)
+}H=C
+}}}C=C.nextSibling;
+if(H){dojo._destroyElement(H);
+H=null
+}}}return F
 }})
 };

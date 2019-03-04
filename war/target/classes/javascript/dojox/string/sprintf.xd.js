@@ -1,138 +1,138 @@
 dojo._xdResourceLoaded({depends:[["provide","dojox.string.sprintf"],["require","dojox.string.tokenize"]],defineResource:function(A){if(!A._hasResource["dojox.string.sprintf"]){A._hasResource["dojox.string.sprintf"]=true;
 A.provide("dojox.string.sprintf");
 A.require("dojox.string.tokenize");
-dojox.string.sprintf=function(B,F){for(var C=[],E=1;
-E<arguments.length;
-E++){C.push(arguments[E])
-}var D=new dojox.string.sprintf.Formatter(B);
-return D.format.apply(D,C)
+dojox.string.sprintf=function(F,E){for(var B=[],D=1;
+D<arguments.length;
+D++){B.push(arguments[D])
+}var C=new dojox.string.sprintf.Formatter(F);
+return C.format.apply(C,B)
 };
-dojox.string.sprintf.Formatter=function(B){var C=[];
+dojox.string.sprintf.Formatter=function(C){var B=[];
 this._mapped=false;
-this._format=B;
-this._tokens=dojox.string.tokenize(B,this._re,this._parseDelim,this)
+this._format=C;
+this._tokens=dojox.string.tokenize(C,this._re,this._parseDelim,this)
 };
-A.extend(dojox.string.sprintf.Formatter,{_re:/\%(?:\(([\w_]+)\)|([1-9]\d*)\$)?([0 +\-\#]*)(\*|\d+)?(\.)?(\*|\d+)?[hlL]?([\%scdeEfFgGiouxX])/g,_parseDelim:function(D,C,H,F,B,G,E){if(D){this._mapped=true
-}return{mapping:D,intmapping:C,flags:H,_minWidth:F,period:B,_precision:G,specifier:E}
-},_specifiers:{b:{base:2,isInt:true},o:{base:8,isInt:true},x:{base:16,isInt:true},X:{extend:["x"],toUpper:true},d:{base:10,isInt:true},i:{extend:["d"]},u:{extend:["d"],isUnsigned:true},c:{setArg:function(B){if(!isNaN(B.arg)){var C=parseInt(B.arg);
-if(C<0||C>127){throw new Error("invalid character code passed to %c in sprintf")
-}B.arg=isNaN(C)?""+C:String.fromCharCode(C)
+A.extend(dojox.string.sprintf.Formatter,{_re:/\%(?:\(([\w_]+)\)|([1-9]\d*)\$)?([0 +\-\#]*)(\*|\d+)?(\.)?(\*|\d+)?[hlL]?([\%scdeEfFgGiouxX])/g,_parseDelim:function(E,D,C,G,H,B,F){if(E){this._mapped=true
+}return{mapping:E,intmapping:D,flags:C,_minWidth:G,period:H,_precision:B,specifier:F}
+},_specifiers:{b:{base:2,isInt:true},o:{base:8,isInt:true},x:{base:16,isInt:true},X:{extend:["x"],toUpper:true},d:{base:10,isInt:true},i:{extend:["d"]},u:{extend:["d"],isUnsigned:true},c:{setArg:function(C){if(!isNaN(C.arg)){var B=parseInt(C.arg);
+if(B<0||B>127){throw new Error("invalid character code passed to %c in sprintf")
+}C.arg=isNaN(B)?""+B:String.fromCharCode(B)
 }}},s:{setMaxWidth:function(B){B.maxWidth=(B.period==".")?B.precision:-1
-}},e:{isDouble:true,doubleNotation:"e"},E:{extend:["e"],toUpper:true},f:{isDouble:true,doubleNotation:"f"},F:{extend:["f"]},g:{isDouble:true,doubleNotation:"g"},G:{extend:["g"],toUpper:true}},format:function(B){if(this._mapped&&typeof B!="object"){throw new Error("format requires a mapping")
-}var G="";
-var D=0;
-for(var C=0,J;
-C<this._tokens.length;
-C++){J=this._tokens[C];
-if(typeof J=="string"){G+=J
-}else{if(this._mapped){if(typeof B[J.mapping]=="undefined"){throw new Error("missing key "+J.mapping)
-}J.arg=B[J.mapping]
-}else{if(J.intmapping){var D=parseInt(J.intmapping)-1
-}if(D>=arguments.length){throw new Error("got "+arguments.length+" printf arguments, insufficient for '"+this._format+"'")
-}J.arg=arguments[D++]
-}if(!J.compiled){J.compiled=true;
-J.sign="";
-J.zeroPad=false;
-J.rightJustify=false;
-J.alternative=false;
-var I={};
-for(var H=J.flags.length;
-H--;
-){var F=J.flags.charAt(H);
-I[F]=true;
-switch(F){case" ":J.sign=" ";
+}},e:{isDouble:true,doubleNotation:"e"},E:{extend:["e"],toUpper:true},f:{isDouble:true,doubleNotation:"f"},F:{extend:["f"]},g:{isDouble:true,doubleNotation:"g"},G:{extend:["g"],toUpper:true}},format:function(D){if(this._mapped&&typeof D!="object"){throw new Error("format requires a mapping")
+}var I="";
+var F=0;
+for(var E=0,C;
+E<this._tokens.length;
+E++){C=this._tokens[E];
+if(typeof C=="string"){I+=C
+}else{if(this._mapped){if(typeof D[C.mapping]=="undefined"){throw new Error("missing key "+C.mapping)
+}C.arg=D[C.mapping]
+}else{if(C.intmapping){var F=parseInt(C.intmapping)-1
+}if(F>=arguments.length){throw new Error("got "+arguments.length+" printf arguments, insufficient for '"+this._format+"'")
+}C.arg=arguments[F++]
+}if(!C.compiled){C.compiled=true;
+C.sign="";
+C.zeroPad=false;
+C.rightJustify=false;
+C.alternative=false;
+var B={};
+for(var J=C.flags.length;
+J--;
+){var H=C.flags.charAt(J);
+B[H]=true;
+switch(H){case" ":C.sign=" ";
 break;
-case"+":J.sign="+";
+case"+":C.sign="+";
 break;
-case"0":J.zeroPad=(I["-"])?false:true;
+case"0":C.zeroPad=(B["-"])?false:true;
 break;
-case"-":J.rightJustify=true;
-J.zeroPad=false;
+case"-":C.rightJustify=true;
+C.zeroPad=false;
 break;
-case"#":J.alternative=true;
+case"#":C.alternative=true;
 break;
-default:throw Error("bad formatting flag '"+J.flags.charAt(H)+"'")
-}}J.minWidth=(J._minWidth)?parseInt(J._minWidth):0;
-J.maxWidth=-1;
-J.toUpper=false;
-J.isUnsigned=false;
-J.isInt=false;
-J.isDouble=false;
-J.precision=1;
-if(J.period=="."){if(J._precision){J.precision=parseInt(J._precision)
-}else{J.precision=0
-}}var E=this._specifiers[J.specifier];
-if(typeof E=="undefined"){throw new Error("unexpected specifier '"+J.specifier+"'")
-}if(E.extend){A.mixin(E,this._specifiers[E.extend]);
-delete E.extend
-}A.mixin(J,E)
-}if(typeof J.setArg=="function"){J.setArg(J)
-}if(typeof J.setMaxWidth=="function"){J.setMaxWidth(J)
-}if(J._minWidth=="*"){if(this._mapped){throw new Error("* width not supported in mapped formats")
-}J.minWidth=parseInt(arguments[D++]);
-if(isNaN(J.minWidth)){throw new Error("the argument for * width at position "+D+" is not a number in "+this._format)
-}if(J.minWidth<0){J.rightJustify=true;
-J.minWidth=-J.minWidth
-}}if(J._precision=="*"&&J.period=="."){if(this._mapped){throw new Error("* precision not supported in mapped formats")
-}J.precision=parseInt(arguments[D++]);
-if(isNaN(J.precision)){throw Error("the argument for * precision at position "+D+" is not a number in "+this._format)
-}if(J.precision<0){J.precision=1;
-J.period=""
-}}if(J.isInt){if(J.period=="."){J.zeroPad=false
-}this.formatInt(J)
-}else{if(J.isDouble){if(J.period!="."){J.precision=6
-}this.formatDouble(J)
-}}this.fitField(J);
-G+=""+J.arg
-}}return G
-},_zeros10:"0000000000",_spaces10:"          ",formatInt:function(B){var C=parseInt(B.arg);
-if(!isFinite(C)){if(typeof B.arg!="number"){throw new Error("format argument '"+B.arg+"' not an integer; parseInt returned "+C)
-}C=0
-}if(C<0&&(B.isUnsigned||B.base!=10)){C=4294967295+C+1
-}if(C<0){B.arg=(-C).toString(B.base);
-this.zeroPad(B);
-B.arg="-"+B.arg
-}else{B.arg=C.toString(B.base);
-if(!C&&!B.precision){B.arg=""
-}else{this.zeroPad(B)
-}if(B.sign){B.arg=B.sign+B.arg
-}}if(B.base==16){if(B.alternative){B.arg="0x"+B.arg
-}toke.art=B.toUpper?B.arg.toUpperCase():B.arg.toLowerCase()
-}if(B.base==8){if(B.alternative&&B.arg.charAt(0)!="0"){B.arg="0"+B.arg
-}}},formatDouble:function(C){var B=parseFloat(C.arg);
-if(!isFinite(B)){if(typeof C.arg!="number"){throw new Error("format argument '"+C.arg+"' not a float; parseFloat returned "+B)
+default:throw Error("bad formatting flag '"+C.flags.charAt(J)+"'")
+}}C.minWidth=(C._minWidth)?parseInt(C._minWidth):0;
+C.maxWidth=-1;
+C.toUpper=false;
+C.isUnsigned=false;
+C.isInt=false;
+C.isDouble=false;
+C.precision=1;
+if(C.period=="."){if(C._precision){C.precision=parseInt(C._precision)
+}else{C.precision=0
+}}var G=this._specifiers[C.specifier];
+if(typeof G=="undefined"){throw new Error("unexpected specifier '"+C.specifier+"'")
+}if(G.extend){A.mixin(G,this._specifiers[G.extend]);
+delete G.extend
+}A.mixin(C,G)
+}if(typeof C.setArg=="function"){C.setArg(C)
+}if(typeof C.setMaxWidth=="function"){C.setMaxWidth(C)
+}if(C._minWidth=="*"){if(this._mapped){throw new Error("* width not supported in mapped formats")
+}C.minWidth=parseInt(arguments[F++]);
+if(isNaN(C.minWidth)){throw new Error("the argument for * width at position "+F+" is not a number in "+this._format)
+}if(C.minWidth<0){C.rightJustify=true;
+C.minWidth=-C.minWidth
+}}if(C._precision=="*"&&C.period=="."){if(this._mapped){throw new Error("* precision not supported in mapped formats")
+}C.precision=parseInt(arguments[F++]);
+if(isNaN(C.precision)){throw Error("the argument for * precision at position "+F+" is not a number in "+this._format)
+}if(C.precision<0){C.precision=1;
+C.period=""
+}}if(C.isInt){if(C.period=="."){C.zeroPad=false
+}this.formatInt(C)
+}else{if(C.isDouble){if(C.period!="."){C.precision=6
+}this.formatDouble(C)
+}}this.fitField(C);
+I+=""+C.arg
+}}return I
+},_zeros10:"0000000000",_spaces10:"          ",formatInt:function(C){var B=parseInt(C.arg);
+if(!isFinite(B)){if(typeof C.arg!="number"){throw new Error("format argument '"+C.arg+"' not an integer; parseInt returned "+B)
 }B=0
-}switch(C.doubleNotation){case"e":C.arg=B.toExponential(C.precision);
+}if(B<0&&(C.isUnsigned||C.base!=10)){B=4294967295+B+1
+}if(B<0){C.arg=(-B).toString(C.base);
+this.zeroPad(C);
+C.arg="-"+C.arg
+}else{C.arg=B.toString(C.base);
+if(!B&&!C.precision){C.arg=""
+}else{this.zeroPad(C)
+}if(C.sign){C.arg=C.sign+C.arg
+}}if(C.base==16){if(C.alternative){C.arg="0x"+C.arg
+}toke.art=C.toUpper?C.arg.toUpperCase():C.arg.toLowerCase()
+}if(C.base==8){if(C.alternative&&C.arg.charAt(0)!="0"){C.arg="0"+C.arg
+}}},formatDouble:function(B){var C=parseFloat(B.arg);
+if(!isFinite(C)){if(typeof B.arg!="number"){throw new Error("format argument '"+B.arg+"' not a float; parseFloat returned "+C)
+}C=0
+}switch(B.doubleNotation){case"e":B.arg=C.toExponential(B.precision);
 break;
-case"f":C.arg=B.toFixed(C.precision);
+case"f":B.arg=C.toFixed(B.precision);
 break;
-case"g":if(Math.abs(B)<0.0001){C.arg=B.toExponential(C.precision>0?C.precision-1:C.precision)
-}else{C.arg=B.toPrecision(C.precision)
-}if(!C.alternative){C.arg=C.arg.replace(/(\..*[^0])0*/,"$1");
-C.arg=C.arg.replace(/\.0*e/,"e").replace(/\.0$/,"")
+case"g":if(Math.abs(C)<0.0001){B.arg=C.toExponential(B.precision>0?B.precision-1:B.precision)
+}else{B.arg=C.toPrecision(B.precision)
+}if(!B.alternative){B.arg=B.arg.replace(/(\..*[^0])0*/,"$1");
+B.arg=B.arg.replace(/\.0*e/,"e").replace(/\.0$/,"")
 }break;
-default:throw new Error("unexpected double notation '"+C.doubleNotation+"'")
-}C.arg=C.arg.replace(/e\+(\d)$/,"e+0$1").replace(/e\-(\d)$/,"e-0$1");
-if(A.isOpera){C.arg=C.arg.replace(/^\./,"0.")
-}if(C.alternative){C.arg=C.arg.replace(/^(\d+)$/,"$1.");
-C.arg=C.arg.replace(/^(\d+)e/,"$1.e")
-}if(B>=0&&C.sign){C.arg=C.sign+C.arg
-}C.arg=C.toUpper?C.arg.toUpperCase():C.arg.toLowerCase()
-},zeroPad:function(D,E){E=(arguments.length==2)?E:D.precision;
-if(typeof D.arg!="string"){D.arg=""+D.arg
-}var C=E-10;
-while(D.arg.length<C){D.arg=(D.rightJustify)?D.arg+this._zeros10:this._zeros10+D.arg
-}var B=E-D.arg.length;
-D.arg=(D.rightJustify)?D.arg+this._zeros10.substring(0,B):this._zeros10.substring(0,B)+D.arg
+default:throw new Error("unexpected double notation '"+B.doubleNotation+"'")
+}B.arg=B.arg.replace(/e\+(\d)$/,"e+0$1").replace(/e\-(\d)$/,"e-0$1");
+if(A.isOpera){B.arg=B.arg.replace(/^\./,"0.")
+}if(B.alternative){B.arg=B.arg.replace(/^(\d+)$/,"$1.");
+B.arg=B.arg.replace(/^(\d+)e/,"$1.e")
+}if(C>=0&&B.sign){B.arg=B.sign+B.arg
+}B.arg=B.toUpper?B.arg.toUpperCase():B.arg.toLowerCase()
+},zeroPad:function(C,D){D=(arguments.length==2)?D:C.precision;
+if(typeof C.arg!="string"){C.arg=""+C.arg
+}var B=D-10;
+while(C.arg.length<B){C.arg=(C.rightJustify)?C.arg+this._zeros10:this._zeros10+C.arg
+}var E=D-C.arg.length;
+C.arg=(C.rightJustify)?C.arg+this._zeros10.substring(0,E):this._zeros10.substring(0,E)+C.arg
 },fitField:function(B){if(B.maxWidth>=0&&B.arg.length>B.maxWidth){return B.arg.substring(0,B.maxWidth)
 }if(B.zeroPad){this.zeroPad(B,B.minWidth);
 return 
 }this.spacePad(B)
-},spacePad:function(D,E){E=(arguments.length==2)?E:D.minWidth;
-if(typeof D.arg!="string"){D.arg=""+D.arg
-}var C=E-10;
-while(D.arg.length<C){D.arg=(D.rightJustify)?D.arg+this._spaces10:this._spaces10+D.arg
-}var B=E-D.arg.length;
-D.arg=(D.rightJustify)?D.arg+this._spaces10.substring(0,B):this._spaces10.substring(0,B)+D.arg
+},spacePad:function(C,D){D=(arguments.length==2)?D:C.minWidth;
+if(typeof C.arg!="string"){C.arg=""+C.arg
+}var B=D-10;
+while(C.arg.length<B){C.arg=(C.rightJustify)?C.arg+this._spaces10:this._spaces10+C.arg
+}var E=D-C.arg.length;
+C.arg=(C.rightJustify)?C.arg+this._spaces10.substring(0,E):this._spaces10.substring(0,E)+C.arg
 }})
 }}});

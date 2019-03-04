@@ -1,18 +1,18 @@
 if(!dojo._hasResource["dojox.uuid.Uuid"]){dojo._hasResource["dojox.uuid.Uuid"]=true;
 dojo.provide("dojox.uuid.Uuid");
 dojo.require("dojox.uuid");
-dojox.uuid.Uuid=function(A){this._uuidString=dojox.uuid.NIL_UUID;
-if(A){dojox.uuid.assert(dojo.isString(A));
-this._uuidString=A.toLowerCase();
+dojox.uuid.Uuid=function(B){this._uuidString=dojox.uuid.NIL_UUID;
+if(B){dojox.uuid.assert(dojo.isString(B));
+this._uuidString=B.toLowerCase();
 dojox.uuid.assert(this.isValid())
-}else{var B=dojox.uuid.Uuid.getGenerator();
-if(B){this._uuidString=B();
+}else{var A=dojox.uuid.Uuid.getGenerator();
+if(A){this._uuidString=A();
 dojox.uuid.assert(this.isValid())
 }}};
-dojox.uuid.Uuid.compare=function(C,B){var A=C.toString();
-var D=B.toString();
-if(A>D){return 1
-}if(A<D){return -1
+dojox.uuid.Uuid.compare=function(D,C){var B=D.toString();
+var A=C.toString();
+if(B>A){return 1
+}if(B<A){return -1
 }return 0
 };
 dojox.uuid.Uuid.setGenerator=function(A){dojox.uuid.assert(!A||dojo.isFunction(A));

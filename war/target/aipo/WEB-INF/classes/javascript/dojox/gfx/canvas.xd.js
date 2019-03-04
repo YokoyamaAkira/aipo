@@ -85,23 +85,23 @@ if(N){V.arcTo(R,U,Q,U,N)
 }V.closePath()
 }});
 var K=[];
-(function(){var C=L.curvePI4;
-K.push(C.s,C.c1,C.c2,C.e);
-for(var N=45;
-N<360;
-N+=45){var O=H.rotateg(N);
-K.push(F(O,C.c1),F(O,C.c2),F(O,C.e))
+(function(){var N=L.curvePI4;
+K.push(N.s,N.c1,N.c2,N.e);
+for(var C=45;
+C<360;
+C+=45){var O=H.rotateg(C);
+K.push(F(O,N.c1),F(O,N.c2),F(O,N.e))
 }})();
 A.declare("dojox.gfx.Ellipse",D.Ellipse,{setShape:function(){I.Ellipse.superclass.setShape.apply(this,arguments);
-var Q=this.shape,O,P,C,R=[],S=H.normalize([H.translate(Q.cx,Q.cy),H.scale(Q.rx,Q.ry)]);
+var Q=this.shape,O,P,N,R=[],S=H.normalize([H.translate(Q.cx,Q.cy),H.scale(Q.rx,Q.ry)]);
 O=F(S,K[0]);
 R.push([O.x,O.y]);
-for(var N=1;
-N<K.length;
-N+=3){P=F(S,K[N]);
-C=F(S,K[N+1]);
-O=F(S,K[N+2]);
-R.push([P.x,P.y,C.x,C.y,O.x,O.y])
+for(var C=1;
+C<K.length;
+C+=3){P=F(S,K[C]);
+N=F(S,K[C+1]);
+O=F(S,K[C+2]);
+R.push([P.x,P.y,N.x,N.y,O.x,O.y])
 }this.canvasEllipse=R;
 return this
 },_renderShape:function(C){var O=this.canvasEllipse;
@@ -122,17 +122,17 @@ C.moveTo(N.x1,N.y1);
 C.lineTo(N.x2,N.y2)
 }});
 A.declare("dojox.gfx.Polyline",D.Polyline,{setShape:function(){I.Polyline.superclass.setShape.apply(this,arguments);
-var P=this.shape.points,O=P[0],C=[],Q,N;
-if(P.length){if(typeof O=="number"){C.push(O,P[1]);
-N=2
-}else{C.push(O.x,O.y);
-N=1
+var P=this.shape.points,O=P[0],N=[],Q,C;
+if(P.length){if(typeof O=="number"){N.push(O,P[1]);
+C=2
+}else{N.push(O.x,O.y);
+C=1
 }for(;
-N<P.length;
-++N){Q=P[N];
-if(typeof Q=="number"){C.push(Q,P[++N])
-}else{C.push(Q.x,Q.y)
-}}}this.canvasPolyline=C;
+C<P.length;
+++C){Q=P[C];
+if(typeof Q=="number"){N.push(Q,P[++C])
+}else{N.push(Q.x,Q.y)
+}}}this.canvasPolyline=N;
 return this
 },_renderShape:function(C){var O=this.canvasPolyline;
 if(O.length){C.beginPath();
@@ -157,9 +157,9 @@ A.declare("dojox.gfx.Path",I.path.Path,{constructor:function(){this.last={};
 this.lastControl={}
 },setShape:function(){this.canvasPath=[];
 return I.Path.superclass.setShape.apply(this,arguments)
-},_updateWithSegment:function(C){var N=A.clone(this.last);
-this[E[C.action]](this.canvasPath,C.action,C.args);
-this.last=N;
+},_updateWithSegment:function(N){var C=A.clone(this.last);
+this[E[N.action]](this.canvasPath,N.action,N.args);
+this.last=C;
 I.Path.superclass._updateWithSegment.apply(this,arguments)
 },_renderShape:function(C){var O=this.canvasPath;
 C.beginPath();
@@ -289,11 +289,11 @@ A.declare("dojox.gfx.TextPath",I.path.TextPath,{_renderShape:function(C){var N=t
 A.declare("dojox.gfx.Surface",D.Surface,{constructor:function(){D.Container._init.call(this);
 this.pendingImageCount=0;
 this.makeDirty()
-},setDimensions:function(C,N){this.width=I.normalizedLength(C);
-this.height=I.normalizedLength(N);
+},setDimensions:function(N,C){this.width=I.normalizedLength(N);
+this.height=I.normalizedLength(C);
 if(!this.rawNode){return this
-}this.rawNode.width=C;
-this.rawNode.height=N;
+}this.rawNode.width=N;
+this.rawNode.height=C;
 this.makeDirty();
 return this
 },getDimensions:function(){return this.rawNode?{width:this.rawNode.width,height:this.rawNode.height}:null
@@ -318,11 +318,11 @@ C.src=N
 },onImageLoad:function(){if(!--this.pendingImageCount){this.render()
 }},getEventSource:function(){return null
 },connect:function(){},disconnect:function(){}});
-I.createSurface=function(C,P,N){if(!P){P="100%"
-}if(!N){N="100%"
-}var O=new I.Surface(),Q=A.byId(C),R=Q.ownerDocument.createElement("canvas");
+I.createSurface=function(N,P,C){if(!P){P="100%"
+}if(!C){C="100%"
+}var O=new I.Surface(),Q=A.byId(N),R=Q.ownerDocument.createElement("canvas");
 R.width=P;
-R.height=N;
+R.height=C;
 Q.appendChild(R);
 O.rawNode=R;
 O.surface=O;
@@ -339,11 +339,11 @@ return B._moveChildToFront.apply(this,arguments)
 },_moveChildToBack:function(C){this.surface.makeDirty();
 return B._moveChildToBack.apply(this,arguments)
 }};
-A.mixin(D.Creator,{createObject:function(O,C){var N=new O();
-N.surface=this.surface;
-N.setShape(C);
-this.add(N);
-return N
+A.mixin(D.Creator,{createObject:function(O,N){var C=new O();
+C.surface=this.surface;
+C.setShape(N);
+this.add(C);
+return C
 }});
 A.extend(I.Group,G);
 A.extend(I.Group,D.Creator);

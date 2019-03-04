@@ -48,12 +48,12 @@ import org.apache.velocity.context.Context;
 
 /**
  * A Velocity based portlet control which implements all PortletState action
- * 
+ *
  * <p>
  * To use this control you need to define in your registry the following entry
  * or similar:
  * </p>
- * 
+ *
  * <pre>
  *   <portlet-control-entry name="TitlePortletControl">
  *     <classname>org.apache.jetspeed.portal.controls.VelocityPortletControl</classname>
@@ -66,23 +66,23 @@ import org.apache.velocity.context.Context;
  *     <media-type ref="html"/>
  *   </portlet-control-entry>
  * </pre>
- * 
- * 
+ *
+ *
  * @author <a href="mailto:re_carrasco@bco011.sonda.cl">Roberto Carrasco</a>
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @author <a href="mailto:morciuch@apache.org">Mark Orciuch</a>
- * 
+ *
  * @version $Id: VelocityPortletControl.java,v 1.30 2004/03/29 21:38:42 taylor
  *          Exp $
- * 
+ *
  */
 public class VelocityPortletControl extends AbstractPortletControl {
 
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(VelocityPortletControl.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(VelocityPortletControl.class.getName());
 
   /** Disable content caching */
   @Override
@@ -104,9 +104,8 @@ public class VelocityPortletControl extends AbstractPortletControl {
     if (portlet instanceof PortletWrapper) {
       PortletWrapper wrapper = (PortletWrapper) portlet;
       if (!wrapper.getAllowView(rundata)) {
-        if (JetspeedResources.getBoolean(
-          "defaultportletcontrol.hide.decorator",
-          true)) {
+        if (JetspeedResources
+          .getBoolean("defaultportletcontrol.hide.decorator", true)) {
           return new StringElement("");
         }
       }
@@ -124,7 +123,7 @@ public class VelocityPortletControl extends AbstractPortletControl {
     // Put the request and session based contexts
     TurbinePull.populateContext(context, rundata);
 
-    if (portlet.getName().equals(jdata.getCustomized())
+    if (portlet.getName().equals(jdata.getCustomized().getName())
       && (!portlet.providesCustomization())) {
       context.put("portlet", JetspeedTool.getCustomizer(portlet));
       context.put("portlet_instance", JetspeedTool.getCustomizer(portlet));
@@ -133,9 +132,10 @@ public class VelocityPortletControl extends AbstractPortletControl {
       if (PersistenceManager.getInstance(portlet, jdata) == null) {
         context.put("portlet_instance", portlet);
       } else {
-        context.put("portlet_instance", PersistenceManager.getInstance(
-          portlet,
-          jdata));
+        context
+          .put(
+            "portlet_instance",
+            PersistenceManager.getInstance(portlet, jdata));
       }
     }
 
@@ -161,7 +161,7 @@ public class VelocityPortletControl extends AbstractPortletControl {
   /**
    * This method allows subclasses of the VelocityPortletControl to populate the
    * context of this control before rendering by the template engine.
-   * 
+   *
    * @param rundata
    *          the RunData object for this request
    * @param context
@@ -174,7 +174,7 @@ public class VelocityPortletControl extends AbstractPortletControl {
   /**
    * Builds a list of possible window actions for this portlet instance. For
    * best results, the portlet should also implement the PortletState interface.
-   * 
+   *
    * @param rundata
    *          the request RunData
    * @param the
@@ -182,7 +182,8 @@ public class VelocityPortletControl extends AbstractPortletControl {
    * @return a list of ordered PortletAction objects describing the the actions
    *         available for this portlet
    */
-  protected List<PortletAction> buildActionList(RunData rundata, Portlet portlet) {
+  protected List<PortletAction> buildActionList(RunData rundata,
+      Portlet portlet) {
     List<PortletAction> actions = new Vector<PortletAction>();
     JetspeedLink jsLink = null;
     JetspeedRunData jdata = (JetspeedRunData) rundata;
@@ -266,9 +267,9 @@ public class VelocityPortletControl extends AbstractPortletControl {
       // action.setLink( jsLink.setPortletById(portlet.getID())
       // .addQueryData("action", getAction( action.getName()))
       // .toString());
-      action.setLink(jsLink
-        .setAction(getAction(action.getName()), portlet)
-        .toString());
+      action
+        .setLink(
+          jsLink.setAction(getAction(action.getName()), portlet).toString());
       JetspeedLinkFactory.putInstance(jsLink);
       jsLink = null;
     }
@@ -302,7 +303,7 @@ public class VelocityPortletControl extends AbstractPortletControl {
 
     /**
      * Constructor
-     * 
+     *
      * @param name
      *          Name of the action
      * @param alt

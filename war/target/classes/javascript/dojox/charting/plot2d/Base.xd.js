@@ -12,13 +12,13 @@ return this
 },addSeries:function(B){this.series.push(B);
 return this
 },calculateAxes:function(B){return this
-},render:function(B,C){return this
+},render:function(C,B){return this
 },getRequiredColors:function(){return this.series.length
-},_calc:function(B,C){if(this._hAxis){if(!this._hAxis.initialized()){this._hAxis.calculate(C.hmin,C.hmax,B.width)
+},_calc:function(C,B){if(this._hAxis){if(!this._hAxis.initialized()){this._hAxis.calculate(B.hmin,B.hmax,C.width)
 }this._hScaler=this._hAxis.getScaler()
-}else{this._hScaler={bounds:{lower:C.hmin,upper:C.hmax},scale:B.width/(C.hmax-C.hmin)}
-}if(this._vAxis){if(!this._vAxis.initialized()){this._vAxis.calculate(C.vmin,C.vmax,B.height)
+}else{this._hScaler={bounds:{lower:B.hmin,upper:B.hmax},scale:C.width/(B.hmax-B.hmin)}
+}if(this._vAxis){if(!this._vAxis.initialized()){this._vAxis.calculate(B.vmin,B.vmax,C.height)
 }this._vScaler=this._vAxis.getScaler()
-}else{this._vScaler={bounds:{lower:C.vmin,upper:C.vmax},scale:B.height/(C.vmax-C.vmin)}
+}else{this._vScaler={bounds:{lower:B.vmin,upper:B.vmax},scale:C.height/(B.vmax-B.vmin)}
 }}})
 }}});

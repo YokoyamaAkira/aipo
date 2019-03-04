@@ -25,10 +25,12 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -67,7 +69,7 @@ public class ThreadPoolingDataSource implements DataSource {
 
   /**
    * Returns the value of the accessToUnderlyingConnectionAllowed property.
-   * 
+   *
    * @return true if access to the underlying is allowed, false otherwise.
    */
   public boolean isAccessToUnderlyingConnectionAllowed() {
@@ -78,7 +80,7 @@ public class ThreadPoolingDataSource implements DataSource {
    * Sets the value of the accessToUnderlyingConnectionAllowed property. It
    * controls if the PoolGuard allows access to the underlying connection.
    * (Default: false)
-   * 
+   *
    * @param allow
    *          Access to the underlying connection is granted when true.
    */
@@ -117,8 +119,9 @@ public class ThreadPoolingDataSource implements DataSource {
     } catch (SQLException e) {
       throw e;
     } catch (NoSuchElementException e) {
-      throw new SQLNestedException("Cannot get a connection, pool error "
-        + e.getMessage(), e);
+      throw new SQLNestedException(
+        "Cannot get a connection, pool error " + e.getMessage(),
+        e);
     } catch (RuntimeException e) {
       throw e;
     } catch (Exception e) {
@@ -128,7 +131,7 @@ public class ThreadPoolingDataSource implements DataSource {
 
   /**
    * Throws {@link UnsupportedOperationException}
-   * 
+   *
    * @throws UnsupportedOperationException
    */
   @Override
@@ -139,7 +142,7 @@ public class ThreadPoolingDataSource implements DataSource {
 
   /**
    * Returns my log writer.
-   * 
+   *
    * @return my log writer
    * @see DataSource#getLogWriter
    */
@@ -150,7 +153,7 @@ public class ThreadPoolingDataSource implements DataSource {
 
   /**
    * Throws {@link UnsupportedOperationException}.
-   * 
+   *
    * @throws UnsupportedOperationException
    *           As this implementation does not support this feature.
    */
@@ -161,7 +164,7 @@ public class ThreadPoolingDataSource implements DataSource {
 
   /**
    * Throws {@link UnsupportedOperationException}.
-   * 
+   *
    * @throws UnsupportedOperationException
    *           As this implementation does not support this feature.
    */
@@ -172,7 +175,7 @@ public class ThreadPoolingDataSource implements DataSource {
 
   /**
    * Sets my log writer.
-   * 
+   *
    * @see DataSource#setLogWriter
    */
   @Override
@@ -241,12 +244,12 @@ public class ThreadPoolingDataSource implements DataSource {
     }
 
     @Override
-    public Statement createStatement(int resultSetType, int resultSetConcurrency)
-        throws SQLException {
+    public Statement createStatement(int resultSetType,
+        int resultSetConcurrency) throws SQLException {
       checkOpen();
-      return new DelegatingStatement(this, delegate.createStatement(
-        resultSetType,
-        resultSetConcurrency));
+      return new DelegatingStatement(
+        this,
+        delegate.createStatement(resultSetType, resultSetConcurrency));
     }
 
     @Override
@@ -283,7 +286,7 @@ public class ThreadPoolingDataSource implements DataSource {
       return delegate.getTransactionIsolation();
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "rawtypes" })
     @Override
     public Map getTypeMap() throws SQLException {
       checkOpen();
@@ -347,27 +350,26 @@ public class ThreadPoolingDataSource implements DataSource {
     public CallableStatement prepareCall(String sql, int resultSetType,
         int resultSetConcurrency) throws SQLException {
       checkOpen();
-      return new DelegatingCallableStatement(this, delegate.prepareCall(
-        sql,
-        resultSetType,
-        resultSetConcurrency));
+      return new DelegatingCallableStatement(
+        this,
+        delegate.prepareCall(sql, resultSetType, resultSetConcurrency));
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
       checkOpen();
-      return new DelegatingPreparedStatement(this, delegate
-        .prepareStatement(sql));
+      return new DelegatingPreparedStatement(
+        this,
+        delegate.prepareStatement(sql));
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType,
         int resultSetConcurrency) throws SQLException {
       checkOpen();
-      return new DelegatingPreparedStatement(this, delegate.prepareStatement(
-        sql,
-        resultSetType,
-        resultSetConcurrency));
+      return new DelegatingPreparedStatement(
+        this,
+        delegate.prepareStatement(sql, resultSetType, resultSetConcurrency));
     }
 
     @Override
@@ -454,61 +456,73 @@ public class ThreadPoolingDataSource implements DataSource {
 
     @Override
     public Statement createStatement(int resultSetType,
-        int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+        int resultSetConcurrency, int resultSetHoldability)
+        throws SQLException {
       checkOpen();
-      return new DelegatingStatement(this, delegate.createStatement(
-        resultSetType,
-        resultSetConcurrency,
-        resultSetHoldability));
+      return new DelegatingStatement(
+        this,
+        delegate
+          .createStatement(
+            resultSetType,
+            resultSetConcurrency,
+            resultSetHoldability));
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType,
-        int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+        int resultSetConcurrency, int resultSetHoldability)
+        throws SQLException {
       checkOpen();
-      return new DelegatingCallableStatement(this, delegate.prepareCall(
-        sql,
-        resultSetType,
-        resultSetConcurrency,
-        resultSetHoldability));
+      return new DelegatingCallableStatement(
+        this,
+        delegate
+          .prepareCall(
+            sql,
+            resultSetType,
+            resultSetConcurrency,
+            resultSetHoldability));
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys)
         throws SQLException {
       checkOpen();
-      return new DelegatingPreparedStatement(this, delegate.prepareStatement(
-        sql,
-        autoGeneratedKeys));
+      return new DelegatingPreparedStatement(
+        this,
+        delegate.prepareStatement(sql, autoGeneratedKeys));
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType,
-        int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+        int resultSetConcurrency, int resultSetHoldability)
+        throws SQLException {
       checkOpen();
-      return new DelegatingPreparedStatement(this, delegate.prepareStatement(
-        sql,
-        resultSetType,
-        resultSetConcurrency,
-        resultSetHoldability));
+      return new DelegatingPreparedStatement(
+        this,
+        delegate
+          .prepareStatement(
+            sql,
+            resultSetType,
+            resultSetConcurrency,
+            resultSetHoldability));
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int[] columnIndexes)
         throws SQLException {
       checkOpen();
-      return new DelegatingPreparedStatement(this, delegate.prepareStatement(
-        sql,
-        columnIndexes));
+      return new DelegatingPreparedStatement(
+        this,
+        delegate.prepareStatement(sql, columnIndexes));
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, String[] columnNames)
         throws SQLException {
       checkOpen();
-      return new DelegatingPreparedStatement(this, delegate.prepareStatement(
-        sql,
-        columnNames));
+      return new DelegatingPreparedStatement(
+        this,
+        delegate.prepareStatement(sql, columnNames));
     }
 
     /**
@@ -534,5 +548,14 @@ public class ThreadPoolingDataSource implements DataSource {
         return null;
       }
     }
+  }
+
+  /**
+   * @return
+   * @throws SQLFeatureNotSupportedException
+   */
+  @Override
+  public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    return null;
   }
 }

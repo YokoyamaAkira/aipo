@@ -1,311 +1,658 @@
-if(!dojo._hasResource["dojox.dtl.html"]){dojo._hasResource["dojox.dtl.html"]=true;
+if(!dojo._hasResource["dojox.dtl.html"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.dtl.html"] = true;
 dojo.provide("dojox.dtl.html");
+
 dojo.require("dojox.dtl._base");
-dojox.dtl.ObjectMap=function(){this.contents=[]
-};
-dojo.extend(dojox.dtl.ObjectMap,{get:function(B){var D=this.contents;
-for(var A=0,C;
-C=D[A];
-A++){if(C[0]===B){return C[1]
-}}},put:function(B,E){var D=this.contents;
-for(var A=0,C;
-C=D[A];
-A++){if(C[0]===B){if(arguments.length==1){D.splice(A,1);
-return 
-}C[1]=E;
-return 
-}}D.push([B,E])
-},toString:function(){return"dojox.dtl.ObjectMap"
-}});
-dojox.dtl.html={types:dojo.mixin({change:-11,attr:-12,elem:1,text:3},dojox.dtl.text.types),_attributes:{},_re:/(^\s+|\s+$)/g,_re2:/\b([a-zA-Z]+)="/g,_re3:/<!--({({|%).*?(%|})})-->/g,_re4:/^function anonymous\(\)\s*{\s*(.*)\s*}$/,_trim:function(A){return A.replace(this._re,"")
-},getTemplate:function(C){if(typeof this._commentable=="undefined"){this._commentable=false;
-var D=document.createElement("div");
-D.innerHTML="<!--Test comment handling, and long comments, using comments whenever possible.-->";
-if(D.childNodes.length&&D.childNodes[0].nodeType==8&&D.childNodes[0].data=="comment"){this._commentable=true
-}}if(!this._commentable){C=C.replace(this._re3,"$1")
-}var B;
-while(B=this._re2.exec(C)){this._attributes[B[1]]=true
-}var D=document.createElement("div");
-D.innerHTML=C;
-var A={pres:[],posts:[]};
-while(D.childNodes.length){if(!A.node&&D.childNodes[0].nodeType==1){A.node=D.removeChild(D.childNodes[0])
-}else{if(!A.node){A.pres.push(D.removeChild(D.childNodes[0]))
-}else{A.posts.push(D.removeChild(D.childNodes[0]))
-}}}if(!A.node){throw new Error("Template did not provide any content")
-}return A
-},tokenize:function(D,K,J,E){K=K||[];
-var H=!K.length;
-var I=this.types;
-var C=[];
-for(var G=0,B;
-B=D.childNodes[G];
-G++){C.push(B)
-}if(J){for(var G=0,B;
-B=J[G];
-G++){this._tokenize(D,B,K)
-}}K.push([I.elem,D]);
-K.push([I.change,D]);
-for(var M in this._attributes){var L="";
-if(M=="class"){L=D.className||L
-}else{if(M=="for"){L=D.htmlFor||L
-}else{if(D.getAttribute){L=D.getAttribute(M,2)||L;
-if(M=="href"||M=="src"){if(dojo.isIE){var F=location.href.lastIndexOf(location.hash);
-var A=location.href.substring(0,F).split("/");
-A.pop();
-A=A.join("/")+"/";
-if(L.indexOf(A)==0){L=L.replace(A,"")
-}L=L.replace(/%20/g," ").replace(/%7B/g,"{").replace(/%7D/g,"}").replace(/%25/g,"%")
-}if(L.indexOf("{%")!=-1||L.indexOf("{{")!=-1){D.setAttribute(M,"")
-}}}}}if(typeof L=="function"){L=L.toString().replace(this._re4,"$1")
-}if(typeof L=="string"&&(L.indexOf("{%")!=-1||L.indexOf("{{")!=-1||(L&&dojox.dtl.text.getTag("attr:"+M,true)))){K.push([I.attr,D,M,L])
-}}if(!C.length){K.push([I.change,D.parentNode,true]);
-if(E){for(var G=0,B;
-B=E[G];
-G++){this._tokenize(D,B,K)
-}}return K
-}for(var G=0,B;
-B=C[G];
-G++){this._tokenize(D,B,K)
-}if(D.parentNode&&D.parentNode.tagName){K.push([I.change,D.parentNode,true]);
-D.parentNode.removeChild(D)
-}if(E){for(var G=0,B;
-B=E[G];
-G++){this._tokenize(D,B,K)
-}}if(H){K.push([I.change,D,true])
-}return K
-},_tokenize:function(C,H,F){var B=this.types;
-var E=H.data;
-switch(H.nodeType){case 1:this.tokenize(H,F);
-break;
-case 3:if(E.match(/[^\s\n]/)){if(E.indexOf("{{")!=-1||E.indexOf("{%")!=-1){var D=dojox.dtl.text.tokenize(E);
-for(var A=0,G;
-G=D[A];
-A++){if(typeof G=="string"){F.push([B.text,G])
-}else{F.push(G)
-}}}else{F.push([H.nodeType,H])
-}}if(H.parentNode){H.parentNode.removeChild(H)
-}break;
-case 8:if(E.indexOf("{%")==0){F.push([B.tag,this._trim(E.substring(2,E.length-3))])
-}if(E.indexOf("{{")==0){F.push([B.varr,this._trim(E.substring(2,E.length-3))])
-}if(H.parentNode){H.parentNode.removeChild(H)
-}break
-}}};
-dojox.dtl.HtmlTemplate=function(D){var A=dojox.dtl;
-var B=A.html;
-if(!D.node){if(typeof D=="object"){D=dojox.dtl.text.getTemplateString(D)
-}D=B.getTemplate(D)
-}var C=B.tokenize(D.node,[],D.pres,D.posts);
-var E=new A.HtmlParser(C);
-this.nodelist=E.parse()
-};
-dojo.extend(dojox.dtl.HtmlTemplate,{_count:0,_re:/\bdojo:([a-zA-Z0-9_]+)\b/g,setClass:function(A){this.getRootNode().className=A
-},getRootNode:function(){return this.rootNode
-},getBuffer:function(){return new dojox.dtl.HtmlBuffer()
-},render:function(D,A){A=A||this.getBuffer();
-this.rootNode=null;
-var C=dojo.connect(A,"onSetParent",this,function(E){if(!this.rootNode){this.rootNode=E||true
-}});
-var B=this.nodelist.render(D||new dojox.dtl.Context({}),A);
-dojo.disconnect(C);
-A._flushCache();
-return B
-},unrender:function(B,A){return this.nodelist.unrender(B,A)
-},toString:function(){return"dojox.dtl.HtmlTemplate"
-}});
-dojox.dtl.HtmlBuffer=function(A){this._parent=A;
-this._cache=[]
-};
-dojo.extend(dojox.dtl.HtmlBuffer,{concat:function(D){if(!this._parent){return this
-}if(D.nodeType){var A=this._getCache(this._parent);
-if(D.parentNode===this._parent){var C=0;
-for(var C=0,B;
-B=A[C];
-C++){this.onAddNode(D);
-this._parent.insertBefore(B,D)
-}A.length=0
-}if(!D.parentNode||!D.parentNode.tagName){if(!this._parent.childNodes.length){this.onAddNode(D);
-this._parent.appendChild(D)
-}else{A.push(D)
-}}}return this
-},remove:function(A){if(typeof A=="string"){this._parent.removeAttribute(A)
-}else{if(A.parentNode===this._parent){this.onRemoveNode();
-this._parent.removeChild(A)
-}}return this
-},setAttribute:function(A,B){if(A=="class"){this._parent.className=B
-}else{if(A=="for"){this._parent.htmlFor=B
-}else{if(this._parent.setAttribute){this._parent.setAttribute(A,B)
-}}}return this
-},setParent:function(E,A){if(!this._parent){this._parent=E
-}var B=this._getCache(this._parent);
-if(B&&B.length&&A){for(var D=0,C;
-C=B[D];
-D++){if(C!==this._parent&&(!C.parentNode||!C.parentNode.tagName)){this.onAddNode(C);
-this._parent.appendChild(C)
-}}B.length=0
-}this.onSetParent(E,A);
-this._parent=E;
-return this
-},getParent:function(){return this._parent
-},onSetParent:function(){},onAddNode:function(){},onRemoveNode:function(){},_getCache:function(D){for(var C=0,B;
-B=this._cache[C];
-C++){if(B[0]===D){return B[1]
-}}var A=[];
-this._cache.push([D,A]);
-return A
-},_flushCache:function(C){for(var B=0,A;
-A=this._cache[B];
-B++){if(!A[1].length){this._cache.splice(B--,1)
-}}},toString:function(){return"dojox.dtl.HtmlBuffer"
-}});
-dojox.dtl.HtmlNode=function(A){this.contents=A
-};
-dojo.extend(dojox.dtl.HtmlNode,{render:function(B,A){return A.concat(this.contents)
-},unrender:function(B,A){return A.remove(this.contents)
-},clone:function(A){return new dojox.dtl.HtmlNode(this.contents)
-},toString:function(){return"dojox.dtl.HtmlNode"
-}});
-dojox.dtl.HtmlNodeList=function(A){this.contents=A||[]
-};
-dojo.extend(dojox.dtl.HtmlNodeList,{parents:new dojox.dtl.ObjectMap(),push:function(A){this.contents.push(A)
-},unshift:function(A){this.contents.unshift(A)
-},render:function(D,B,A){if(A){var E=B.getParent()
-}for(var C=0;
-C<this.contents.length;
-C++){B=this.contents[C].render(D,B);
-if(!B){throw new Error("Template node render functions must return their buffer")
-}}if(E){B.setParent(E,true)
-}return B
-},unrender:function(C,A){for(var B=0;
-B<this.contents.length;
-B++){A=this.contents[B].unrender(C,A);
-if(!A){throw new Error("Template node render functions must return their buffer")
-}}return A
-},clone:function(C){var I=dojox.dtl;
-var E=I.html;
-var H=C.getParent();
-var B=this.contents;
-var K=new I.HtmlNodeList();
-var F=[];
-for(var D=0;
-D<B.length;
-D++){var G=B[D].clone(C);
-if(G instanceof I.ChangeNode||G instanceof I.HtmlNode){var J=this.parents.get(G.contents);
-if(J){G.contents=J
-}else{if(H!==G.contents&&G instanceof I.HtmlNode){var A=G.contents;
-G.contents=G.contents.cloneNode(false);
-F.push(A);
-this.parents.put(A,G.contents)
-}}}K.push(G)
-}for(var D=0,G;
-G=F[D];
-D++){this.parents.put(G)
-}return K
-},toString:function(){return"dojox.dtl.HtmlNodeList"
-}});
-dojox.dtl.HtmlVarNode=function(A){this.contents=new dojox.dtl.Filter(A);
-this._lists={}
-};
-dojo.extend(dojox.dtl.HtmlVarNode,{render:function(F,D){this._rendered=true;
-var B=dojox.dtl;
-var E=B.html;
-var H=this.contents.resolve(F);
-if(H&&H.render&&H.getRootNode){var C=this._curr=H.getRootNode();
-var A=this._lists;
-var G=A[C];
-if(!G){G=A[C]=new B.HtmlNodeList();
-G.push(new B.ChangeNode(D.getParent()));
-G.push(new B.HtmlNode(C));
-G.push(H);
-G.push(new B.ChangeNode(D.getParent(),true))
-}return G.render(F,D)
-}else{if(!this._txt){this._txt=document.createTextNode(H)
-}if(this._txt.data!=H){this._txt.data=H
-}return D.concat(this._txt)
-}return D
-},unrender:function(B,A){if(this._rendered){this._rendered=false;
-if(this._curr){return this._lists[this._curr].unrender(B,A)
-}else{if(this._txt){return A.remove(this._txt)
-}}}return A
-},clone:function(){return new dojox.dtl.HtmlVarNode(this.contents.contents)
-},toString:function(){return"dojox.dtl.HtmlVarNode"
-}});
-dojox.dtl.ChangeNode=function(B,A){this.contents=B;
-this._up=A
-};
-dojo.extend(dojox.dtl.ChangeNode,{render:function(B,A){return A.setParent(this.contents,this._up)
-},unrender:function(B,A){return A.setParent(this.contents)
-},clone:function(A){return new dojox.dtl.ChangeNode(this.contents,this._up)
-},toString:function(){return"dojox.dtl.ChangeNode"
-}});
-dojox.dtl.AttributeNode=function(A,B){this._key=A;
-this._value=B;
-this._tpl=new dojox.dtl.Template(B);
-this.contents=""
-};
-dojo.extend(dojox.dtl.AttributeNode,{render:function(C,A){var B=this._key;
-var D=this._tpl.render(C);
-if(this._rendered){if(D!=this.contents){this.contents=D;
-return A.setAttribute(B,D)
-}}else{this._rendered=true;
-this.contents=D;
-return A.setAttribute(B,D)
-}return A
-},unrender:function(B,A){if(this._rendered){this._rendered=false;
-this.contents="";
-return A.remove(this.contents)
-}return A
-},clone:function(){return new dojox.dtl.AttributeNode(this._key,this._value)
-},toString:function(){return"dojox.dtl.AttributeNode"
-}});
-dojox.dtl.HtmlTextNode=function(A){this.contents=document.createTextNode(A)
-};
-dojo.extend(dojox.dtl.HtmlTextNode,{render:function(B,A){return A.concat(this.contents)
-},unrender:function(B,A){return A.remove(this.contents)
-},clone:function(){return new dojox.dtl.HtmlTextNode(this.contents.data)
-},toString:function(){return"dojox.dtl.HtmlTextNode"
-}});
-dojox.dtl.HtmlParser=function(A){this.contents=A
-};
-dojo.extend(dojox.dtl.HtmlParser,{parse:function(A){var M=dojox.dtl;
-var E=M.html;
-var H=E.types;
-var F={};
-var J=this.contents;
-if(!A){A=[]
-}for(var D=0;
-D<A.length;
-D++){F[A[D]]=true
-}var N=new M.HtmlNodeList();
-while(J.length){var C=J.shift();
-var I=C[0];
-var L=C[1];
-if(I==H.change){N.push(new M.ChangeNode(L,C[2]))
-}else{if(I==H.attr){var K=dojox.dtl.text.getTag("attr:"+C[2],true);
-if(K){N.push(K(null,C[2]+" "+C[3]))
-}else{N.push(new M.AttributeNode(C[2],C[3]))
-}}else{if(I==H.elem){var K=dojox.dtl.text.getTag("node:"+L.tagName.toLowerCase(),true);
-if(K){N.push(K(null,L,L.tagName.toLowerCase()))
-}N.push(new M.HtmlNode(L))
-}else{if(I==H.varr){N.push(new M.HtmlVarNode(L))
-}else{if(I==H.text){N.push(new M.HtmlTextNode(L.data||L))
-}else{if(I==H.tag){if(F[L]){J.unshift(C);
-return N
-}var B=L.split(/\s+/g);
-if(B.length){B=B[0];
-var K=dojox.dtl.text.getTag(B);
-if(typeof K!="function"){throw new Error("Function not found for ",B)
-}var G=K(this,L);
-if(G){N.push(G)
-}}}}}}}}}if(A.length){throw new Error("Could not find closing tag(s): "+A.toString())
-}return N
-},next:function(){var A=this.contents.shift();
-return{type:A[0],text:A[1]}
-},skipPast:function(A){return dojox.dtl.Parser.prototype.skipPast.call(this,A)
-},getVarNode:function(){return dojox.dtl.HtmlVarNode
-},getTextNode:function(){return dojox.dtl.HtmlTextNode
-},getTemplate:function(A){return new dojox.dtl.HtmlTemplate(dojox.dtl.html.getTemplate(A))
-},toString:function(){return"dojox.dtl.HtmlParser"
-}});
-dojox.dtl.register.tag("dojox.dtl.tag.event","dojox.dtl.tag.event",[[/(attr:)?on(click|key(up))/i,"on"]]);
-dojox.dtl.register.tag("dojox.dtl.tag.html","dojox.dtl.tag.html",["html","attr:attach","attr:tstyle"])
-};
+
+dojox.dtl.ObjectMap = function(){
+	this.contents = [];
+}
+dojo.extend(dojox.dtl.ObjectMap, {
+	get: function(key){
+		var contents = this.contents;
+		for(var i = 0, content; content = contents[i]; i++){
+			if(content[0] === key){
+				return content[1];
+			}
+		}
+	},
+	put: function(key, value){
+		var contents = this.contents;
+		for(var i = 0, content; content = contents[i]; i++){
+			if(content[0] === key){
+				if(arguments.length == 1){
+					contents.splice(i, 1);
+					return;
+				}
+				content[1] = value;
+				return;
+			}
+		}
+		contents.push([key, value]);
+	},
+	toString: function(){ return "dojox.dtl.ObjectMap"; }
+});
+
+dojox.dtl.html = {
+	types: dojo.mixin({change: -11, attr: -12, elem: 1, text: 3}, dojox.dtl.text.types),
+	_attributes: {},
+	_re: /(^\s+|\s+$)/g,
+	_re2: /\b([a-zA-Z]+)="/g,
+	_re3: /<!--({({|%).*?(%|})})-->/g,
+	_re4: /^function anonymous\(\)\s*{\s*(.*)\s*}$/,
+	_trim: function(/*String*/ str){
+		return str.replace(this._re, "");
+	},
+	getTemplate: function(text){
+		if(typeof this._commentable == "undefined"){
+			// Check to see if the browser can handle comments
+			this._commentable = false;
+			var div = document.createElement("div");
+			div.innerHTML = "<!--Test comment handling, and long comments, using comments whenever possible.-->";
+			if(div.childNodes.length && div.childNodes[0].nodeType == 8 && div.childNodes[0].data == "comment"){
+				this._commentable = true;
+			}
+		}
+
+		if(!this._commentable){
+			// Strip comments
+			text = text.replace(this._re3, "$1");
+		}
+
+		var match;
+		while(match = this._re2.exec(text)){
+			this._attributes[match[1]] = true;
+		}
+		var div = document.createElement("div");
+		div.innerHTML = text;
+		var output = { pres: [], posts: []}
+		while(div.childNodes.length){
+			if(!output.node && div.childNodes[0].nodeType == 1){
+				output.node = div.removeChild(div.childNodes[0]);
+			}else if(!output.node){
+				output.pres.push(div.removeChild(div.childNodes[0]));
+			}else{
+				output.posts.push(div.removeChild(div.childNodes[0]));
+			}
+		}
+
+		if(!output.node){
+			throw new Error("Template did not provide any content");
+		}
+
+		return output;
+	},
+	tokenize: function(/*Node*/ node, /*Array?*/ tokens, /*Array?*/ preNodes, /*Array?*/ postNodes){
+		tokens = tokens || [];
+		var first = !tokens.length;
+		var types = this.types;
+
+		var children = [];
+		for(var i = 0, child; child = node.childNodes[i]; i++){
+			children.push(child);
+		}
+
+		if(preNodes){
+			for(var i = 0, child; child = preNodes[i]; i++){
+				this._tokenize(node, child, tokens);
+			}
+		}
+
+		tokens.push([types.elem, node]);
+		tokens.push([types.change, node]);
+
+		for(var key in this._attributes){
+			var value = "";
+			if(key == "class"){
+				value = node.className || value;
+			}else if(key == "for"){
+				value = node.htmlFor || value;
+			}else if(node.getAttribute){
+				value = node.getAttribute(key, 2) || value;
+				if(key == "href" || key == "src"){
+					if(dojo.isIE){
+						var hash = location.href.lastIndexOf(location.hash);
+						var href = location.href.substring(0, hash).split("/");
+						href.pop();
+						href = href.join("/") + "/";
+						if(value.indexOf(href) == 0){
+							value = value.replace(href, "");
+						}
+						value = value.replace(/%20/g, " ").replace(/%7B/g, "{").replace(/%7D/g, "}").replace(/%25/g, "%");
+					}
+					if(value.indexOf("{%") != -1 || value.indexOf("{{") != -1){
+						node.setAttribute(key, "");
+					}
+				}
+			}
+			if(typeof value == "function"){
+				value = value.toString().replace(this._re4, "$1");
+			}
+			if(typeof value == "string" && (value.indexOf("{%") != -1 || value.indexOf("{{") != -1 || (value && dojox.dtl.text.getTag("attr:" + key, true)))){
+				tokens.push([types.attr, node, key, value]);
+			}
+		}
+
+		if(!children.length){
+			tokens.push([types.change, node.parentNode, true]);
+			if(postNodes){
+				for(var i = 0, child; child = postNodes[i]; i++){
+					this._tokenize(node, child, tokens);
+				}
+			}
+			return tokens;
+		}
+
+		for(var i = 0, child; child = children[i]; i++){
+			this._tokenize(node, child, tokens);
+		}
+
+		if(node.parentNode && node.parentNode.tagName){
+			tokens.push([types.change, node.parentNode, true]);
+			node.parentNode.removeChild(node);
+		}
+		
+		if(postNodes){
+			for(var i = 0, child; child = postNodes[i]; i++){
+				this._tokenize(node, child, tokens);
+			}
+		}
+
+		if(first){
+			tokens.push([types.change, node, true]);
+		}
+
+		return tokens;
+	},
+	_tokenize: function(parent, child, tokens){
+		var types = this.types;
+		var data = child.data;
+		switch(child.nodeType){
+			case 1:
+				this.tokenize(child, tokens);
+				break;
+			case 3:
+				if(data.match(/[^\s\n]/)){
+					if(data.indexOf("{{") != -1 || data.indexOf("{%") != -1){
+						var texts = dojox.dtl.text.tokenize(data);
+						for(var j = 0, text; text = texts[j]; j++){
+							if(typeof text == "string"){
+								tokens.push([types.text, text]);
+							}else{
+								tokens.push(text);
+							}
+						}
+					}else{
+						tokens.push([child.nodeType, child]);
+					}
+				}
+				if(child.parentNode) child.parentNode.removeChild(child);
+				break;
+			case 8:
+				if(data.indexOf("{%") == 0){
+					tokens.push([types.tag, this._trim(data.substring(2, data.length - 3))]);
+				}
+				if(data.indexOf("{{") == 0){
+					tokens.push([types.varr, this._trim(data.substring(2, data.length - 3))]);
+				}
+				if(child.parentNode) child.parentNode.removeChild(child);
+				break;
+		}
+	}
+}
+
+dojox.dtl.HtmlTemplate = function(/*String|dojo._Url*/ obj){
+	// summary: Use this object for HTML templating
+	var dd = dojox.dtl;
+	var ddh = dd.html;
+
+	if(!obj.node){
+		if(typeof obj == "object"){
+			obj = dojox.dtl.text.getTemplateString(obj);
+		}
+		obj = ddh.getTemplate(obj);
+	}
+
+	var tokens = ddh.tokenize(obj.node, [], obj.pres, obj.posts);
+	var parser = new dd.HtmlParser(tokens);
+	this.nodelist = parser.parse();
+}
+dojo.extend(dojox.dtl.HtmlTemplate, {
+	_count: 0,
+	_re: /\bdojo:([a-zA-Z0-9_]+)\b/g,
+	setClass: function(str){
+		this.getRootNode().className = str;
+	},
+	getRootNode: function(){
+		return this.rootNode;
+	},
+	getBuffer: function(){
+		return new dojox.dtl.HtmlBuffer();
+	},
+	render: function(context, buffer){
+		buffer = buffer || this.getBuffer();
+		this.rootNode = null;
+		var onSetParent = dojo.connect(buffer, "onSetParent", this, function(node){
+			if(!this.rootNode){
+				this.rootNode = node || true;
+			}
+		});
+		var output = this.nodelist.render(context || new dojox.dtl.Context({}), buffer);
+		dojo.disconnect(onSetParent);
+		buffer._flushCache();
+		return output;
+	},
+	unrender: function(context, buffer){
+		return this.nodelist.unrender(context, buffer);
+	},
+	toString: function(){ return "dojox.dtl.HtmlTemplate"; }
+});
+
+dojox.dtl.HtmlBuffer = function(/*Node*/ parent){
+	// summary: Allows the manipulation of DOM
+	// description:
+	//		Use this to append a child, change the parent, or
+	//		change the attribute of the current node.
+	this._parent = parent;
+	this._cache = [];
+}
+dojo.extend(dojox.dtl.HtmlBuffer, {
+	concat: function(/*DOMNode*/ node){
+		if(!this._parent) return this;
+		if(node.nodeType){
+			var caches = this._getCache(this._parent);
+			if(node.parentNode === this._parent){
+				// If we reach a node that already existed, fill in the cache for this same parent
+				var i = 0;
+				for(var i = 0, cache; cache = caches[i]; i++){
+					this.onAddNode(node);
+					this._parent.insertBefore(cache, node);
+				}
+				caches.length = 0;
+			}
+			if(!node.parentNode || !node.parentNode.tagName){
+				if(!this._parent.childNodes.length){
+					this.onAddNode(node);
+					this._parent.appendChild(node);
+				}else{
+					caches.push(node);
+				}
+			}
+		}
+		return this;
+	},
+	remove: function(obj){
+		if(typeof obj == "string"){
+			this._parent.removeAttribute(obj);
+		}else{
+			if(obj.parentNode === this._parent){
+				this.onRemoveNode();
+				this._parent.removeChild(obj);
+			}
+		}
+		return this;
+	},
+	setAttribute: function(key, value){
+		if(key == "class"){
+			this._parent.className = value;
+		}else if(key == "for"){
+			this._parent.htmlFor = value;
+		}else if(this._parent.setAttribute){
+			this._parent.setAttribute(key, value);
+		}
+		return this;
+	},
+	setParent: function(node, /*Boolean?*/ up){
+		if(!this._parent) this._parent = node;
+		var caches = this._getCache(this._parent);
+		if(caches && caches.length && up){
+			for(var i = 0, cache; cache = caches[i]; i++){
+				if(cache !== this._parent && (!cache.parentNode || !cache.parentNode.tagName)){
+					this.onAddNode(cache);
+					this._parent.appendChild(cache);
+				}
+			}
+			caches.length = 0;
+		}
+
+		this.onSetParent(node, up);
+		this._parent = node;
+		return this;
+	},
+	getParent: function(){
+		return this._parent;
+	},
+	onSetParent: function(){
+		// summary: Stub called when setParent is used.
+	},
+	onAddNode: function(){
+		// summary: Stub called when new nodes are added
+	},
+	onRemoveNode: function(){
+		// summary: Stub called when nodes are removed
+	},
+	_getCache: function(node){
+		for(var i = 0, cache; cache = this._cache[i]; i++){
+			if(cache[0] === node){
+				return cache[1];
+			}
+		}
+		var arr = [];
+		this._cache.push([node, arr]);
+		return arr;
+	},
+	_flushCache: function(node){
+		for(var i = 0, cache; cache = this._cache[i]; i++){
+			if(!cache[1].length){
+				this._cache.splice(i--, 1);
+			}
+		}
+	},
+	toString: function(){ return "dojox.dtl.HtmlBuffer"; }
+});
+
+dojox.dtl.HtmlNode = function(node){
+	// summary: Places a node into DOM
+	this.contents = node;
+}
+dojo.extend(dojox.dtl.HtmlNode, {
+	render: function(context, buffer){
+		return buffer.concat(this.contents);
+	},
+	unrender: function(context, buffer){
+		return buffer.remove(this.contents);
+	},
+	clone: function(buffer){
+		return new dojox.dtl.HtmlNode(this.contents);
+	},
+	toString: function(){ return "dojox.dtl.HtmlNode"; }
+});
+
+dojox.dtl.HtmlNodeList = function(/*Node[]*/ nodes){
+	// summary: A list of any HTML-specific node object
+	// description:
+	//		Any object that's used in the constructor or added
+	//		through the push function much implement the
+	//		render, unrender, and clone functions.
+	this.contents = nodes || [];
+}
+dojo.extend(dojox.dtl.HtmlNodeList, {
+	parents: new dojox.dtl.ObjectMap(),
+	push: function(node){
+		this.contents.push(node);
+	},
+	unshift: function(node){
+		this.contents.unshift(node);
+	},
+	render: function(context, buffer, /*Node*/ instance){
+		if(instance){
+			var parent = buffer.getParent();
+		}
+		for(var i = 0; i < this.contents.length; i++){
+			buffer = this.contents[i].render(context, buffer);
+			if(!buffer) throw new Error("Template node render functions must return their buffer");
+		}
+		if(parent){
+			buffer.setParent(parent, true);
+		}
+		return buffer;
+	},
+	unrender: function(context, buffer){
+		for(var i = 0; i < this.contents.length; i++){
+			buffer = this.contents[i].unrender(context, buffer);
+			if(!buffer) throw new Error("Template node render functions must return their buffer");
+		}
+		return buffer;
+	},
+	clone: function(buffer){
+		// summary:
+		//		Used to create an identical copy of a NodeList, useful for things like the for tag.
+		var dd = dojox.dtl;
+		var ddh = dd.html;
+		var parent = buffer.getParent();
+		var contents = this.contents;
+		var nodelist = new dd.HtmlNodeList();
+		var cloned = [];
+		for(var i = 0; i < contents.length; i++){
+			var clone = contents[i].clone(buffer);
+			if(clone instanceof dd.ChangeNode || clone instanceof dd.HtmlNode){
+				var item = this.parents.get(clone.contents);
+				if(item){
+					clone.contents = item;
+				}else if(parent !== clone.contents && clone instanceof dd.HtmlNode){
+					var node = clone.contents;
+					clone.contents = clone.contents.cloneNode(false);
+					cloned.push(node);
+					this.parents.put(node, clone.contents);
+				}
+			}
+			nodelist.push(clone);
+		}
+
+		for(var i = 0, clone; clone = cloned[i]; i++){
+			this.parents.put(clone);
+		}
+
+		return nodelist;
+	},
+	toString: function(){ return "dojox.dtl.HtmlNodeList"; }
+});
+
+dojox.dtl.HtmlVarNode = function(str){
+	// summary: A node to be processed as a variable
+	// description:
+	//		Will render an object that supports the render function
+	// 		and the getRootNode function
+	this.contents = new dojox.dtl.Filter(str);
+	this._lists = {};
+}
+dojo.extend(dojox.dtl.HtmlVarNode, {
+	render: function(context, buffer){
+		this._rendered = true;
+		var dd = dojox.dtl;
+		var ddh = dd.html;
+		var str = this.contents.resolve(context);
+		if(str && str.render && str.getRootNode){
+			var root = this._curr = str.getRootNode();
+			var lists = this._lists;
+			var list = lists[root];
+			if(!list){
+				list = lists[root] = new dd.HtmlNodeList();
+				list.push(new dd.ChangeNode(buffer.getParent()));
+				list.push(new dd.HtmlNode(root));
+				list.push(str);
+				list.push(new dd.ChangeNode(buffer.getParent(), true));
+			}
+			return list.render(context, buffer);
+		}else{
+			if(!this._txt) this._txt = document.createTextNode(str);
+			if(this._txt.data != str) this._txt.data = str;
+			return buffer.concat(this._txt);
+		}
+		return buffer;
+	},
+	unrender: function(context, buffer){
+		if(this._rendered){
+			this._rendered = false;
+			if(this._curr){
+				return this._lists[this._curr].unrender(context, buffer);
+			}else if(this._txt){
+				return buffer.remove(this._txt);
+			}
+		}
+		return buffer;
+	},
+	clone: function(){
+		return new dojox.dtl.HtmlVarNode(this.contents.contents);
+	},
+	toString: function(){ return "dojox.dtl.HtmlVarNode"; }
+});
+
+dojox.dtl.ChangeNode = function(node, /*Boolean?*/ up){
+	// summary: Changes the parent during render/unrender
+	this.contents = node;
+	this._up = up;
+}
+dojo.extend(dojox.dtl.ChangeNode, {
+	render: function(context, buffer){
+		return buffer.setParent(this.contents, this._up);
+	},
+	unrender: function(context, buffer){
+		return buffer.setParent(this.contents);
+	},
+	clone: function(buffer){
+		return new dojox.dtl.ChangeNode(this.contents, this._up);
+	},
+	toString: function(){ return "dojox.dtl.ChangeNode"; }
+});
+
+dojox.dtl.AttributeNode = function(key, value){
+	// summary: Works on attributes
+	this._key = key;
+	this._value = value;
+	this._tpl = new dojox.dtl.Template(value);
+	this.contents = "";
+}
+dojo.extend(dojox.dtl.AttributeNode, {
+	render: function(context, buffer){
+		var key = this._key;
+		var value = this._tpl.render(context);
+		if(this._rendered){
+			if(value != this.contents){
+				this.contents = value;
+				return buffer.setAttribute(key, value);
+			}
+		}else{
+			this._rendered = true;
+			this.contents = value;
+			return buffer.setAttribute(key, value);
+		}
+		return buffer;
+	},
+	unrender: function(context, buffer){
+		if(this._rendered){
+			this._rendered = false;
+			this.contents = "";
+			return buffer.remove(this.contents);
+		}
+		return buffer;
+	},
+	clone: function(){
+		return new dojox.dtl.AttributeNode(this._key, this._value);
+	},
+	toString: function(){ return "dojox.dtl.AttributeNode"; }
+});
+
+dojox.dtl.HtmlTextNode = function(str){
+	// summary: Adds a straight text node without any processing
+	this.contents = document.createTextNode(str);
+}
+dojo.extend(dojox.dtl.HtmlTextNode, {
+	render: function(context, buffer){
+		return buffer.concat(this.contents);
+	},
+	unrender: function(context, buffer){
+		return buffer.remove(this.contents);
+	},
+	clone: function(){
+		return new dojox.dtl.HtmlTextNode(this.contents.data);
+	},
+	toString: function(){ return "dojox.dtl.HtmlTextNode"; }
+});
+
+dojox.dtl.HtmlParser = function(tokens){
+	// summary: Turn a simple array into a set of objects
+	// description:
+	//	This is also used by all tags to move through
+	//	the list of nodes.
+	this.contents = tokens;
+}
+dojo.extend(dojox.dtl.HtmlParser, {
+	parse: function(/*Array?*/ stop_at){
+		var dd = dojox.dtl;
+		var ddh = dd.html;
+		var types = ddh.types;
+		var terminators = {};
+		var tokens = this.contents;
+		if(!stop_at){
+			stop_at = [];
+		}
+		for(var i = 0; i < stop_at.length; i++){
+			terminators[stop_at[i]] = true;
+		}
+		var nodelist = new dd.HtmlNodeList();
+		while(tokens.length){
+			var token = tokens.shift();
+			var type = token[0];
+			var value = token[1];
+			if(type == types.change){
+				nodelist.push(new dd.ChangeNode(value, token[2]));
+			}else if(type == types.attr){
+				var fn = dojox.dtl.text.getTag("attr:" + token[2], true);
+				if(fn){
+					nodelist.push(fn(null, token[2] + " " + token[3]));
+				}else{
+					nodelist.push(new dd.AttributeNode(token[2], token[3]));
+				}
+			}else if(type == types.elem){
+				var fn = dojox.dtl.text.getTag("node:" + value.tagName.toLowerCase(), true);
+				if(fn){
+					// TODO: We need to move this to tokenization so that it's before the
+					// 				node and the parser can be passed here instead of null
+					nodelist.push(fn(null, value, value.tagName.toLowerCase()));
+				}
+				nodelist.push(new dd.HtmlNode(value));
+			}else if(type == types.varr){
+				nodelist.push(new dd.HtmlVarNode(value));
+			}else if(type == types.text){
+				nodelist.push(new dd.HtmlTextNode(value.data || value));
+			}else if(type == types.tag){
+				if(terminators[value]){
+					tokens.unshift(token);
+					return nodelist;
+				}
+				var cmd = value.split(/\s+/g);
+				if(cmd.length){
+					cmd = cmd[0];
+					var fn = dojox.dtl.text.getTag(cmd);
+					if(typeof fn != "function"){
+						throw new Error("Function not found for ", cmd);
+					}
+					var tpl = fn(this, value);
+					if(tpl){
+						nodelist.push(tpl);
+					}
+				}
+			}
+		}
+
+		if(stop_at.length){
+			throw new Error("Could not find closing tag(s): " + stop_at.toString());
+		}
+
+		return nodelist;
+	},
+	next: function(){
+		// summary: Used by tags to discover what token was found
+		var token = this.contents.shift();
+		return {type: token[0], text: token[1]};
+	},
+	skipPast: function(endtag){
+		return dojox.dtl.Parser.prototype.skipPast.call(this, endtag);
+	},
+	getVarNode: function(){
+		return dojox.dtl.HtmlVarNode;
+	},
+	getTextNode: function(){
+		return dojox.dtl.HtmlTextNode;
+	},
+	getTemplate: function(/*String*/ loc){
+		return new dojox.dtl.HtmlTemplate(dojox.dtl.html.getTemplate(loc));
+	},
+	toString: function(){ return "dojox.dtl.HtmlParser"; }
+});
+
+dojox.dtl.register.tag("dojox.dtl.tag.event", "dojox.dtl.tag.event", [[/(attr:)?on(click|key(up))/i, "on"]]);
+dojox.dtl.register.tag("dojox.dtl.tag.html", "dojox.dtl.tag.html", ["html", "attr:attach", "attr:tstyle"]);
+
+}

@@ -2,33 +2,33 @@ if(!dojo._hasResource["dojox.charting.axis2d.common"]){dojo._hasResource["dojox.
 dojo.provide("dojox.charting.axis2d.common");
 dojo.require("dojox.gfx");
 (function(){var A=dojox.gfx;
-dojo.mixin(dojox.charting.axis2d.common,{createText:{gfx:function(I,H,F,C,E,D,G,B){return H.createText({x:F,y:C,text:D,align:E}).setFont(G).setFill(B)
-},html:function(C,E,G,F,O,I,M,B){var L=dojo.doc.createElement("div"),K=L.style;
-K.marginLeft="0px";
-K.marginTop="0px";
-K.marginRight="0px";
-K.marginBottom="0px";
-K.paddingLeft="0px";
-K.paddingTop="0px";
-K.paddingRight="0px";
-K.paddingBottom="0px";
-K.borderLeftWidth="0px";
-K.borderTopWidth="0px";
-K.borderRightWidth="0px";
-K.borderBottomWidth="0px";
-K.position="absolute";
-K.font=M;
-L.innerHTML=I;
-K.color=B;
-C.node.appendChild(L);
-var H=C.getCoords(),N=dojo.marginBox(L),J=A.normalizedLength(A.splitFontString(M).size),D=H.y+Math.floor(F-J);
-switch(O){case"middle":dojo.marginBox(L,{l:H.x+Math.floor(G-N.w/2),t:D});
+dojo.mixin(dojox.charting.axis2d.common,{createText:{gfx:function(E,D,B,I,H,G,C,F){return D.createText({x:B,y:I,text:G,align:H}).setFont(C).setFill(F)
+},html:function(H,D,K,J,F,M,C,G){var B=dojo.doc.createElement("div"),O=B.style;
+O.marginLeft="0px";
+O.marginTop="0px";
+O.marginRight="0px";
+O.marginBottom="0px";
+O.paddingLeft="0px";
+O.paddingTop="0px";
+O.paddingRight="0px";
+O.paddingBottom="0px";
+O.borderLeftWidth="0px";
+O.borderTopWidth="0px";
+O.borderRightWidth="0px";
+O.borderBottomWidth="0px";
+O.position="absolute";
+O.font=C;
+B.innerHTML=M;
+O.color=G;
+H.node.appendChild(B);
+var L=H.getCoords(),E=dojo.marginBox(B),N=A.normalizedLength(A.splitFontString(C).size),I=L.y+Math.floor(J-N);
+switch(F){case"middle":dojo.marginBox(B,{l:L.x+Math.floor(K-E.w/2),t:I});
 break;
-case"end":dojo.marginBox(L,{l:H.x+Math.floor(G-N.w),t:D});
+case"end":dojo.marginBox(B,{l:L.x+Math.floor(K-E.w),t:I});
 break;
-default:dojo.marginBox(L,{l:H.x+Math.floor(G),t:D});
+default:dojo.marginBox(B,{l:L.x+Math.floor(K),t:I});
 break
-}return L
+}return B
 }}})
 })()
 };

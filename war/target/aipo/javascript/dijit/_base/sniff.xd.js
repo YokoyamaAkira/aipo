@@ -1,12 +1,47 @@
-dojo._xdResourceLoaded({depends:[["provide","dijit._base.sniff"]],defineResource:function(A){if(!A._hasResource["dijit._base.sniff"]){A._hasResource["dijit._base.sniff"]=true;
-A.provide("dijit._base.sniff");
-(function(){var H=A;
-var G=H.isIE;
-var B=H.isOpera;
-var C=Math.floor;
-var E={dj_ie:G,dj_ie6:C(G)==6,dj_ie7:C(G)==7,dj_iequirks:G&&H.isQuirks,dj_opera:B,dj_opera8:C(B)==8,dj_opera9:C(B)==9,dj_khtml:H.isKhtml,dj_safari:H.isSafari,dj_gecko:H.isMozilla};
-for(var F in E){if(E[F]){var D=A.doc.documentElement;
-if(D.className){D.className+=" "+F
-}else{D.className=F
-}}}})()
-}}});
+dojo._xdResourceLoaded({
+depends: [["provide", "dijit._base.sniff"]],
+defineResource: function(dojo){if(!dojo._hasResource["dijit._base.sniff"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dijit._base.sniff"] = true;
+dojo.provide("dijit._base.sniff");
+
+// ported from dojo.html.applyBrowserClass (style.js)
+
+//	summary:
+//		Applies pre-set class names based on browser & version to the
+//		top-level HTML node.  Simply doing a require on this module will
+//		establish this CSS.  Modified version of Morris' CSS hack.
+(function(){
+	var d = dojo;
+	var ie = d.isIE;
+	var opera = d.isOpera;
+	var maj = Math.floor;
+	var classes = {
+		dj_ie: ie,
+//		dj_ie55: ie == 5.5,
+		dj_ie6: maj(ie) == 6,
+		dj_ie7: maj(ie) == 7,
+		dj_iequirks: ie && d.isQuirks,
+// NOTE: Opera not supported by dijit
+		dj_opera: opera,
+		dj_opera8: maj(opera) == 8,
+		dj_opera9: maj(opera) == 9,
+		dj_khtml: d.isKhtml,
+		dj_safari: d.isSafari,
+		dj_gecko: d.isMozilla
+	}; // no dojo unsupported browsers
+
+	for(var p in classes){
+		if(classes[p]){
+			var html = dojo.doc.documentElement; //TODO browser-specific DOM magic needed?
+			if(html.className){
+				html.className += " " + p;
+			}else{
+				html.className = p;
+			}
+		}
+	}
+})();
+
+}
+
+}});

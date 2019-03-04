@@ -1,13 +1,13 @@
 dojo.provide("aipo.license");
-aipo.license.onLoadLicenseInfoDialog=function(C){var D=dojo.byId("license_1");
-if(D){D.focus()
+aipo.license.onLoadLicenseInfoDialog=function(A){var B=dojo.byId("license_1");
+if(B){B.focus()
 }};
-aipo.license.hideDialog=function(){var B=dijit.byId("modalDialog");
-if(B){B.hide()
+aipo.license.hideDialog=function(){var A=dijit.byId("modalDialog");
+if(A){A.hide()
 }aipo.portletReload("license")
 };
-aipo.license.onReceiveMessage=function(D){if(!D){var C=dijit.byId("modalDialog");
-if(C){C.hide()
+aipo.license.onReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
+if(A){A.hide()
 }aipo.portletReload("license")
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=D
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
 }};

@@ -8,52 +8,52 @@ A.require("dijit._Widget");
 A.require("dijit._Container");
 A.require("dojox.wire._base");
 A.require("dojox.wire.ml.Action");
-A.declare("dojox.wire.ml.Transfer",dojox.wire.ml.Action,{source:"",sourceStore:"",sourceAttribute:"",sourcePath:"",type:"",converter:"",delimiter:"",target:"",targetStore:"",targetAttribute:"",targetPath:"",_run:function(){var B=this._getWire("source");
-var C=this._getWire("target");
-dojox.wire.transfer(B,C,arguments)
-},_getWire:function(G){var D=undefined;
-if(G=="source"){D={object:this.source,dataStore:this.sourceStore,attribute:this.sourceAttribute,path:this.sourcePath,type:this.type,converter:this.converter}
-}else{D={object:this.target,dataStore:this.targetStore,attribute:this.targetAttribute,path:this.targetPath}
-}if(D.object){if(D.object.length>=9&&D.object.substring(0,9)=="arguments"){D.property=D.object.substring(9);
-D.object=null
-}else{var F=D.object.indexOf(".");
-if(F<0){D.object=dojox.wire.ml._getValue(D.object)
-}else{D.property=D.object.substring(F+1);
-D.object=dojox.wire.ml._getValue(D.object.substring(0,F))
-}}}if(D.dataStore){D.dataStore=dojox.wire.ml._getValue(D.dataStore)
-}var C=undefined;
-var E=this.getChildren();
-for(var F in E){var B=E[F];
-if(B instanceof dojox.wire.ml.ChildWire&&B.which==G){if(!C){C={}
-}B._addWire(this,C)
-}}if(C){C.object=dojox.wire.create(D);
-C.dataStore=D.dataStore;
-D=C
-}return D
+A.declare("dojox.wire.ml.Transfer",dojox.wire.ml.Action,{source:"",sourceStore:"",sourceAttribute:"",sourcePath:"",type:"",converter:"",delimiter:"",target:"",targetStore:"",targetAttribute:"",targetPath:"",_run:function(){var C=this._getWire("source");
+var B=this._getWire("target");
+dojox.wire.transfer(C,B,arguments)
+},_getWire:function(F){var C=undefined;
+if(F=="source"){C={object:this.source,dataStore:this.sourceStore,attribute:this.sourceAttribute,path:this.sourcePath,type:this.type,converter:this.converter}
+}else{C={object:this.target,dataStore:this.targetStore,attribute:this.targetAttribute,path:this.targetPath}
+}if(C.object){if(C.object.length>=9&&C.object.substring(0,9)=="arguments"){C.property=C.object.substring(9);
+C.object=null
+}else{var E=C.object.indexOf(".");
+if(E<0){C.object=dojox.wire.ml._getValue(C.object)
+}else{C.property=C.object.substring(E+1);
+C.object=dojox.wire.ml._getValue(C.object.substring(0,E))
+}}}if(C.dataStore){C.dataStore=dojox.wire.ml._getValue(C.dataStore)
+}var B=undefined;
+var D=this.getChildren();
+for(var E in D){var G=D[E];
+if(G instanceof dojox.wire.ml.ChildWire&&G.which==F){if(!B){B={}
+}G._addWire(this,B)
+}}if(B){B.object=dojox.wire.create(C);
+B.dataStore=C.dataStore;
+C=B
+}return C
 }});
-A.declare("dojox.wire.ml.ChildWire",dijit._Widget,{which:"source",object:"",property:"",type:"",converter:"",attribute:"",path:"",name:"",_addWire:function(B,C){if(this.name){if(!C.children){C.children={}
-}C.children[this.name]=this._getWire(B)
-}else{if(!C.children){C.children=[]
-}C.children.push(this._getWire(B))
+A.declare("dojox.wire.ml.ChildWire",dijit._Widget,{which:"source",object:"",property:"",type:"",converter:"",attribute:"",path:"",name:"",_addWire:function(C,B){if(this.name){if(!B.children){B.children={}
+}B.children[this.name]=this._getWire(C)
+}else{if(!B.children){B.children=[]
+}B.children.push(this._getWire(C))
 }},_getWire:function(B){return{object:(this.object?dojox.wire.ml._getValue(this.object):undefined),property:this.property,type:this.type,converter:this.converter,attribute:this.attribute,path:this.path}
 }});
-A.declare("dojox.wire.ml.ColumnWire",dojox.wire.ml.ChildWire,{column:"",_addWire:function(B,C){if(this.column){if(!C.columns){C.columns={}
-}C.columns[this.column]=this._getWire(B)
-}else{if(!C.columns){C.columns=[]
-}C.columns.push(this._getWire(B))
+A.declare("dojox.wire.ml.ColumnWire",dojox.wire.ml.ChildWire,{column:"",_addWire:function(C,B){if(this.column){if(!B.columns){B.columns={}
+}B.columns[this.column]=this._getWire(C)
+}else{if(!B.columns){B.columns=[]
+}B.columns.push(this._getWire(C))
 }}});
-A.declare("dojox.wire.ml.NodeWire",[dojox.wire.ml.ChildWire,dijit._Container],{titleProperty:"",titleAttribute:"",titlePath:"",_addWire:function(B,C){if(!C.nodes){C.nodes=[]
-}C.nodes.push(this._getWires(B))
-},_getWires:function(G){var D={node:this._getWire(G),title:{type:"string",property:this.titleProperty,attribute:this.titleAttribute,path:this.titlePath}};
-var C=[];
-var F=this.getChildren();
-for(var E in F){var B=F[E];
-if(B instanceof dojox.wire.ml.NodeWire){C.push(B._getWires(G))
-}}if(C.length>0){D.children=C
-}return D
+A.declare("dojox.wire.ml.NodeWire",[dojox.wire.ml.ChildWire,dijit._Container],{titleProperty:"",titleAttribute:"",titlePath:"",_addWire:function(C,B){if(!B.nodes){B.nodes=[]
+}B.nodes.push(this._getWires(C))
+},_getWires:function(F){var C={node:this._getWire(F),title:{type:"string",property:this.titleProperty,attribute:this.titleAttribute,path:this.titlePath}};
+var B=[];
+var E=this.getChildren();
+for(var D in E){var G=E[D];
+if(G instanceof dojox.wire.ml.NodeWire){B.push(G._getWires(F))
+}}if(B.length>0){C.children=B
+}return C
 }});
-A.declare("dojox.wire.ml.SegmentWire",dojox.wire.ml.ChildWire,{_addWire:function(B,C){if(!C.segments){C.segments=[]
-}C.segments.push(this._getWire(B));
-if(B.delimiter&&!C.delimiter){C.delimiter=B.delimiter
+A.declare("dojox.wire.ml.SegmentWire",dojox.wire.ml.ChildWire,{_addWire:function(C,B){if(!B.segments){B.segments=[]
+}B.segments.push(this._getWire(C));
+if(C.delimiter&&!B.delimiter){B.delimiter=C.delimiter
 }}})
 }}});

@@ -32,39 +32,39 @@ A=A.parentMenu){}return A
 }if(A.popup){if(!this.is_open){this._openPopup()
 }}else{this.onExecute();
 A.onClick()
-}},_iframeContentWindow:function(B){var A=dijit.getDocumentWindow(dijit.Menu._iframeContentDocument(B))||dijit.Menu._iframeContentDocument(B)["__parent__"]||(B.name&&document.frames[B.name])||null;
-return A
-},_iframeContentDocument:function(B){var A=B.contentDocument||(B.contentWindow&&B.contentWindow.document)||(B.name&&document.frames[B.name]&&document.frames[B.name].document)||null;
-return A
-},bindDomNode:function(C){C=dojo.byId(C);
-var A=dijit.getDocumentWindow(C.ownerDocument);
-if(C.tagName.toLowerCase()=="iframe"){A=this._iframeContentWindow(C);
-C=dojo.withGlobal(A,dojo.body)
-}var B=(C==dojo.body()?dojo.doc:C);
-C[this.id]=this._bindings.push([dojo.connect(B,"oncontextmenu",this,"_openMyself"),dojo.connect(B,"onkeydown",this,"_contextKey"),dojo.connect(B,"onmousedown",this,"_contextMouse")])
-},unBindDomNode:function(C){var B=dojo.byId(C);
-var A=B[this.id]-1,D=this._bindings[A];
-dojo.forEach(D,dojo.disconnect);
-delete this._bindings[A]
-},_contextKey:function(A){this._contextMenuWithMouse=false;
-if(A.keyCode==dojo.keys.F10){dojo.stopEvent(A);
-if(A.shiftKey&&A.type=="keydown"){var B={target:A.target,pageX:A.pageX,pageY:A.pageY};
-B.preventDefault=B.stopPropagation=function(){};
-window.setTimeout(dojo.hitch(this,function(){this._openMyself(B)
+}},_iframeContentWindow:function(A){var B=dijit.getDocumentWindow(dijit.Menu._iframeContentDocument(A))||dijit.Menu._iframeContentDocument(A)["__parent__"]||(A.name&&document.frames[A.name])||null;
+return B
+},_iframeContentDocument:function(A){var B=A.contentDocument||(A.contentWindow&&A.contentWindow.document)||(A.name&&document.frames[A.name]&&document.frames[A.name].document)||null;
+return B
+},bindDomNode:function(A){A=dojo.byId(A);
+var B=dijit.getDocumentWindow(A.ownerDocument);
+if(A.tagName.toLowerCase()=="iframe"){B=this._iframeContentWindow(A);
+A=dojo.withGlobal(B,dojo.body)
+}var C=(A==dojo.body()?dojo.doc:A);
+A[this.id]=this._bindings.push([dojo.connect(C,"oncontextmenu",this,"_openMyself"),dojo.connect(C,"onkeydown",this,"_contextKey"),dojo.connect(C,"onmousedown",this,"_contextMouse")])
+},unBindDomNode:function(D){var C=dojo.byId(D);
+var B=C[this.id]-1,A=this._bindings[B];
+dojo.forEach(A,dojo.disconnect);
+delete this._bindings[B]
+},_contextKey:function(B){this._contextMenuWithMouse=false;
+if(B.keyCode==dojo.keys.F10){dojo.stopEvent(B);
+if(B.shiftKey&&B.type=="keydown"){var A={target:B.target,pageX:B.pageX,pageY:B.pageY};
+A.preventDefault=A.stopPropagation=function(){};
+window.setTimeout(dojo.hitch(this,function(){this._openMyself(A)
 }),1)
 }}},_contextMouse:function(A){this._contextMenuWithMouse=true
-},_openMyself:function(C){dojo.stopEvent(C);
-var E,D;
-if(dojo.isSafari||this._contextMenuWithMouse){E=C.pageX;
-D=C.pageY
-}else{var B=dojo.coords(C.target,true);
-E=B.x+10;
-D=B.y+10
-}var G=this;
-var F=dijit.getFocus(this);
-function A(){dijit.focus(F);
-dijit.popup.close(G)
-}dijit.popup.open({popup:this,x:E,y:D,onExecute:A,onCancel:A,orient:this.isLeftToRight()?"L":"R"});
+},_openMyself:function(F){dojo.stopEvent(F);
+var A,G;
+if(dojo.isSafari||this._contextMenuWithMouse){A=F.pageX;
+G=F.pageY
+}else{var E=dojo.coords(F.target,true);
+A=E.x+10;
+G=E.y+10
+}var C=this;
+var B=dijit.getFocus(this);
+function D(){dijit.focus(B);
+dijit.popup.close(C)
+}dijit.popup.open({popup:this,x:A,y:G,onExecute:D,onCancel:D,orient:this.isLeftToRight()?"L":"R"});
 this.focus();
 this._onBlur=function(){dijit.popup.close(this)
 }
@@ -76,17 +76,17 @@ this.currentPopup=null;
 if(this.focusedChild){this._onChildBlur(this.focusedChild);
 this.focusedChild=null
 }},_openPopup:function(){this._stopPopupTimer();
-var C=this.focusedChild;
-var A=C.popup;
-if(A.isShowingNow){return 
-}A.parentMenu=this;
-var B=this;
-dijit.popup.open({parent:this,popup:A,around:C.arrowCell,orient:this.isLeftToRight()?{TR:"TL",TL:"TR"}:{TL:"TR",TR:"TL"},onCancel:function(){dijit.popup.close(A);
-C.focus();
-B.currentPopup=null
+var A=this.focusedChild;
+var B=A.popup;
+if(B.isShowingNow){return 
+}B.parentMenu=this;
+var C=this;
+dijit.popup.open({parent:this,popup:B,around:A.arrowCell,orient:this.isLeftToRight()?{TR:"TL",TL:"TR"}:{TL:"TR",TR:"TL"},onCancel:function(){dijit.popup.close(B);
+A.focus();
+C.currentPopup=null
 }});
-this.currentPopup=A;
-if(A.focus){A.focus()
+this.currentPopup=B;
+if(B.focus){B.focus()
 }}});
 dojo.declare("dijit.MenuItem",[dijit._Widget,dijit._Templated,dijit._Contained],{templateString:'<tr class="dijitReset dijitMenuItem"dojoAttachEvent="onmouseenter:_onHover,onmouseleave:_onUnhover,ondijitclick:_onClick"><td class="dijitReset"><div class="dijitMenuItemIcon ${iconClass}" dojoAttachPoint="iconNode" ></div></td><td tabIndex="-1" class="dijitReset dijitMenuItemLabel" dojoAttachPoint="containerNode" waiRole="menuitem"></td><td class="dijitReset" dojoAttachPoint="arrowCell"><div class="dijitMenuExpand" dojoAttachPoint="expand" style="display:none"><span class="dijitInline dijitArrowNode dijitMenuExpandInner">+</span></div></td></tr>',label:"",iconClass:"",disabled:false,postCreate:function(){dojo.setSelectable(this.domNode,false);
 this.setDisabled(this.disabled);

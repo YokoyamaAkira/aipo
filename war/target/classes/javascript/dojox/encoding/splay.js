@@ -9,32 +9,32 @@ dojo.extend(dojox.encoding.Splay,{reset:function(){for(var A=1;
 A<this.up.length;
 this.up[A]=Math.floor((A-1)/2),++A){}for(var A=0;
 A<this.left.length;
-this.left[A]=2*A+1,this.right[A]=2*A+2,++A){}},splay:function(B){var A=B+this.left.length;
-do{var D=this.up[A];
-if(D){var C=this.up[D];
-var E=this.left[C];
-if(D==E){E=this.right[C];
-this.right[C]=A
-}else{this.left[C]=A
-}this[A==this.left[D]?"left":"right"][D]=E;
-this.up[A]=C;
-this.up[E]=D;
-A=C
-}else{A=D
-}}while(A)
-},encode:function(C,D){var B=[],A=C+this.left.length;
-do{B.push(this.right[this.up[A]]==A);
-A=this.up[A]
-}while(A);
-this.splay(C);
-var E=B.length;
-while(B.length){D.putBits(B.pop()?1:0,1)
-}return E
-},decode:function(A){var B=0;
-do{B=this[A.getBits(1)?"right":"left"][B]
-}while(B<this.left.length);
-B-=this.left.length;
-this.splay(B);
-return B
+this.left[A]=2*A+1,this.right[A]=2*A+2,++A){}},splay:function(C){var B=C+this.left.length;
+do{var E=this.up[B];
+if(E){var D=this.up[E];
+var A=this.left[D];
+if(E==A){A=this.right[D];
+this.right[D]=B
+}else{this.left[D]=B
+}this[B==this.left[E]?"left":"right"][E]=A;
+this.up[B]=D;
+this.up[A]=E;
+B=D
+}else{B=E
+}}while(B)
+},encode:function(D,E){var C=[],B=D+this.left.length;
+do{C.push(this.right[this.up[B]]==B);
+B=this.up[B]
+}while(B);
+this.splay(D);
+var A=C.length;
+while(C.length){E.putBits(C.pop()?1:0,1)
+}return A
+},decode:function(B){var A=0;
+do{A=this[B.getBits(1)?"right":"left"][A]
+}while(A<this.left.length);
+A-=this.left.length;
+this.splay(A);
+return A
 }})
 };

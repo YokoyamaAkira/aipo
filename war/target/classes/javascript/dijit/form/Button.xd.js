@@ -5,14 +5,14 @@ A.require("dijit._Container");
 A.declare("dijit.form.Button",dijit.form._FormWidget,{label:"",showLabel:true,iconClass:"",type:"button",baseClass:"dijitButton",templateString:'<div class="dijit dijitLeft dijitInline dijitButton"\r\n\tdojoAttachEvent="onclick:_onButtonClick,onmouseenter:_onMouse,onmouseleave:_onMouse,onmousedown:_onMouse"\r\n\t><div class=\'dijitRight\'\r\n\t\t><button class="dijitStretch dijitButtonNode dijitButtonContents" dojoAttachPoint="focusNode,titleNode"\r\n\t\t\ttype="${type}" waiRole="button" waiState="labelledby-${id}_label"\r\n\t\t\t><span class="dijitInline ${iconClass}" dojoAttachPoint="iconNode" \r\n \t\t\t\t><span class="dijitToggleButtonIconChar">&#10003</span \r\n\t\t\t></span\r\n\t\t\t><span class="dijitButtonText" id="${id}_label" dojoAttachPoint="containerNode">${label}</span\r\n\t\t></button\r\n\t></div\r\n></div>\r\n',_onClick:function(B){if(this.disabled){return false
 }this._clicked();
 return this.onClick(B)
-},_onButtonClick:function(B){A.stopEvent(B);
-var E=this._onClick(B)!==false;
-if(this.type=="submit"&&E){for(var C=this.domNode;
-C;
-C=C.parentNode){var D=dijit.byNode(C);
-if(D&&D._onSubmit){D._onSubmit(B);
+},_onButtonClick:function(E){A.stopEvent(E);
+var D=this._onClick(E)!==false;
+if(this.type=="submit"&&D){for(var B=this.domNode;
+B;
+B=B.parentNode){var C=dijit.byNode(B);
+if(C&&C._onSubmit){C._onSubmit(E);
 break
-}if(C.tagName.toLowerCase()=="form"){if(!C.onsubmit||C.onsubmit()){C.submit()
+}if(B.tagName.toLowerCase()=="form"){if(!B.onsubmit||B.onsubmit()){B.submit()
 }break
 }}}},postCreate:function(){if(this.showLabel==false){var B="";
 this.label=this.containerNode.innerHTML;
@@ -21,11 +21,11 @@ this.titleNode.title=B;
 A.addClass(this.containerNode,"dijitDisplayNone")
 }this.inherited(arguments)
 },onClick:function(B){return true
-},_clicked:function(B){},setLabel:function(C){this.containerNode.innerHTML=this.label=C;
-if(A.isMozilla){var D=A.getComputedStyle(this.domNode).display;
+},_clicked:function(B){},setLabel:function(B){this.containerNode.innerHTML=this.label=B;
+if(A.isMozilla){var C=A.getComputedStyle(this.domNode).display;
 this.domNode.style.display="none";
-var B=this;
-setTimeout(function(){B.domNode.style.display=D
+var D=this;
+setTimeout(function(){D.domNode.style.display=C
 },1)
 }if(this.showLabel==false){this.titleNode.title=A.trim(this.containerNode.innerText||this.containerNode.textContent)
 }}});
@@ -39,8 +39,8 @@ delete this.dropDownContainer
 this.dropDown.domNode.style.display="none"
 },_onArrowClick:function(B){if(this.disabled){return 
 }this._toggleDropDown()
-},_onDropDownClick:function(B){var C=A.isFF&&A.isFF<3&&navigator.appVersion.indexOf("Macintosh")!=-1;
-if(!C||B.detail!=0||this._seenKeydown){this._onArrowClick(B)
+},_onDropDownClick:function(C){var B=A.isFF&&A.isFF<3&&navigator.appVersion.indexOf("Macintosh")!=-1;
+if(!B||C.detail!=0||this._seenKeydown){this._onArrowClick(C)
 }this._seenKeydown=false
 },_onDropDownKeydown:function(B){this._seenKeydown=true
 },_onDropDownBlur:function(B){this._seenKeydown=false
@@ -50,33 +50,33 @@ return this._toggleDropDown()
 }}},_onBlur:function(){this._closeDropDown()
 },_toggleDropDown:function(){if(this.disabled){return 
 }dijit.focus(this.popupStateNode);
-var B=this.dropDown;
-if(!B){return false
-}if(!B.isShowingNow){if(B.href&&!B.isLoaded){var C=this;
-var D=A.connect(B,"onLoad",function(){A.disconnect(D);
-C._openDropDown()
+var D=this.dropDown;
+if(!D){return false
+}if(!D.isShowingNow){if(D.href&&!D.isLoaded){var B=this;
+var C=A.connect(D,"onLoad",function(){A.disconnect(C);
+B._openDropDown()
 });
-B._loadCheck(true);
+D._loadCheck(true);
 return 
 }else{this._openDropDown()
 }}else{this._closeDropDown()
-}},_openDropDown:function(){var B=this.dropDown;
-var D=B.domNode.style.width;
-var E=this;
-dijit.popup.open({parent:this,popup:B,around:this.domNode,orient:this.isLeftToRight()?{BL:"TL",BR:"TR",TL:"BL",TR:"BR"}:{BR:"TR",BL:"TL",TR:"BR",TL:"BL"},onExecute:function(){E._closeDropDown(true)
-},onCancel:function(){E._closeDropDown(true)
-},onClose:function(){B.domNode.style.width=D;
-E.popupStateNode.removeAttribute("popupActive");
+}},_openDropDown:function(){var F=this.dropDown;
+var C=F.domNode.style.width;
+var D=this;
+dijit.popup.open({parent:this,popup:F,around:this.domNode,orient:this.isLeftToRight()?{BL:"TL",BR:"TR",TL:"BL",TR:"BR"}:{BR:"TR",BL:"TL",TR:"BR",TL:"BL"},onExecute:function(){D._closeDropDown(true)
+},onCancel:function(){D._closeDropDown(true)
+},onClose:function(){F.domNode.style.width=C;
+D.popupStateNode.removeAttribute("popupActive");
 this._opened=false
 }});
-if(this.domNode.offsetWidth>B.domNode.offsetWidth){var F=null;
-if(!this.isLeftToRight()){F=B.domNode.parentNode;
-var C=F.offsetLeft+F.offsetWidth
-}A.marginBox(B.domNode,{w:this.domNode.offsetWidth});
-if(F){F.style.left=C-this.domNode.offsetWidth+"px"
+if(this.domNode.offsetWidth>F.domNode.offsetWidth){var E=null;
+if(!this.isLeftToRight()){E=F.domNode.parentNode;
+var B=E.offsetLeft+E.offsetWidth
+}A.marginBox(F.domNode,{w:this.domNode.offsetWidth});
+if(E){E.style.left=B-this.domNode.offsetWidth+"px"
 }}this.popupStateNode.setAttribute("popupActive","true");
 this._opened=true;
-if(B.focus){B.focus()
+if(F.focus){F.focus()
 }},_closeDropDown:function(B){if(this._opened){dijit.popup.close(this.dropDown);
 if(B){this.focus()
 }this._opened=false

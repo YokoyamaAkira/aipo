@@ -1,213 +1,213 @@
 if(!dojo._hasResource["dijit._editor.range"]){dojo._hasResource["dijit._editor.range"]=true;
 dojo.provide("dijit._editor.range");
 dijit.range={};
-dijit.range.getIndex=function(G,E){var B=[],H=[];
-var D=E;
-var C=G;
-while(G!=D){var I=0;
-var A=G.parentNode,F;
-while(F=A.childNodes[I++]){if(F===G){--I;
+dijit.range.getIndex=function(B,I){var F=[],C=[];
+var H=I;
+var G=B;
+while(B!=H){var D=0;
+var E=B.parentNode,A;
+while(A=E.childNodes[D++]){if(A===B){--D;
 break
-}}if(I>=A.childNodes.length){dojo.debug("Error finding index of a node in dijit.range.getIndex")
-}B.unshift(I);
-H.unshift(I-A.childNodes.length);
-G=A
-}if(B.length>0&&C.nodeType==3){var F=C.previousSibling;
-while(F&&F.nodeType==3){B[B.length-1]--;
-F=F.previousSibling
-}F=C.nextSibling;
-while(F&&F.nodeType==3){H[H.length-1]++;
-F=F.nextSibling
-}}return{o:B,r:H}
+}}if(D>=E.childNodes.length){dojo.debug("Error finding index of a node in dijit.range.getIndex")
+}F.unshift(D);
+C.unshift(D-E.childNodes.length);
+B=E
+}if(F.length>0&&G.nodeType==3){var A=G.previousSibling;
+while(A&&A.nodeType==3){F[F.length-1]--;
+A=A.previousSibling
+}A=G.nextSibling;
+while(A&&A.nodeType==3){C[C.length-1]++;
+A=A.nextSibling
+}}return{o:F,r:C}
 };
-dijit.range.getNode=function(C,A){if(!dojo.isArray(C)||C.length==0){return A
-}var B=A;
-dojo.every(C,function(D){if(D>=0&&D<B.childNodes.length){B=B.childNodes[D]
-}else{B=null;
-console.debug("Error: can not find node with index",C,"under parent node",A);
+dijit.range.getNode=function(A,B){if(!dojo.isArray(A)||A.length==0){return B
+}var C=B;
+dojo.every(A,function(D){if(D>=0&&D<C.childNodes.length){C=C.childNodes[D]
+}else{C=null;
+console.debug("Error: can not find node with index",A,"under parent node",B);
 return false
 }return true
 });
-return B
+return C
 };
-dijit.range.getCommonAncestor=function(D,B,E){var C=function(J,L){var K=[];
-while(J){K.unshift(J);
-if(J!=L&&J.tagName!="BODY"){J=J.parentNode
+dijit.range.getCommonAncestor=function(H,F,I){var G=function(L,K){var J=[];
+while(L){J.unshift(L);
+if(L!=K&&L.tagName!="BODY"){L=L.parentNode
 }else{break
-}}return K
+}}return J
 };
-var G=C(D,E);
-var A=C(B,E);
-var H=Math.min(G.length,A.length);
-var F=G[0];
-for(var I=1;
-I<H;
-I++){if(G[I]===A[I]){F=G[I]
+var B=G(H,I);
+var E=G(F,I);
+var C=Math.min(B.length,E.length);
+var A=B[0];
+for(var D=1;
+D<C;
+D++){if(B[D]===E[D]){A=B[D]
 }else{break
-}}return F
+}}return A
 };
-dijit.range.getAncestor=function(C,B,D){D=D||C.ownerDocument.body;
-while(C&&C!==D){var A=C.nodeName.toUpperCase();
-if(B.test(A)){return C
-}C=C.parentNode
+dijit.range.getAncestor=function(D,C,A){A=A||D.ownerDocument.body;
+while(D&&D!==A){var B=D.nodeName.toUpperCase();
+if(C.test(B)){return D
+}D=D.parentNode
 }return null
 };
 dijit.range.BlockTagNames=/^(?:P|DIV|H1|H2|H3|H4|H5|H6|ADDRESS|PRE|OL|UL|LI|DT|DE)$/;
-dijit.range.getBlockAncestor=function(D,C,F){F=F||D.ownerDocument.body;
-C=C||dijit.range.BlockTagNames;
-var E=null,B;
-while(D&&D!==F){var A=D.nodeName.toUpperCase();
-if(!E&&C.test(A)){E=D
-}if(!B&&(/^(?:BODY|TD|TH|CAPTION)$/).test(A)){B=D
+dijit.range.getBlockAncestor=function(E,D,A){A=A||E.ownerDocument.body;
+D=D||dijit.range.BlockTagNames;
+var F=null,C;
+while(E&&E!==A){var B=E.nodeName.toUpperCase();
+if(!F&&D.test(B)){F=E
+}if(!C&&(/^(?:BODY|TD|TH|CAPTION)$/).test(B)){C=E
+}E=E.parentNode
+}return{blockNode:F,blockContainer:C||E.ownerDocument.body}
+};
+dijit.range.atBeginningOfContainer=function(A,C,F){var E=false;
+var D=(F==0);
+if(!D&&C.nodeType==3){if(dojo.trim(C.nodeValue.substr(0,F))==0){D=true
+}}if(D){var B=C;
+E=true;
+while(B&&B!==A){if(B.previousSibling){E=false;
+break
+}B=B.parentNode
+}}return E
+};
+dijit.range.atEndOfContainer=function(C,E,F){var B=false;
+var A=(F==(E.length||E.childNodes.length));
+if(!A&&E.nodeType==3){if(dojo.trim(E.nodeValue.substr(F))==0){A=true
+}}if(A){var D=E;
+B=true;
+while(D&&D!==C){if(D.nextSibling){B=false;
+break
 }D=D.parentNode
-}return{blockNode:E,blockContainer:B||D.ownerDocument.body}
+}}return B
 };
-dijit.range.atBeginningOfContainer=function(F,B,E){var D=false;
-var C=(E==0);
-if(!C&&B.nodeType==3){if(dojo.trim(B.nodeValue.substr(0,E))==0){C=true
-}}if(C){var A=B;
-D=true;
-while(A&&A!==F){if(A.previousSibling){D=false;
-break
-}A=A.parentNode
-}}return D
-};
-dijit.range.atEndOfContainer=function(B,D,E){var A=false;
-var F=(E==(D.length||D.childNodes.length));
-if(!F&&D.nodeType==3){if(dojo.trim(D.nodeValue.substr(E))==0){F=true
-}}if(F){var C=D;
-A=true;
-while(C&&C!==B){if(C.nextSibling){A=false;
-break
-}C=C.parentNode
-}}return A
-};
-dijit.range.adjacentNoneTextNode=function(C,A){var B=C;
-var E=(0-C.length)||0;
-var D=A?"nextSibling":"previousSibling";
-while(B){if(B.nodeType!=3){break
-}E+=B.length;
-B=B[D]
-}return[B,E]
+dijit.range.adjacentNoneTextNode=function(D,B){var C=D;
+var A=(0-D.length)||0;
+var E=B?"nextSibling":"previousSibling";
+while(C){if(C.nodeType!=3){break
+}A+=C.length;
+C=C[E]
+}return[C,A]
 };
 dijit.range._w3c=Boolean(window.getSelection);
 dijit.range.create=function(){if(dijit.range._w3c){return document.createRange()
 }else{return new dijit.range.W3CRange
 }};
-dijit.range.getSelection=function(B,A){if(dijit.range._w3c){return B.getSelection()
-}else{var C=B.__W3CRange;
-if(!C||!dijit.range.ie.cachedSelection[C]){var D=new dijit.range.ie.selection(B);
-C=(new Date).getTime();
-while(C in dijit.range.ie.cachedSelection){C=C+1
-}C=String(C);
-dijit.range.ie.cachedSelection[C]=D
-}else{var D=dijit.range.ie.cachedSelection[C]
-}if(!A){D._getCurrentSelection()
-}return D
+dijit.range.getSelection=function(C,B){if(dijit.range._w3c){return C.getSelection()
+}else{var D=C.__W3CRange;
+if(!D||!dijit.range.ie.cachedSelection[D]){var A=new dijit.range.ie.selection(C);
+D=(new Date).getTime();
+while(D in dijit.range.ie.cachedSelection){D=D+1
+}D=String(D);
+dijit.range.ie.cachedSelection[D]=A
+}else{var A=dijit.range.ie.cachedSelection[D]
+}if(!B){A._getCurrentSelection()
+}return A
 }};
-if(!dijit.range._w3c){dijit.range.ie={cachedSelection:{},selection:function(A){this._ranges=[];
-this.addRange=function(C,D){this._ranges.push(C);
-if(!D){C._select()
+if(!dijit.range._w3c){dijit.range.ie={cachedSelection:{},selection:function(B){this._ranges=[];
+this.addRange=function(D,C){this._ranges.push(D);
+if(!C){D._select()
 }this.rangeCount=this._ranges.length
 };
 this.removeAllRanges=function(){this._ranges=[];
 this.rangeCount=0
 };
-var B=function(){var C=A.document.selection.createRange();
-var D=A.document.selection.type.toUpperCase();
-if(D=="CONTROL"){return new dijit.range.W3CRange(dijit.range.ie.decomposeControlRange(C))
-}else{return new dijit.range.W3CRange(dijit.range.ie.decomposeTextRange(C))
+var A=function(){var D=B.document.selection.createRange();
+var C=B.document.selection.type.toUpperCase();
+if(C=="CONTROL"){return new dijit.range.W3CRange(dijit.range.ie.decomposeControlRange(D))
+}else{return new dijit.range.W3CRange(dijit.range.ie.decomposeTextRange(D))
 }};
 this.getRangeAt=function(C){return this._ranges[C]
 };
 this._getCurrentSelection=function(){this.removeAllRanges();
-var C=B();
+var C=A();
 if(C){this.addRange(C,true)
 }}
-},decomposeControlRange:function(G){var F=G.item(0),D=G.item(G.length-1);
-var B=F.parentNode,C=D.parentNode;
-var E=dijit.range.getIndex(F,B).o;
-var A=dijit.range.getIndex(D,C).o+1;
-return[[B,E],[C,A]]
-},getEndPoint:function(H,G){var F=H.duplicate();
-F.collapse(!G);
-var C="EndTo"+(G?"End":"Start");
-var E=F.parentElement();
-var B,D,A;
-if(E.childNodes.length>0){dojo.every(E.childNodes,function(K,J){var M;
-if(K.nodeType!=3){F.moveToElementText(K);
-if(F.compareEndPoints(C,H)>0){B=K.previousSibling;
-if(A&&A.nodeType==3){B=A;
-M=true
-}else{B=E;
-D=J;
+},decomposeControlRange:function(C){var B=C.item(0),G=C.item(C.length-1);
+var E=B.parentNode,F=G.parentNode;
+var A=dijit.range.getIndex(B,E).o;
+var D=dijit.range.getIndex(G,F).o+1;
+return[[E,A],[F,D]]
+},getEndPoint:function(E,D){var C=E.duplicate();
+C.collapse(!D);
+var H="EndTo"+(D?"End":"Start");
+var B=C.parentElement();
+var G,A,F;
+if(B.childNodes.length>0){dojo.every(B.childNodes,function(N,M){var J;
+if(N.nodeType!=3){C.moveToElementText(N);
+if(C.compareEndPoints(H,E)>0){G=N.previousSibling;
+if(F&&F.nodeType==3){G=F;
+J=true
+}else{G=B;
+A=M;
 return false
-}}else{if(J==E.childNodes.length-1){B=E;
-D=E.childNodes.length;
+}}else{if(M==B.childNodes.length-1){G=B;
+A=B.childNodes.length;
 return false
-}}}else{if(J==E.childNodes.length-1){B=K;
-M=true
-}}if(M&&B){var I=dijit.range.adjacentNoneTextNode(B)[0];
-if(I){B=I.nextSibling
-}else{B=E.firstChild
-}var N=dijit.range.adjacentNoneTextNode(B);
-I=N[0];
-var L=N[1];
-if(I){F.moveToElementText(I);
-F.collapse(false)
-}else{F.moveToElementText(E)
-}F.setEndPoint(C,H);
-D=F.text.length-L;
+}}}else{if(M==B.childNodes.length-1){G=N;
+J=true
+}}if(J&&G){var L=dijit.range.adjacentNoneTextNode(G)[0];
+if(L){G=L.nextSibling
+}else{G=B.firstChild
+}var K=dijit.range.adjacentNoneTextNode(G);
+L=K[0];
+var I=K[1];
+if(L){C.moveToElementText(L);
+C.collapse(false)
+}else{C.moveToElementText(B)
+}C.setEndPoint(H,E);
+A=C.text.length-I;
 return false
-}A=K;
+}F=N;
 return true
 })
-}else{B=E;
-D=0
-}if(!G&&B.nodeType!=3&&D==B.childNodes.length){if(B.nextSibling&&B.nextSibling.nodeType==3){B=B.nextSibling;
-D=0
-}}return[B,D]
-},setEndPoint:function(H,G,C){var E=H.duplicate();
-if(G.nodeType!=3){E.moveToElementText(G);
-E.collapse(true);
-if(C==G.childNodes.length){if(C>0){var B=G.lastChild;
-var D=0;
-while(B&&B.nodeType==3){D+=B.length;
-G=B;
-B=B.previousSibling
-}if(B){E.moveToElementText(B)
-}E.collapse(false);
-C=D
-}else{E.moveToElementText(G);
-E.collapse(true)
-}}else{if(C>0){var B=G.childNodes[C-1];
-if(B.nodeType==3){G=B;
-C=B.length
-}else{E.moveToElementText(B);
-E.collapse(false)
-}}}}if(G.nodeType==3){var F=dijit.range.adjacentNoneTextNode(G);
-var A=F[0],D=F[1];
-if(A){E.moveToElementText(A);
-E.collapse(false);
-if(A.contentEditable!="inherit"){D++
-}}else{E.moveToElementText(G.parentNode);
-E.collapse(true)
-}C+=D;
-if(C>0){if(E.moveEnd("character",C)!=C){alert("Error when moving!")
-}E.collapse(false)
-}}return E
-},decomposeTextRange:function(A){var E=dijit.range.ie.getEndPoint(A);
-var D=E[0],F=E[1];
-var C=E[0],B=E[1];
-if(A.htmlText.length){if(A.htmlText==A.text){B=F+A.text.length
-}else{E=dijit.range.ie.getEndPoint(A,true);
-C=E[0],B=E[1]
-}}return[[D,F],[C,B],A.parentElement()]
-},setRange:function(H,C,E,B,A,F){var G=dijit.range.ie.setEndPoint(H,C,E);
-H.setEndPoint("StartToStart",G);
-if(!this.collapsed){var D=dijit.range.ie.setEndPoint(H,B,A);
-H.setEndPoint("EndToEnd",D)
-}return H
+}else{G=B;
+A=0
+}if(!D&&G.nodeType!=3&&A==G.childNodes.length){if(G.nextSibling&&G.nextSibling.nodeType==3){G=G.nextSibling;
+A=0
+}}return[G,A]
+},setEndPoint:function(E,D,H){var B=E.duplicate();
+if(D.nodeType!=3){B.moveToElementText(D);
+B.collapse(true);
+if(H==D.childNodes.length){if(H>0){var G=D.lastChild;
+var A=0;
+while(G&&G.nodeType==3){A+=G.length;
+D=G;
+G=G.previousSibling
+}if(G){B.moveToElementText(G)
+}B.collapse(false);
+H=A
+}else{B.moveToElementText(D);
+B.collapse(true)
+}}else{if(H>0){var G=D.childNodes[H-1];
+if(G.nodeType==3){D=G;
+H=G.length
+}else{B.moveToElementText(G);
+B.collapse(false)
+}}}}if(D.nodeType==3){var C=dijit.range.adjacentNoneTextNode(D);
+var F=C[0],A=C[1];
+if(F){B.moveToElementText(F);
+B.collapse(false);
+if(F.contentEditable!="inherit"){A++
+}}else{B.moveToElementText(D.parentNode);
+B.collapse(true)
+}H+=A;
+if(H>0){if(B.moveEnd("character",H)!=H){alert("Error when moving!")
+}B.collapse(false)
+}}return B
+},decomposeTextRange:function(B){var F=dijit.range.ie.getEndPoint(B);
+var E=F[0],A=F[1];
+var D=F[0],C=F[1];
+if(B.htmlText.length){if(B.htmlText==B.text){C=A+B.text.length
+}else{F=dijit.range.ie.getEndPoint(B,true);
+D=F[0],C=F[1]
+}}return[[E,A],[D,C],B.parentElement()]
+},setRange:function(E,H,B,G,F,C){var D=dijit.range.ie.setEndPoint(E,H,B);
+E.setEndPoint("StartToStart",D);
+if(!this.collapsed){var A=dijit.range.ie.setEndPoint(E,G,F);
+E.setEndPoint("EndToEnd",A)
+}return E
 }};
 dojo.declare("dijit.range.W3CRange",null,{constructor:function(){if(arguments.length>0){this.setStart(arguments[0][0][0],arguments[0][0][1]);
 this.setEnd(arguments[0][1][0],arguments[0][1][1],arguments[0][2])
@@ -217,36 +217,36 @@ this.startOffset=0;
 this.endContainer=null;
 this.endOffset=0;
 this.collapsed=true
-}},_simpleSetEndPoint:function(C,A,D){var B=(this._body||C.ownerDocument.body).createTextRange();
-if(C.nodeType!=1){B.moveToElementText(C.parentNode)
-}else{B.moveToElementText(C)
-}B.collapse(true);
-A.setEndPoint(D?"EndToEnd":"StartToStart",B)
-},_updateInternal:function(A){if(this.startContainer!==this.endContainer){if(!A){var B=(this._body||this.startContainer.ownerDocument.body).createTextRange();
-this._simpleSetEndPoint(this.startContainer,B);
-this._simpleSetEndPoint(this.endContainer,B,true);
-A=B.parentElement()
-}this.commonAncestorContainer=dijit.range.getCommonAncestor(this.startContainer,this.endContainer,A)
+}},_simpleSetEndPoint:function(D,B,A){var C=(this._body||D.ownerDocument.body).createTextRange();
+if(D.nodeType!=1){C.moveToElementText(D.parentNode)
+}else{C.moveToElementText(D)
+}C.collapse(true);
+B.setEndPoint(A?"EndToEnd":"StartToStart",C)
+},_updateInternal:function(B){if(this.startContainer!==this.endContainer){if(!B){var A=(this._body||this.startContainer.ownerDocument.body).createTextRange();
+this._simpleSetEndPoint(this.startContainer,A);
+this._simpleSetEndPoint(this.endContainer,A,true);
+B=A.parentElement()
+}this.commonAncestorContainer=dijit.range.getCommonAncestor(this.startContainer,this.endContainer,B)
 }else{this.commonAncestorContainer=this.startContainer
 }this.collapsed=(this.startContainer===this.endContainer)&&(this.startOffset==this.endOffset)
-},setStart:function(C,B,A){if(this.startContainer===C&&this.startOffset==B){return 
+},setStart:function(A,C,B){if(this.startContainer===A&&this.startOffset==C){return 
 }delete this._cachedBookmark;
-this.startContainer=C;
-this.startOffset=B;
-if(!this.endContainer){this.setEnd(C,B,A)
-}else{this._updateInternal(A)
-}},setEnd:function(C,B,A){if(this.endContainer===C&&this.endOffset==B){return 
+this.startContainer=A;
+this.startOffset=C;
+if(!this.endContainer){this.setEnd(A,C,B)
+}else{this._updateInternal(B)
+}},setEnd:function(A,C,B){if(this.endContainer===A&&this.endOffset==C){return 
 }delete this._cachedBookmark;
-this.endContainer=C;
-this.endOffset=B;
-if(!this.startContainer){this.setStart(C,B,A)
-}else{this._updateInternal(A)
-}},setStartAfter:function(B,A){this._setPoint("setStart",B,A,1)
-},setStartBefore:function(B,A){this._setPoint("setStart",B,A,0)
-},setEndAfter:function(B,A){this._setPoint("setEnd",B,A,1)
-},setEndBefore:function(B,A){this._setPoint("setEnd",B,A,0)
-},_setPoint:function(C,B,D,A){var E=dijit.range.getIndex(B,B.parentNode).o;
-this[C](B.parentNode,E.pop()+A)
+this.endContainer=A;
+this.endOffset=C;
+if(!this.startContainer){this.setStart(A,C,B)
+}else{this._updateInternal(B)
+}},setStartAfter:function(A,B){this._setPoint("setStart",A,B,1)
+},setStartBefore:function(A,B){this._setPoint("setStart",A,B,0)
+},setEndAfter:function(A,B){this._setPoint("setEnd",A,B,1)
+},setEndBefore:function(A,B){this._setPoint("setEnd",A,B,0)
+},_setPoint:function(D,C,E,B){var A=dijit.range.getIndex(C,C.parentNode).o;
+this[D](C.parentNode,A.pop()+B)
 },_getIERange:function(){var A=(this._body||this.endContainer.ownerDocument.body).createTextRange();
 dijit.range.ie.setRange(A,this.startContainer,this.startOffset,this.endContainer,this.endOffset);
 return A

@@ -2,57 +2,26 @@ dojo._xdResourceLoaded({depends:[["provide","dojo.dnd.move"],["require","dojo.dn
 A.provide("dojo.dnd.move");
 A.require("dojo.dnd.Mover");
 A.require("dojo.dnd.Moveable");
-A.declare("dojo.dnd.move.constrainedMoveable",A.dnd.Moveable,{constraints:function(){},within:false,markupFactory:function(B,C){return new A.dnd.move.constrainedMoveable(C,B)
-},constructor:function(C,B){if(!B){B={}
-}this.constraints=B.constraints;
-this.within=B.within
-},onFirstMove:function(D){var B=this.constraintBox=this.constraints.call(this,D),C=D.marginBox;
-B.r=B.l+B.w-(this.within?C.w:0);
-B.b=B.t+B.h-(this.within?C.h:0)
-},onMove:function(D,C){var B=this.constraintBox;
-C.l=C.l<B.l?B.l:B.r<C.l?B.r:C.l;
-C.t=C.t<B.t?B.t:B.b<C.t?B.b:C.t;
-A.marginBox(D.node,C)
+A.declare("dojo.dnd.move.constrainedMoveable",A.dnd.Moveable,{constraints:function(){},within:false,markupFactory:function(C,B){return new A.dnd.move.constrainedMoveable(B,C)
+},constructor:function(B,C){if(!C){C={}
+}this.constraints=C.constraints;
+this.within=C.within
+},onFirstMove:function(C){var D=this.constraintBox=this.constraints.call(this,C),B=C.marginBox;
+D.r=D.l+D.w-(this.within?B.w:0);
+D.b=D.t+D.h-(this.within?B.h:0)
+},onMove:function(C,B){var D=this.constraintBox;
+B.l=B.l<D.l?D.l:D.r<B.l?D.r:B.l;
+B.t=B.t<D.t?D.t:D.b<B.t?D.b:B.t;
+A.marginBox(C.node,B)
 }});
-A.declare("dojo.dnd.move.boxConstrainedMoveable",A.dnd.move.constrainedMoveable,{box:{},markupFactory:function(B,C){return new A.dnd.move.boxConstrainedMoveable(C,B)
-},constructor:function(D,B){var C=B&&B.box;
-this.constraints=function(){return C
+A.declare("dojo.dnd.move.boxConstrainedMoveable",A.dnd.move.constrainedMoveable,{box:{},markupFactory:function(C,B){return new A.dnd.move.boxConstrainedMoveable(B,C)
+},constructor:function(C,D){var B=D&&D.box;
+this.constraints=function(){return B
 }
 }});
-A.declare("dojo.dnd.move.parentConstrainedMoveable",A.dnd.move.constrainedMoveable,{area:"content",markupFactory:function(B,C){return new A.dnd.move.parentConstrainedMoveable(C,B)
-},constructor:function(D,B){var C=B&&B.area;
+A.declare("dojo.dnd.move.parentConstrainedMoveable",A.dnd.move.constrainedMoveable,{area:"content",markupFactory:function(C,B){return new A.dnd.move.parentConstrainedMoveable(B,C)
+},constructor:function(C,D){var B=D&&D.area;
 this.constraints=function(){var H=this.node.parentNode,F=A.getComputedStyle(H),G=A._getMarginBox(H,F);
-if(C=="margin"){return G
-}var E=A._getMarginExtents(H,F);
-G.l+=E.l,G.t+=E.t,G.w-=E.w,G.h-=E.h;
-if(C=="border"){return G
-}E=A._getBorderExtents(H,F);
-G.l+=E.l,G.t+=E.t,G.w-=E.w,G.h-=E.h;
-if(C=="padding"){return G
-}E=A._getPadExtents(H,F);
-G.l+=E.l,G.t+=E.t,G.w-=E.w,G.h-=E.h;
-return G
-}
-}});
-A.dnd.move.constrainedMover=function(C,B){var D=function(F,G,E){A.dnd.Mover.call(this,F,G,E)
-};
-A.extend(D,A.dnd.Mover.prototype);
-A.extend(D,{onMouseMove:function(H){A.dnd.autoScroll(H);
-var E=this.marginBox,I=this.constraintBox,F=E.l+H.pageX,G=E.t+H.pageY;
-F=F<I.l?I.l:I.r<F?I.r:F;
-G=G<I.t?I.t:I.b<G?I.b:G;
-this.host.onMove(this,{l:F,t:G})
-},onFirstMove:function(){A.dnd.Mover.prototype.onFirstMove.call(this);
-var F=this.constraintBox=C.call(this),E=this.marginBox;
-F.r=F.l+F.w-(B?E.w:0);
-F.b=F.t+F.h-(B?E.h:0)
-}});
-return D
-};
-A.dnd.move.boxConstrainedMover=function(B,C){return A.dnd.move.constrainedMover(function(){return B
-},C)
-};
-A.dnd.move.parentConstrainedMover=function(B,D){var C=function(){var H=this.node.parentNode,F=A.getComputedStyle(H),G=A._getMarginBox(H,F);
 if(B=="margin"){return G
 }var E=A._getMarginExtents(H,F);
 G.l+=E.l,G.t+=E.t,G.w-=E.w,G.h-=E.h;
@@ -63,8 +32,39 @@ if(B=="padding"){return G
 }E=A._getPadExtents(H,F);
 G.l+=E.l,G.t+=E.t,G.w-=E.w,G.h-=E.h;
 return G
+}
+}});
+A.dnd.move.constrainedMover=function(B,D){var C=function(F,G,E){A.dnd.Mover.call(this,F,G,E)
 };
-return A.dnd.move.constrainedMover(C,D)
+A.extend(C,A.dnd.Mover.prototype);
+A.extend(C,{onMouseMove:function(H){A.dnd.autoScroll(H);
+var E=this.marginBox,I=this.constraintBox,F=E.l+H.pageX,G=E.t+H.pageY;
+F=F<I.l?I.l:I.r<F?I.r:F;
+G=G<I.t?I.t:I.b<G?I.b:G;
+this.host.onMove(this,{l:F,t:G})
+},onFirstMove:function(){A.dnd.Mover.prototype.onFirstMove.call(this);
+var F=this.constraintBox=B.call(this),E=this.marginBox;
+F.r=F.l+F.w-(D?E.w:0);
+F.b=F.t+F.h-(D?E.h:0)
+}});
+return C
+};
+A.dnd.move.boxConstrainedMover=function(C,B){return A.dnd.move.constrainedMover(function(){return C
+},B)
+};
+A.dnd.move.parentConstrainedMover=function(D,C){var B=function(){var H=this.node.parentNode,F=A.getComputedStyle(H),G=A._getMarginBox(H,F);
+if(D=="margin"){return G
+}var E=A._getMarginExtents(H,F);
+G.l+=E.l,G.t+=E.t,G.w-=E.w,G.h-=E.h;
+if(D=="border"){return G
+}E=A._getBorderExtents(H,F);
+G.l+=E.l,G.t+=E.t,G.w-=E.w,G.h-=E.h;
+if(D=="padding"){return G
+}E=A._getPadExtents(H,F);
+G.l+=E.l,G.t+=E.t,G.w-=E.w,G.h-=E.h;
+return G
+};
+return A.dnd.move.constrainedMover(B,C)
 };
 A.dnd.constrainedMover=A.dnd.move.constrainedMover;
 A.dnd.boxConstrainedMover=A.dnd.move.boxConstrainedMover;

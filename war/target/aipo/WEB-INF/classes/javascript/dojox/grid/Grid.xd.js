@@ -21,56 +21,56 @@ this.indexCellFields()
 },get:function(B){return this.grid.model.getDatum(B,this.fieldIndex)
 },modelAllChange:function(){this.rowCount=(this.model?this.model.getRowCount():0);
 this.updateRowCount(this.rowCount)
-},modelRowChange:function(C,B){this.updateRow(B)
-},modelDatumChange:function(B,D,C){this.updateRow(D)
+},modelRowChange:function(B,C){this.updateRow(C)
+},modelDatumChange:function(D,C,B){this.updateRow(C)
 },modelFieldsChange:function(){this.indexCellFields();
 this.render()
 },modelInsertion:function(B){this.updateRowCount(this.model.getRowCount())
 },modelRemoval:function(B){this.updateRowCount(this.model.getRowCount())
-},getCellName:function(B){var C=this.model.fields.values,D=B.fieldIndex;
-return D>=0&&D<C.length&&C[D].name||this.inherited(arguments)
-},indexCellFields:function(){var C=this.layout.cells;
-for(var D=0,B;
-C&&(B=C[D]);
-D++){if(A.isString(B.field)){B.fieldIndex=this.model.fields.indexOf(B.field)
+},getCellName:function(D){var B=this.model.fields.values,C=D.fieldIndex;
+return C>=0&&C<B.length&&B[C].name||this.inherited(arguments)
+},indexCellFields:function(){var B=this.layout.cells;
+for(var C=0,D;
+B&&(D=B[C]);
+C++){if(A.isString(D.field)){D.fieldIndex=this.model.fields.indexOf(D.field)
 }}},refresh:function(){this.edit.cancel();
 this.model.measure()
-},canSort:function(C){var B=this.getSortField(C);
-return B&&this.model.canSort(B)
-},getSortField:function(C){var B=this.getCell(this.getSortIndex(C));
-return(B.fieldIndex+1)*(this.sortInfo>0?1:-1)
+},canSort:function(B){var C=this.getSortField(B);
+return C&&this.model.canSort(C)
+},getSortField:function(B){var C=this.getCell(this.getSortIndex(B));
+return(C.fieldIndex+1)*(this.sortInfo>0?1:-1)
 },sort:function(){this.edit.apply();
 this.model.sort(this.getSortField())
-},addRow:function(C,B){this.edit.apply();
-var E=B||-1;
-if(E<0){E=this.selection.getFirstSelected()||0
-}if(E<0){E=0
-}this.model.insert(C,E);
-this.model.beginModifyRow(E);
-for(var D=0,F;
-((F=this.getCell(D))&&!F.editor);
-D++){}if(F&&F.editor){this.edit.setEditCell(F,E)
+},addRow:function(B,F){this.edit.apply();
+var D=F||-1;
+if(D<0){D=this.selection.getFirstSelected()||0
+}if(D<0){D=0
+}this.model.insert(B,D);
+this.model.beginModifyRow(D);
+for(var C=0,E;
+((E=this.getCell(C))&&!E.editor);
+C++){}if(E&&E.editor){this.edit.setEditCell(E,D)
 }},removeSelectedRows:function(){this.edit.apply();
 var B=this.selection.getSelected();
 if(B.length){this.model.remove(B);
 this.selection.clear()
-}},canEdit:function(C,B){return(this.model.canModify?this.model.canModify(B):true)
-},doStartEdit:function(C,B){var D=this.canEdit(C,B);
-if(D){this.model.beginModifyRow(B);
-this.onStartEdit(C,B)
-}return D
-},doApplyCellEdit:function(C,B,D){this.model.setDatum(C,B,D);
-this.onApplyCellEdit(C,B,D)
+}},canEdit:function(B,C){return(this.model.canModify?this.model.canModify(C):true)
+},doStartEdit:function(B,D){var C=this.canEdit(B,D);
+if(C){this.model.beginModifyRow(D);
+this.onStartEdit(B,D)
+}return C
+},doApplyCellEdit:function(B,D,C){this.model.setDatum(B,D,C);
+this.onApplyCellEdit(B,D,C)
 },doCancelEdit:function(B){this.model.cancelModifyRow(B);
 this.onCancelEdit.apply(this,arguments)
 },doApplyEdit:function(B){this.model.endModifyRow(B);
 this.onApplyEdit(B)
-},styleRowState:function(G){if(this.model.getState){var C=this.model.getState(G.index),B="";
-for(var E=0,D=["inflight","error","inserting"],F;
-F=D[E];
-E++){if(C[F]){B=" dojoxGrid-row-"+F;
+},styleRowState:function(F){if(this.model.getState){var B=this.model.getState(F.index),G="";
+for(var D=0,C=["inflight","error","inserting"],E;
+E=C[D];
+D++){if(B[E]){G=" dojoxGrid-row-"+E;
 break
-}}G.customClasses+=B
+}}F.customClasses+=G
 }},onStyleRow:function(B){this.styleRowState(B);
 this.inherited(arguments)
 },junk:0})

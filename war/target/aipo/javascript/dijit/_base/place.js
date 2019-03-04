@@ -1,63 +1,207 @@
-if(!dojo._hasResource["dijit._base.place"]){dojo._hasResource["dijit._base.place"]=true;
+if(!dojo._hasResource["dijit._base.place"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dijit._base.place"] = true;
 dojo.provide("dijit._base.place");
-dijit.getViewport=function(){var A=dojo.global;
-var G=dojo.doc;
-var H=0,C=0;
-if(dojo.isMozilla){var I,D,E,B;
-if(G.body.clientWidth>G.documentElement.clientWidth){I=G.documentElement.clientWidth;
-E=G.body.clientWidth
-}else{E=G.documentElement.clientWidth;
-I=G.body.clientWidth
-}if(G.body.clientHeight>G.documentElement.clientHeight){D=G.documentElement.clientHeight;
-B=G.body.clientHeight
-}else{B=G.documentElement.clientHeight;
-D=G.body.clientHeight
-}H=(E>A.innerWidth)?I:E;
-C=(B>A.innerHeight)?D:B
-}else{if(!dojo.isOpera&&A.innerWidth){H=A.innerWidth;
-C=A.innerHeight
-}else{if(dojo.isIE&&G.documentElement&&G.documentElement.clientHeight){H=G.documentElement.clientWidth;
-C=G.documentElement.clientHeight
-}else{if(dojo.body().clientWidth){H=dojo.body().clientWidth;
-C=dojo.body().clientHeight
-}}}}var F=dojo._docScroll();
-return{w:H,h:C,l:F.x,t:F.y}
+
+// ported from dojo.html.util
+
+dijit.getViewport = function(){
+	//	summary
+	//	Returns the dimensions and scroll position of the viewable area of a browser window
+
+	var _window = dojo.global;
+	var _document = dojo.doc;
+
+	// get viewport size
+	var w = 0, h = 0;
+	if(dojo.isMozilla){
+		// mozilla
+		// _window.innerHeight includes the height taken by the scroll bar
+		// clientHeight is ideal but has DTD issues:
+		// #4539: FF reverses the roles of body.clientHeight/Width and documentElement.clientHeight/Width based on the DTD!
+		// check DTD to see whether body or documentElement returns the viewport dimensions using this algorithm:
+		var minw, minh, maxw, maxh;
+		if(_document.body.clientWidth>_document.documentElement.clientWidth){
+			minw = _document.documentElement.clientWidth;
+			maxw = _document.body.clientWidth;
+		}else{
+			maxw = _document.documentElement.clientWidth;
+			minw = _document.body.clientWidth;
+		}
+		if(_document.body.clientHeight>_document.documentElement.clientHeight){
+			minh = _document.documentElement.clientHeight;
+			maxh = _document.body.clientHeight;
+		}else{
+			maxh = _document.documentElement.clientHeight;
+			minh = _document.body.clientHeight;
+		}
+		w = (maxw > _window.innerWidth) ? minw : maxw;
+		h = (maxh > _window.innerHeight) ? minh : maxh;
+	}else if(!dojo.isOpera && _window.innerWidth){
+		//in opera9, dojo.body().clientWidth should be used, instead
+		//of window.innerWidth/document.documentElement.clientWidth
+		//so we have to check whether it is opera
+		w = _window.innerWidth;
+		h = _window.innerHeight;
+	}else if(dojo.isIE && _document.documentElement && _document.documentElement.clientHeight){
+		w = _document.documentElement.clientWidth;
+		h = _document.documentElement.clientHeight;
+	}else if(dojo.body().clientWidth){
+		// IE5, Opera
+		w = dojo.body().clientWidth;
+		h = dojo.body().clientHeight;
+	}
+
+	// get scroll position
+	var scroll = dojo._docScroll();
+
+	return { w: w, h: h, l: scroll.x, t: scroll.y };	//	object
 };
-dijit.placeOnScreen=function(B,E,A,C){var D=dojo.map(A,function(F){return{corner:F,pos:E}
-});
-return dijit._place(B,D)
-};
-dijit._place=function(O,L,H){var I=dijit.getViewport();
-if(!O.parentNode||String(O.parentNode.tagName).toLowerCase()!="body"){dojo.body().appendChild(O)
-}var E=null;
-for(var P=0;
-P<L.length;
-P++){var G=L[P].corner;
-var F=L[P].pos;
-if(H){H(G)
-}var K=O.style.display;
-var B=O.style.visibility;
-O.style.visibility="hidden";
-O.style.display="";
-var A=dojo.marginBox(O);
-O.style.display=K;
-O.style.visibility=B;
-var R=(G.charAt(1)=="L"?F.x:Math.max(I.l,F.x-A.w)),Q=(G.charAt(0)=="T"?F.y:Math.max(I.t,F.y-A.h)),D=(G.charAt(1)=="L"?Math.min(I.l+I.w,R+A.w):F.x),C=(G.charAt(0)=="T"?Math.min(I.t+I.h,Q+A.h):F.y),M=D-R,J=C-Q,N=(A.w-M)+(A.h-J);
-if(E==null||N<E.overflow){E={corner:G,aroundCorner:L[P].aroundCorner,x:R,y:Q,w:M,h:J,overflow:N}
-}if(N==0){break
-}}O.style.left=E.x+"px";
-O.style.top=E.y+"px";
-return E
-};
-dijit.placeOnScreenAroundElement=function(B,E,F,C){E=dojo.byId(E);
-var H=E.style.display;
-E.style.display="";
-var I=E.offsetWidth;
-var D=E.offsetHeight;
-var G=dojo.coords(E,true);
-E.style.display=H;
-var J=[];
-for(var A in F){J.push({aroundCorner:A,corner:F[A],pos:{x:G.x+(A.charAt(1)=="L"?0:I),y:G.y+(A.charAt(0)=="T"?0:D)}})
-}return dijit._place(B,J,C)
+
+dijit.placeOnScreen = function(
+	/* DomNode */	node,
+	/* Object */		pos,
+	/* Object */		corners,
+	/* boolean? */		tryOnly){
+	//	summary:
+	//		Keeps 'node' in the visible area of the screen while trying to
+	//		place closest to pos.x, pos.y. The input coordinates are
+	//		expected to be the desired document position.
+	//
+	//		Set which corner(s) you want to bind to, such as
+	//		
+	//			placeOnScreen(node, {x: 10, y: 20}, ["TR", "BL"])
+	//		
+	//		The desired x/y will be treated as the topleft(TL)/topright(TR) or
+	//		BottomLeft(BL)/BottomRight(BR) corner of the node. Each corner is tested
+	//		and if a perfect match is found, it will be used. Otherwise, it goes through
+	//		all of the specified corners, and choose the most appropriate one.
+	//		
+	//		NOTE: node is assumed to be absolutely or relatively positioned.
+
+	var choices = dojo.map(corners, function(corner){ return { corner: corner, pos: pos }; });
+
+	return dijit._place(node, choices);
 }
-};
+
+dijit._place = function(/*DomNode*/ node, /* Array */ choices, /* Function */ layoutNode){
+	// summary:
+	//		Given a list of spots to put node, put it at the first spot where it fits,
+	//		of if it doesn't fit anywhere then the place with the least overflow
+	// choices: Array
+	//		Array of elements like: {corner: 'TL', pos: {x: 10, y: 20} }
+	//		Above example says to put the top-left corner of the node at (10,20)
+	//	layoutNode: Function(node, orient)
+	//		for things like tooltip, they are displayed differently (and have different dimensions)
+	//		based on their orientation relative to the parent.   This adjusts the popup based on orientation.
+
+	// get {x: 10, y: 10, w: 100, h:100} type obj representing position of
+	// viewport over document
+	var view = dijit.getViewport();
+
+	// This won't work if the node is inside a <div style="position: relative">,
+	// so reattach it to document.body.   (Otherwise, the positioning will be wrong
+	// and also it might get cutoff)
+	if(!node.parentNode || String(node.parentNode.tagName).toLowerCase() != "body"){
+		dojo.body().appendChild(node);
+	}
+
+	var best=null;
+	for(var i=0; i<choices.length; i++){
+		var corner = choices[i].corner;
+		var pos = choices[i].pos;
+
+		// configure node to be displayed in given position relative to button
+		// (need to do this in order to get an accurate size for the node, because
+		// a tooltips size changes based on position, due to triangle)
+		if(layoutNode){
+			layoutNode(corner);
+		}
+
+		// get node's size
+		var oldDisplay = node.style.display;
+		var oldVis = node.style.visibility;
+		node.style.visibility = "hidden";
+		node.style.display = "";
+		var mb = dojo.marginBox(node);
+		node.style.display = oldDisplay;
+		node.style.visibility = oldVis;
+
+		// coordinates and size of node with specified corner placed at pos,
+		// and clipped by viewport
+		var startX = (corner.charAt(1)=='L' ? pos.x : Math.max(view.l, pos.x - mb.w)),
+			startY = (corner.charAt(0)=='T' ? pos.y : Math.max(view.t, pos.y -  mb.h)),
+			endX = (corner.charAt(1)=='L' ? Math.min(view.l+view.w, startX+mb.w) : pos.x),
+			endY = (corner.charAt(0)=='T' ? Math.min(view.t+view.h, startY+mb.h) : pos.y),
+			width = endX-startX,
+			height = endY-startY,
+			overflow = (mb.w-width) + (mb.h-height);
+
+		if(best==null || overflow<best.overflow){
+			best = {
+				corner: corner,
+				aroundCorner: choices[i].aroundCorner,
+				x: startX,
+				y: startY,
+				w: width,
+				h: height,
+				overflow: overflow
+			};
+		}
+		if(overflow==0){
+			break;
+		}
+	}
+
+	node.style.left = best.x + "px";
+	node.style.top = best.y + "px";
+	return best;
+}
+
+dijit.placeOnScreenAroundElement = function(
+	/* DomNode */		node,
+	/* DomNode */		aroundNode,
+	/* Object */		aroundCorners,
+	/* Function */		layoutNode){
+
+	//	summary
+	//	Like placeOnScreen, except it accepts aroundNode instead of x,y
+	//	and attempts to place node around it.  Uses margin box dimensions.
+	//
+	//	aroundCorners
+	//		specify Which corner of aroundNode should be
+	//		used to place the node => which corner(s) of node to use (see the
+	//		corners parameter in dijit.placeOnScreen)
+	//		e.g. {'TL': 'BL', 'BL': 'TL'}
+	//
+	//	layoutNode: Function(node, orient)
+	//		for things like tooltip, they are displayed differently (and have different dimensions)
+	//		based on their orientation relative to the parent.   This adjusts the popup based on orientation.
+
+
+	// get coordinates of aroundNode
+	aroundNode = dojo.byId(aroundNode);
+	var oldDisplay = aroundNode.style.display;
+	aroundNode.style.display="";
+	// #3172: use the slightly tighter border box instead of marginBox
+	var aroundNodeW = aroundNode.offsetWidth; //mb.w;
+	var aroundNodeH = aroundNode.offsetHeight; //mb.h;
+	var aroundNodePos = dojo.coords(aroundNode, true);
+	aroundNode.style.display=oldDisplay;
+
+	// Generate list of possible positions for node
+	var choices = [];
+	for(var nodeCorner in aroundCorners){
+		choices.push( {
+			aroundCorner: nodeCorner,
+			corner: aroundCorners[nodeCorner],
+			pos: {
+				x: aroundNodePos.x + (nodeCorner.charAt(1)=='L' ? 0 : aroundNodeW),
+				y: aroundNodePos.y + (nodeCorner.charAt(0)=='T' ? 0 : aroundNodeH)
+			}
+		});
+	}
+
+	return dijit._place(node, choices, layoutNode);
+}
+
+}

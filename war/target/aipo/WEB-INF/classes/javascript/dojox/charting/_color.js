@@ -1,38 +1,38 @@
 if(!dojo._hasResource["dojox.charting._color"]){dojo._hasResource["dojox.charting._color"]=true;
 dojo.provide("dojox.charting._color");
 dojox.charting._color={};
-dojox.charting._color.fromHsb=function(I,G,A){I=Math.round(I);
-G=Math.round((G/100)*255);
-A=Math.round((A/100)*255);
-var F,H,B;
-if(G==0){F=H=B=A
-}else{var E=A,D=(255-G)*A/255,C=(E-D)*(I%60)/60;
-if(I<60){F=E,H=D+C,B=D
-}else{if(I<120){F=E-C,H=E,B=D
-}else{if(I<180){F=D,H=E,B=D+C
-}else{if(I<240){F=D,H=E-C,B=E
-}else{if(I<300){F=D+C,H=D,B=E
-}else{if(I<360){F=E,H=D,B=E-C
-}}}}}}}F=Math.round(F);
-H=Math.round(H);
-B=Math.round(B);
-return new dojo.Color({r:F,g:H,b:B})
+dojox.charting._color.fromHsb=function(D,B,E){D=Math.round(D);
+B=Math.round((B/100)*255);
+E=Math.round((E/100)*255);
+var A,C,F;
+if(B==0){A=C=F=E
+}else{var I=E,H=(255-B)*E/255,G=(I-H)*(D%60)/60;
+if(D<60){A=I,C=H+G,F=H
+}else{if(D<120){A=I-G,C=I,F=H
+}else{if(D<180){A=H,C=I,F=H+G
+}else{if(D<240){A=H,C=I-G,F=I
+}else{if(D<300){A=H+G,C=H,F=I
+}else{if(D<360){A=I,C=H,F=I-G
+}}}}}}}A=Math.round(A);
+C=Math.round(C);
+F=Math.round(F);
+return new dojo.Color({r:A,g:C,b:F})
 };
-dojox.charting._color.toHsb=function(J,K,G){var I=J,C=K,E=G;
-if(dojo.isObject(J)){I=J.r,C=J.g,E=J.b
-}var L=Math.min(I,C,E);
-var F=Math.max(I,C,E);
-var H=F-L;
-var B=0,A=(F!=0?H/F:0),D=F/255;
-if(A==0){B=0
-}else{if(I==F){B=((F-E)/H)-((F-C)/H)
-}else{if(C==F){B=2+(((F-I)/H)-((F-E)/H))
-}else{B=4+(((F-C)/H)-((F-I)/H))
-}}B/=6;
-if(B<0){B++
-}}B=Math.round(B*360);
-A=Math.round(A*100);
-D=Math.round(D*100);
-return{h:B,s:A,b:D,hue:B,saturation:A,brightness:D}
+dojox.charting._color.toHsb=function(B,C,K){var A=B,G=C,I=K;
+if(dojo.isObject(B)){A=B.r,G=B.g,I=B.b
+}var D=Math.min(A,G,I);
+var J=Math.max(A,G,I);
+var L=J-D;
+var F=0,E=(J!=0?L/J:0),H=J/255;
+if(E==0){F=0
+}else{if(A==J){F=((J-I)/L)-((J-G)/L)
+}else{if(G==J){F=2+(((J-A)/L)-((J-I)/L))
+}else{F=4+(((J-G)/L)-((J-A)/L))
+}}F/=6;
+if(F<0){F++
+}}F=Math.round(F*360);
+E=Math.round(E*100);
+H=Math.round(H*100);
+return{h:F,s:E,b:H,hue:F,saturation:E,brightness:H}
 }
 };

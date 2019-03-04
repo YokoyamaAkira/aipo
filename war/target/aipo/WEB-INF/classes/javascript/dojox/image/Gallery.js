@@ -20,17 +20,17 @@ dojo.subscribe(this.thumbPicker.getShowTopicName(),function(B){A.slideShow.moveI
 dojo.subscribe(this.slideShow.getLoadTopicName(),function(B){A.thumbPicker.markImageLoaded(B)
 });
 this._centerChildren()
-},setDataStore:function(C,A,B){this.thumbPicker.setDataStore(C,A,B);
-this.slideShow.setDataStore(C,A,B)
+},setDataStore:function(A,B,C){this.thumbPicker.setDataStore(A,B,C);
+this.slideShow.setDataStore(A,B,C)
 },reset:function(){this.slideShow.reset();
 this.thumbPicker.reset()
 },showNextImage:function(A){this.slideShow.showNextImage()
 },toggleSlideshow:function(){this.slideShow.toggleSlideshow()
-},showImage:function(B,A){this.slideShow.showImage(B,A)
-},_centerChildren:function(){var C=dojo.marginBox(this.thumbPicker.outerNode);
-var A=dojo.marginBox(this.slideShow.outerNode);
-var B=(C.w-A.w)/2;
-if(B>0){dojo.style(this.slideShow.outerNode,"marginLeft",B+"px")
-}else{if(B<0){dojo.style(this.thumbPicker.outerNode,"marginLeft",(B*-1)+"px")
+},showImage:function(A,B){this.slideShow.showImage(A,B)
+},_centerChildren:function(){var A=dojo.marginBox(this.thumbPicker.outerNode);
+var B=dojo.marginBox(this.slideShow.outerNode);
+var C=(A.w-B.w)/2;
+if(C>0){dojo.style(this.slideShow.outerNode,"marginLeft",C+"px")
+}else{if(C<0){dojo.style(this.thumbPicker.outerNode,"marginLeft",(C*-1)+"px")
 }}}})
 };

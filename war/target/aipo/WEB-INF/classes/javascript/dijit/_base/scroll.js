@@ -1,11 +1,11 @@
 if(!dojo._hasResource["dijit._base.scroll"]){dojo._hasResource["dijit._base.scroll"]=true;
 dojo.provide("dijit._base.scroll");
-dijit.scrollIntoView=function(B){if(dojo.isIE){if(dojo.marginBox(B.parentNode).h<=B.parentNode.scrollHeight){B.scrollIntoView(false)
-}}else{if(dojo.isMozilla){B.scrollIntoView(false)
-}else{var D=B.parentNode;
-var A=D.scrollTop+dojo.marginBox(D).h;
-var C=B.offsetTop+dojo.marginBox(B).h;
-if(A<C){D.scrollTop+=(C-A)
-}else{if(D.scrollTop>B.offsetTop){D.scrollTop-=(D.scrollTop-B.offsetTop)
+dijit.scrollIntoView=function(C){if(dojo.isIE){if(dojo.marginBox(C.parentNode).h<=C.parentNode.scrollHeight){C.scrollIntoView(false)
+}}else{if(dojo.isMozilla){C.scrollIntoView(false)
+}else{var A=C.parentNode;
+var B=A.scrollTop+dojo.marginBox(A).h;
+var D=C.offsetTop+dojo.marginBox(C).h;
+if(B<D){A.scrollTop+=(D-B)
+}else{if(A.scrollTop>C.offsetTop){A.scrollTop-=(A.scrollTop-C.offsetTop)
 }}}}}
 };

@@ -11,102 +11,102 @@ return this
 },getAbsoluteMode:function(){return this.absolute
 },getBoundingBox:function(){return(this.bbox&&("l" in this.bbox))?{x:this.bbox.l,y:this.bbox.t,width:this.bbox.r-this.bbox.l,height:this.bbox.b-this.bbox.t}:null
 },getLastPosition:function(){return"x" in this.last?this.last:null
-},_updateBBox:function(B,A){if(this.bbox&&("l" in this.bbox)){if(this.bbox.l>B){this.bbox.l=B
-}if(this.bbox.r<B){this.bbox.r=B
-}if(this.bbox.t>A){this.bbox.t=A
-}if(this.bbox.b<A){this.bbox.b=A
-}}else{this.bbox={l:B,b:A,r:B,t:A}
-}},_updateWithSegment:function(A){var D=A.args,F=D.length;
-switch(A.action){case"M":case"L":case"C":case"S":case"Q":case"T":for(var G=0;
-G<F;
-G+=2){this._updateBBox(D[G],D[G+1])
-}this.last.x=D[F-2];
-this.last.y=D[F-1];
+},_updateBBox:function(A,B){if(this.bbox&&("l" in this.bbox)){if(this.bbox.l>A){this.bbox.l=A
+}if(this.bbox.r<A){this.bbox.r=A
+}if(this.bbox.t>B){this.bbox.t=B
+}if(this.bbox.b<B){this.bbox.b=B
+}}else{this.bbox={l:A,b:B,r:A,t:B}
+}},_updateWithSegment:function(D){var G=D.args,B=G.length;
+switch(D.action){case"M":case"L":case"C":case"S":case"Q":case"T":for(var C=0;
+C<B;
+C+=2){this._updateBBox(G[C],G[C+1])
+}this.last.x=G[B-2];
+this.last.y=G[B-1];
 this.absolute=true;
 break;
-case"H":for(var G=0;
-G<F;
-++G){this._updateBBox(D[G],this.last.y)
-}this.last.x=D[F-1];
+case"H":for(var C=0;
+C<B;
+++C){this._updateBBox(G[C],this.last.y)
+}this.last.x=G[B-1];
 this.absolute=true;
 break;
-case"V":for(var G=0;
-G<F;
-++G){this._updateBBox(this.last.x,D[G])
-}this.last.y=D[F-1];
+case"V":for(var C=0;
+C<B;
+++C){this._updateBBox(this.last.x,G[C])
+}this.last.y=G[B-1];
 this.absolute=true;
 break;
-case"m":var C=0;
-if(!("x" in this.last)){this._updateBBox(this.last.x=D[0],this.last.y=D[1]);
-C=2
-}for(var G=C;
-G<F;
-G+=2){this._updateBBox(this.last.x+=D[G],this.last.y+=D[G+1])
+case"m":var F=0;
+if(!("x" in this.last)){this._updateBBox(this.last.x=G[0],this.last.y=G[1]);
+F=2
+}for(var C=F;
+C<B;
+C+=2){this._updateBBox(this.last.x+=G[C],this.last.y+=G[C+1])
 }this.absolute=false;
 break;
-case"l":case"t":for(var G=0;
-G<F;
-G+=2){this._updateBBox(this.last.x+=D[G],this.last.y+=D[G+1])
+case"l":case"t":for(var C=0;
+C<B;
+C+=2){this._updateBBox(this.last.x+=G[C],this.last.y+=G[C+1])
 }this.absolute=false;
 break;
-case"h":for(var G=0;
-G<F;
-++G){this._updateBBox(this.last.x+=D[G],this.last.y)
+case"h":for(var C=0;
+C<B;
+++C){this._updateBBox(this.last.x+=G[C],this.last.y)
 }this.absolute=false;
 break;
-case"v":for(var G=0;
-G<F;
-++G){this._updateBBox(this.last.x,this.last.y+=D[G])
+case"v":for(var C=0;
+C<B;
+++C){this._updateBBox(this.last.x,this.last.y+=G[C])
 }this.absolute=false;
 break;
-case"c":for(var G=0;
-G<F;
-G+=6){this._updateBBox(this.last.x+D[G],this.last.y+D[G+1]);
-this._updateBBox(this.last.x+D[G+2],this.last.y+D[G+3]);
-this._updateBBox(this.last.x+=D[G+4],this.last.y+=D[G+5])
+case"c":for(var C=0;
+C<B;
+C+=6){this._updateBBox(this.last.x+G[C],this.last.y+G[C+1]);
+this._updateBBox(this.last.x+G[C+2],this.last.y+G[C+3]);
+this._updateBBox(this.last.x+=G[C+4],this.last.y+=G[C+5])
 }this.absolute=false;
 break;
-case"s":case"q":for(var G=0;
-G<F;
-G+=4){this._updateBBox(this.last.x+D[G],this.last.y+D[G+1]);
-this._updateBBox(this.last.x+=D[G+2],this.last.y+=D[G+3])
+case"s":case"q":for(var C=0;
+C<B;
+C+=4){this._updateBBox(this.last.x+G[C],this.last.y+G[C+1]);
+this._updateBBox(this.last.x+=G[C+2],this.last.y+=G[C+3])
 }this.absolute=false;
 break;
-case"A":for(var G=0;
-G<F;
-G+=7){this._updateBBox(D[G+5],D[G+6])
-}this.last.x=D[F-2];
-this.last.y=D[F-1];
+case"A":for(var C=0;
+C<B;
+C+=7){this._updateBBox(G[C+5],G[C+6])
+}this.last.x=G[B-2];
+this.last.y=G[B-1];
 this.absolute=true;
 break;
-case"a":for(var G=0;
-G<F;
-G+=7){this._updateBBox(this.last.x+=D[G+5],this.last.y+=D[G+6])
+case"a":for(var C=0;
+C<B;
+C+=7){this._updateBBox(this.last.x+=G[C+5],this.last.y+=G[C+6])
 }this.absolute=false;
 break
-}var B=[A.action];
-for(var G=0;
-G<F;
-++G){B.push(dojox.gfx.formatNumber(D[G],true))
-}if(typeof this.shape.path=="string"){this.shape.path+=B.join("")
-}else{var F=B.length,E=this.shape.path;
-for(var G=0;
-G<F;
-++G){E.push(B[G])
-}}},_validSegments:{m:2,l:2,h:1,v:1,c:6,s:4,q:4,t:2,a:7,z:0},_pushSegment:function(B,D){var C=this._validSegments[B.toLowerCase()];
-if(typeof C=="number"){if(C){if(D.length>=C){var A={action:B,args:D.slice(0,D.length-D.length%C)};
-this.segments.push(A);
-this._updateWithSegment(A)
-}}else{var A={action:B,args:[]};
-this.segments.push(A);
-this._updateWithSegment(A)
-}}},_collectArgs:function(C,D){for(var B=0;
-B<D.length;
-++B){var A=D[B];
-if(typeof A=="boolean"){C.push(A?1:0)
-}else{if(typeof A=="number"){C.push(A)
-}else{if(A instanceof Array){this._collectArgs(C,A)
-}else{if("x" in A&&"y" in A){C.push(A.x,A.y)
+}var E=[D.action];
+for(var C=0;
+C<B;
+++C){E.push(dojox.gfx.formatNumber(G[C],true))
+}if(typeof this.shape.path=="string"){this.shape.path+=E.join("")
+}else{var B=E.length,A=this.shape.path;
+for(var C=0;
+C<B;
+++C){A.push(E[C])
+}}},_validSegments:{m:2,l:2,h:1,v:1,c:6,s:4,q:4,t:2,a:7,z:0},_pushSegment:function(C,A){var D=this._validSegments[C.toLowerCase()];
+if(typeof D=="number"){if(D){if(A.length>=D){var B={action:C,args:A.slice(0,A.length-A.length%D)};
+this.segments.push(B);
+this._updateWithSegment(B)
+}}else{var B={action:C,args:[]};
+this.segments.push(B);
+this._updateWithSegment(B)
+}}},_collectArgs:function(D,A){for(var C=0;
+C<A.length;
+++C){var B=A[C];
+if(typeof B=="boolean"){D.push(B?1:0)
+}else{if(typeof B=="number"){D.push(B)
+}else{if(B instanceof Array){this._collectArgs(D,B)
+}else{if("x" in B&&"y" in B){D.push(B.x,B.y)
 }}}}}},moveTo:function(){var A=[];
 this._collectArgs(A,arguments);
 this._pushSegment(this.absolute?"M":"m",A);
@@ -145,25 +145,25 @@ this._pushSegment(this.absolute?"A":"a",A);
 return this
 },closePath:function(){this._pushSegment("Z",[]);
 return this
-},_setPath:function(C){var B=dojo.isArray(C)?C:C.match(dojox.gfx.pathSvgRegExp);
+},_setPath:function(H){var G=dojo.isArray(H)?H:H.match(dojox.gfx.pathSvgRegExp);
 this.segments=[];
 this.absolute=true;
 this.bbox={};
 this.last={};
-if(!B){return 
-}var A="",F=[],E=B.length;
-for(var H=0;
-H<E;
-++H){var G=B[H],D=parseFloat(G);
-if(isNaN(D)){if(A){this._pushSegment(A,F)
-}F=[];
-A=G
-}else{F.push(D)
-}}this._pushSegment(A,F)
-},setShape:function(B){dojox.gfx.Shape.prototype.setShape.call(this,typeof B=="string"?{path:B}:B);
-var A=this.shape.path;
+if(!G){return 
+}var F="",C=[],B=G.length;
+for(var E=0;
+E<B;
+++E){var D=G[E],A=parseFloat(D);
+if(isNaN(A)){if(F){this._pushSegment(F,C)
+}C=[];
+F=D
+}else{C.push(A)
+}}this._pushSegment(F,C)
+},setShape:function(A){dojox.gfx.Shape.prototype.setShape.call(this,typeof A=="string"?{path:A}:A);
+var B=this.shape.path;
 this.shape.path=[];
-this._setPath(A);
+this._setPath(B);
 this.shape.path=this.shape.path.join("");
 return this
 },_2PI:Math.PI*2});

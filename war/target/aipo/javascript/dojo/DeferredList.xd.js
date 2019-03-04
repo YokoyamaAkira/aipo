@@ -1,42 +1,95 @@
-dojo._xdResourceLoaded({depends:[["provide","dojo.DeferredList"]],defineResource:function(A){if(!A._hasResource["dojo.DeferredList"]){A._hasResource["dojo.DeferredList"]=true;
-A.provide("dojo.DeferredList");
-A.declare("dojo.DeferredList",A.Deferred,{constructor:function(G,F,B,E,D){this.list=G;
-this.resultList=new Array(this.list.length);
-this.chain=[];
-this.id=this._nextId();
-this.fired=-1;
-this.paused=0;
-this.results=[null,null];
-this.canceller=D;
-this.silentlyCancelled=false;
-if(this.list.length===0&&!F){this.callback(this.resultList)
-}this.finishedCount=0;
-this.fireOnOneCallback=F;
-this.fireOnOneErrback=B;
-this.consumeErrors=E;
-var C=0;
-A.forEach(this.list,function(I,H){I.addCallback(this,function(J){this._cbDeferred(H,true,J);
-return J
+dojo._xdResourceLoaded({
+depends: [["provide", "dojo.DeferredList"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojo.DeferredList"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.DeferredList"] = true;
+dojo.provide("dojo.DeferredList");
+dojo.declare("dojo.DeferredList", dojo.Deferred, {
+	constructor: function(/*Array*/ list, /*Boolean?*/ fireOnOneCallback, /*Boolean?*/ fireOnOneErrback, /*Boolean?*/ consumeErrors, /*Function?*/ canceller){
+		// summary:
+		//		Provides event handling for a group of Deferred objects.
+		// description:
+		//		DeferredList takes an array of existing deferreds and returns a new deferred of its own
+		//		this new deferred will typically have its callback fired when all of the deferreds in
+		//		the given list have fired their own deferreds.  The parameters `fireOnOneCallback` and
+		//		fireOnOneErrback, will fire before all the deferreds as appropriate
+		//
+		//	list:
+		//		The list of deferreds to be synchronizied with this DeferredList
+		//	fireOnOneCallback:
+		//		Will cause the DeferredLists callback to be fired as soon as any
+		//		of the deferreds in its list have been fired instead of waiting until
+		//		the entire list has finished
+		//	fireonOneErrback:
+		//		Will cause the errback to fire upon any of the deferreds errback
+		//	canceller:
+		//		A deferred canceller function, see dojo.Deferred
+		this.list = list;
+		this.resultList = new Array(this.list.length);
+
+		// Deferred init
+		this.chain = [];
+		this.id = this._nextId();
+		this.fired = -1;
+		this.paused = 0;
+		this.results = [null, null];
+		this.canceller = canceller;
+		this.silentlyCancelled = false;
+
+		if (this.list.length === 0 && !fireOnOneCallback) {
+			this.callback(this.resultList);
+		}
+
+		this.finishedCount = 0;
+		this.fireOnOneCallback = fireOnOneCallback;
+		this.fireOnOneErrback = fireOnOneErrback;
+		this.consumeErrors = consumeErrors;
+
+		var index = 0;
+
+		dojo.forEach(this.list, function(d, index) {
+			d.addCallback(this, function(r) { this._cbDeferred(index, true, r); return r; });
+			d.addErrback(this, function(r) { this._cbDeferred(index, false, r); return r; });
+			index++;
+		},this);
+	},
+
+	_cbDeferred: function (index, succeeded, result) {
+		// summary:
+		//	The DeferredLists' callback handler
+
+		this.resultList[index] = [succeeded, result]; this.finishedCount += 1;
+		if (this.fired !== 0) {
+			if (succeeded && this.fireOnOneCallback) {
+				this.callback([index, result]);
+			} else if (!succeeded && this.fireOnOneErrback) {
+			this.errback(result);
+			} else if (this.finishedCount == this.list.length) {
+				this.callback(this.resultList);
+			}
+		}
+		if (!succeeded && this.consumeErrors) {
+			result = null;
+		}
+		return result;
+	},
+
+	gatherResults: function (deferredList) {
+		// summary:	
+		//	Gathers the results of the deferreds for packaging
+		//	as the parameters to the Deferred Lists' callback
+
+		var d = new dojo.DeferedList(deferredList, false, true, false);
+		d.addCallback(function (results) {
+			var ret = [];
+			for (var i = 0; i < results.length; i++) {
+				ret.push(results[i][1]);
+			}
+			return ret;
+		});
+		return d;
+	}
 });
-I.addErrback(this,function(J){this._cbDeferred(H,false,J);
-return J
-});
-H++
-},this)
-},_cbDeferred:function(C,D,B){this.resultList[C]=[D,B];
-this.finishedCount+=1;
-if(this.fired!==0){if(D&&this.fireOnOneCallback){this.callback([C,B])
-}else{if(!D&&this.fireOnOneErrback){this.errback(B)
-}else{if(this.finishedCount==this.list.length){this.callback(this.resultList)
-}}}}if(!D&&this.consumeErrors){B=null
-}return B
-},gatherResults:function(B){var C=new A.DeferedList(B,false,true,false);
-C.addCallback(function(F){var D=[];
-for(var E=0;
-E<F.length;
-E++){D.push(F[E][1])
-}return D
-});
-return C
-}})
-}}});
+
+}
+
+}});

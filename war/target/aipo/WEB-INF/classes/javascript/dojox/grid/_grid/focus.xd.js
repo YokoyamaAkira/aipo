@@ -5,45 +5,45 @@ this.cell=null;
 this.rowIndex=-1;
 A.connect(this.grid.domNode,"onfocus",this,"doFocus")
 },tabbingOut:false,focusClass:"dojoxGrid-cell-focus",focusView:null,initFocusView:function(){this.focusView=this.grid.views.getFirstScrollingView()
-},isFocusCell:function(C,B){return(this.cell==C)&&(this.rowIndex==B)
+},isFocusCell:function(B,C){return(this.cell==B)&&(this.rowIndex==C)
 },isLastFocusCell:function(){return(this.rowIndex==this.grid.rowCount-1)&&(this.cell.index==this.grid.layout.cellCount-1)
 },isFirstFocusCell:function(){return(this.rowIndex==0)&&(this.cell.index==0)
 },isNoFocusCell:function(){return(this.rowIndex<0)||!this.cell
-},_focusifyCellNode:function(C){var B=this.cell&&this.cell.getNode(this.rowIndex);
-if(B){A.toggleClass(B,this.focusClass,C);
+},_focusifyCellNode:function(B){var D=this.cell&&this.cell.getNode(this.rowIndex);
+if(D){A.toggleClass(D,this.focusClass,B);
 this.scrollIntoView();
-try{if(!this.grid.edit.isEditing()){dojox.grid.fire(B,"focus")
-}}catch(D){}}},scrollIntoView:function(){if(!this.cell){return 
-}var C=this.cell,E=C.view.scrollboxNode,D={w:E.clientWidth,l:E.scrollLeft,t:E.scrollTop,h:E.clientHeight},G=C.getNode(this.rowIndex),F=C.view.getRowNode(this.rowIndex),B=this.grid.scroller.findScrollTop(this.rowIndex);
-if(G.offsetLeft+G.offsetWidth>D.l+D.w){E.scrollLeft=G.offsetLeft+G.offsetWidth-D.w
-}else{if(G.offsetLeft<D.l){E.scrollLeft=G.offsetLeft
-}}if(B+F.offsetHeight>D.t+D.h){this.grid.setScrollTop(B+F.offsetHeight-D.h)
-}else{if(B<D.t){this.grid.setScrollTop(B)
+try{if(!this.grid.edit.isEditing()){dojox.grid.fire(D,"focus")
+}}catch(C){}}},scrollIntoView:function(){if(!this.cell){return 
+}var G=this.cell,D=G.view.scrollboxNode,C={w:D.clientWidth,l:D.scrollLeft,t:D.scrollTop,h:D.clientHeight},F=G.getNode(this.rowIndex),E=G.view.getRowNode(this.rowIndex),B=this.grid.scroller.findScrollTop(this.rowIndex);
+if(F.offsetLeft+F.offsetWidth>C.l+C.w){D.scrollLeft=F.offsetLeft+F.offsetWidth-C.w
+}else{if(F.offsetLeft<C.l){D.scrollLeft=F.offsetLeft
+}}if(B+E.offsetHeight>C.t+C.h){this.grid.setScrollTop(B+E.offsetHeight-C.h)
+}else{if(B<C.t){this.grid.setScrollTop(B)
 }}},styleRow:function(B){if(B.index==this.rowIndex){this._focusifyCellNode(true)
-}},setFocusIndex:function(B,C){this.setFocusCell(this.grid.getCell(C),B)
-},setFocusCell:function(C,B){if(C&&!this.isFocusCell(C,B)){this.tabbingOut=false;
+}},setFocusIndex:function(C,B){this.setFocusCell(this.grid.getCell(B),C)
+},setFocusCell:function(B,C){if(B&&!this.isFocusCell(B,C)){this.tabbingOut=false;
 this.focusGrid();
 this._focusifyCellNode(false);
-this.cell=C;
-this.rowIndex=B;
+this.cell=B;
+this.rowIndex=C;
 this._focusifyCellNode(true)
 }if(A.isOpera){setTimeout(A.hitch(this.grid,"onCellFocus",this.cell,this.rowIndex),1)
 }else{this.grid.onCellFocus(this.cell,this.rowIndex)
-}},next:function(){var E=this.rowIndex,C=this.cell.index+1,B=this.grid.layout.cellCount-1,D=this.grid.rowCount-1;
-if(C>B){C=0;
-E++
-}if(E>D){C=B;
-E=D
-}this.setFocusIndex(E,C)
-},previous:function(){var B=(this.rowIndex||0),C=(this.cell.index||0)-1;
-if(C<0){C=this.grid.layout.cellCount-1;
-B--
-}if(B<0){B=0;
-C=0
-}this.setFocusIndex(B,C)
-},move:function(I,F){var D=this.grid.rowCount-1,C=this.grid.layout.cellCount-1,B=this.rowIndex,H=this.cell.index,E=Math.min(D,Math.max(0,B+I)),G=Math.min(C,Math.max(0,H+F));
-this.setFocusIndex(E,G);
-if(I){this.grid.updateRow(B)
+}},next:function(){var D=this.rowIndex,B=this.cell.index+1,E=this.grid.layout.cellCount-1,C=this.grid.rowCount-1;
+if(B>E){B=0;
+D++
+}if(D>C){B=E;
+D=C
+}this.setFocusIndex(D,B)
+},previous:function(){var C=(this.rowIndex||0),B=(this.cell.index||0)-1;
+if(B<0){B=this.grid.layout.cellCount-1;
+C--
+}if(C<0){C=0;
+B=0
+}this.setFocusIndex(C,B)
+},move:function(E,B){var G=this.grid.rowCount-1,I=this.grid.layout.cellCount-1,F=this.rowIndex,D=this.cell.index,H=Math.min(G,Math.max(0,F+E)),C=Math.min(I,Math.max(0,D+B));
+this.setFocusIndex(H,C);
+if(E){this.grid.updateRow(F)
 }},previousKey:function(B){if(this.isFirstFocusCell()){this.tabOut(this.grid.domNode)
 }else{A.stopEvent(B);
 this.previous()

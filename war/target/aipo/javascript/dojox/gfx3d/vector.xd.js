@@ -1,33 +1,114 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.gfx3d.vector"]],defineResource:function(A){if(!A._hasResource["dojox.gfx3d.vector"]){A._hasResource["dojox.gfx3d.vector"]=true;
-A.provide("dojox.gfx3d.vector");
-A.mixin(dojox.gfx3d.vector,{sum:function(){var B={x:0,y:0,z:0};
-A.forEach(arguments,function(C){B.x+=C.x;
-B.y+=C.y;
-B.z+=C.z
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.gfx3d.vector"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.gfx3d.vector"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.gfx3d.vector"] = true;
+dojo.provide("dojox.gfx3d.vector");
+
+dojo.mixin(dojox.gfx3d.vector, {
+	sum: function(){
+		// summary: sum of the vectors
+		var v = {x: 0, y: 0, z:0};
+		dojo.forEach(arguments, function(item){ v.x += item.x; v.y += item.y; v.z += item.z; });
+		return v;
+	},
+
+	center: function(){
+		// summary: center of the vectors
+		var l = arguments.length;
+		if(l == 0){
+			return {x: 0, y: 0, z: 0};
+		} 
+		var v = dojox.gfx3d.vector.sum(arguments);
+		return {x: v.x/l, y: v.y/l, z: v.z/l};
+	},
+
+	substract: function(/* Pointer */a, /* Pointer */b){
+		return  {x: a.x - b.x, y: a.y - b.y, z: a.z - b.z};
+	},
+
+	_crossProduct: function(x, y, z, u, v, w){
+		// summary: applies a cross product of two vectorss, (x, y, z) and (u, v, w)
+		// x: Number: an x coordinate of a point
+		// y: Number: a y coordinate of a point
+		// z: Number: a z coordinate of a point
+		// u: Number: an x coordinate of a point
+		// v: Number: a y coordinate of a point
+		// w: Number: a z coordinate of a point
+		return {x: y * w - z * v, y: z * u - x * w, z: x * v - y * u}; // Object
+	},
+
+	crossProduct: function(/* Number||Point */ a, /* Number||Point */ b, /* Number, optional */ c, /* Number, optional */ d, /* Number, optional */ e, /* Number, optional */ f){
+		// summary: applies a matrix to a point
+		// matrix: dojox.gfx3d.matrix.Matrix3D: a 3D matrix object to be applied
+		// a: Number: an x coordinate of a point
+		// b: Number: a y coordinate of a point
+		// c: Number: a z coordinate of a point
+		// d: Number: an x coordinate of a point
+		// e: Number: a y coordinate of a point
+		// f: Number: a z coordinate of a point
+		if(arguments.length == 6 && dojo.every(arguments, function(item){ return typeof item == "number"; })){
+			return dojox.gfx3d.vector._crossProduct(a, b, c, d, e, f); // Object
+		}
+		// branch
+		// a: Object: a point
+		// b: Object: a point
+		// c: null
+		// d: null
+		// e: null
+		// f: null
+		return dojox.gfx3d.vector._crossProduct(a.x, a.y, a.z, b.x, b.y, b.z); // Object
+	},
+
+	_dotProduct: function(x, y, z, u, v, w){
+		// summary: applies a cross product of two vectorss, (x, y, z) and (u, v, w)
+		// x: Number: an x coordinate of a point
+		// y: Number: a y coordinate of a point
+		// z: Number: a z coordinate of a point
+		// u: Number: an x coordinate of a point
+		// v: Number: a y coordinate of a point
+		// w: Number: a z coordinate of a point
+		return x * u + y * v + z * w; // Number
+	},
+	dotProduct: function(/* Number||Point */ a, /* Number||Point */ b, /* Number, optional */ c, /* Number, optional */ d, /* Number, optional */ e, /* Number, optional */ f){
+		// summary: applies a matrix to a point
+		// matrix: dojox.gfx3d.matrix.Matrix3D: a 3D matrix object to be applied
+		// a: Number: an x coordinate of a point
+		// b: Number: a y coordinate of a point
+		// c: Number: a z coordinate of a point
+		// d: Number: an x coordinate of a point
+		// e: Number: a y coordinate of a point
+		// f: Number: a z coordinate of a point
+		if(arguments.length == 6 && dojo.every(arguments, function(item){ return typeof item == "number"; })){
+			return dojox.gfx3d.vector._dotProduct(a, b, c, d, e, f); // Object
+		}
+		// branch
+		// a: Object: a point
+		// b: Object: a point
+		// c: null
+		// d: null
+		// e: null
+		// f: null
+		return dojox.gfx3d.vector._dotProduct(a.x, a.y, a.z, b.x, b.y, b.z); // Object
+	},
+
+	normalize: function(/* Point||Array*/ a, /* Point */ b, /* Point */ c){
+		// summary: find the normal of the implicit surface
+		// a: Object: a point
+		// b: Object: a point
+		// c: Object: a point
+		var l, m, n; 
+		if(a instanceof Array){
+			l = a[0]; m = a[1]; n = a[2];
+		}else{
+			l = a; m = b; n = c;
+		}
+
+		var u = dojox.gfx3d.vector.substract(m, l);
+		var v = dojox.gfx3d.vector.substract(n, l);
+		return dojox.gfx3d.vector.crossProduct(u, v);
+	}
 });
-return B
-},center:function(){var B=arguments.length;
-if(B==0){return{x:0,y:0,z:0}
-}var C=dojox.gfx3d.vector.sum(arguments);
-return{x:C.x/B,y:C.y/B,z:C.z/B}
-},substract:function(C,B){return{x:C.x-B.x,y:C.y-B.y,z:C.z-B.z}
-},_crossProduct:function(B,G,F,E,D,C){return{x:G*C-F*D,y:F*E-B*C,z:B*D-G*E}
-},crossProduct:function(C,B,G,F,E,D){if(arguments.length==6&&A.every(arguments,function(H){return typeof H=="number"
-})){return dojox.gfx3d.vector._crossProduct(C,B,G,F,E,D)
-}return dojox.gfx3d.vector._crossProduct(C.x,C.y,C.z,B.x,B.y,B.z)
-},_dotProduct:function(B,G,F,E,D,C){return B*E+G*D+F*C
-},dotProduct:function(C,B,G,F,E,D){if(arguments.length==6&&A.every(arguments,function(H){return typeof H=="number"
-})){return dojox.gfx3d.vector._dotProduct(C,B,G,F,E,D)
-}return dojox.gfx3d.vector._dotProduct(C.x,C.y,C.z,B.x,B.y,B.z)
-},normalize:function(E,C,I){var D,B,H;
-if(E instanceof Array){D=E[0];
-B=E[1];
-H=E[2]
-}else{D=E;
-B=C;
-H=I
-}var G=dojox.gfx3d.vector.substract(B,D);
-var F=dojox.gfx3d.vector.substract(H,D);
-return dojox.gfx3d.vector.crossProduct(G,F)
-}})
-}}});
+
+}
+
+}});

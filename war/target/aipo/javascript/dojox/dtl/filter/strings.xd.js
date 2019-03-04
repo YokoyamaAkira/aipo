@@ -1,146 +1,319 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.dtl.filter.strings"],["require","dojox.dtl.filter.htmlstrings"],["require","dojox.string.sprintf"],["require","dojox.string.tokenize"]],defineResource:function(A){if(!A._hasResource["dojox.dtl.filter.strings"]){A._hasResource["dojox.dtl.filter.strings"]=true;
-A.provide("dojox.dtl.filter.strings");
-A.require("dojox.dtl.filter.htmlstrings");
-A.require("dojox.string.sprintf");
-A.require("dojox.string.tokenize");
-A.mixin(dojox.dtl.filter.strings,{addslashes:function(B){return B.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/'/g,"\\'")
-},capfirst:function(B){B=""+B;
-return B.charAt(0).toUpperCase()+B.substring(1)
-},center:function(D,B){B=B||D.length;
-D=D+"";
-var E=B-D.length;
-if(E%2){D=D+" ";
-E-=1
-}for(var C=0;
-C<E;
-C+=2){D=" "+D+" "
-}return D
-},cut:function(C,B){B=B+""||"";
-C=C+"";
-return C.replace(new RegExp(B,"g"),"")
-},_fix_ampersands:/&(?!(\w+|#\d+);)/g,fix_ampersands:function(B){return B.replace(dojox.dtl.filter.strings._fix_ampersands,"&amp;")
-},floatformat:function(D,C){C=parseInt(C||-1);
-D=parseFloat(D);
-var B=D-D.toFixed(0);
-if(!B&&C<0){return D.toFixed()
-}D=D.toFixed(Math.abs(C));
-return(C<0)?parseFloat(D)+"":D
-},iriencode:function(B){return dojox.dtl.text.urlquote(B,"/#%[]=:;$&()+,!")
-},linenumbers:function(G){var H=dojox.dtl.filter;
-var C=G.split("\n");
-var D=[];
-var F=(C.length+"").length;
-for(var E=0,B;
-E<C.length;
-E++){B=C[E];
-D.push(H.strings.ljust(E+1,F)+". "+H.htmlstrings.escape(B))
-}return D.join("\n")
-},ljust:function(C,B){C=C+"";
-B=parseInt(B);
-while(C.length<B){C=C+" "
-}return C
-},lower:function(B){return(B+"").toLowerCase()
-},make_list:function(E){var B=[];
-if(typeof E=="number"){E=E+""
-}if(E.charAt){for(var D=0;
-D<E.length;
-D++){B.push(E.charAt(D))
-}return B
-}if(typeof E=="object"){for(var C in E){B.push(E[C])
-}return B
-}return[]
-},rjust:function(C,B){C=C+"";
-B=parseInt(B);
-while(C.length<B){C=" "+C
-}return C
-},slugify:function(B){B=B.replace(/[^\w\s-]/g,"").toLowerCase();
-return B.replace(/[\-\s]+/g,"-")
-},_strings:{},stringformat:function(D,C){C=""+C;
-var B=dojox.dtl.filter.strings._strings;
-if(!B[C]){B[C]=new dojox.string.sprintf.Formatter("%"+C)
-}return B[C].format(D)
-},title:function(D){var C,F="";
-for(var B=0,E;
-B<D.length;
-B++){E=D.charAt(B);
-if(C==" "||C=="\n"||C=="\t"||!C){F+=E.toUpperCase()
-}else{F+=E.toLowerCase()
-}C=E
-}return F
-},_truncatewords:/[ \n\r\t]/,truncatewords:function(G,B){B=parseInt(B);
-if(!B){return G
-}for(var D=0,C=G.length,F=0,H,E;
-D<G.length;
-D++){H=G.charAt(D);
-if(dojox.dtl.filter.strings._truncatewords.test(E)){if(!dojox.dtl.filter.strings._truncatewords.test(H)){++F;
-if(F==B){return G.substring(0,C+1)
-}}}else{if(!dojox.dtl.filter.strings._truncatewords.test(H)){C=D
-}}E=H
-}return G
-},_truncate_words:/(&.*?;|<.*?>|(\w[\w-]*))/g,_truncate_tag:/<(\/)?([^ ]+?)(?: (\/)| .*?)?>/,_truncate_singlets:{br:true,col:true,link:true,base:true,img:true,param:true,area:true,hr:true,input:true},truncatewords_html:function(H,D){D=parseInt(D);
-if(D<=0){return""
-}var C=dojox.dtl.filter.strings;
-var I=0;
-var F=[];
-var E=dojox.string.tokenize(H,C._truncate_words,function(N,P){if(P){++I;
-if(I<D){return P
-}else{if(I==D){return P+" ..."
-}}}var J=N.match(C._truncate_tag);
-if(!J||I>=D){return 
-}var M=J[1];
-var O=J[2].toLowerCase();
-var L=J[3];
-if(M||C._truncate_singlets[O]){}else{if(M){var K=A.indexOf(F,O);
-if(K!=-1){F=F.slice(K+1)
-}}else{F.unshift(O)
-}}return N
-}).join("");
-E=E.replace(/\s+$/g,"");
-for(var G=0,B;
-B=F[G];
-G++){E+="</"+B+">"
-}return E
-},upper:function(B){return B.toUpperCase()
-},urlencode:function(B){return dojox.dtl.text.urlquote(B)
-},_urlize:/^((?:[(>]|&lt;)*)(.*?)((?:[.,)>\n]|&gt;)*)$/,_urlize2:/^\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+$/,urlize:function(B){return dojox.dtl.filter.strings.urlizetrunc(B)
-},urlizetrunc:function(C,B){B=parseInt(B);
-return dojox.string.tokenize(C,/(\S+)/g,function(E){var F=dojox.dtl.filter.strings._urlize.exec(E);
-if(!F){return E
-}var J=F[1];
-var P=F[2];
-var D=F[3];
-var M=P.indexOf("www.")==0;
-var O=P.indexOf("@")!=-1;
-var H=P.indexOf(":")!=-1;
-var K=P.indexOf("http://")==0;
-var N=P.indexOf("https://")==0;
-var L=/[a-zA-Z0-9]/.test(P.charAt(0));
-var I=P.substring(P.length-4);
-var G=P;
-if(B>3){G=G.substring(0,B-3)+"..."
-}if(M||(!O&&!K&&P.length&&L&&(I==".org"||I==".net"||I==".com"))){return'<a href="http://'+P+'" rel="nofollow">'+G+"</a>"
-}else{if(K||N){return'<a href="'+P+'" rel="nofollow">'+G+"</a>"
-}else{if(O&&!M&&!H&&dojox.dtl.filter.strings._urlize2.test(P)){return'<a href="mailto:'+P+'">'+P+"</a>"
-}}}return E
-}).join("")
-},wordcount:function(B){return dojox.dtl.text.pySplit(B).length
-},wordwrap:function(F,B){B=parseInt(B);
-var D=[];
-var H=F.split(/ /g);
-if(H.length){var G=H.shift();
-D.push(G);
-var I=G.length-G.lastIndexOf("\n")-1;
-for(var E=0;
-E<H.length;
-E++){G=H[E];
-if(G.indexOf("\n")!=-1){var C=G.split(/\n/g)
-}else{var C=[G]
-}I+=C[0].length+1;
-if(B&&I>B){D.push("\n");
-I=C[C.length-1].length
-}else{D.push(" ");
-if(C.length>1){I=C[C.length-1].length
-}}D.push(G)
-}}return D.join("")
-}})
-}}});
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.dtl.filter.strings"],
+["require", "dojox.dtl.filter.htmlstrings"],
+["require", "dojox.string.sprintf"],
+["require", "dojox.string.tokenize"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.dtl.filter.strings"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.dtl.filter.strings"] = true;
+dojo.provide("dojox.dtl.filter.strings");
+
+dojo.require("dojox.dtl.filter.htmlstrings");
+dojo.require("dojox.string.sprintf");
+dojo.require("dojox.string.tokenize");
+
+dojo.mixin(dojox.dtl.filter.strings, {
+	addslashes: function(value){
+		// summary: Adds slashes - useful for passing strings to JavaScript, for example.
+		return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/'/g, "\\'");
+	},
+	capfirst: function(value){
+		// summary: Capitalizes the first character of the value
+		value = "" + value;
+		return value.charAt(0).toUpperCase() + value.substring(1);
+	},
+	center: function(value, arg){
+		// summary: Centers the value in a field of a given width
+		arg = arg || value.length;
+		value = value + "";
+		var diff = arg - value.length;
+		if(diff % 2){
+			value = value + " ";
+			diff -= 1;
+		}
+		for(var i = 0; i < diff; i += 2){
+			value = " " + value + " ";
+		}
+		return value;
+	},
+	cut: function(value, arg){
+		// summary: Removes all values of arg from the given string
+		arg = arg + "" || "";
+		value = value + "";
+		return value.replace(new RegExp(arg, "g"), "");
+	},
+	_fix_ampersands: /&(?!(\w+|#\d+);)/g,
+	fix_ampersands: function(value){
+		// summary: Replaces ampersands with ``&amp;`` entities
+		return value.replace(dojox.dtl.filter.strings._fix_ampersands, "&amp;");
+	},
+	floatformat: function(value, arg){
+		// summary: Format a number according to arg
+		// description:
+		//		If called without an argument, displays a floating point
+		//		number as 34.2 -- but only if there's a point to be displayed.
+		//		With a positive numeric argument, it displays that many decimal places
+		//		always.
+		//		With a negative numeric argument, it will display that many decimal
+		//		places -- but only if there's places to be displayed.
+		arg = parseInt(arg || -1);
+		value = parseFloat(value);
+		var m = value - value.toFixed(0);
+		if(!m && arg < 0){
+			return value.toFixed();
+		}
+		value = value.toFixed(Math.abs(arg));
+		return (arg < 0) ? parseFloat(value) + "" : value;
+	},
+	iriencode: function(value){
+		return dojox.dtl.text.urlquote(value, "/#%[]=:;$&()+,!");
+	},
+	linenumbers: function(value){
+		// summary: Displays text with line numbers
+		var df = dojox.dtl.filter;
+		var lines = value.split("\n");
+		var output = [];
+		var width = (lines.length + "").length;
+		for(var i = 0, line; i < lines.length; i++){
+			line = lines[i];
+			output.push(df.strings.ljust(i + 1, width) + ". " + df.htmlstrings.escape(line));
+		}
+		return output.join("\n");
+	},
+	ljust: function(value, arg){
+		value = value + "";
+		arg = parseInt(arg);
+		while(value.length < arg){
+			value = value + " ";
+		}
+		return value;
+	},
+	lower: function(value){
+		// summary: Converts a string into all lowercase
+		return (value + "").toLowerCase();
+	},
+	make_list: function(value){
+		// summary:
+		//		Returns the value turned into a list. For an integer, it's a list of
+		//		digits. For a string, it's a list of characters.
+		var output = [];
+		if(typeof value == "number"){
+			value = value + "";
+		}
+		if(value.charAt){
+			for(var i = 0; i < value.length; i++){
+				output.push(value.charAt(i));
+			}
+			return output;
+		}
+		if(typeof value == "object"){
+			for(var key in value){
+				output.push(value[key]);
+			}
+			return output;
+		}
+		return [];
+	},
+	rjust: function(value, arg){
+		value = value + "";
+		arg = parseInt(arg);
+		while(value.length < arg){
+			value = " " + value;
+		}
+		return value;
+	},
+	slugify: function(value){
+		// summary: Converts to lowercase, removes
+		//		non-alpha chars and converts spaces to hyphens
+		value = value.replace(/[^\w\s-]/g, "").toLowerCase();
+		return value.replace(/[\-\s]+/g, "-");
+	},
+	_strings: {},
+	stringformat: function(value, arg){
+		// summary:
+		//		Formats the variable according to the argument, a string formatting specifier.
+		//		This specifier uses Python string formating syntax, with the exception that
+		//		the leading "%" is dropped.
+		arg = "" + arg;
+		var strings = dojox.dtl.filter.strings._strings;
+		if(!strings[arg]){
+			strings[arg] = new dojox.string.sprintf.Formatter("%" + arg);
+		}
+		return strings[arg].format(value);
+	},
+	title: function(value){
+		// summary: Converts a string into titlecase
+		var last, title = "";
+		for(var i = 0, current; i < value.length; i++){
+			current = value.charAt(i);
+			if(last == " " || last == "\n" || last == "\t" || !last){
+				title += current.toUpperCase();
+			}else{
+				title += current.toLowerCase();
+			}
+			last = current;
+		}
+		return title;
+	},
+	_truncatewords: /[ \n\r\t]/,
+	truncatewords: function(value, arg){
+		// summary: Truncates a string after a certain number of words
+		// arg: Integer
+		//		Number of words to truncate after
+		arg = parseInt(arg);
+		if(!arg){
+			return value;
+		}
+
+		for(var i = 0, j = value.length, count = 0, current, last; i < value.length; i++){
+			current = value.charAt(i);
+			if(dojox.dtl.filter.strings._truncatewords.test(last)){
+				if(!dojox.dtl.filter.strings._truncatewords.test(current)){
+					++count;
+					if(count == arg){
+						return value.substring(0, j + 1);
+					}
+				}
+			}else if(!dojox.dtl.filter.strings._truncatewords.test(current)){
+				j = i;
+			}
+			last = current;
+		}
+		return value;
+	},
+	_truncate_words: /(&.*?;|<.*?>|(\w[\w-]*))/g,
+	_truncate_tag: /<(\/)?([^ ]+?)(?: (\/)| .*?)?>/,
+	_truncate_singlets: { br: true, col: true, link: true, base: true, img: true, param: true, area: true, hr: true, input: true },
+	truncatewords_html: function(value, arg){
+		arg = parseInt(arg);
+
+		if(arg <= 0){
+			return "";
+		}
+
+		var strings = dojox.dtl.filter.strings;
+		var words = 0;
+		var open = [];
+
+		var output = dojox.string.tokenize(value, strings._truncate_words, function(all, word){
+			if(word){
+				// It's an actual non-HTML word
+				++words;
+				if(words < arg){
+					return word;
+				}else if(words == arg){
+					return word + " ...";
+				}
+			}
+			// Check for tag
+			var tag = all.match(strings._truncate_tag);
+			if(!tag || words >= arg){
+				// Don't worry about non tags or tags after our truncate point
+				return;
+			}
+			var closing = tag[1];
+			var tagname = tag[2].toLowerCase();
+			var selfclosing = tag[3];
+			if(closing || strings._truncate_singlets[tagname]){
+			}else if(closing){
+				var i = dojo.indexOf(open, tagname);
+				if(i != -1){
+					open = open.slice(i + 1);
+				}
+			}else{
+				open.unshift(tagname);
+			}
+			return all;
+		}).join("");
+
+		output = output.replace(/\s+$/g, "");
+
+		for(var i = 0, tag; tag = open[i]; i++){
+			output += "</" + tag + ">";
+		}
+
+		return output;
+	},
+	upper: function(value){
+		return value.toUpperCase();
+	},
+	urlencode: function(value){
+		return dojox.dtl.text.urlquote(value);
+	},
+	_urlize: /^((?:[(>]|&lt;)*)(.*?)((?:[.,)>\n]|&gt;)*)$/,
+	_urlize2: /^\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+$/,
+	urlize: function(value){
+		return dojox.dtl.filter.strings.urlizetrunc(value);
+	},
+	urlizetrunc: function(value, arg){
+		arg = parseInt(arg);
+		return dojox.string.tokenize(value, /(\S+)/g, function(word){
+			var matches = dojox.dtl.filter.strings._urlize.exec(word);
+			if(!matches){
+				return word;
+			}
+			var lead = matches[1];
+			var middle = matches[2];
+			var trail = matches[3];
+
+			var startsWww = middle.indexOf("www.") == 0;
+			var hasAt = middle.indexOf("@") != -1;
+			var hasColon = middle.indexOf(":") != -1;
+			var startsHttp = middle.indexOf("http://") == 0;
+			var startsHttps = middle.indexOf("https://") == 0;
+			var firstAlpha = /[a-zA-Z0-9]/.test(middle.charAt(0));
+			var last4 = middle.substring(middle.length - 4);
+
+			var trimmed = middle;
+			if(arg > 3){
+				trimmed = trimmed.substring(0, arg - 3) + "...";
+			}
+
+			if(startsWww || (!hasAt && !startsHttp && middle.length && firstAlpha && (last4 == ".org" || last4 == ".net" || last4 == ".com"))){
+				return '<a href="http://' + middle + '" rel="nofollow">' + trimmed + '</a>';
+			}else if(startsHttp || startsHttps){
+				return '<a href="' + middle + '" rel="nofollow">' + trimmed + '</a>';
+			}else if(hasAt && !startsWww && !hasColon && dojox.dtl.filter.strings._urlize2.test(middle)){
+				return '<a href="mailto:' + middle + '">' + middle + '</a>';
+			}
+			return word;
+		}).join("");
+	},
+	wordcount: function(value){
+		return dojox.dtl.text.pySplit(value).length;
+	},
+	wordwrap: function(value, arg){
+		arg = parseInt(arg);
+		// summary: Wraps words at specified line length
+		var output = [];
+		var parts = value.split(/ /g);
+		if(parts.length){
+			var word = parts.shift();
+			output.push(word);
+			var pos = word.length - word.lastIndexOf("\n") - 1;
+			for(var i = 0; i < parts.length; i++){
+				word = parts[i];
+				if(word.indexOf("\n") != -1){
+					var lines = word.split(/\n/g);
+				}else{
+					var lines = [word];
+				}
+				pos += lines[0].length + 1;
+				if(arg && pos > arg){
+					output.push("\n");
+					pos = lines[lines.length - 1].length;
+				}else{
+					output.push(" ");
+					if(lines.length > 1){
+						pos = lines[lines.length - 1].length;
+					}
+				}
+				output.push(word);
+			}
+		}
+		return output.join("");
+	}
+});
+
+}
+
+}});

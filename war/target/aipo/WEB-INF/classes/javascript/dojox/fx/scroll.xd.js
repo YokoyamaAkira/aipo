@@ -2,16 +2,16 @@ dojo._xdResourceLoaded({depends:[["provide","dojox.fx.scroll"],["require","dojox
 A.provide("dojox.fx.scroll");
 A.experimental("dojox.fx.scroll");
 A.require("dojox.fx._core");
-dojox.fx.smoothScroll=function(D){if(!D.target){D.target=A.coords(D.node,true)
-}var C=A[(A.isIE?"isObject":"isFunction")](D.win.scrollTo);
-var E=(C)?(function(F){D.win.scrollTo(F[0],F[1])
-}):(function(F){D.win.scrollLeft=F[0];
-D.win.scrollTop=F[1]
+dojox.fx.smoothScroll=function(C){if(!C.target){C.target=A.coords(C.node,true)
+}var B=A[(A.isIE?"isObject":"isFunction")](C.win.scrollTo);
+var D=(B)?(function(F){C.win.scrollTo(F[0],F[1])
+}):(function(F){C.win.scrollLeft=F[0];
+C.win.scrollTop=F[1]
 });
-var B=new A._Animation(A.mixin({beforeBegin:function(){if(this.curve){delete this.curve
-}var F=C?A._docScroll():{x:D.win.scrollLeft,y:D.win.scrollTop};
-B.curve=new dojox.fx._Line([F.x,F.y],[D.target.x,D.target.y])
-},onAnimate:E},D));
-return B
+var E=new A._Animation(A.mixin({beforeBegin:function(){if(this.curve){delete this.curve
+}var F=B?A._docScroll():{x:C.win.scrollLeft,y:C.win.scrollTop};
+E.curve=new dojox.fx._Line([F.x,F.y],[C.target.x,C.target.y])
+},onAnimate:D},C));
+return E
 }
 }}});

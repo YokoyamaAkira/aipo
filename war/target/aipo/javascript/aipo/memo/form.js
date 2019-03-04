@@ -1,31 +1,31 @@
 dojo.provide("aipo.memo");
-aipo.memo.onLoadMemoDialog=function(B){dojo.byId("memo_name").focus()
+aipo.memo.onLoadMemoDialog=function(A){dojo.byId("memo_name").focus()
 };
-aipo.memo.formSwitchCategoryInput=function(B){if(B.form.is_new_category.value=="TRUE"||B.form.is_new_category.value=="true"){B.value="新しく入力する";
-aipo.memo.formCategoryInputOff(B.form)
-}else{B.value="一覧から選択する";
-aipo.memo.formCategoryInputOn(B.form)
+aipo.memo.formSwitchCategoryInput=function(A){if(A.form.is_new_category.value=="TRUE"||A.form.is_new_category.value=="true"){A.value="新しく入力する";
+aipo.memo.formCategoryInputOff(A.form)
+}else{A.value="一覧から選択する";
+aipo.memo.formCategoryInputOn(A.form)
 }};
-aipo.memo.formCategoryInputOn=function(B){dojo.byId("memoCategorySelectField").style.display="none";
+aipo.memo.formCategoryInputOn=function(A){dojo.byId("memoCategorySelectField").style.display="none";
 dojo.byId("memoCategoryInputField").style.display="";
-B.is_new_category.value="TRUE"
+A.is_new_category.value="TRUE"
 };
-aipo.memo.formCategoryInputOff=function(B){dojo.byId("memoCategoryInputField").style.display="none";
+aipo.memo.formCategoryInputOff=function(A){dojo.byId("memoCategoryInputField").style.display="none";
 dojo.byId("memoCategorySelectField").style.display="";
-B.is_new_category.value="FALSE"
+A.is_new_category.value="FALSE"
 };
-aipo.memo.onReceiveMessage=function(D){if(!D){var C=dijit.byId("modalDialog");
-if(!!C){C.hide()
+aipo.memo.onReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
+if(!!A){A.hide()
 }aipo.portletReload("memo")
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=D
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
 }};
-aipo.memo.onReceiveMessageUpdate=function(E){if(!E){var D=dijit.byId("modalDialog");
-if(!!D){D.hide()
+aipo.memo.onReceiveMessageUpdate=function(C){if(!C){var A=dijit.byId("modalDialog");
+if(!!A){A.hide()
 }aipo.portletReload("memo")
-}var F=dojo.query(".messageDiv_memo.enabled");
-if(F.length>=1){F[0].innerHTML=E
+}var B=dojo.query(".messageDiv_memo.enabled");
+if(B.length>=1){B[0].innerHTML=C
 }};
-aipo.memo.enableMessageDiv=function(B){dojo.query(".messageDiv_memo").forEach(function(A,E,F){dojo.removeClass(A,"enabled")
+aipo.memo.enableMessageDiv=function(A){dojo.query(".messageDiv_memo").forEach(function(D,C,B){dojo.removeClass(D,"enabled")
 });
-dojo.addClass("memo_"+B,"enabled")
+dojo.addClass("memo_"+A,"enabled")
 };

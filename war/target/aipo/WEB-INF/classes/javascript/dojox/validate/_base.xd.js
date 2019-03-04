@@ -3,42 +3,42 @@ A.provide("dojox.validate._base");
 A.require("dojo.regexp");
 A.require("dojo.number");
 A.require("dojox.validate.regexp");
-dojox.validate.isText=function(B,C){C=(typeof C=="object")?C:{};
-if(/^\s*$/.test(B)){return false
-}if(typeof C.length=="number"&&C.length!=B.length){return false
-}if(typeof C.minlength=="number"&&C.minlength>B.length){return false
-}if(typeof C.maxlength=="number"&&C.maxlength<B.length){return false
+dojox.validate.isText=function(C,B){B=(typeof B=="object")?B:{};
+if(/^\s*$/.test(C)){return false
+}if(typeof B.length=="number"&&B.length!=C.length){return false
+}if(typeof B.minlength=="number"&&B.minlength>C.length){return false
+}if(typeof B.maxlength=="number"&&B.maxlength<C.length){return false
 }return true
 };
 dojox.validate._isInRangeCache={};
-dojox.validate.isInRange=function(F,H){F=A.number.parse(F,H);
-if(isNaN(F)){return false
-}H=(typeof H=="object")?H:{};
-var G=(typeof H.max=="number")?H.max:Infinity;
-var D=(typeof H.min=="number")?H.min:-Infinity;
-var C=(typeof H.decimal=="string")?H.decimal:".";
-var B=dojox.validate._isInRangeCache;
-var E=F+"max"+G+"min"+D+"dec"+C;
-if(typeof B[E]!="undefined"){return B[E]
-}if(F<D||F>G){B[E]=false;
+dojox.validate.isInRange=function(G,C){G=A.number.parse(G,C);
+if(isNaN(G)){return false
+}C=(typeof C=="object")?C:{};
+var B=(typeof C.max=="number")?C.max:Infinity;
+var E=(typeof C.min=="number")?C.min:-Infinity;
+var H=(typeof C.decimal=="string")?C.decimal:".";
+var D=dojox.validate._isInRangeCache;
+var F=G+"max"+B+"min"+E+"dec"+H;
+if(typeof D[F]!="undefined"){return D[F]
+}if(G<E||G>B){D[F]=false;
 return false
-}B[E]=true;
+}D[F]=true;
 return true
 };
-dojox.validate.isNumberFormat=function(B,C){var D=new RegExp("^"+dojox.regexp.numberFormat(C)+"$","i");
-return D.test(B)
+dojox.validate.isNumberFormat=function(D,B){var C=new RegExp("^"+dojox.regexp.numberFormat(B)+"$","i");
+return C.test(D)
 };
-dojox.validate.isValidLuhn=function(B){var E,F,C;
-if(typeof B!="string"){B=String(B)
-}B=B.replace(/[- ]/g,"");
-F=B.length%2;
-E=0;
-for(var D=0;
-D<B.length;
-D++){C=parseInt(B.charAt(D));
-if(D%2==F){C*=2
-}if(C>9){C-=9
-}E+=C
-}return !(E%10)
+dojox.validate.isValidLuhn=function(F){var D,E,B;
+if(typeof F!="string"){F=String(F)
+}F=F.replace(/[- ]/g,"");
+E=F.length%2;
+D=0;
+for(var C=0;
+C<F.length;
+C++){B=parseInt(F.charAt(C));
+if(C%2==E){B*=2
+}if(B>9){B-=9
+}D+=B
+}return !(D%10)
 }
 }}});

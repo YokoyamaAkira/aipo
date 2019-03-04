@@ -20,18 +20,18 @@ visibility="hidden"
 }if(!dojo.isIE){this.setSrc(cframe,turi,true);
 cframe.onload=new Function(onloadstr)
 }return cframe
-},setSrc:function(B,D,A){try{if(!A){if(dojo.isSafari){B.location=D
-}else{frames[B.name].location=D
-}}else{var E;
-if(dojo.isIE||dojo.isSafari>2){E=B.contentWindow.document
-}else{if(dojo.isSafari){E=B.document
-}else{E=B.contentWindow
-}}if(!E){B.location=D;
+},setSrc:function(C,E,B){try{if(!B){if(dojo.isSafari){C.location=E
+}else{frames[C.name].location=E
+}}else{var A;
+if(dojo.isIE||dojo.isSafari>2){A=C.contentWindow.document
+}else{if(dojo.isSafari){A=C.document
+}else{A=C.contentWindow
+}}if(!A){C.location=E;
 return 
-}else{E.location.replace(D)
-}}}catch(C){console.debug("dojo.io.iframe.setSrc: ",C)
-}},doc:function(B){var A=B.contentDocument||((B.contentWindow)&&(B.contentWindow.document))||((B.name)&&(document.frames[B.name])&&(document.frames[B.name].document))||null;
-return A
+}else{A.location.replace(E)
+}}}catch(D){console.debug("dojo.io.iframe.setSrc: ",D)
+}},doc:function(A){var B=A.contentDocument||((A.contentWindow)&&(A.contentWindow.document))||((A.name)&&(document.frames[A.name])&&(document.frames[A.name].document))||null;
+return B
 },send:function(args){if(!this["_frame"]){this._frame=this.create(this._iframeName,"dojo.io.iframe._iframeOnload();")
 }var dfd=dojo._ioSetArgs(args,function(dfd){dfd.canceled=true;
 dfd.ioArgs._callNext()
@@ -64,57 +64,57 @@ dojo._ioWatch(dfd,function(dfd){return !dfd.ioArgs._hasError
 }});
 return dfd
 },_currentDfd:null,_dfdQueue:[],_iframeName:"dojoIoIframe",_fireNextRequest:function(){try{if((this._currentDfd)||(this._dfdQueue.length==0)){return 
-}var F=this._currentDfd=this._dfdQueue.shift();
-var K=F.ioArgs;
-var B=K.args;
-K._contentToClean=[];
-var C=B.form;
-var A=B.content||{};
-if(C){if(A){for(var D in A){if(!C[D]){var E;
-if(dojo.isIE){E=dojo.doc.createElement("<input type='hidden' name='"+D+"'>")
-}else{E=dojo.doc.createElement("input");
-E.type="hidden";
-E.name=D
-}E.value=A[D];
-C.appendChild(E);
-K._contentToClean.push(D)
-}else{C[D].value=A[D]
-}}}var H=C.getAttributeNode("action");
-var J=C.getAttributeNode("method");
-var I=C.getAttributeNode("target");
-if(B.url){K._originalAction=H?H.value:null;
-if(H){H.value=B.url
-}else{C.setAttribute("action",B.url)
-}}if(!J||!J.value){if(J){J.value=(B.method)?B.method:"post"
-}else{C.setAttribute("method",(B.method)?B.method:"post")
-}}K._originalTarget=I?I.value:null;
-if(I){I.value=this._iframeName
-}else{C.setAttribute("target",this._iframeName)
-}C.target=this._iframeName;
-C.submit()
-}else{var G=B.url+(B.url.indexOf("?")>-1?"&":"?")+K.query;
-this.setSrc(this._frame,G,true)
-}}catch(L){F.errback(L)
-}},_iframeOnload:function(){var D=this._currentDfd;
-if(!D){this._fireNextRequest();
+}var J=this._currentDfd=this._dfdQueue.shift();
+var C=J.ioArgs;
+var F=C.args;
+C._contentToClean=[];
+var G=F.form;
+var E=F.content||{};
+if(G){if(E){for(var H in E){if(!G[H]){var I;
+if(dojo.isIE){I=dojo.doc.createElement("<input type='hidden' name='"+H+"'>")
+}else{I=dojo.doc.createElement("input");
+I.type="hidden";
+I.name=H
+}I.value=E[H];
+G.appendChild(I);
+C._contentToClean.push(H)
+}else{G[H].value=E[H]
+}}}var L=G.getAttributeNode("action");
+var B=G.getAttributeNode("method");
+var A=G.getAttributeNode("target");
+if(F.url){C._originalAction=L?L.value:null;
+if(L){L.value=F.url
+}else{G.setAttribute("action",F.url)
+}}if(!B||!B.value){if(B){B.value=(F.method)?F.method:"post"
+}else{G.setAttribute("method",(F.method)?F.method:"post")
+}}C._originalTarget=A?A.value:null;
+if(A){A.value=this._iframeName
+}else{G.setAttribute("target",this._iframeName)
+}G.target=this._iframeName;
+G.submit()
+}else{var K=F.url+(F.url.indexOf("?")>-1?"&":"?")+C.query;
+this.setSrc(this._frame,K,true)
+}}catch(D){J.errback(D)
+}},_iframeOnload:function(){var H=this._currentDfd;
+if(!H){this._fireNextRequest();
 return 
-}var I=D.ioArgs;
-var A=I.args;
-var B=A.form;
-if(B){var G=I._contentToClean;
-for(var H=0;
-H<G.length;
-H++){var C=G[H];
-if(dojo.isSafari<3){for(var F=0;
-F<B.childNodes.length;
-F++){var E=B.childNodes[F];
-if(E.name==C){dojo._destroyElement(E);
+}var D=H.ioArgs;
+var E=D.args;
+var F=E.form;
+if(F){var B=D._contentToClean;
+for(var C=0;
+C<B.length;
+C++){var G=B[C];
+if(dojo.isSafari<3){for(var A=0;
+A<F.childNodes.length;
+A++){var I=F.childNodes[A];
+if(I.name==G){dojo._destroyElement(I);
 break
-}}}else{dojo._destroyElement(B[C]);
-B[C]=null
-}}if(I._originalAction){B.setAttribute("action",I._originalAction)
-}if(I._originalTarget){B.setAttribute("target",I._originalTarget);
-B.target=I._originalTarget
-}}I._finished=true
+}}}else{dojo._destroyElement(F[G]);
+F[G]=null
+}}if(D._originalAction){F.setAttribute("action",D._originalAction)
+}if(D._originalTarget){F.setAttribute("target",D._originalTarget);
+F.target=D._originalTarget
+}}D._finished=true
 }}
 };

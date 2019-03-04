@@ -5,40 +5,40 @@ dojo.declare("aipo.widget.DateCalendar",[dijit._Calendar],{dateId:"",callback:fu
 },onChange:function(A){this.onChangeNoCallback(A);
 this.callback(A)
 },onValueSelected:function(A){this.onChange(A)
-},onChangeNoCallback:function(K){var F=K.getFullYear();
-var J=1+K.getMonth();
-var I=K.getDate();
-var H=dojo.date.locale.getNames("days",this.dayWidth,"standAlone",this.lang);
-var E=H[K.getDay()];
-var B=dojo.byId(this.dateId+"_view");
-B.innerHTML=F+"\u5e74"+J+"\u6708"+I+"\u65e5\uff08"+E+"\uff09";
-var G=dojo.byId(this.dateId);
-G.value=F+"/"+J+"/"+I;
-var D=dojo.byId(this.dateId+"_year");
-D.value=F;
-var C=dojo.byId(this.dateId+"_month");
-C.value=J;
-var A=dojo.byId(this.dateId+"_day");
-A.value=I;
+},onChangeNoCallback:function(D){var J=D.getFullYear();
+var C=1+D.getMonth();
+var B=D.getDate();
+var A=dojo.date.locale.getNames("days",this.dayWidth,"standAlone",this.lang);
+var I=A[D.getDay()];
+var F=dojo.byId(this.dateId+"_view");
+F.innerHTML=J+"\u5e74"+C+"\u6708"+B+"\u65e5\uff08"+I+"\uff09";
+var K=dojo.byId(this.dateId);
+K.value=J+"/"+C+"/"+B;
+var H=dojo.byId(this.dateId+"_year");
+H.value=J;
+var G=dojo.byId(this.dateId+"_month");
+G.value=C;
+var E=dojo.byId(this.dateId+"_day");
+E.value=B;
 dojo.byId(this.dateId+"_flag").checked=false
-},disabledCalendar:function(J){if(J){var A=dojo.byId(this.dateId+"_view");
-A.innerHTML="---- \u5e74 -- \u6708 -- \u65e5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-var D=dojo.byId(this.dateId+"_year");
+},disabledCalendar:function(C){if(C){var E=dojo.byId(this.dateId+"_view");
+E.innerHTML="---- \u5e74 -- \u6708 -- \u65e5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+var H=dojo.byId(this.dateId+"_year");
+H.value="";
+var F=dojo.byId(this.dateId+"_month");
+F.value="";
+var D=dojo.byId(this.dateId+"_day");
 D.value="";
-var B=dojo.byId(this.dateId+"_month");
-B.value="";
-var K=dojo.byId(this.dateId+"_day");
-K.value="";
 this.value="";
 if(!dojo.byId(this.dateId+"_flag").checked){dojo.byId(this.dateId+"_flag").checked=true
-}}else{var G=dojo.byId(this.dateId);
-if((!G.value)||(G.value=="")){this.setValue(new Date())
-}else{var F=G.value.split("/");
-if(F.length==3){var E=F[0];
-var I=F[1]-1;
-var C=F[2];
-var H=new Date(E,I,C);
-this.setValue(H)
+}}else{var K=dojo.byId(this.dateId);
+if((!K.value)||(K.value=="")){this.setValue(new Date())
+}else{var J=K.value.split("/");
+if(J.length==3){var I=J[0];
+var B=J[1]-1;
+var G=J[2];
+var A=new Date(I,B,G);
+this.setValue(A)
 }}}},clearDate:function(){this.value=null
 }})
 };

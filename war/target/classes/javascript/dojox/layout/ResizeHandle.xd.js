@@ -19,7 +19,7 @@ break;
 case"y":this._resizeY=true;
 A.addClass(this.resizeHandle,"dojoxResizeN");
 break
-}},_beginSizing:function(C){if(this._isSizing){return false
+}},_beginSizing:function(B){if(this._isSizing){return false
 }this.targetWidget=dijit.byId(this.targetId);
 if(this.targetWidget){this.activeResize=true
 }this.targetDomNode=this.targetWidget?this.targetWidget.domNode:A.byId(this.targetId);
@@ -29,37 +29,37 @@ if(this.targetContainer){this.targetDomNode=this.targetContainer
 A.fadeIn({node:this._activeResizeNode,duration:120,beforeBegin:A.hitch(this,function(){this._activeResizeNode.style.display=""
 })}).play()
 }this._isSizing=true;
-this.startPoint={x:C.clientX,y:C.clientY};
-var B=(this.targetWidget)?A.marginBox(this.targetDomNode):A.contentBox(this.targetDomNode);
-this.startSize={w:B.w,h:B.h};
+this.startPoint={x:B.clientX,y:B.clientY};
+var C=(this.targetWidget)?A.marginBox(this.targetDomNode):A.contentBox(this.targetDomNode);
+this.startSize={w:C.w,h:C.h};
 this._connects=[];
 this._connects.push(A.connect(document,"onmousemove",this,"_updateSizing"));
 this._connects.push(A.connect(document,"onmouseup",this,"_endSizing"));
-C.preventDefault()
-},_updateSizing:function(B){if(this.activeResize){this._changeSizing(B)
-}else{var C=this._getNewCoords(B);
-if(C===false){return 
-}A.style(this._activeResizeNode,"width",C.width+"px");
-A.style(this._activeResizeNode,"height",C.height+"px");
+B.preventDefault()
+},_updateSizing:function(C){if(this.activeResize){this._changeSizing(C)
+}else{var B=this._getNewCoords(C);
+if(B===false){return 
+}A.style(this._activeResizeNode,"width",B.width+"px");
+A.style(this._activeResizeNode,"height",B.height+"px");
 this._activeResizeNode.style.display=""
-}},_getNewCoords:function(F){try{if(!F.clientX||!F.clientY){return false
-}}catch(F){return false
-}this._activeResizeLastEvent=F;
-var D=this.startPoint.x-F.clientX;
-var C=this.startPoint.y-F.clientY;
-var B=(this._resizeX)?this.startSize.w-D:this.startSize.w;
-var E=(this._resizeY)?this.startSize.h-C:this.startSize.h;
-if(this.minSize){if(B<this.minSize.w){B=this.minSize.w
-}if(E<this.minSize.h){E=this.minSize.h
-}}return{width:B,height:E}
-},_changeSizing:function(B){var C=this._getNewCoords(B);
-if(C===false){return 
-}if(this.targetWidget&&typeof this.targetWidget.resize=="function"){this.targetWidget.resize({w:C.width,h:C.height})
-}else{if(this.animateSizing){var D=A.fx[this.animateMethod]([A.animateProperty({node:this.targetDomNode,properties:{width:{start:this.startSize.w,end:C.width,unit:"px"}},duration:this.animateDuration}),A.animateProperty({node:this.targetDomNode,properties:{height:{start:this.startSize.h,end:C.height,unit:"px"}},duration:this.animateDuration})]);
-D.play()
-}else{A.style(this.targetDomNode,"width",C.width+"px");
-A.style(this.targetDomNode,"height",C.height+"px")
-}}B.preventDefault()
+}},_getNewCoords:function(E){try{if(!E.clientX||!E.clientY){return false
+}}catch(E){return false
+}this._activeResizeLastEvent=E;
+var C=this.startPoint.x-E.clientX;
+var B=this.startPoint.y-E.clientY;
+var F=(this._resizeX)?this.startSize.w-C:this.startSize.w;
+var D=(this._resizeY)?this.startSize.h-B:this.startSize.h;
+if(this.minSize){if(F<this.minSize.w){F=this.minSize.w
+}if(D<this.minSize.h){D=this.minSize.h
+}}return{width:F,height:D}
+},_changeSizing:function(D){var B=this._getNewCoords(D);
+if(B===false){return 
+}if(this.targetWidget&&typeof this.targetWidget.resize=="function"){this.targetWidget.resize({w:B.width,h:B.height})
+}else{if(this.animateSizing){var C=A.fx[this.animateMethod]([A.animateProperty({node:this.targetDomNode,properties:{width:{start:this.startSize.w,end:B.width,unit:"px"}},duration:this.animateDuration}),A.animateProperty({node:this.targetDomNode,properties:{height:{start:this.startSize.h,end:B.height,unit:"px"}},duration:this.animateDuration})]);
+C.play()
+}else{A.style(this.targetDomNode,"width",B.width+"px");
+A.style(this.targetDomNode,"height",B.height+"px")
+}}D.preventDefault()
 },_endSizing:function(B){A.forEach(this._connects,function(C){A.disconnect(C)
 });
 if(!this.activeResize){A.fadeOut({node:this._activeResizeNode,duration:250,onEnd:A.hitch(this,function(){this._activeResizeNode.style.display="none"

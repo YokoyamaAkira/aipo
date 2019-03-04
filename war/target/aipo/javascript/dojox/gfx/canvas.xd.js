@@ -1,353 +1,691 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.gfx.canvas"],["require","dojox.gfx._base"],["require","dojox.gfx.shape"],["require","dojox.gfx.path"],["require","dojox.gfx.arc"],["require","dojox.gfx.decompose"]],defineResource:function(A){if(!A._hasResource["dojox.gfx.canvas"]){A._hasResource["dojox.gfx.canvas"]=true;
-A.provide("dojox.gfx.canvas");
-A.require("dojox.gfx._base");
-A.require("dojox.gfx.shape");
-A.require("dojox.gfx.path");
-A.require("dojox.gfx.arc");
-A.require("dojox.gfx.decompose");
-A.experimental("dojox.gfx.canvas");
-(function(){var I=dojox.gfx,D=I.shape,L=I.arc,H=I.matrix,F=H.multiplyPoint,M=2*Math.PI;
-A.extend(I.Shape,{render:function(C){C.save();
-this._renderTransform(C);
-this._renderShape(C);
-this._renderFill(C,true);
-this._renderStroke(C,true);
-C.restore()
-},_renderTransform:function(C){if("canvasTransform" in this){var N=this.canvasTransform;
-C.translate(N.dx,N.dy);
-C.rotate(N.angle2);
-C.scale(N.sx,N.sy);
-C.rotate(N.angle1)
-}},_renderShape:function(C){},_renderFill:function(C,N){if("canvasFill" in this){if("canvasFillImage" in this){this.canvasFill=C.createPattern(this.canvasFillImage,"repeat");
-delete this.canvasFillImage
-}C.fillStyle=this.canvasFill;
-if(N){C.fill()
-}}else{C.fillStyle="rgba(0,0,0,0.0)"
-}},_renderStroke:function(C,N){var O=this.strokeStyle;
-if(O){C.strokeStyle=O.color.toString();
-C.lineWidth=O.width;
-C.lineCap=O.cap;
-if(typeof O.join=="number"){C.lineJoin="miter";
-C.miterLimit=O.join
-}else{C.lineJoin=O.join
-}if(N){C.stroke()
-}}else{if(!N){C.strokeStyle="rgba(0,0,0,0.0)"
-}}},getEventSource:function(){return null
-},connect:function(){},disconnect:function(){}});
-var J=function(O,P,C){var N=O.prototype[P];
-O.prototype[P]=C?function(){this.surface.makeDirty();
-N.apply(this,arguments);
-C.call(this);
-return this
-}:function(){this.surface.makeDirty();
-return N.apply(this,arguments)
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.gfx.canvas"],
+["require", "dojox.gfx._base"],
+["require", "dojox.gfx.shape"],
+["require", "dojox.gfx.path"],
+["require", "dojox.gfx.arc"],
+["require", "dojox.gfx.decompose"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.gfx.canvas"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.gfx.canvas"] = true;
+dojo.provide("dojox.gfx.canvas");
+
+dojo.require("dojox.gfx._base");
+dojo.require("dojox.gfx.shape");
+dojo.require("dojox.gfx.path");
+dojo.require("dojox.gfx.arc");
+dojo.require("dojox.gfx.decompose");
+
+dojo.experimental("dojox.gfx.canvas");
+
+(function(){
+	var g = dojox.gfx, gs = g.shape, ga = g.arc, 
+		m = g.matrix, mp = m.multiplyPoint, twoPI = 2 * Math.PI;
+	
+	dojo.extend(g.Shape, {
+		render: function(/* Object */ ctx){
+			// summary: render the shape
+			ctx.save();
+			this._renderTransform(ctx);
+			this._renderShape(ctx);
+			this._renderFill(ctx, true);
+			this._renderStroke(ctx, true);
+			ctx.restore();
+		},
+		_renderTransform: function(/* Object */ ctx){
+			if("canvasTransform" in this){
+				var t = this.canvasTransform;
+				ctx.translate(t.dx, t.dy);
+				ctx.rotate(t.angle2);
+				ctx.scale(t.sx, t.sy);
+				ctx.rotate(t.angle1);
+				// The future implementation when vendors catch up with the spec:
+				// var t = this.matrix;
+				// ctx.transform(t.xx, t.yx, t.xy, t.yy, t.dx, t.dy);
+			}
+		},
+		_renderShape: function(/* Object */ ctx){
+			// nothing
+		},
+		_renderFill: function(/* Object */ ctx, /* Boolean */ apply){
+			if("canvasFill" in this){
+				if("canvasFillImage" in this){
+					this.canvasFill = ctx.createPattern(this.canvasFillImage, "repeat");
+					delete this.canvasFillImage;
+				}
+				ctx.fillStyle = this.canvasFill;
+				if(apply){ ctx.fill(); }
+			}else{
+				ctx.fillStyle = "rgba(0,0,0,0.0)";
+			}
+		},
+		_renderStroke: function(/* Object */ ctx, /* Boolean */ apply){
+			var s = this.strokeStyle;
+			if(s){
+				ctx.strokeStyle = s.color.toString();
+				ctx.lineWidth = s.width;
+				ctx.lineCap = s.cap;
+				if(typeof s.join == "number"){
+					ctx.lineJoin = "miter";
+					ctx.miterLimit = s.join;
+				}else{
+					ctx.lineJoin = s.join;
+				}
+				if(apply){ ctx.stroke(); }
+			}else if(!apply){
+				ctx.strokeStyle = "rgba(0,0,0,0.0)";
+			}
+		},
+		
+		// events are not implemented
+		getEventSource: function(){ return null; },
+		connect:		function(){},
+		disconnect:		function(){}
+	});
+	
+	var modifyMethod = function(shape, method, extra){
+			var old = shape.prototype[method];
+			shape.prototype[method] = extra ?
+				function(){
+					this.surface.makeDirty();
+					old.apply(this, arguments);
+					extra.call(this);
+					return this;
+				} :
+				function(){
+					this.surface.makeDirty();
+					return old.apply(this, arguments);
+				};
+		};
+
+	modifyMethod(g.Shape, "setTransform", 		
+		function(){
+			// prepare Canvas-specific structures
+			if(this.matrix){
+				this.canvasTransform = g.decompose(this.matrix);
+			}else{
+				delete this.canvasTransform;
+			}
+		});
+
+	modifyMethod(g.Shape, "setFill",
+		function(){
+			// prepare Canvas-specific structures
+			var fs = this.fillStyle, f;
+			if(fs){
+				if(typeof(fs) == "object" && "type" in fs){
+					var ctx = this.surface.rawNode.getContext("2d");
+					switch(fs.type){
+						case "linear":
+						case "radial":
+							f = fs.type == "linear" ? 
+								ctx.createLinearGradient(fs.x1, fs.y1, fs.x2, fs.y2) :
+								ctx.createRadialGradient(fs.cx, fs.cy, 0, fs.cx, fs.cy, fs.r);
+							dojo.forEach(fs.colors, function(step){
+								f.addColorStop(step.offset, g.normalizeColor(step.color).toString());
+							});
+							break;
+						case "pattern":
+							var img = new Image(fs.width, fs.height);
+							this.surface.downloadImage(img, fs.src);
+							this.canvasFillImage = img;
+					}
+				}else{
+					// Set fill color using CSS RGBA func style
+					f = fs.toString();
+				}
+				this.canvasFill = f;
+			}else{
+				delete this.canvasFill;
+			}
+		});
+	
+	modifyMethod(g.Shape, "setStroke");
+	modifyMethod(g.Shape, "setShape");
+		
+	dojo.declare("dojox.gfx.Group", g.Shape, {
+		// summary: a group shape (Canvas), which can be used 
+		//	to logically group shapes (e.g, to propagate matricies)
+		constructor: function(){
+			gs.Container._init.call(this);
+		},
+		render: function(/* Object */ ctx){
+			// summary: render the group
+			ctx.save();
+			this._renderTransform(ctx);
+			this._renderFill(ctx);
+			this._renderStroke(ctx);
+			for(var i = 0; i < this.children.length; ++i){
+				this.children[i].render(ctx);
+			}
+			ctx.restore();
+		}
+	});
+
+	dojo.declare("dojox.gfx.Rect", gs.Rect, {
+		// summary: a rectangle shape (Canvas)
+		_renderShape: function(/* Object */ ctx){
+			var s = this.shape, r = Math.min(s.r, s.height / 2, s.width / 2),
+				xl = s.x, xr = xl + s.width, yt = s.y, yb = yt + s.height,
+				xl2 = xl + r, xr2 = xr - r, yt2 = yt + r, yb2 = yb - r;
+			ctx.beginPath();
+			ctx.moveTo(xl2, yt);
+			ctx.lineTo(xr2, yt);
+			if(r){ ctx.arcTo(xr, yt, xr, yt2, r); }
+			ctx.lineTo(xr, yb2);
+			if(r){ ctx.arcTo(xr, yb, xr2, yb, r); }
+			ctx.lineTo(xl2, yb);
+			if(r){ ctx.arcTo(xl, yb, xl, yb2, r); }
+			ctx.lineTo(xl, yt2);
+			if(r){ ctx.arcTo(xl, yt, xl2, yt, r); }
+	 		ctx.closePath();
+		}
+	});
+	
+	var bezierCircle = [];
+	(function(){
+		var u = ga.curvePI4;
+		bezierCircle.push(u.s, u.c1, u.c2, u.e);
+		for(var a = 45; a < 360; a += 45){
+			var r = m.rotateg(a);
+			bezierCircle.push(mp(r, u.c1), mp(r, u.c2), mp(r, u.e));
+		}
+	})();
+	
+	dojo.declare("dojox.gfx.Ellipse", gs.Ellipse, {
+		// summary: an ellipse shape (Canvas)
+		setShape: function(){
+			g.Ellipse.superclass.setShape.apply(this, arguments);
+			// prepare Canvas-specific structures
+			var s = this.shape, t, c1, c2, r = [],
+				M = m.normalize([m.translate(s.cx, s.cy), m.scale(s.rx, s.ry)]);
+			t = mp(M, bezierCircle[0]);
+			r.push([t.x, t.y]);
+			for(var i = 1; i < bezierCircle.length; i += 3){
+				c1 = mp(M, bezierCircle[i]);
+				c2 = mp(M, bezierCircle[i + 1]);
+				t  = mp(M, bezierCircle[i + 2]);
+				r.push([c1.x, c1.y, c2.x, c2.y, t.x, t.y]);
+			}
+			this.canvasEllipse = r;
+			return this;
+		},
+		_renderShape: function(/* Object */ ctx){
+			var r = this.canvasEllipse;
+			ctx.beginPath();
+			ctx.moveTo.apply(ctx, r[0]);
+			for(var i = 1; i < r.length; ++i){
+				ctx.bezierCurveTo.apply(ctx, r[i]);
+			}
+			ctx.closePath();
+		}
+	});
+
+	dojo.declare("dojox.gfx.Circle", gs.Circle, {
+		// summary: a circle shape (Canvas)
+		_renderShape: function(/* Object */ ctx){
+			var s = this.shape;
+			ctx.beginPath();
+			ctx.arc(s.cx, s.cy, s.r, 0, twoPI, 1);
+		}
+	});
+
+	dojo.declare("dojox.gfx.Line", gs.Line, {
+		// summary: a line shape (Canvas)
+		_renderShape: function(/* Object */ ctx){
+			var s = this.shape;
+			ctx.beginPath();
+			ctx.moveTo(s.x1, s.y1);
+			ctx.lineTo(s.x2, s.y2);
+		}
+	});
+
+	dojo.declare("dojox.gfx.Polyline", gs.Polyline, {
+		// summary: a polyline/polygon shape (Canvas)
+		setShape: function(){
+			g.Polyline.superclass.setShape.apply(this, arguments);
+			// prepare Canvas-specific structures
+			var p = this.shape.points, f = p[0], r = [], c, i;
+			if(p.length){
+				if(typeof f == "number"){
+					r.push(f, p[1]);
+					i = 2;
+				}else{
+					r.push(f.x, f.y);
+					i = 1;
+				}
+				for(; i < p.length; ++i){
+					c = p[i];
+					if(typeof c == "number"){
+						r.push(c, p[++i]);
+					}else{
+						r.push(c.x, c.y);
+					}
+				}
+			}
+			this.canvasPolyline = r;
+			return this;
+		},
+		_renderShape: function(/* Object */ ctx){
+			var p = this.canvasPolyline;
+			if(p.length){
+				ctx.beginPath();
+				ctx.moveTo(p[0], p[1]);
+				for(var i = 2; i < p.length; i += 2){
+					ctx.lineTo(p[i], p[i + 1]);
+				}
+			}
+		}
+	});
+	
+	dojo.declare("dojox.gfx.Image", gs.Image, {
+		// summary: an image shape (Canvas)
+		setShape: function(){
+			g.Image.superclass.setShape.apply(this, arguments);
+			// prepare Canvas-specific structures
+			var img = new Image();
+			this.surface.downloadImage(img, this.shape.src);
+			this.canvasImage = img;
+			return this;
+		},
+		_renderShape: function(/* Object */ ctx){
+			var s = this.shape;
+			ctx.drawImage(this.canvasImage, s.x, s.y, s.width, s.height);
+		}
+	});
+	
+	dojo.declare("dojox.gfx.Text", gs.Text, {
+		// summary: a text shape (Canvas)
+		_renderShape: function(/* Object */ ctx){
+			var s = this.shape;
+			// nothing for the moment
+		}
+	});
+	modifyMethod(g.Text, "setFont");
+	
+	var pathRenderers = {
+		M: "_moveToA", m: "_moveToR", 
+		L: "_lineToA", l: "_lineToR", 
+		H: "_hLineToA", h: "_hLineToR", 
+		V: "_vLineToA", v: "_vLineToR", 
+		C: "_curveToA", c: "_curveToR", 
+		S: "_smoothCurveToA", s: "_smoothCurveToR", 
+		Q: "_qCurveToA", q: "_qCurveToR", 
+		T: "_qSmoothCurveToA", t: "_qSmoothCurveToR", 
+		A: "_arcTo", a: "_arcTo", 
+		Z: "_closePath", z: "_closePath"
+	};
+	
+	dojo.declare("dojox.gfx.Path", g.path.Path, {
+		// summary: a path shape (Canvas)
+		constructor: function(){
+			this.last = {};
+			this.lastControl = {};
+		},
+		setShape: function(){
+			this.canvasPath = [];
+			return g.Path.superclass.setShape.apply(this, arguments);
+		},
+		_updateWithSegment: function(segment){
+			var last = dojo.clone(this.last);
+			this[pathRenderers[segment.action]](this.canvasPath, segment.action, segment.args);
+			this.last = last;
+			g.Path.superclass._updateWithSegment.apply(this, arguments);
+		},
+		_renderShape: function(/* Object */ ctx){
+			var r = this.canvasPath;
+			ctx.beginPath();
+			for(var i = 0; i < r.length; i += 2){
+				ctx[r[i]].apply(ctx, r[i + 1]);
+			}
+		},
+		_moveToA: function(result, action, args){
+			result.push("moveTo", [args[0], args[1]]);
+			for(var i = 2; i < args.length; i += 2){
+				result.push("lineTo", [args[i], args[i + 1]]);
+			}
+			this.last.x = args[args.length - 2];
+			this.last.y = args[args.length - 1];
+			this.lastControl = {};
+		},
+		_moveToR: function(result, action, args){
+			if("x" in this.last){
+				result.push("moveTo", [this.last.x += args[0], this.last.y += args[1]]);
+			}else{
+				result.push("moveTo", [this.last.x = args[0], this.last.y = args[1]]);
+			}
+			for(var i = 2; i < args.length; i += 2){
+				result.push("lineTo", [this.last.x += args[i], this.last.y += args[i + 1]]);
+			}
+			this.lastControl = {};
+		},
+		_lineToA: function(result, action, args){
+			for(var i = 0; i < args.length; i += 2){
+				result.push("lineTo", [args[i], args[i + 1]]);
+			}
+			this.last.x = args[args.length - 2];
+			this.last.y = args[args.length - 1];
+			this.lastControl = {};
+		},
+		_lineToR: function(result, action, args){
+			for(var i = 0; i < args.length; i += 2){
+				result.push("lineTo", [this.last.x += args[i], this.last.y += args[i + 1]]);
+			}
+			this.lastControl = {};
+		},
+		_hLineToA: function(result, action, args){
+			for(var i = 0; i < args.length; ++i){
+				result.push("lineTo", [args[i], this.last.y]);
+			}
+			this.last.x = args[args.length - 1];
+			this.lastControl = {};
+		},
+		_hLineToR: function(result, action, args){
+			for(var i = 0; i < args.length; ++i){
+				result.push("lineTo", [this.last.x += args[i], this.last.y]);
+			}
+			this.lastControl = {};
+		},
+		_vLineToA: function(result, action, args){
+			for(var i = 0; i < args.length; ++i){
+				result.push("lineTo", [this.last.x, args[i]]);
+			}
+			this.last.y = args[args.length - 1];
+			this.lastControl = {};
+		},
+		_vLineToR: function(result, action, args){
+			for(var i = 0; i < args.length; ++i){
+				result.push("lineTo", [this.last.x, this.last.y += args[i]]);
+			}
+			this.lastControl = {};
+		},
+		_curveToA: function(result, action, args){
+			for(var i = 0; i < args.length; i += 6){
+				result.push("bezierCurveTo", args.slice(i, i + 6));
+			}
+			this.last.x = args[args.length - 2];
+			this.last.y = args[args.length - 1];
+			this.lastControl.x = args[args.length - 4];
+			this.lastControl.y = args[args.length - 3];
+			this.lastControl.type = "C";
+		},
+		_curveToR: function(result, action, args){
+			for(var i = 0; i < args.length; i += 6){
+				result.push("bezierCurveTo", [
+					this.last.x + args[i], 
+					this.last.y + args[i + 1], 
+					this.lastControl.x = this.last.x + args[i + 2], 
+					this.lastControl.y = this.last.y + args[i + 3], 
+					this.last.x + args[i + 4], 
+					this.last.y + args[i + 5]
+				]);
+				this.last.x += args[i + 4];
+				this.last.y += args[i + 5];
+			}
+			this.lastControl.type = "C";
+		},
+		_smoothCurveToA: function(result, action, args){
+			for(var i = 0; i < args.length; i += 4){
+				var valid = this.lastControl.type == "C";
+				result.push("bezierCurveTo", [
+					valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
+					valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
+					args[i], 
+					args[i + 1], 
+					args[i + 2], 
+					args[i + 3]
+				]);
+				this.lastControl.x = args[i];
+				this.lastControl.y = args[i + 1];
+				this.lastControl.type = "C";
+			}
+			this.last.x = args[args.length - 2];
+			this.last.y = args[args.length - 1];
+		},
+		_smoothCurveToR: function(result, action, args){
+			for(var i = 0; i < args.length; i += 4){
+				var valid = this.lastControl.type == "C";
+				result.push("bezierCurveTo", [
+					valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
+					valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
+					this.last.x + args[i], 
+					this.last.y + args[i + 1], 
+					this.last.x + args[i + 2], 
+					this.last.y + args[i + 3]
+				]);
+				this.lastControl.x = this.last.x + args[i];
+				this.lastControl.y = this.last.y + args[i + 1];
+				this.lastControl.type = "C";
+				this.last.x += args[i + 2];
+				this.last.y += args[i + 3];
+			}
+		},
+		_qCurveToA: function(result, action, args){
+			for(var i = 0; i < args.length; i += 4){
+				result.push("quadraticCurveTo", args.slice(i, i + 4));
+			}
+			this.last.x = args[args.length - 2];
+			this.last.y = args[args.length - 1];
+			this.lastControl.x = args[args.length - 4];
+			this.lastControl.y = args[args.length - 3];
+			this.lastControl.type = "Q";
+		},
+		_qCurveToR: function(result, action, args){
+			for(var i = 0; i < args.length; i += 4){
+				result.push("quadraticCurveTo", [
+					this.lastControl.x = this.last.x + args[i], 
+					this.lastControl.y = this.last.y + args[i + 1], 
+					this.last.x + args[i + 2], 
+					this.last.y + args[i + 3]
+				]);
+				this.last.x += args[i + 2];
+				this.last.y += args[i + 3];
+			}
+			this.lastControl.type = "Q";
+		},
+		_qSmoothCurveToA: function(result, action, args){
+			for(var i = 0; i < args.length; i += 2){
+				var valid = this.lastControl.type == "Q";
+				result.push("quadraticCurveTo", [
+					this.lastControl.x = valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
+					this.lastControl.y = valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
+					args[i], 
+					args[i + 1]
+				]);
+				this.lastControl.type = "Q";
+			}
+			this.last.x = args[args.length - 2];
+			this.last.y = args[args.length - 1];
+		},
+		_qSmoothCurveToR: function(result, action, args){
+			for(var i = 0; i < args.length; i += 2){
+				var valid = this.lastControl.type == "Q";
+				result.push("quadraticCurveTo", [
+					this.lastControl.x = valid ? 2 * this.last.x - this.lastControl.x : this.last.x, 
+					this.lastControl.y = valid ? 2 * this.last.y - this.lastControl.y : this.last.y, 
+					this.last.x + args[i], 
+					this.last.y + args[i + 1]
+				]);
+				this.lastControl.type = "Q";
+				this.last.x += args[i];
+				this.last.y += args[i + 1];
+			}
+		},
+		_arcTo: function(result, action, args){
+			var relative = action == "a";
+			for(var i = 0; i < args.length; i += 7){
+				var x1 = args[i + 5], y1 = args[i + 6];
+				if(relative){
+					x1 += this.last.x;
+					y1 += this.last.y;
+				}
+				var arcs = ga.arcAsBezier(
+					this.last, args[i], args[i + 1], args[i + 2], 
+					args[i + 3] ? 1 : 0, args[i + 4] ? 1 : 0,
+					x1, y1
+				);
+				dojo.forEach(arcs, function(p){
+					result.push("bezierCurveTo", p);
+				});
+				this.last.x = x1;
+				this.last.y = y1;
+			}
+			this.lastControl = {};
+		},
+		_closePath: function(result, action, args){
+			result.push("closePath", []);
+			this.lastControl = {};
+		}
+	});
+	dojo.forEach(["moveTo", "lineTo", "hLineTo", "vLineTo", "curveTo", 
+		"smoothCurveTo", "qCurveTo", "qSmoothCurveTo", "arcTo", "closePath"], 
+		function(method){ modifyMethod(g.Path, method); }
+	);
+
+	dojo.declare("dojox.gfx.TextPath", g.path.TextPath, {
+		// summary: a text shape (Canvas)
+		_renderShape: function(/* Object */ ctx){
+			var s = this.shape;
+			// nothing for the moment
+		}
+	});
+	
+	dojo.declare("dojox.gfx.Surface", gs.Surface, {
+		// summary: a surface object to be used for drawings (Canvas)
+		constructor: function(){
+			gs.Container._init.call(this);
+			this.pendingImageCount = 0;
+			this.makeDirty();
+		},
+		setDimensions: function(width, height){
+			// summary: sets the width and height of the rawNode
+			// width: String: width of surface, e.g., "100px"
+			// height: String: height of surface, e.g., "100px"
+			this.width  = g.normalizedLength(width);	// in pixels
+			this.height = g.normalizedLength(height);	// in pixels
+			if(!this.rawNode) return this;
+			this.rawNode.width = width;
+			this.rawNode.height = height;
+			this.makeDirty();
+			return this;	// self
+		},
+		getDimensions: function(){
+			// summary: returns an object with properties "width" and "height"
+			return this.rawNode ? {width:  this.rawNode.width, height: this.rawNode.height} : null;	// Object
+		},
+		render: function(){
+			// summary: render the all shapes
+			if(this.pendingImageCount){ return; }
+			var ctx = this.rawNode.getContext("2d");
+			ctx.save();
+			ctx.clearRect(0, 0, this.rawNode.width, this.rawNode.height);
+			for(var i = 0; i < this.children.length; ++i){
+				this.children[i].render(ctx);
+			}
+			ctx.restore();
+			if("pendingRender" in this){
+				clearTimeout(this.pendingRender);
+				delete this.pendingRender;
+			}
+		},
+		makeDirty: function(){
+			// summary: internal method, which is called when we may need to redraw
+			if(!this.pendingImagesCount && !("pendingRender" in this)){
+				this.pendingRender = setTimeout(dojo.hitch(this, this.render), 0);
+			}
+		},
+		downloadImage: function(img, url){
+			// summary: 
+			//		internal method, which starts an image download and renders, when it is ready
+			// img: Image:
+			//		the image object
+			// url: String:
+			//		the url of the image
+			var handler = dojo.hitch(this, this.onImageLoad);
+			if(!this.pendingImageCount++ && "pendingRender" in this){
+				clearTimeout(this.pendingRender);
+				delete this.pendingRender;
+			}
+			img.onload  = handler;
+			img.onerror = handler;
+			img.onabort = handler;
+			img.src = url;
+		},
+		onImageLoad: function(){
+			if(!--this.pendingImageCount){ this.render(); }
+		},
+
+		// events are not implemented
+		getEventSource: function(){ return null; },
+		connect:		function(){},
+		disconnect:		function(){}
+	});
+
+	g.createSurface = function(parentNode, width, height){
+		// summary: creates a surface (Canvas)
+		// parentNode: Node: a parent node
+		// width: String: width of surface, e.g., "100px"
+		// height: String: height of surface, e.g., "100px"
+
+		if(!width){ width = "100%"; }
+		if(!height){ height = "100%"; }
+		var s = new g.Surface(),
+			p = dojo.byId(parentNode),
+			c = p.ownerDocument.createElement("canvas");
+		c.width  = width;
+		c.height = height;
+		p.appendChild(c);
+		s.rawNode = c;
+		s.surface = s;
+		return s;	// dojox.gfx.Surface
+	};
+	
+	// Extenders
+	
+	var C = gs.Container, Container = {
+		add: function(shape){
+			this.surface.makeDirty();
+			return C.add.apply(this, arguments);
+		},
+		remove: function(shape, silently){
+			this.surface.makeDirty();
+			return C.remove.apply(this, arguments);
+		},
+		clear: function(){
+			this.surface.makeDirty();
+			return C.clear.apply(this, arguments);
+		},
+		_moveChildToFront: function(shape){
+			this.surface.makeDirty();
+			return C._moveChildToFront.apply(this, arguments);
+		},
+		_moveChildToBack: function(shape){
+			this.surface.makeDirty();
+			return C._moveChildToBack.apply(this, arguments);
+		}
+	};
+
+	dojo.mixin(gs.Creator, {
+		// summary: Canvas shape creators
+		createObject: function(shapeType, rawShape) {
+			// summary: creates an instance of the passed shapeType class
+			// shapeType: Function: a class constructor to create an instance of
+			// rawShape: Object: properties to be passed in to the classes "setShape" method
+			// overrideSize: Boolean: set the size explicitly, if true
+			var shape = new shapeType();
+			shape.surface = this.surface;
+			shape.setShape(rawShape);
+			this.add(shape);
+			return shape;	// dojox.gfx.Shape
+		}
+	});
+
+	dojo.extend(g.Group, Container);
+	dojo.extend(g.Group, gs.Creator);
+
+	dojo.extend(g.Surface, Container);
+	dojo.extend(g.Surface, gs.Creator);
+})();
+
 }
-};
-J(I.Shape,"setTransform",function(){if(this.matrix){this.canvasTransform=I.decompose(this.matrix)
-}else{delete this.canvasTransform
+
 }});
-J(I.Shape,"setFill",function(){var C=this.fillStyle,P;
-if(C){if(typeof (C)=="object"&&"type" in C){var N=this.surface.rawNode.getContext("2d");
-switch(C.type){case"linear":case"radial":P=C.type=="linear"?N.createLinearGradient(C.x1,C.y1,C.x2,C.y2):N.createRadialGradient(C.cx,C.cy,0,C.cx,C.cy,C.r);
-A.forEach(C.colors,function(Q){P.addColorStop(Q.offset,I.normalizeColor(Q.color).toString())
-});
-break;
-case"pattern":var O=new Image(C.width,C.height);
-this.surface.downloadImage(O,C.src);
-this.canvasFillImage=O
-}}else{P=C.toString()
-}this.canvasFill=P
-}else{delete this.canvasFill
-}});
-J(I.Shape,"setStroke");
-J(I.Shape,"setShape");
-A.declare("dojox.gfx.Group",I.Shape,{constructor:function(){D.Container._init.call(this)
-},render:function(C){C.save();
-this._renderTransform(C);
-this._renderFill(C);
-this._renderStroke(C);
-for(var N=0;
-N<this.children.length;
-++N){this.children[N].render(C)
-}C.restore()
-}});
-A.declare("dojox.gfx.Rect",D.Rect,{_renderShape:function(V){var W=this.shape,N=Math.min(W.r,W.height/2,W.width/2),R=W.x,P=R+W.width,U=W.y,S=U+W.height,Q=R+N,O=P-N,T=U+N,C=S-N;
-V.beginPath();
-V.moveTo(Q,U);
-V.lineTo(O,U);
-if(N){V.arcTo(P,U,P,T,N)
-}V.lineTo(P,C);
-if(N){V.arcTo(P,S,O,S,N)
-}V.lineTo(Q,S);
-if(N){V.arcTo(R,S,R,C,N)
-}V.lineTo(R,T);
-if(N){V.arcTo(R,U,Q,U,N)
-}V.closePath()
-}});
-var K=[];
-(function(){var N=L.curvePI4;
-K.push(N.s,N.c1,N.c2,N.e);
-for(var C=45;
-C<360;
-C+=45){var O=H.rotateg(C);
-K.push(F(O,N.c1),F(O,N.c2),F(O,N.e))
-}})();
-A.declare("dojox.gfx.Ellipse",D.Ellipse,{setShape:function(){I.Ellipse.superclass.setShape.apply(this,arguments);
-var Q=this.shape,O,P,N,R=[],S=H.normalize([H.translate(Q.cx,Q.cy),H.scale(Q.rx,Q.ry)]);
-O=F(S,K[0]);
-R.push([O.x,O.y]);
-for(var C=1;
-C<K.length;
-C+=3){P=F(S,K[C]);
-N=F(S,K[C+1]);
-O=F(S,K[C+2]);
-R.push([P.x,P.y,N.x,N.y,O.x,O.y])
-}this.canvasEllipse=R;
-return this
-},_renderShape:function(C){var O=this.canvasEllipse;
-C.beginPath();
-C.moveTo.apply(C,O[0]);
-for(var N=1;
-N<O.length;
-++N){C.bezierCurveTo.apply(C,O[N])
-}C.closePath()
-}});
-A.declare("dojox.gfx.Circle",D.Circle,{_renderShape:function(C){var N=this.shape;
-C.beginPath();
-C.arc(N.cx,N.cy,N.r,0,M,1)
-}});
-A.declare("dojox.gfx.Line",D.Line,{_renderShape:function(C){var N=this.shape;
-C.beginPath();
-C.moveTo(N.x1,N.y1);
-C.lineTo(N.x2,N.y2)
-}});
-A.declare("dojox.gfx.Polyline",D.Polyline,{setShape:function(){I.Polyline.superclass.setShape.apply(this,arguments);
-var P=this.shape.points,O=P[0],N=[],Q,C;
-if(P.length){if(typeof O=="number"){N.push(O,P[1]);
-C=2
-}else{N.push(O.x,O.y);
-C=1
-}for(;
-C<P.length;
-++C){Q=P[C];
-if(typeof Q=="number"){N.push(Q,P[++C])
-}else{N.push(Q.x,Q.y)
-}}}this.canvasPolyline=N;
-return this
-},_renderShape:function(C){var O=this.canvasPolyline;
-if(O.length){C.beginPath();
-C.moveTo(O[0],O[1]);
-for(var N=2;
-N<O.length;
-N+=2){C.lineTo(O[N],O[N+1])
-}}}});
-A.declare("dojox.gfx.Image",D.Image,{setShape:function(){I.Image.superclass.setShape.apply(this,arguments);
-var C=new Image();
-this.surface.downloadImage(C,this.shape.src);
-this.canvasImage=C;
-return this
-},_renderShape:function(C){var N=this.shape;
-C.drawImage(this.canvasImage,N.x,N.y,N.width,N.height)
-}});
-A.declare("dojox.gfx.Text",D.Text,{_renderShape:function(C){var N=this.shape
-}});
-J(I.Text,"setFont");
-var E={M:"_moveToA",m:"_moveToR",L:"_lineToA",l:"_lineToR",H:"_hLineToA",h:"_hLineToR",V:"_vLineToA",v:"_vLineToR",C:"_curveToA",c:"_curveToR",S:"_smoothCurveToA",s:"_smoothCurveToR",Q:"_qCurveToA",q:"_qCurveToR",T:"_qSmoothCurveToA",t:"_qSmoothCurveToR",A:"_arcTo",a:"_arcTo",Z:"_closePath",z:"_closePath"};
-A.declare("dojox.gfx.Path",I.path.Path,{constructor:function(){this.last={};
-this.lastControl={}
-},setShape:function(){this.canvasPath=[];
-return I.Path.superclass.setShape.apply(this,arguments)
-},_updateWithSegment:function(N){var C=A.clone(this.last);
-this[E[N.action]](this.canvasPath,N.action,N.args);
-this.last=C;
-I.Path.superclass._updateWithSegment.apply(this,arguments)
-},_renderShape:function(C){var O=this.canvasPath;
-C.beginPath();
-for(var N=0;
-N<O.length;
-N+=2){C[O[N]].apply(C,O[N+1])
-}},_moveToA:function(C,P,N){C.push("moveTo",[N[0],N[1]]);
-for(var O=2;
-O<N.length;
-O+=2){C.push("lineTo",[N[O],N[O+1]])
-}this.last.x=N[N.length-2];
-this.last.y=N[N.length-1];
-this.lastControl={}
-},_moveToR:function(C,P,N){if("x" in this.last){C.push("moveTo",[this.last.x+=N[0],this.last.y+=N[1]])
-}else{C.push("moveTo",[this.last.x=N[0],this.last.y=N[1]])
-}for(var O=2;
-O<N.length;
-O+=2){C.push("lineTo",[this.last.x+=N[O],this.last.y+=N[O+1]])
-}this.lastControl={}
-},_lineToA:function(C,P,N){for(var O=0;
-O<N.length;
-O+=2){C.push("lineTo",[N[O],N[O+1]])
-}this.last.x=N[N.length-2];
-this.last.y=N[N.length-1];
-this.lastControl={}
-},_lineToR:function(C,P,N){for(var O=0;
-O<N.length;
-O+=2){C.push("lineTo",[this.last.x+=N[O],this.last.y+=N[O+1]])
-}this.lastControl={}
-},_hLineToA:function(C,P,N){for(var O=0;
-O<N.length;
-++O){C.push("lineTo",[N[O],this.last.y])
-}this.last.x=N[N.length-1];
-this.lastControl={}
-},_hLineToR:function(C,P,N){for(var O=0;
-O<N.length;
-++O){C.push("lineTo",[this.last.x+=N[O],this.last.y])
-}this.lastControl={}
-},_vLineToA:function(C,P,N){for(var O=0;
-O<N.length;
-++O){C.push("lineTo",[this.last.x,N[O]])
-}this.last.y=N[N.length-1];
-this.lastControl={}
-},_vLineToR:function(C,P,N){for(var O=0;
-O<N.length;
-++O){C.push("lineTo",[this.last.x,this.last.y+=N[O]])
-}this.lastControl={}
-},_curveToA:function(C,P,N){for(var O=0;
-O<N.length;
-O+=6){C.push("bezierCurveTo",N.slice(O,O+6))
-}this.last.x=N[N.length-2];
-this.last.y=N[N.length-1];
-this.lastControl.x=N[N.length-4];
-this.lastControl.y=N[N.length-3];
-this.lastControl.type="C"
-},_curveToR:function(C,P,N){for(var O=0;
-O<N.length;
-O+=6){C.push("bezierCurveTo",[this.last.x+N[O],this.last.y+N[O+1],this.lastControl.x=this.last.x+N[O+2],this.lastControl.y=this.last.y+N[O+3],this.last.x+N[O+4],this.last.y+N[O+5]]);
-this.last.x+=N[O+4];
-this.last.y+=N[O+5]
-}this.lastControl.type="C"
-},_smoothCurveToA:function(C,Q,N){for(var O=0;
-O<N.length;
-O+=4){var P=this.lastControl.type=="C";
-C.push("bezierCurveTo",[P?2*this.last.x-this.lastControl.x:this.last.x,P?2*this.last.y-this.lastControl.y:this.last.y,N[O],N[O+1],N[O+2],N[O+3]]);
-this.lastControl.x=N[O];
-this.lastControl.y=N[O+1];
-this.lastControl.type="C"
-}this.last.x=N[N.length-2];
-this.last.y=N[N.length-1]
-},_smoothCurveToR:function(C,Q,N){for(var O=0;
-O<N.length;
-O+=4){var P=this.lastControl.type=="C";
-C.push("bezierCurveTo",[P?2*this.last.x-this.lastControl.x:this.last.x,P?2*this.last.y-this.lastControl.y:this.last.y,this.last.x+N[O],this.last.y+N[O+1],this.last.x+N[O+2],this.last.y+N[O+3]]);
-this.lastControl.x=this.last.x+N[O];
-this.lastControl.y=this.last.y+N[O+1];
-this.lastControl.type="C";
-this.last.x+=N[O+2];
-this.last.y+=N[O+3]
-}},_qCurveToA:function(C,P,N){for(var O=0;
-O<N.length;
-O+=4){C.push("quadraticCurveTo",N.slice(O,O+4))
-}this.last.x=N[N.length-2];
-this.last.y=N[N.length-1];
-this.lastControl.x=N[N.length-4];
-this.lastControl.y=N[N.length-3];
-this.lastControl.type="Q"
-},_qCurveToR:function(C,P,N){for(var O=0;
-O<N.length;
-O+=4){C.push("quadraticCurveTo",[this.lastControl.x=this.last.x+N[O],this.lastControl.y=this.last.y+N[O+1],this.last.x+N[O+2],this.last.y+N[O+3]]);
-this.last.x+=N[O+2];
-this.last.y+=N[O+3]
-}this.lastControl.type="Q"
-},_qSmoothCurveToA:function(C,Q,N){for(var O=0;
-O<N.length;
-O+=2){var P=this.lastControl.type=="Q";
-C.push("quadraticCurveTo",[this.lastControl.x=P?2*this.last.x-this.lastControl.x:this.last.x,this.lastControl.y=P?2*this.last.y-this.lastControl.y:this.last.y,N[O],N[O+1]]);
-this.lastControl.type="Q"
-}this.last.x=N[N.length-2];
-this.last.y=N[N.length-1]
-},_qSmoothCurveToR:function(C,Q,N){for(var O=0;
-O<N.length;
-O+=2){var P=this.lastControl.type=="Q";
-C.push("quadraticCurveTo",[this.lastControl.x=P?2*this.last.x-this.lastControl.x:this.last.x,this.lastControl.y=P?2*this.last.y-this.lastControl.y:this.last.y,this.last.x+N[O],this.last.y+N[O+1]]);
-this.lastControl.type="Q";
-this.last.x+=N[O];
-this.last.y+=N[O+1]
-}},_arcTo:function(C,T,O){var S=T=="a";
-for(var P=0;
-P<O.length;
-P+=7){var N=O[P+5],Q=O[P+6];
-if(S){N+=this.last.x;
-Q+=this.last.y
-}var R=L.arcAsBezier(this.last,O[P],O[P+1],O[P+2],O[P+3]?1:0,O[P+4]?1:0,N,Q);
-A.forEach(R,function(U){C.push("bezierCurveTo",U)
-});
-this.last.x=N;
-this.last.y=Q
-}this.lastControl={}
-},_closePath:function(C,O,N){C.push("closePath",[]);
-this.lastControl={}
-}});
-A.forEach(["moveTo","lineTo","hLineTo","vLineTo","curveTo","smoothCurveTo","qCurveTo","qSmoothCurveTo","arcTo","closePath"],function(C){J(I.Path,C)
-});
-A.declare("dojox.gfx.TextPath",I.path.TextPath,{_renderShape:function(C){var N=this.shape
-}});
-A.declare("dojox.gfx.Surface",D.Surface,{constructor:function(){D.Container._init.call(this);
-this.pendingImageCount=0;
-this.makeDirty()
-},setDimensions:function(N,C){this.width=I.normalizedLength(N);
-this.height=I.normalizedLength(C);
-if(!this.rawNode){return this
-}this.rawNode.width=N;
-this.rawNode.height=C;
-this.makeDirty();
-return this
-},getDimensions:function(){return this.rawNode?{width:this.rawNode.width,height:this.rawNode.height}:null
-},render:function(){if(this.pendingImageCount){return 
-}var C=this.rawNode.getContext("2d");
-C.save();
-C.clearRect(0,0,this.rawNode.width,this.rawNode.height);
-for(var N=0;
-N<this.children.length;
-++N){this.children[N].render(C)
-}C.restore();
-if("pendingRender" in this){clearTimeout(this.pendingRender);
-delete this.pendingRender
-}},makeDirty:function(){if(!this.pendingImagesCount&&!("pendingRender" in this)){this.pendingRender=setTimeout(A.hitch(this,this.render),0)
-}},downloadImage:function(C,N){var O=A.hitch(this,this.onImageLoad);
-if(!this.pendingImageCount++&&"pendingRender" in this){clearTimeout(this.pendingRender);
-delete this.pendingRender
-}C.onload=O;
-C.onerror=O;
-C.onabort=O;
-C.src=N
-},onImageLoad:function(){if(!--this.pendingImageCount){this.render()
-}},getEventSource:function(){return null
-},connect:function(){},disconnect:function(){}});
-I.createSurface=function(N,P,C){if(!P){P="100%"
-}if(!C){C="100%"
-}var O=new I.Surface(),Q=A.byId(N),R=Q.ownerDocument.createElement("canvas");
-R.width=P;
-R.height=C;
-Q.appendChild(R);
-O.rawNode=R;
-O.surface=O;
-return O
-};
-var B=D.Container,G={add:function(C){this.surface.makeDirty();
-return B.add.apply(this,arguments)
-},remove:function(C,N){this.surface.makeDirty();
-return B.remove.apply(this,arguments)
-},clear:function(){this.surface.makeDirty();
-return B.clear.apply(this,arguments)
-},_moveChildToFront:function(C){this.surface.makeDirty();
-return B._moveChildToFront.apply(this,arguments)
-},_moveChildToBack:function(C){this.surface.makeDirty();
-return B._moveChildToBack.apply(this,arguments)
-}};
-A.mixin(D.Creator,{createObject:function(O,N){var C=new O();
-C.surface=this.surface;
-C.setShape(N);
-this.add(C);
-return C
-}});
-A.extend(I.Group,G);
-A.extend(I.Group,D.Creator);
-A.extend(I.Surface,G);
-A.extend(I.Surface,D.Creator)
-})()
-}}});

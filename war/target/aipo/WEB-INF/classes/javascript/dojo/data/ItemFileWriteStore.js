@@ -10,174 +10,174 @@ if(!this._datatypeMap.Date.serialize){this._datatypeMap.Date.serialize=function(
 },_assert:function(A){if(!A){throw new Error("assertion failed in ItemFileWriteStore")
 }},_getIdentifierAttribute:function(){var A=this.getFeatures()["dojo.data.api.Identity"];
 return A
-},newItem:function(F,G){this._assert(!this._saveInProgress);
+},newItem:function(J,A){this._assert(!this._saveInProgress);
 if(!this._loadFinished){this._forceLoad()
-}if(typeof F!="object"&&typeof F!="undefined"){throw new Error("newItem() was passed something other than an object")
-}var A=null;
-var H=this._getIdentifierAttribute();
-if(H===Number){A=this._arrayOfAllItems.length
-}else{A=F[H];
-if(typeof A==="undefined"){throw new Error("newItem() was not passed an identity for the new item")
-}if(dojo.isArray(A)){throw new Error("newItem() was not passed an single-valued identity")
-}}if(this._itemsByIdentity){this._assert(typeof this._itemsByIdentity[A]==="undefined")
-}this._assert(typeof this._pending._newItems[A]==="undefined");
-this._assert(typeof this._pending._deletedItems[A]==="undefined");
-var I={};
-I[this._storeRefPropName]=this;
-I[this._itemNumPropName]=this._arrayOfAllItems.length;
-if(this._itemsByIdentity){this._itemsByIdentity[A]=I
-}this._arrayOfAllItems.push(I);
-var C=null;
-if(G&&G.parent&&G.attribute){C={item:G.parent,attribute:G.attribute,oldValue:undefined};
-var E=this.getValues(G.parent,G.attribute);
-if(E&&E.length>0){var J=E.slice(0,E.length);
-if(E.length===1){C.oldValue=E[0]
-}else{C.oldValue=E.slice(0,E.length)
-}J.push(I);
-this._setValueOrValues(G.parent,G.attribute,J,false);
-C.newValue=this.getValues(G.parent,G.attribute)
-}else{this._setValueOrValues(G.parent,G.attribute,I,false);
-C.newValue=I
-}}else{I[this._rootItemPropName]=true;
-this._arrayOfTopLevelItems.push(I)
-}this._pending._newItems[A]=I;
-for(var D in F){if(D===this._storeRefPropName||D===this._itemNumPropName){throw new Error("encountered bug in ItemFileWriteStore.newItem")
-}var B=F[D];
-if(!dojo.isArray(B)){B=[B]
-}I[D]=B
-}this.onNew(I,C);
-return I
-},_removeArrayElement:function(B,A){var C=dojo.indexOf(B,A);
-if(C!=-1){B.splice(C,1);
+}if(typeof J!="object"&&typeof J!="undefined"){throw new Error("newItem() was passed something other than an object")
+}var E=null;
+var B=this._getIdentifierAttribute();
+if(B===Number){E=this._arrayOfAllItems.length
+}else{E=J[B];
+if(typeof E==="undefined"){throw new Error("newItem() was not passed an identity for the new item")
+}if(dojo.isArray(E)){throw new Error("newItem() was not passed an single-valued identity")
+}}if(this._itemsByIdentity){this._assert(typeof this._itemsByIdentity[E]==="undefined")
+}this._assert(typeof this._pending._newItems[E]==="undefined");
+this._assert(typeof this._pending._deletedItems[E]==="undefined");
+var C={};
+C[this._storeRefPropName]=this;
+C[this._itemNumPropName]=this._arrayOfAllItems.length;
+if(this._itemsByIdentity){this._itemsByIdentity[E]=C
+}this._arrayOfAllItems.push(C);
+var G=null;
+if(A&&A.parent&&A.attribute){G={item:A.parent,attribute:A.attribute,oldValue:undefined};
+var I=this.getValues(A.parent,A.attribute);
+if(I&&I.length>0){var D=I.slice(0,I.length);
+if(I.length===1){G.oldValue=I[0]
+}else{G.oldValue=I.slice(0,I.length)
+}D.push(C);
+this._setValueOrValues(A.parent,A.attribute,D,false);
+G.newValue=this.getValues(A.parent,A.attribute)
+}else{this._setValueOrValues(A.parent,A.attribute,C,false);
+G.newValue=C
+}}else{C[this._rootItemPropName]=true;
+this._arrayOfTopLevelItems.push(C)
+}this._pending._newItems[E]=C;
+for(var H in J){if(H===this._storeRefPropName||H===this._itemNumPropName){throw new Error("encountered bug in ItemFileWriteStore.newItem")
+}var F=J[H];
+if(!dojo.isArray(F)){F=[F]
+}C[H]=F
+}this.onNew(C,G);
+return C
+},_removeArrayElement:function(C,B){var A=dojo.indexOf(C,B);
+if(A!=-1){C.splice(A,1);
 return true
 }return false
-},deleteItem:function(A){this._assert(!this._saveInProgress);
-this._assertIsItem(A);
-var B=A[this._itemNumPropName];
-this._arrayOfAllItems[B]=null;
-var C=this.getIdentity(A);
-A[this._storeRefPropName]=null;
-if(this._itemsByIdentity){delete this._itemsByIdentity[C]
-}this._pending._deletedItems[C]=A;
-if(A[this._rootItemPropName]){this._removeArrayElement(this._arrayOfTopLevelItems,A)
-}this.onDelete(A);
-return true
-},setValue:function(A,C,B){return this._setValueOrValues(A,C,B,true)
-},setValues:function(B,A,C){return this._setValueOrValues(B,A,C,true)
-},unsetAttribute:function(A,B){return this._setValueOrValues(A,B,[],true)
-},_setValueOrValues:function(D,H,O,K){this._assert(!this._saveInProgress);
-this._assertIsItem(D);
-this._assert(dojo.isString(H));
-this._assert(typeof O!=="undefined");
-var M=this._getIdentifierAttribute();
-if(H==M){throw new Error("ItemFileWriteStore does not have support for changing the value of an item's identifier.")
-}var L=this._getValueOrValues(D,H);
-var P=this.getIdentity(D);
-if(!this._pending._modifiedItems[P]){var F={};
-for(var B in D){if((B===this._storeRefPropName)||(B===this._itemNumPropName)||(B===this._rootItemPropName)){F[B]=D[B]
-}else{var A=D[B];
-var N=[];
-for(var J=0;
-J<A.length;
-++J){N.push(A[J])
-}F[B]=N
-}}this._pending._modifiedItems[P]=F
-}var C=false;
-if(dojo.isArray(O)&&O.length===0){C=delete D[H];
-O=undefined
-}else{var Q=[];
-if(dojo.isArray(O)){var E=O;
-for(var I=0;
-I<E.length;
-++I){Q.push(E[I])
-}}else{var G=O;
-Q.push(G)
-}D[H]=Q;
-C=true
-}if(K){this.onSet(D,H,L,O)
-}return C
-},_getValueOrValues:function(C,B){var D=undefined;
-if(this.hasAttribute(C,B)){var A=this.getValues(C,B);
-if(A.length==1){D=A[0]
-}else{D=A
-}}return D
-},_flatten:function(C){if(this.isItem(C)){var B=C;
-var E=this.getIdentity(B);
-var A={_reference:E};
-return A
-}else{if(typeof C==="object"){for(type in this._datatypeMap){var D=this._datatypeMap[type];
-if(dojo.isObject(D)&&!dojo.isFunction(D)){if(C instanceof D.type){if(!D.serialize){throw new Error("ItemFileWriteStore:  No serializer defined for type mapping: ["+type+"]")
-}return{_type:type,_value:D.serialize(C)}
-}}else{if(C instanceof D){return{_type:type,_value:C.toString()}
-}}}}return C
-}},_getNewFileContentString:function(){var F={};
-var A=this._getIdentifierAttribute();
-if(A!==Number){F.identifier=A
-}if(this._labelAttr){F.label=this._labelAttr
-}F.items=[];
-for(var J=0;
-J<this._arrayOfAllItems.length;
-++J){var E=this._arrayOfAllItems[J];
-if(E!==null){serializableItem={};
-for(var D in E){if(D!==this._storeRefPropName&&D!==this._itemNumPropName){var G=D;
-var C=this.getValues(E,G);
-if(C.length==1){serializableItem[G]=this._flatten(C[0])
-}else{var B=[];
-for(var I=0;
-I<C.length;
-++I){B.push(this._flatten(C[I]));
-serializableItem[G]=B
-}}}}F.items.push(serializableItem)
-}}var H=true;
-return dojo.toJson(F,H)
-},save:function(A){this._assert(!this._saveInProgress);
-this._saveInProgress=true;
-var E=this;
-var C=function(){E._pending={_newItems:{},_modifiedItems:{},_deletedItems:{}};
-E._saveInProgress=false;
-if(A&&A.onComplete){var F=A.scope||dojo.global;
-A.onComplete.call(F)
-}};
-var D=function(){E._saveInProgress=false;
-if(A&&A.onError){var F=A.scope||dojo.global;
-A.onError.call(F)
-}};
-if(this._saveEverything){var B=this._getNewFileContentString();
-this._saveEverything(C,D,B)
-}if(this._saveCustom){this._saveCustom(C,D)
-}if(!this._saveEverything&&!this._saveCustom){C()
-}},revert:function(){this._assert(!this._saveInProgress);
-var G;
-for(G in this._pending._newItems){var B=this._pending._newItems[G];
+},deleteItem:function(B){this._assert(!this._saveInProgress);
+this._assertIsItem(B);
+var C=B[this._itemNumPropName];
+this._arrayOfAllItems[C]=null;
+var A=this.getIdentity(B);
 B[this._storeRefPropName]=null;
-this._arrayOfAllItems[B[this._itemNumPropName]]=null;
+if(this._itemsByIdentity){delete this._itemsByIdentity[A]
+}this._pending._deletedItems[A]=B;
 if(B[this._rootItemPropName]){this._removeArrayElement(this._arrayOfTopLevelItems,B)
-}if(this._itemsByIdentity){delete this._itemsByIdentity[G]
-}}for(G in this._pending._modifiedItems){var D=this._pending._modifiedItems[G];
-var C=null;
-if(this._itemsByIdentity){C=this._itemsByIdentity[G]
-}else{C=this._arrayOfAllItems[G]
-}D[this._storeRefPropName]=this;
-C[this._storeRefPropName]=null;
-var F=C[this._itemNumPropName];
-this._arrayOfAllItems[F]=D;
-if(C[this._rootItemPropName]){F=C[this._itemNumPropName];
-this._arrayOfTopLevelItems[F]=D
-}if(this._itemsByIdentity){this._itemsByIdentity[G]=D
-}}for(G in this._pending._deletedItems){var E=this._pending._deletedItems[G];
-E[this._storeRefPropName]=this;
-var A=E[this._itemNumPropName];
-this._arrayOfAllItems[A]=E;
-if(this._itemsByIdentity){this._itemsByIdentity[G]=E
-}if(E[this._rootItemPropName]){this._arrayOfTopLevelItems.push(E)
+}this.onDelete(B);
+return true
+},setValue:function(B,A,C){return this._setValueOrValues(B,A,C,true)
+},setValues:function(C,B,A){return this._setValueOrValues(C,B,A,true)
+},unsetAttribute:function(B,A){return this._setValueOrValues(B,A,[],true)
+},_setValueOrValues:function(P,C,J,F){this._assert(!this._saveInProgress);
+this._assertIsItem(P);
+this._assert(dojo.isString(C));
+this._assert(typeof J!=="undefined");
+var H=this._getIdentifierAttribute();
+if(C==H){throw new Error("ItemFileWriteStore does not have support for changing the value of an item's identifier.")
+}var G=this._getValueOrValues(P,C);
+var K=this.getIdentity(P);
+if(!this._pending._modifiedItems[K]){var A={};
+for(var N in P){if((N===this._storeRefPropName)||(N===this._itemNumPropName)||(N===this._rootItemPropName)){A[N]=P[N]
+}else{var M=P[N];
+var I=[];
+for(var E=0;
+E<M.length;
+++E){I.push(M[E])
+}A[N]=I
+}}this._pending._modifiedItems[K]=A
+}var O=false;
+if(dojo.isArray(J)&&J.length===0){O=delete P[C];
+J=undefined
+}else{var L=[];
+if(dojo.isArray(J)){var Q=J;
+for(var D=0;
+D<Q.length;
+++D){L.push(Q[D])
+}}else{var B=J;
+L.push(B)
+}P[C]=L;
+O=true
+}if(F){this.onSet(P,C,G,J)
+}return O
+},_getValueOrValues:function(D,C){var A=undefined;
+if(this.hasAttribute(D,C)){var B=this.getValues(D,C);
+if(B.length==1){A=B[0]
+}else{A=B
+}}return A
+},_flatten:function(D){if(this.isItem(D)){var C=D;
+var A=this.getIdentity(C);
+var B={_reference:A};
+return B
+}else{if(typeof D==="object"){for(type in this._datatypeMap){var E=this._datatypeMap[type];
+if(dojo.isObject(E)&&!dojo.isFunction(E)){if(D instanceof E.type){if(!E.serialize){throw new Error("ItemFileWriteStore:  No serializer defined for type mapping: ["+type+"]")
+}return{_type:type,_value:E.serialize(D)}
+}}else{if(D instanceof E){return{_type:type,_value:D.toString()}
+}}}}return D
+}},_getNewFileContentString:function(){var J={};
+var E=this._getIdentifierAttribute();
+if(E!==Number){J.identifier=E
+}if(this._labelAttr){J.label=this._labelAttr
+}J.items=[];
+for(var D=0;
+D<this._arrayOfAllItems.length;
+++D){var I=this._arrayOfAllItems[D];
+if(I!==null){serializableItem={};
+for(var H in I){if(H!==this._storeRefPropName&&H!==this._itemNumPropName){var A=H;
+var G=this.getValues(I,A);
+if(G.length==1){serializableItem[A]=this._flatten(G[0])
+}else{var F=[];
+for(var C=0;
+C<G.length;
+++C){F.push(this._flatten(G[C]));
+serializableItem[A]=F
+}}}}J.items.push(serializableItem)
+}}var B=true;
+return dojo.toJson(J,B)
+},save:function(B){this._assert(!this._saveInProgress);
+this._saveInProgress=true;
+var A=this;
+var D=function(){A._pending={_newItems:{},_modifiedItems:{},_deletedItems:{}};
+A._saveInProgress=false;
+if(B&&B.onComplete){var F=B.scope||dojo.global;
+B.onComplete.call(F)
+}};
+var E=function(){A._saveInProgress=false;
+if(B&&B.onError){var F=B.scope||dojo.global;
+B.onError.call(F)
+}};
+if(this._saveEverything){var C=this._getNewFileContentString();
+this._saveEverything(D,E,C)
+}if(this._saveCustom){this._saveCustom(D,E)
+}if(!this._saveEverything&&!this._saveCustom){D()
+}},revert:function(){this._assert(!this._saveInProgress);
+var C;
+for(C in this._pending._newItems){var E=this._pending._newItems[C];
+E[this._storeRefPropName]=null;
+this._arrayOfAllItems[E[this._itemNumPropName]]=null;
+if(E[this._rootItemPropName]){this._removeArrayElement(this._arrayOfTopLevelItems,E)
+}if(this._itemsByIdentity){delete this._itemsByIdentity[C]
+}}for(C in this._pending._modifiedItems){var G=this._pending._modifiedItems[C];
+var F=null;
+if(this._itemsByIdentity){F=this._itemsByIdentity[C]
+}else{F=this._arrayOfAllItems[C]
+}G[this._storeRefPropName]=this;
+F[this._storeRefPropName]=null;
+var B=F[this._itemNumPropName];
+this._arrayOfAllItems[B]=G;
+if(F[this._rootItemPropName]){B=F[this._itemNumPropName];
+this._arrayOfTopLevelItems[B]=G
+}if(this._itemsByIdentity){this._itemsByIdentity[C]=G
+}}for(C in this._pending._deletedItems){var A=this._pending._deletedItems[C];
+A[this._storeRefPropName]=this;
+var D=A[this._itemNumPropName];
+this._arrayOfAllItems[D]=A;
+if(this._itemsByIdentity){this._itemsByIdentity[C]=A
+}if(A[this._rootItemPropName]){this._arrayOfTopLevelItems.push(A)
 }}this._pending={_newItems:{},_modifiedItems:{},_deletedItems:{}};
 return true
-},isDirty:function(B){if(B){var C=this.getIdentity(B);
-return new Boolean(this._pending._newItems[C]||this._pending._modifiedItems[C]||this._pending._deletedItems[C])
-}else{var A;
-for(A in this._pending._newItems){return true
-}for(A in this._pending._modifiedItems){return true
-}for(A in this._pending._deletedItems){return true
+},isDirty:function(C){if(C){var A=this.getIdentity(C);
+return new Boolean(this._pending._newItems[A]||this._pending._modifiedItems[A]||this._pending._deletedItems[A])
+}else{var B;
+for(B in this._pending._newItems){return true
+}for(B in this._pending._modifiedItems){return true
+}for(B in this._pending._deletedItems){return true
 }return false
-}},onSet:function(B,A,D,C){},onNew:function(A,B){},onDelete:function(A){}})
+}},onSet:function(C,B,A,D){},onNew:function(B,A){},onDelete:function(A){}})
 };

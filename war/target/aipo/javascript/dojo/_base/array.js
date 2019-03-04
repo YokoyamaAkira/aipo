@@ -1,45 +1,167 @@
-if(!dojo._hasResource["dojo._base.array"]){dojo._hasResource["dojo._base.array"]=true;
+if(!dojo._hasResource["dojo._base.array"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo._base.array"] = true;
 dojo.require("dojo._base.lang");
 dojo.provide("dojo._base.array");
-(function(){var A=function(C,D,B){return[(dojo.isString(C)?C.split(""):C),(D||dojo.global),(dojo.isString(B)?(new Function("item","index","array",B)):B)]
-};
-dojo.mixin(dojo,{indexOf:function(H,G,E,D){var C=0,F=1,B=H.length;
-if(D){C=B-1;
-F=B=-1
-}for(C=E||C;
-C!=B;
-C+=F){if(H[C]==G){return C
-}}return -1
-},lastIndexOf:function(D,C,B){return dojo.indexOf(D,C,B,true)
-},forEach:function(C,G,F){if(!C||!C.length){return 
-}var B=A(C,F,G);
-C=B[0];
-for(var E=0,D=B[0].length;
-E<D;
-E++){B[2].call(B[1],C[E],E,C)
-}},_everyOrSome:function(H,D,I,G){var C=A(D,G,I);
-D=C[0];
-for(var F=0,E=D.length;
-F<E;
-F++){var B=!!C[2].call(C[1],D[F],F,D);
-if(H^B){return B
-}}return H
-},every:function(B,D,C){return this._everyOrSome(true,B,D,C)
-},some:function(B,D,C){return this._everyOrSome(false,B,D,C)
-},map:function(C,E,F){var B=A(C,F,E);
-C=B[0];
-var G=((arguments[3])?(new arguments[3]()):[]);
-for(var D=0;
-D<C.length;
-++D){G.push(B[2].call(B[1],C[D],D,C))
-}return G
-},filter:function(C,G,E){var B=A(C,E,G);
-C=B[0];
-var F=[];
-for(var D=0;
-D<C.length;
-D++){if(B[2].call(B[1],C[D],D,C)){F.push(C[D])
-}}return F
-}})
-})()
-};
+
+(function(){
+	var _getParts = function(arr, obj, cb){
+		return [ 
+			(dojo.isString(arr) ? arr.split("") : arr), 
+			(obj||dojo.global),
+			// FIXME: cache the anonymous functions we create here?
+			(dojo.isString(cb) ? (new Function("item", "index", "array", cb)) : cb)
+		];
+	}
+
+	dojo.mixin(dojo, {
+		indexOf: function(	/*Array*/		array, 
+							/*Object*/		value,
+							/*Integer?*/	fromIndex,
+							/*Boolean?*/	findLast){
+			// summary:
+			//		locates the first index of the provided value in the
+			//		passed array. If the value is not found, -1 is returned.
+			// description:
+			//		For details on this method, see:
+			// 			http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:indexOf
+
+			var i = 0, step = 1, end = array.length;
+			if(findLast){
+				i = end - 1;
+				step = end = -1;
+			}
+			for(i = fromIndex || i; i != end; i += step){
+				if(array[i] == value){ return i; }
+			}
+			return -1;	// Number
+		},
+
+		lastIndexOf: function(/*Array*/array, /*Object*/value, /*Integer?*/fromIndex){
+			// summary:
+			//		locates the last index of the provided value in the passed array. 
+			//		If the value is not found, -1 is returned.
+			// description:
+			//		For details on this method, see:
+			// 			http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:lastIndexOf
+			return dojo.indexOf(array, value, fromIndex, true); // Number
+		},
+
+		forEach: function(/*Array*/arr, /*Function*/callback, /*Object?*/obj){
+			// summary:
+			//		for every item in arr, call callback with that item as its
+			//		only parameter.
+			// description:
+			//		Return values are ignored. This function
+			//		corresponds (and wraps) the JavaScript 1.6 forEach method. For
+			//		more details, see:
+			//			http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:forEach
+
+			// match the behavior of the built-in forEach WRT empty arrs
+			if(!arr || !arr.length){ return; }
+
+			// FIXME: there are several ways of handilng thisObject. Is
+			// dojo.global always the default context?
+			var _p = _getParts(arr, obj, callback); arr = _p[0];
+			for(var i=0,l=_p[0].length; i<l; i++){ 
+				_p[2].call(_p[1], arr[i], i, arr);
+			}
+		},
+
+		_everyOrSome: function(/*Boolean*/every, /*Array*/arr, /*Function*/callback, /*Object?*/obj){
+			var _p = _getParts(arr, obj, callback); arr = _p[0];
+			for(var i = 0, l = arr.length; i < l; i++){
+				var result = !!_p[2].call(_p[1], arr[i], i, arr);
+				if(every ^ result){
+					return result; // Boolean
+				}
+			}
+			return every; // Boolean
+		},
+
+		every: function(/*Array*/arr, /*Function*/callback, /*Object?*/thisObject){
+			// summary:
+			//		Determines whether or not every item in the array satisfies the
+			//		condition implemented by callback.
+			// description:
+			//		The parameter thisObject may be used to
+			//		scope the call to callback. The function signature is derived
+			//		from the JavaScript 1.6 Array.every() function. More
+			//		information on this can be found here:
+			//			http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:every
+			// example:
+			//	|	dojo.every([1, 2, 3, 4], function(item){ return item>1; });
+			//		returns false
+			// example:
+			//	|	dojo.every([1, 2, 3, 4], function(item){ return item>0; });
+			//		returns true 
+			return this._everyOrSome(true, arr, callback, thisObject); // Boolean
+		},
+
+		some: function(/*Array*/arr, /*Function*/callback, /*Object?*/thisObject){
+			// summary:
+			//		Determines whether or not any item in the array satisfies the
+			//		condition implemented by callback.
+			// description:
+			//		The parameter thisObject may be used to
+			//		scope the call to callback. The function signature is derived
+			//		from the JavaScript 1.6 Array.some() function. More
+			//		information on this can be found here:
+			//			http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:some
+			// example:
+			//	|	dojo.some([1, 2, 3, 4], function(item){ return item>1; });
+			//		returns true
+			// example:
+			//	|	dojo.some([1, 2, 3, 4], function(item){ return item<1; });
+			//		returns false
+			return this._everyOrSome(false, arr, callback, thisObject); // Boolean
+		},
+
+		map: function(/*Array*/arr, /*Function*/func, /*Function?*/obj){
+			// summary:
+			//		applies a function to each element of an Array and creates
+			//		an Array with the results
+			// description:
+			//		Returns a new array constituted from the return values of
+			//		passing each element of arr into unary_func. The obj parameter
+			//		may be passed to enable the passed function to be called in
+			//		that scope.  In environments that support JavaScript 1.6, this
+			//		function is a passthrough to the built-in map() function
+			//		provided by Array instances. For details on this, see:
+			// 			http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:map
+			// example:
+			//	|	dojo.map([1, 2, 3, 4], function(item){ return item+1 });
+			//		returns [2, 3, 4, 5]
+			var _p = _getParts(arr, obj, func); arr = _p[0];
+			var outArr = ((arguments[3]) ? (new arguments[3]()) : []);
+			for(var i=0;i<arr.length;++i){
+				outArr.push(_p[2].call(_p[1], arr[i], i, arr));
+			}
+			return outArr; // Array
+		},
+
+		filter: function(/*Array*/arr, /*Function*/callback, /*Object?*/obj){
+			// summary:
+			//		Returns a new Array with those items from arr that match the
+			//		condition implemented by callback. ob may be used to
+			//		scope the call to callback. The function signature is derived
+			//		from the JavaScript 1.6 Array.filter() function.
+			//
+			//		More information on the JS 1.6 API can be found here:
+			//			http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:filter
+			// example:
+			//	|	dojo.filter([1, 2, 3, 4], function(item){ return item>1; });
+			//		returns [2, 3, 4]
+
+			var _p = _getParts(arr, obj, callback); arr = _p[0];
+			var outArr = [];
+			for(var i = 0; i < arr.length; i++){
+				if(_p[2].call(_p[1], arr[i], i, arr)){
+					outArr.push(arr[i]);
+				}
+			}
+			return outArr; // Array
+		}
+	});
+})();
+
+}

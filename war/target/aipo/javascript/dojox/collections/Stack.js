@@ -1,34 +1,72 @@
-if(!dojo._hasResource["dojox.collections.Stack"]){dojo._hasResource["dojox.collections.Stack"]=true;
+if(!dojo._hasResource["dojox.collections.Stack"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.collections.Stack"] = true;
 dojo.provide("dojox.collections.Stack");
 dojo.require("dojox.collections._base");
-dojox.collections.Stack=function(A){var B=[];
-if(A){B=B.concat(A)
-}this.count=B.length;
-this.clear=function(){B=[];
-this.count=B.length
-};
-this.clone=function(){return new dojox.collections.Stack(B)
-};
-this.contains=function(D){for(var C=0;
-C<B.length;
-C++){if(B[C]==D){return true
-}}return false
-};
-this.copyTo=function(C,D){C.splice(D,0,B)
-};
-this.forEach=function(D,C){dojo.forEach(B,D,C)
-};
-this.getIterator=function(){return new dojox.collections.Iterator(B)
-};
-this.peek=function(){return B[(B.length-1)]
-};
-this.pop=function(){var C=B.pop();
-this.count=B.length;
-return C
-};
-this.push=function(C){this.count=B.push(C)
-};
-this.toArray=function(){return[].concat(B)
+
+dojox.collections.Stack=function(/* array? */arr){
+	//	summary
+	//	returns an object of type dojox.collections.Stack
+	var q=[];
+	if (arr) q=q.concat(arr);
+	this.count=q.length;
+	this.clear=function(){
+		//	summary
+		//	Clear the internal array and reset the count
+		q=[];
+		this.count=q.length;
+	};
+	this.clone=function(){
+		//	summary
+		//	Create and return a clone of this Stack
+		return new dojox.collections.Stack(q);
+	};
+	this.contains=function(/* object */o){
+		//	summary
+		//	check to see if the stack contains object o
+		for (var i=0; i<q.length; i++){
+			if (q[i] == o){
+				return true;	//	bool
+			}
+		}
+		return false;	//	bool
+	};
+	this.copyTo=function(/* array */ arr, /* int */ i){
+		//	summary
+		//	copy the stack into array arr at index i
+		arr.splice(i,0,q);
+	};
+	this.forEach=function(/* function */ fn, /* object? */ scope){
+		//	summary
+		//	functional iterator, following the mozilla spec.
+		dojo.forEach(q, fn, scope);
+	};
+	this.getIterator=function(){
+		//	summary
+		//	get an iterator for this collection
+		return new dojox.collections.Iterator(q);	//	dojox.collections.Iterator
+	};
+	this.peek=function(){
+		//	summary
+		//	Return the next item without altering the stack itself.
+		return q[(q.length-1)];	//	object
+	};
+	this.pop=function(){
+		//	summary
+		//	pop and return the next item on the stack
+		var r=q.pop();
+		this.count=q.length;
+		return r;	//	object
+	};
+	this.push=function(/* object */ o){
+		//	summary
+		//	Push object o onto the stack
+		this.count=q.push(o);
+	};
+	this.toArray=function(){
+		//	summary
+		//	create and return an array based on the internal collection
+		return [].concat(q);	//	array
+	};
 }
+
 }
-};

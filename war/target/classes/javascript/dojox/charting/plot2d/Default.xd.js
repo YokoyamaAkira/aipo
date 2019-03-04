@@ -4,57 +4,57 @@ A.require("dojox.charting.plot2d.common");
 A.require("dojox.charting.plot2d.Base");
 A.require("dojox.lang.utils");
 A.require("dojox.lang.functional");
-(function(){var B=dojox.lang.functional,D=dojox.lang.utils,C=dojox.charting.plot2d.common,E=B.lambda("item.purgeGroup()");
+(function(){var E=dojox.lang.functional,C=dojox.lang.utils,B=dojox.charting.plot2d.common,D=E.lambda("item.purgeGroup()");
 A.declare("dojox.charting.plot2d.Default",dojox.charting.plot2d.Base,{defaultParams:{hAxis:"x",vAxis:"y",lines:true,areas:false,markers:false,shadows:0},optionalParams:{},constructor:function(G,F){this.opt=A.clone(this.defaultParams);
-D.updateWithObject(this.opt,F);
+C.updateWithObject(this.opt,F);
 this.series=[];
 this.hAxis=this.opt.hAxis;
 this.vAxis=this.opt.vAxis
-},calculateAxes:function(F){this._calc(F,C.collectSimpleStats(this.series));
+},calculateAxes:function(F){this._calc(F,B.collectSimpleStats(this.series));
 return this
-},render:function(T,O){if(this.dirty){A.forEach(this.series,E);
+},render:function(N,I){if(this.dirty){A.forEach(this.series,D);
 this.cleanGroup();
-var H=this.group;
-B.forEachReversed(this.series,function(W){W.cleanGroup(H)
+var V=this.group;
+E.forEachReversed(this.series,function(W){W.cleanGroup(V)
 })
-}var F=this.chart.theme,V,L,P,R;
-for(var Q=this.series.length-1;
-Q>=0;
---Q){var N=this.series[Q];
-if(!this.dirty&&!N.dirty){continue
-}N.cleanGroup();
-if(!N.data.length){N.dirty=false;
+}var U=this.chart.theme,T,F,J,L;
+for(var K=this.series.length-1;
+K>=0;
+--K){var H=this.series[K];
+if(!this.dirty&&!H.dirty){continue
+}H.cleanGroup();
+if(!H.data.length){H.dirty=false;
 continue
-}var H=N.group,J;
-if(typeof N.data[0]=="number"){J=A.map(N.data,function(X,W){return{x:this._hScaler.scale*(W+1-this._hScaler.bounds.lower)+O.l,y:T.height-O.b-this._vScaler.scale*(X-this._vScaler.bounds.lower)}
+}var V=H.group,R;
+if(typeof H.data[0]=="number"){R=A.map(H.data,function(W,X){return{x:this._hScaler.scale*(X+1-this._hScaler.bounds.lower)+I.l,y:N.height-I.b-this._vScaler.scale*(W-this._vScaler.bounds.lower)}
 },this)
-}else{J=A.map(N.data,function(X,W){return{x:this._hScaler.scale*(X.x-this._hScaler.bounds.lower)+O.l,y:T.height-O.b-this._vScaler.scale*(X.y-this._vScaler.bounds.lower)}
+}else{R=A.map(H.data,function(W,X){return{x:this._hScaler.scale*(W.x-this._hScaler.bounds.lower)+I.l,y:N.height-I.b-this._vScaler.scale*(W.y-this._vScaler.bounds.lower)}
 },this)
-}if(!N.fill||!N.stroke){P=N.dyn.color=new A.Color(F.next("color"))
-}if(this.opt.areas){var I=A.clone(J);
-I.push({x:J[J.length-1].x,y:T.height-O.b});
-I.push({x:J[0].x,y:T.height-O.b});
-I.push(J[0]);
-var K=N.fill?N.fill:C.augmentFill(F.series.fill,P);
-N.dyn.fill=H.createPolyline(I).setFill(K).getFill()
-}if(this.opt.lines||this.opt.markers){V=N.stroke?C.makeStroke(N.stroke):C.augmentStroke(F.series.stroke,P);
-if(N.outline||F.series.outline){L=C.makeStroke(N.outline?N.outline:F.series.outline);
-L.width=2*L.width+V.width
-}}if(this.opt.markers){R=N.dyn.marker=N.marker?N.marker:F.next("marker")
-}if(this.opt.shadows&&V){var S=this.opt.shadows,G=new A.Color([0,0,0,0.3]),M=A.map(J,function(W){return{x:W.x+S.dx,y:W.y+S.dy}
-}),U=A.clone(L?L:V);
-U.color=G;
-U.width+=S.dw?S.dw:0;
-if(this.opt.lines){H.createPolyline(M).setStroke(U)
-}if(this.opt.markers){A.forEach(M,function(W){H.createPath("M"+W.x+" "+W.y+" "+R).setStroke(U).setFill(G)
+}if(!H.fill||!H.stroke){J=H.dyn.color=new A.Color(U.next("color"))
+}if(this.opt.areas){var Q=A.clone(R);
+Q.push({x:R[R.length-1].x,y:N.height-I.b});
+Q.push({x:R[0].x,y:N.height-I.b});
+Q.push(R[0]);
+var S=H.fill?H.fill:B.augmentFill(U.series.fill,J);
+H.dyn.fill=V.createPolyline(Q).setFill(S).getFill()
+}if(this.opt.lines||this.opt.markers){T=H.stroke?B.makeStroke(H.stroke):B.augmentStroke(U.series.stroke,J);
+if(H.outline||U.series.outline){F=B.makeStroke(H.outline?H.outline:U.series.outline);
+F.width=2*F.width+T.width
+}}if(this.opt.markers){L=H.dyn.marker=H.marker?H.marker:U.next("marker")
+}if(this.opt.shadows&&T){var M=this.opt.shadows,P=new A.Color([0,0,0,0.3]),G=A.map(R,function(W){return{x:W.x+M.dx,y:W.y+M.dy}
+}),O=A.clone(F?F:T);
+O.color=P;
+O.width+=M.dw?M.dw:0;
+if(this.opt.lines){V.createPolyline(G).setStroke(O)
+}if(this.opt.markers){A.forEach(G,function(W){V.createPath("M"+W.x+" "+W.y+" "+L).setStroke(O).setFill(P)
 },this)
-}}if(this.opt.lines){if(L){N.dyn.outline=H.createPolyline(J).setStroke(L).getStroke()
-}N.dyn.stroke=H.createPolyline(J).setStroke(V).getStroke()
-}if(this.opt.markers){A.forEach(J,function(W){var X="M"+W.x+" "+W.y+" "+R;
-if(L){H.createPath(X).setStroke(L)
-}H.createPath(X).setStroke(V).setFill(V.color)
+}}if(this.opt.lines){if(F){H.dyn.outline=V.createPolyline(R).setStroke(F).getStroke()
+}H.dyn.stroke=V.createPolyline(R).setStroke(T).getStroke()
+}if(this.opt.markers){A.forEach(R,function(X){var W="M"+X.x+" "+X.y+" "+L;
+if(F){V.createPath(W).setStroke(F)
+}V.createPath(W).setStroke(T).setFill(T.color)
 },this)
-}N.dirty=false
+}H.dirty=false
 }this.dirty=false;
 return this
 }})

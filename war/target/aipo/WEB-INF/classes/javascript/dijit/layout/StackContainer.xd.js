@@ -6,61 +6,61 @@ A.require("dijit.form.Button");
 A.declare("dijit.layout.StackContainer",dijit.layout._LayoutWidget,{doLayout:true,_started:false,postCreate:function(){dijit.setWaiRole((this.containerNode||this.domNode),"tabpanel");
 this.connect(this.domNode,"onkeypress",this._onKeyPress)
 },startup:function(){if(this._started){return 
-}var C=this.getChildren();
-A.forEach(C,this._setupChild,this);
-A.some(C,function(D){if(D.selected){this.selectedChildWidget=D
+}var B=this.getChildren();
+A.forEach(B,this._setupChild,this);
+A.some(B,function(D){if(D.selected){this.selectedChildWidget=D
 }return D.selected
 },this);
-var B=this.selectedChildWidget;
-if(!B&&C[0]){B=this.selectedChildWidget=C[0];
-B.selected=true
-}if(B){this._showChild(B)
-}A.publish(this.id+"-startup",[{children:C,selected:B}]);
+var C=this.selectedChildWidget;
+if(!C&&B[0]){C=this.selectedChildWidget=B[0];
+C.selected=true
+}if(C){this._showChild(C)
+}A.publish(this.id+"-startup",[{children:B,selected:C}]);
 this.inherited("startup",arguments);
 this._started=true
 },_setupChild:function(B){B.domNode.style.display="none";
 B.domNode.style.position="relative";
 return B
-},addChild:function(B,C){dijit._Container.prototype.addChild.apply(this,arguments);
-B=this._setupChild(B);
+},addChild:function(C,B){dijit._Container.prototype.addChild.apply(this,arguments);
+C=this._setupChild(C);
 if(this._started){this.layout();
-A.publish(this.id+"-addChild",[B,C]);
-if(!this.selectedChildWidget){this.selectChild(B)
-}}},removeChild:function(B){dijit._Container.prototype.removeChild.apply(this,arguments);
+A.publish(this.id+"-addChild",[C,B]);
+if(!this.selectedChildWidget){this.selectChild(C)
+}}},removeChild:function(C){dijit._Container.prototype.removeChild.apply(this,arguments);
 if(this._beingDestroyed){return 
-}if(this._started){A.publish(this.id+"-removeChild",[B]);
+}if(this._started){A.publish(this.id+"-removeChild",[C]);
 this.layout()
-}if(this.selectedChildWidget===B){this.selectedChildWidget=undefined;
-if(this._started){var C=this.getChildren();
-if(C.length){this.selectChild(C[0])
+}if(this.selectedChildWidget===C){this.selectedChildWidget=undefined;
+if(this._started){var B=this.getChildren();
+if(B.length){this.selectChild(B[0])
 }}}},selectChild:function(B){B=dijit.byId(B);
 if(this.selectedChildWidget!=B){this._transition(B,this.selectedChildWidget);
 this.selectedChildWidget=B;
 A.publish(this.id+"-selectChild",[B])
-}},_transition:function(B,C){if(C){this._hideChild(C)
-}this._showChild(B);
-if(this.doLayout&&B.resize){B.resize(this._containerContentBox||this._contentBox)
-}},_adjacent:function(D){var B=this.getChildren();
-var C=A.indexOf(B,this.selectedChildWidget);
-C+=D?1:B.length-1;
-return B[C%B.length]
+}},_transition:function(C,B){if(B){this._hideChild(B)
+}this._showChild(C);
+if(this.doLayout&&C.resize){C.resize(this._containerContentBox||this._contentBox)
+}},_adjacent:function(C){var D=this.getChildren();
+var B=A.indexOf(D,this.selectedChildWidget);
+B+=C?1:D.length-1;
+return D[B%D.length]
 },forward:function(){this.selectChild(this._adjacent(true))
 },back:function(){this.selectChild(this._adjacent(false))
 },_onKeyPress:function(B){A.publish(this.id+"-containerKeyPress",[{e:B,page:this}])
 },layout:function(){if(this.doLayout&&this.selectedChildWidget&&this.selectedChildWidget.resize){this.selectedChildWidget.resize(this._contentBox)
-}},_showChild:function(B){var C=this.getChildren();
-B.isFirstChild=(B==C[0]);
-B.isLastChild=(B==C[C.length-1]);
-B.selected=true;
-B.domNode.style.display="";
-if(B._loadCheck){B._loadCheck()
-}if(B.onShow){B.onShow()
+}},_showChild:function(C){var B=this.getChildren();
+C.isFirstChild=(C==B[0]);
+C.isLastChild=(C==B[B.length-1]);
+C.selected=true;
+C.domNode.style.display="";
+if(C._loadCheck){C._loadCheck()
+}if(C.onShow){C.onShow()
 }},_hideChild:function(B){B.selected=false;
 B.domNode.style.display="none";
 if(B.onHide){B.onHide()
-}},closeChild:function(B){var C=B.onClose(this,B);
-if(C){this.removeChild(B);
-B.destroy()
+}},closeChild:function(C){var B=C.onClose(this,C);
+if(B){this.removeChild(C);
+C.destroy()
 }},destroy:function(){this._beingDestroyed=true;
 this.inherited("destroy",arguments)
 }});
@@ -71,53 +71,53 @@ this._subscriptions=[A.subscribe(this.containerId+"-startup",this,"onStartup"),A
 this.onSelectChild(B.selected)
 },destroy:function(){A.forEach(this._subscriptions,A.unsubscribe);
 this.inherited("destroy",arguments)
-},onAddChild:function(B,C){var E=document.createElement("span");
-this.domNode.appendChild(E);
-var D=A.getObject(this.buttonWidget);
-var F=new D({label:B.title,closeButton:B.closable},E);
-this.addChild(F,C);
-this.pane2button[B]=F;
-B.controlButton=F;
-A.connect(F,"onClick",A.hitch(this,"onButtonClick",B));
-A.connect(F,"onClickCloseButton",A.hitch(this,"onCloseButtonClick",B));
-if(!this._currentChild){F.focusNode.setAttribute("tabIndex","0");
-this._currentChild=B
-}},onRemoveChild:function(B){if(this._currentChild===B){this._currentChild=null
-}var C=this.pane2button[B];
-if(C){C.destroy()
-}this.pane2button[B]=null
-},onSelectChild:function(B){if(!B){return 
-}if(this._currentChild){var C=this.pane2button[this._currentChild];
-C.setChecked(false);
-C.focusNode.setAttribute("tabIndex","-1")
-}var D=this.pane2button[B];
-D.setChecked(true);
-this._currentChild=B;
-D.focusNode.setAttribute("tabIndex","0")
-},onButtonClick:function(B){var C=dijit.byId(this.containerId);
-C.selectChild(B)
-},onCloseButtonClick:function(B){var D=dijit.byId(this.containerId);
-D.closeChild(B);
-var C=this.pane2button[this._currentChild];
-if(C){dijit.focus(C.focusNode||C.domNode)
-}},adjacent:function(C){var D=this.getChildren();
-var E=A.indexOf(D,this.pane2button[this._currentChild]);
-var B=C?1:D.length-1;
-return D[(E+B)%D.length]
-},onkeypress:function(B){if(this.disabled||B.altKey){return 
-}var D=true;
-if(B.ctrlKey||!B._djpage){var C=A.keys;
-switch(B.keyCode){case C.LEFT_ARROW:case C.UP_ARROW:case C.PAGE_UP:D=false;
-case C.RIGHT_ARROW:case C.DOWN_ARROW:case C.PAGE_DOWN:this.adjacent(D).onClick();
-A.stopEvent(B);
+},onAddChild:function(F,B){var D=document.createElement("span");
+this.domNode.appendChild(D);
+var C=A.getObject(this.buttonWidget);
+var E=new C({label:F.title,closeButton:F.closable},D);
+this.addChild(E,B);
+this.pane2button[F]=E;
+F.controlButton=E;
+A.connect(E,"onClick",A.hitch(this,"onButtonClick",F));
+A.connect(E,"onClickCloseButton",A.hitch(this,"onCloseButtonClick",F));
+if(!this._currentChild){E.focusNode.setAttribute("tabIndex","0");
+this._currentChild=F
+}},onRemoveChild:function(C){if(this._currentChild===C){this._currentChild=null
+}var B=this.pane2button[C];
+if(B){B.destroy()
+}this.pane2button[C]=null
+},onSelectChild:function(D){if(!D){return 
+}if(this._currentChild){var B=this.pane2button[this._currentChild];
+B.setChecked(false);
+B.focusNode.setAttribute("tabIndex","-1")
+}var C=this.pane2button[D];
+C.setChecked(true);
+this._currentChild=D;
+C.focusNode.setAttribute("tabIndex","0")
+},onButtonClick:function(C){var B=dijit.byId(this.containerId);
+B.selectChild(C)
+},onCloseButtonClick:function(D){var C=dijit.byId(this.containerId);
+C.closeChild(D);
+var B=this.pane2button[this._currentChild];
+if(B){dijit.focus(B.focusNode||B.domNode)
+}},adjacent:function(B){var C=this.getChildren();
+var D=A.indexOf(C,this.pane2button[this._currentChild]);
+var E=B?1:C.length-1;
+return C[(D+E)%C.length]
+},onkeypress:function(D){if(this.disabled||D.altKey){return 
+}var C=true;
+if(D.ctrlKey||!D._djpage){var B=A.keys;
+switch(D.keyCode){case B.LEFT_ARROW:case B.UP_ARROW:case B.PAGE_UP:C=false;
+case B.RIGHT_ARROW:case B.DOWN_ARROW:case B.PAGE_DOWN:this.adjacent(C).onClick();
+A.stopEvent(D);
 break;
-case C.DELETE:if(this._currentChild.closable){this.onCloseButtonClick(this._currentChild)
-}A.stopEvent(B);
+case B.DELETE:if(this._currentChild.closable){this.onCloseButtonClick(this._currentChild)
+}A.stopEvent(D);
 break;
-default:if(B.ctrlKey){if(B.keyCode==C.TAB){this.adjacent(!B.shiftKey).onClick();
-A.stopEvent(B)
-}else{if(B.keyChar=="w"){if(this._currentChild.closable){this.onCloseButtonClick(this._currentChild)
-}A.stopEvent(B)
+default:if(D.ctrlKey){if(D.keyCode==B.TAB){this.adjacent(!D.shiftKey).onClick();
+A.stopEvent(D)
+}else{if(D.keyChar=="w"){if(this._currentChild.closable){this.onCloseButtonClick(this._currentChild)
+}A.stopEvent(D)
 }}}}}},onContainerKeyPress:function(B){B.e._djpage=B.page;
 this.onkeypress(B.e)
 }});

@@ -8,15 +8,15 @@ A.require("dijit.layout.ContentPane");
 A.require("dijit.form.Form");
 A.declare("dijit.DialogUnderlay",[dijit._Widget,dijit._Templated],{templateString:"<div class=dijitDialogUnderlayWrapper id='${id}_underlay'><div class=dijitDialogUnderlay dojoAttachPoint='node'></div></div>",postCreate:function(){A.body().appendChild(this.domNode);
 this.bgIframe=new dijit.BackgroundIframe(this.domNode)
-},layout:function(){var C=dijit.getViewport();
-var E=this.node.style,B=this.domNode.style;
-B.top=C.t+"px";
-B.left=C.l+"px";
-E.width=C.w+"px";
-E.height=C.h+"px";
-var D=dijit.getViewport();
-if(C.w!=D.w){E.width=D.w+"px"
-}if(C.h!=D.h){E.height=D.h+"px"
+},layout:function(){var B=dijit.getViewport();
+var D=this.node.style,E=this.domNode.style;
+E.top=B.t+"px";
+E.left=B.l+"px";
+D.width=B.w+"px";
+D.height=B.h+"px";
+var C=dijit.getViewport();
+if(B.w!=C.w){D.width=C.w+"px"
+}if(B.h!=C.h){D.height=C.h+"px"
 }},show:function(){this.domNode.style.display="block";
 this.layout();
 if(this.bgIframe.iframe){this.bgIframe.iframe.style.display="block"
@@ -42,23 +42,23 @@ this._fadeOut=A.fx.combine([A.fadeOut({node:B,duration:this.duration,onEnd:funct
 }}),A.fadeOut({node:this._underlay.domNode,duration:this.duration,onEnd:A.hitch(this._underlay,"hide")})])
 },uninitialize:function(){if(this._underlay){this._underlay.destroy()
 }},_position:function(){if(A.hasClass(A.body(),"dojoMove")){return 
-}var C=dijit.getViewport();
-var B=A.marginBox(this.domNode);
-var D=this.domNode.style;
-D.left=Math.floor((C.l+(C.w-B.w)/2))+"px";
-D.top=Math.floor((C.t+(C.h-B.h)/2))+"px"
+}var B=dijit.getViewport();
+var D=A.marginBox(this.domNode);
+var C=this.domNode.style;
+C.left=Math.floor((B.l+(B.w-D.w)/2))+"px";
+C.top=Math.floor((B.t+(B.h-D.h)/2))+"px"
 },_findLastFocus:function(B){this._lastFocused=B.target
 },_cycleFocus:function(B){if(!this._lastFocusItem){this._lastFocusItem=this._lastFocused
 }this.titleBar.focus()
-},_onKey:function(C){if(C.keyCode){var D=C.target;
-if(D==this.titleBar&&C.shiftKey&&C.keyCode==A.keys.TAB){if(this._lastFocusItem){this._lastFocusItem.focus()
-}A.stopEvent(C)
-}else{while(D){if(D==this.domNode){if(C.keyCode==A.keys.ESCAPE){this.hide()
+},_onKey:function(B){if(B.keyCode){var C=B.target;
+if(C==this.titleBar&&B.shiftKey&&B.keyCode==A.keys.TAB){if(this._lastFocusItem){this._lastFocusItem.focus()
+}A.stopEvent(B)
+}else{while(C){if(C==this.domNode){if(B.keyCode==A.keys.ESCAPE){this.hide()
 }else{return 
-}}D=D.parentNode
-}if(C.keyCode!=A.keys.TAB){A.stopEvent(C)
+}}C=C.parentNode
+}if(B.keyCode!=A.keys.TAB){A.stopEvent(B)
 }else{if(!A.isOpera){try{this.titleBar.focus()
-}catch(B){}}}}}},show:function(){if(!this._alreadyInitialized){this._setup();
+}catch(D){}}}}}},show:function(){if(!this._alreadyInitialized){this._setup();
 this._alreadyInitialized=true
 }if(this._fadeOut.status()=="playing"){this._fadeOut.stop()
 }this._modalconnects.push(A.connect(window,"onscroll",this,"layout"));

@@ -1,248 +1,715 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.widget.FisheyeList"],["require","dijit._Widget"],["require","dijit._Templated"],["require","dijit._Container"]],defineResource:function(A){if(!A._hasResource["dojox.widget.FisheyeList"]){A._hasResource["dojox.widget.FisheyeList"]=true;
-A.provide("dojox.widget.FisheyeList");
-A.require("dijit._Widget");
-A.require("dijit._Templated");
-A.require("dijit._Container");
-A.declare("dojox.widget.FisheyeList",[dijit._Widget,dijit._Templated,dijit._Container],{constructor:function(){this.pos={x:-1,y:-1};
-this.timerScale=1
-},EDGE:{CENTER:0,LEFT:1,RIGHT:2,TOP:3,BOTTOM:4},templateString:'<div class="dojoxFisheyeListBar" dojoAttachPoint="containerNode"></div>',snarfChildDomOutput:true,itemWidth:40,itemHeight:40,itemMaxWidth:150,itemMaxHeight:150,imgNode:null,orientation:"horizontal",isFixed:false,conservativeTrigger:false,effectUnits:2,itemPadding:10,attachEdge:"center",labelEdge:"bottom",postCreate:function(){var C=this.EDGE;
-A.setSelectable(this.domNode,false);
-var D=this.isHorizontal=(this.orientation=="horizontal");
-this.selectedNode=-1;
-this.isOver=false;
-this.hitX1=-1;
-this.hitY1=-1;
-this.hitX2=-1;
-this.hitY2=-1;
-this.anchorEdge=this._toEdge(this.attachEdge,C.CENTER);
-this.labelEdge=this._toEdge(this.labelEdge,C.TOP);
-if(this.labelEdge==C.CENTER){this.labelEdge=C.TOP
-}if(D){if(this.anchorEdge==C.LEFT){this.anchorEdge=C.CENTER
-}if(this.anchorEdge==C.RIGHT){this.anchorEdge=C.CENTER
-}if(this.labelEdge==C.LEFT){this.labelEdge=C.TOP
-}if(this.labelEdge==C.RIGHT){this.labelEdge=C.TOP
-}}else{if(this.anchorEdge==C.TOP){this.anchorEdge=C.CENTER
-}if(this.anchorEdge==C.BOTTOM){this.anchorEdge=C.CENTER
-}if(this.labelEdge==C.TOP){this.labelEdge=C.LEFT
-}if(this.labelEdge==C.BOTTOM){this.labelEdge=C.LEFT
-}}var B=this.effectUnits;
-this.proximityLeft=this.itemWidth*(B-0.5);
-this.proximityRight=this.itemWidth*(B-0.5);
-this.proximityTop=this.itemHeight*(B-0.5);
-this.proximityBottom=this.itemHeight*(B-0.5);
-if(this.anchorEdge==C.LEFT){this.proximityLeft=0
-}if(this.anchorEdge==C.RIGHT){this.proximityRight=0
-}if(this.anchorEdge==C.TOP){this.proximityTop=0
-}if(this.anchorEdge==C.BOTTOM){this.proximityBottom=0
-}if(this.anchorEdge==C.CENTER){this.proximityLeft/=2;
-this.proximityRight/=2;
-this.proximityTop/=2;
-this.proximityBottom/=2
-}},startup:function(){this.children=this.getChildren();
-this._initializePositioning();
-if(!this.conservativeTrigger){this._onMouseMoveHandle=A.connect(document.documentElement,"onmousemove",this,"_onMouseMove")
-}if(this.isFixed){this._onScrollHandle=A.connect(document,"onscroll",this,"_onScroll")
-}this._onMouseOutHandle=A.connect(document.documentElement,"onmouseout",this,"_onBodyOut");
-this._addChildHandle=A.connect(this,"addChild",this,"_initializePositioning");
-this._onResizeHandle=A.connect(window,"onresize",this,"_initializePositioning")
-},_initializePositioning:function(){this.itemCount=this.children.length;
-this.barWidth=(this.isHorizontal?this.itemCount:1)*this.itemWidth;
-this.barHeight=(this.isHorizontal?1:this.itemCount)*this.itemHeight;
-this.totalWidth=this.proximityLeft+this.proximityRight+this.barWidth;
-this.totalHeight=this.proximityTop+this.proximityBottom+this.barHeight;
-for(var F=0;
-F<this.children.length;
-F++){this.children[F].posX=this.itemWidth*(this.isHorizontal?F:0);
-this.children[F].posY=this.itemHeight*(this.isHorizontal?0:F);
-this.children[F].cenX=this.children[F].posX+(this.itemWidth/2);
-this.children[F].cenY=this.children[F].posY+(this.itemHeight/2);
-var G=this.isHorizontal?this.itemWidth:this.itemHeight;
-var B=this.effectUnits*G;
-var J=this.isHorizontal?this.children[F].cenX:this.children[F].cenY;
-var E=this.isHorizontal?this.proximityLeft:this.proximityTop;
-var H=this.isHorizontal?this.proximityRight:this.proximityBottom;
-var D=this.isHorizontal?this.barWidth:this.barHeight;
-var L=B;
-var C=B;
-if(L>J+E){L=J+E
-}if(C>(D-J+H)){C=D-J+H
-}this.children[F].effectRangeLeft=L/G;
-this.children[F].effectRangeRght=C/G
-}this.domNode.style.width=this.barWidth+"px";
-this.domNode.style.height=this.barHeight+"px";
-for(var F=0;
-F<this.children.length;
-F++){var K=this.children[F];
-var I=K.domNode;
-I.style.left=K.posX+"px";
-I.style.top=K.posY+"px";
-I.style.width=this.itemWidth+"px";
-I.style.height=this.itemHeight+"px";
-K.imgNode.style.left=this.itemPadding+"%";
-K.imgNode.style.top=this.itemPadding+"%";
-K.imgNode.style.width=(100-2*this.itemPadding)+"%";
-K.imgNode.style.height=(100-2*this.itemPadding)+"%"
-}this._calcHitGrid()
-},_overElement:function(D,E){D=A.byId(D);
-var F={x:E.pageX,y:E.pageY};
-var G=A._getBorderBox(D);
-var I=A.coords(D,true);
-var H=I.y;
-var B=H+G.h;
-var C=I.x;
-var J=C+G.w;
-return(F.x>=C&&F.x<=J&&F.y>=H&&F.y<=B)
-},_onBodyOut:function(B){if(this._overElement(A.body(),B)){return 
-}this._setDormant(B)
-},_setDormant:function(B){if(!this.isOver){return 
-}this.isOver=false;
-if(this.conservativeTrigger){A.disconnect(this._onMouseMoveHandle)
-}this._onGridMouseMove(-1,-1)
-},_setActive:function(B){if(this.isOver){return 
-}this.isOver=true;
-if(this.conservativeTrigger){this._onMouseMoveHandle=A.connect(document.documentElement,"onmousemove",this,"_onMouseMove");
-this.timerScale=0;
-this._onMouseMove(B);
-this._expandSlowly()
-}},_onMouseMove:function(B){if((B.pageX>=this.hitX1)&&(B.pageX<=this.hitX2)&&(B.pageY>=this.hitY1)&&(B.pageY<=this.hitY2)){if(!this.isOver){this._setActive(B)
-}this._onGridMouseMove(B.pageX-this.hitX1,B.pageY-this.hitY1)
-}else{if(this.isOver){this._setDormant(B)
-}}},_onScroll:function(){this._calcHitGrid()
-},onResized:function(){this._calcHitGrid()
-},_onGridMouseMove:function(B,C){this.pos={x:B,y:C};
-this._paint()
-},_paint:function(){var O=this.pos.x;
-var L=this.pos.y;
-if(this.itemCount<=0){return 
-}var M=this.isHorizontal?O:L;
-var G=this.isHorizontal?this.proximityLeft:this.proximityTop;
-var B=this.isHorizontal?this.itemWidth:this.itemHeight;
-var N=this.isHorizontal?(1-this.timerScale)*this.itemWidth+this.timerScale*this.itemMaxWidth:(1-this.timerScale)*this.itemHeight+this.timerScale*this.itemMaxHeight;
-var I=((M-G)/B)-0.5;
-var K=(N/B)-0.5;
-if(K>this.effectUnits){K=this.effectUnits
-}var E=0;
-if(this.anchorEdge==this.EDGE.BOTTOM){var J=(L-this.proximityTop)/this.itemHeight;
-E=(J>0.5)?1:L/(this.proximityTop+(this.itemHeight/2))
-}if(this.anchorEdge==this.EDGE.TOP){var J=(L-this.proximityTop)/this.itemHeight;
-E=(J<0.5)?1:(this.totalHeight-L)/(this.proximityBottom+(this.itemHeight/2))
-}if(this.anchorEdge==this.EDGE.RIGHT){var J=(O-this.proximityLeft)/this.itemWidth;
-E=(J>0.5)?1:O/(this.proximityLeft+(this.itemWidth/2))
-}if(this.anchorEdge==this.EDGE.LEFT){var J=(O-this.proximityLeft)/this.itemWidth;
-E=(J<0.5)?1:(this.totalWidth-O)/(this.proximityRight+(this.itemWidth/2))
-}if(this.anchorEdge==this.EDGE.CENTER){if(this.isHorizontal){E=L/(this.totalHeight)
-}else{E=O/(this.totalWidth)
-}if(E>0.5){E=1-E
-}E*=2
-}for(var D=0;
-D<this.itemCount;
-D++){var F=this._weighAt(I,D);
-if(F<0){F=0
-}this._setItemSize(D,F*E)
-}var H=Math.round(I);
-var C=0;
-if(I<0){H=0
-}else{if(I>this.itemCount-1){H=this.itemCount-1
-}else{C=(I-H)*((this.isHorizontal?this.itemWidth:this.itemHeight)-this.children[H].sizeMain)
-}}this._positionElementsFrom(H,C)
-},_weighAt:function(C,D){var E=Math.abs(C-D);
-var B=((C-D)>0)?this.children[D].effectRangeRght:this.children[D].effectRangeLeft;
-return(E>B)?0:(1-E/B)
-},_setItemSize:function(E,F){F*=this.timerScale;
-var C=Math.round(this.itemWidth+((this.itemMaxWidth-this.itemWidth)*F));
-var D=Math.round(this.itemHeight+((this.itemMaxHeight-this.itemHeight)*F));
-if(this.isHorizontal){this.children[E].sizeW=C;
-this.children[E].sizeH=D;
-this.children[E].sizeMain=C;
-this.children[E].sizeOff=D;
-var G=0;
-if(this.anchorEdge==this.EDGE.TOP){G=(this.children[E].cenY-(this.itemHeight/2))
-}else{if(this.anchorEdge==this.EDGE.BOTTOM){G=(this.children[E].cenY-(D-(this.itemHeight/2)))
-}else{G=(this.children[E].cenY-(D/2))
-}}this.children[E].usualX=Math.round(this.children[E].cenX-(C/2));
-this.children[E].domNode.style.top=G+"px";
-this.children[E].domNode.style.left=this.children[E].usualX+"px"
-}else{this.children[E].sizeW=C;
-this.children[E].sizeH=D;
-this.children[E].sizeOff=C;
-this.children[E].sizeMain=D;
-var B=0;
-if(this.anchorEdge==this.EDGE.LEFT){B=this.children[E].cenX-(this.itemWidth/2)
-}else{if(this.anchorEdge==this.EDGE.RIGHT){B=this.children[E].cenX-(C-(this.itemWidth/2))
-}else{B=this.children[E].cenX-(C/2)
-}}this.children[E].domNode.style.left=B+"px";
-this.children[E].usualY=Math.round(this.children[E].cenY-(D/2));
-this.children[E].domNode.style.top=this.children[E].usualY+"px"
-}this.children[E].domNode.style.width=C+"px";
-this.children[E].domNode.style.height=D+"px";
-if(this.children[E].svgNode){this.children[E].svgNode.setSize(C,D)
-}},_positionElementsFrom:function(E,F){var G=0;
-if(this.isHorizontal){G=Math.round(this.children[E].usualX+F);
-this.children[E].domNode.style.left=G+"px"
-}else{G=Math.round(this.children[E].usualY+F);
-this.children[E].domNode.style.top=G+"px"
-}this._positionLabel(this.children[E]);
-var B=G;
-for(var C=E-1;
-C>=0;
-C--){B-=this.children[C].sizeMain;
-if(this.isHorizontal){this.children[C].domNode.style.left=B+"px"
-}else{this.children[C].domNode.style.top=B+"px"
-}this._positionLabel(this.children[C])
-}var D=G;
-for(var C=E+1;
-C<this.itemCount;
-C++){D+=this.children[C-1].sizeMain;
-if(this.isHorizontal){this.children[C].domNode.style.left=D+"px"
-}else{this.children[C].domNode.style.top=D+"px"
-}this._positionLabel(this.children[C])
-}},_positionLabel:function(E){var B=0;
-var D=0;
-var C=A.marginBox(E.lblNode);
-if(this.labelEdge==this.EDGE.TOP){B=Math.round((E.sizeW/2)-(C.w/2));
-D=-C.h
-}if(this.labelEdge==this.EDGE.BOTTOM){B=Math.round((E.sizeW/2)-(C.w/2));
-D=E.sizeH
-}if(this.labelEdge==this.EDGE.LEFT){B=-C.w;
-D=Math.round((E.sizeH/2)-(C.h/2))
-}if(this.labelEdge==this.EDGE.RIGHT){B=E.sizeW;
-D=Math.round((E.sizeH/2)-(C.h/2))
-}E.lblNode.style.left=B+"px";
-E.lblNode.style.top=D+"px"
-},_calcHitGrid:function(){var B=A.coords(this.domNode,true);
-this.hitX1=B.x-this.proximityLeft;
-this.hitY1=B.y-this.proximityTop;
-this.hitX2=this.hitX1+this.totalWidth;
-this.hitY2=this.hitY1+this.totalHeight
-},_toEdge:function(B,C){return this.EDGE[B.toUpperCase()]||C
-},_expandSlowly:function(){if(!this.isOver){return 
-}this.timerScale+=0.2;
-this._paint();
-if(this.timerScale<1){setTimeout(A.hitch(this,"_expandSlowly"),10)
-}},destroyRecursive:function(){A.disconnect(this._onMouseOutHandle);
-A.disconnect(this._onMouseMoveHandle);
-A.disconnect(this._addChildHandle);
-if(this.isFixed){A.disconnect(this._onScrollHandle)
-}A.disconnect(this._onResizeHandle);
-this.inherited("destroyRecursive",arguments)
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.widget.FisheyeList"],
+["require", "dijit._Widget"],
+["require", "dijit._Templated"],
+["require", "dijit._Container"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.widget.FisheyeList"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.widget.FisheyeList"] = true;
+dojo.provide("dojox.widget.FisheyeList");
+
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
+dojo.require("dijit._Container");
+
+dojo.declare("dojox.widget.FisheyeList", [dijit._Widget, dijit._Templated, dijit._Container], {
+	// summary:
+	//	Menu similar to the fish eye menu on the Mac OS
+	// example:
+	// |	<div dojoType="FisheyeList"
+	// |		itemWidth="40" itemHeight="40"
+	// |		itemMaxWidth="150" itemMaxHeight="150"
+	// |		orientation="horizontal"
+	// |		effectUnits="2"
+	// |		itemPadding="10"
+	// |		attachEdge="center"
+	// |		labelEdge="bottom">
+	// |
+	// |		<div dojoType="FisheyeListItem"
+	// |			id="item1"
+	// |			onclick="alert('click on' + this.label + '(from widget id ' + this.widgetId + ')!');"
+	// |			label="Item 1"
+	// |			iconSrc="images/fisheye_1.png">
+	// |		</div>
+	// |		...
+	// |	</div>
+	//
+	constructor: function(){
+		//
+		// TODO
+		// fix really long labels in vertical mode
+		//
+	
+		this.pos = {'x': -1, 'y': -1};	// current cursor position, relative to the grid
+		
+		// for conservative trigger mode, when triggered, timerScale is gradually increased from 0 to 1
+		this.timerScale = 1.0;
+	
+	},
+
+	EDGE: {
+		CENTER: 0,
+		LEFT: 1,
+		RIGHT: 2,
+		TOP: 3,
+		BOTTOM: 4
+	},
+
+	templateString: '<div class="dojoxFisheyeListBar" dojoAttachPoint="containerNode"></div>',
+
+	snarfChildDomOutput: true,
+	
+	// itemWidth: Integer
+	//	width of menu item (in pixels) in it's dormant state (when the mouse is far away)
+	itemWidth: 40,
+	
+	// itemHeight: Integer
+	//	height of menu item (in pixels) in it's dormant state (when the mouse is far away)
+	itemHeight: 40,
+	
+	// itemMaxWidth: Integer
+	//	width of menu item (in pixels) in it's fully enlarged state (when the mouse is directly over it)
+	itemMaxWidth: 150,
+	
+	// itemMaxHeight: Integer
+	//	height of menu item (in pixels) in it's fully enlarged state (when the mouse is directly over it)
+	itemMaxHeight: 150,
+
+	imgNode: null,
+	
+	// orientation: String
+	//	orientation of the menu, either "horizontal" or "vertical"
+	orientation: 'horizontal',
+
+	// isFixed: Boolean
+	//	toggle to enable additional listener (window scroll) if FisheyeList is in a fixed postion
+	isFixed: false,
+	
+	// conservativeTrigger: Boolean
+	//	if true, don't start enlarging menu items until mouse is over an image;
+	//	if false, start enlarging menu items as the mouse moves near them.
+	conservativeTrigger: false,
+	
+	// effectUnits: Number
+	//	controls how much reaction the menu makes, relative to the distance of the mouse from the menu
+	effectUnits: 2,
+		
+	// itemPadding: Integer
+	//	padding (in pixels) betweeen each menu item
+	itemPadding: 10,
+	
+	// attachEdge: String
+	//	controls the border that the menu items don't expand past;
+	//	for example, if set to "top", then the menu items will drop downwards as they expand.
+	// values
+	//	"center", "left", "right", "top", "bottom".
+	attachEdge: 'center',
+
+	// labelEdge: String
+	//	controls were the labels show up in relation to the menu item icons
+	// values
+	//	"center", "left", "right", "top", "bottom".
+	labelEdge: 'bottom',
+
+	postCreate: function(){
+		var e = this.EDGE;
+		dojo.setSelectable(this.domNode, false);
+
+		var isHorizontal = this.isHorizontal = (this.orientation == 'horizontal');
+		this.selectedNode = -1;
+
+		this.isOver = false;
+		this.hitX1 = -1;
+		this.hitY1 = -1;
+		this.hitX2 = -1;
+		this.hitY2 = -1;
+
+		//
+		// only some edges make sense...
+		//
+		this.anchorEdge = this._toEdge(this.attachEdge, e.CENTER);
+		this.labelEdge  = this._toEdge(this.labelEdge,  e.TOP);
+
+		if(this.labelEdge == e.CENTER){ this.labelEdge = e.TOP; }
+
+		if(isHorizontal){
+			if(this.anchorEdge == e.LEFT){ this.anchorEdge = e.CENTER; }
+			if(this.anchorEdge == e.RIGHT){ this.anchorEdge = e.CENTER; }
+			if(this.labelEdge == e.LEFT){ this.labelEdge = e.TOP; }
+			if(this.labelEdge == e.RIGHT){ this.labelEdge = e.TOP; }
+		}else{
+			if(this.anchorEdge == e.TOP){ this.anchorEdge = e.CENTER; }
+			if(this.anchorEdge == e.BOTTOM){ this.anchorEdge = e.CENTER; }
+			if(this.labelEdge == e.TOP){ this.labelEdge = e.LEFT; }
+			if(this.labelEdge == e.BOTTOM){ this.labelEdge = e.LEFT; }
+		}
+
+		//
+		// figure out the proximity size
+		//
+		var effectUnits = this.effectUnits;
+		this.proximityLeft   = this.itemWidth  * (effectUnits - 0.5);
+		this.proximityRight  = this.itemWidth  * (effectUnits - 0.5);
+		this.proximityTop    = this.itemHeight * (effectUnits - 0.5);
+		this.proximityBottom = this.itemHeight * (effectUnits - 0.5);
+	
+		if(this.anchorEdge == e.LEFT){
+			this.proximityLeft = 0;
+		}
+		if(this.anchorEdge == e.RIGHT){
+			this.proximityRight = 0;
+		}
+		if(this.anchorEdge == e.TOP){
+			this.proximityTop = 0;
+		}
+		if(this.anchorEdge == e.BOTTOM){
+			this.proximityBottom = 0;
+		}
+		if(this.anchorEdge == e.CENTER){
+			this.proximityLeft   /= 2;
+			this.proximityRight  /= 2;
+			this.proximityTop    /= 2;
+			this.proximityBottom /= 2;
+		}
+	},
+	
+	startup: function(){
+		// summary: create our connections and setup our FisheyeList
+		this.children = this.getChildren();
+		//original postCreate() --tk
+		this._initializePositioning();
+	
+		//
+		// in liberal trigger mode, activate menu whenever mouse is close
+		//
+		if(!this.conservativeTrigger){
+			this._onMouseMoveHandle = dojo.connect(document.documentElement, "onmousemove", this, "_onMouseMove");
+		}
+		if (this.isFixed){
+			this._onScrollHandle = dojo.connect(document,"onscroll",this,"_onScroll");
+		}
+			
+		// Deactivate the menu if mouse is moved off screen (doesn't work for FF?)
+		this._onMouseOutHandle = dojo.connect(document.documentElement, "onmouseout", this, "_onBodyOut");
+		this._addChildHandle = dojo.connect(this, "addChild", this, "_initializePositioning");
+		this._onResizeHandle = dojo.connect(window,"onresize", this, "_initializePositioning");
+	},
+	
+	_initializePositioning: function(){
+		this.itemCount = this.children.length;
+	
+		this.barWidth  = (this.isHorizontal ? this.itemCount : 1) * this.itemWidth;
+		this.barHeight = (this.isHorizontal ? 1 : this.itemCount) * this.itemHeight;
+	
+		this.totalWidth  = this.proximityLeft + this.proximityRight  + this.barWidth;
+		this.totalHeight = this.proximityTop  + this.proximityBottom + this.barHeight;
+	
+		//
+		// calculate effect ranges for each item
+		//
+
+		for(var i=0; i<this.children.length; i++){
+
+			this.children[i].posX = this.itemWidth  * (this.isHorizontal ? i : 0);
+			this.children[i].posY = this.itemHeight * (this.isHorizontal ? 0 : i);
+
+			this.children[i].cenX = this.children[i].posX + (this.itemWidth  / 2);
+			this.children[i].cenY = this.children[i].posY + (this.itemHeight / 2);
+
+			var isz = this.isHorizontal ? this.itemWidth : this.itemHeight;
+			var r = this.effectUnits * isz;
+			var c = this.isHorizontal ? this.children[i].cenX : this.children[i].cenY;
+			var lhs = this.isHorizontal ? this.proximityLeft : this.proximityTop;
+			var rhs = this.isHorizontal ? this.proximityRight : this.proximityBottom;
+			var siz = this.isHorizontal ? this.barWidth : this.barHeight;
+
+			var range_lhs = r;
+			var range_rhs = r;
+
+			if(range_lhs > c+lhs){ range_lhs = c+lhs; }
+			if(range_rhs > (siz-c+rhs)){ range_rhs = siz-c+rhs; }
+
+			this.children[i].effectRangeLeft = range_lhs / isz;
+			this.children[i].effectRangeRght = range_rhs / isz;
+
+			//dojo.debug('effect range for '+i+' is '+range_lhs+'/'+range_rhs);
+		}
+
+		//
+		// create the bar
+		//
+		this.domNode.style.width = this.barWidth + 'px';
+		this.domNode.style.height = this.barHeight + 'px';
+
+		//
+		// position the items
+		//
+		for(var i=0; i<this.children.length; i++){
+			var itm = this.children[i];
+			var elm = itm.domNode;
+			elm.style.left   = itm.posX + 'px';
+			elm.style.top    = itm.posY + 'px';
+			elm.style.width  = this.itemWidth + 'px';
+			elm.style.height = this.itemHeight + 'px';
+			
+			itm.imgNode.style.left = this.itemPadding+'%';
+			itm.imgNode.style.top = this.itemPadding+'%';
+			itm.imgNode.style.width = (100 - 2 * this.itemPadding) + '%';
+			itm.imgNode.style.height = (100 - 2 * this.itemPadding) + '%';
+		}
+
+		//
+		// calc the grid
+		//
+		this._calcHitGrid();
+	},
+
+	_overElement: function(/* DomNode|String */node, /* Event */e){
+		// summary:
+		//	Returns whether the mouse is over the passed element.
+		// Node: Must must be display:block (ie, not a <span>)
+		node = dojo.byId(node);
+		var mouse = {x: e.pageX, y: e.pageY};
+		var bb = dojo._getBorderBox(node);
+		var absolute = dojo.coords(node, true);
+		var top = absolute.y;
+		var bottom = top + bb.h;
+		var left = absolute.x;
+		var right = left + bb.w;
+
+		return (mouse.x >= left
+			&& mouse.x <= right
+			&& mouse.y >= top
+			&& mouse.y <= bottom
+		);	//	boolean
+	},
+
+	_onBodyOut: function(/*Event*/ e){
+		// clicking over an object inside of body causes this event to fire; ignore that case
+		if( this._overElement(dojo.body(), e) ){
+			return;
+		}
+		this._setDormant(e);
+	},
+
+	_setDormant: function(/*Event*/ e){
+		// summary: called when mouse moves out of menu's range
+
+		if(!this.isOver){ return; }	// already dormant?
+		this.isOver = false;
+
+		if(this.conservativeTrigger){
+			// user can't re-trigger the menu expansion
+			// until he mouses over a icon again
+			dojo.disconnect(this._onMouseMoveHandle);
+		}
+		this._onGridMouseMove(-1, -1);
+	},
+
+	_setActive: function(/*Event*/ e){
+		// summary: called when mouse is moved into menu's range
+
+		if(this.isOver){ return; }	// already activated?
+		this.isOver = true;
+
+		if(this.conservativeTrigger){
+			// switch event handlers so that we handle mouse events from anywhere near
+			// the menu
+			this._onMouseMoveHandle = dojo.connect(document.documentElement, "onmousemove", this, "_onMouseMove");
+
+			this.timerScale=0.0;
+
+			// call mouse handler to do some initial necessary calculations/positioning
+			this._onMouseMove(e);
+
+			// slowly expand the icon size so it isn't jumpy
+			this._expandSlowly();
+		}
+	},
+
+	_onMouseMove: function(/*Event*/ e){
+		// summary: called when mouse is moved
+		if(	(e.pageX >= this.hitX1) && (e.pageX <= this.hitX2) &&
+			(e.pageY >= this.hitY1) && (e.pageY <= this.hitY2)	){
+			if(!this.isOver){
+				this._setActive(e);
+			}
+			this._onGridMouseMove(e.pageX-this.hitX1, e.pageY-this.hitY1);
+		}else{
+			if(this.isOver){
+				this._setDormant(e);
+			}
+		}
+	},
+
+	_onScroll: function(){
+		this._calcHitGrid();	
+	},
+
+	onResized: function(){
+		this._calcHitGrid();
+	},
+
+	_onGridMouseMove: function(x, y){
+		// summary: called when mouse is moved in the vicinity of the menu
+		this.pos = {x:x, y:y};
+		this._paint();
+	},
+
+	_paint: function(){
+		var x=this.pos.x;
+		var y=this.pos.y;
+
+		if(this.itemCount <= 0){ return; }
+
+		//
+		// figure out our main index
+		//
+		var pos = this.isHorizontal ? x : y;
+		var prx = this.isHorizontal ? this.proximityLeft : this.proximityTop;
+		var siz = this.isHorizontal ? this.itemWidth : this.itemHeight;
+		var sim = this.isHorizontal ? 
+			(1.0-this.timerScale)*this.itemWidth + this.timerScale*this.itemMaxWidth :
+			(1.0-this.timerScale)*this.itemHeight + this.timerScale*this.itemMaxHeight ;
+
+		var cen = ((pos - prx) / siz) - 0.5;
+		var max_off_cen = (sim / siz) - 0.5;
+
+		if(max_off_cen > this.effectUnits){ max_off_cen = this.effectUnits; }
+
+		//
+		// figure out our off-axis weighting
+		//
+		var off_weight = 0;
+
+		if(this.anchorEdge == this.EDGE.BOTTOM){
+			var cen2 = (y - this.proximityTop) / this.itemHeight;
+			off_weight = (cen2 > 0.5) ? 1 : y / (this.proximityTop + (this.itemHeight / 2));
+		}
+		if(this.anchorEdge == this.EDGE.TOP){
+			var cen2 = (y - this.proximityTop) / this.itemHeight;
+			off_weight = (cen2 < 0.5) ? 1 : (this.totalHeight - y) / (this.proximityBottom + (this.itemHeight / 2));
+		}
+		if(this.anchorEdge == this.EDGE.RIGHT){
+			var cen2 = (x - this.proximityLeft) / this.itemWidth;
+			off_weight = (cen2 > 0.5) ? 1 : x / (this.proximityLeft + (this.itemWidth / 2));
+		}
+		if(this.anchorEdge == this.EDGE.LEFT){
+			var cen2 = (x - this.proximityLeft) / this.itemWidth;
+			off_weight = (cen2 < 0.5) ? 1 : (this.totalWidth - x) / (this.proximityRight + (this.itemWidth / 2));
+		}
+		if(this.anchorEdge == this.EDGE.CENTER){
+			if(this.isHorizontal){
+				off_weight = y / (this.totalHeight);
+			}else{
+				off_weight = x / (this.totalWidth);
+			}
+
+			if(off_weight > 0.5){
+				off_weight = 1 - off_weight;
+			}
+
+			off_weight *= 2;
+		}
+
+		//
+		// set the sizes
+		//
+		for(var i=0; i<this.itemCount; i++){
+			var weight = this._weighAt(cen, i);
+			if(weight < 0){weight = 0;}
+			this._setItemSize(i, weight * off_weight);
+		}
+
+		//
+		// set the positions
+		//
+
+		var main_p = Math.round(cen);
+		var offset = 0;
+
+		if(cen < 0){
+
+			main_p = 0;
+
+		}else if(cen > this.itemCount - 1){
+
+			main_p = this.itemCount -1;
+
+		}else{
+
+			offset = (cen - main_p) * ((this.isHorizontal ? this.itemWidth : this.itemHeight) - this.children[main_p].sizeMain);
+		}
+
+		this._positionElementsFrom(main_p, offset);
+	},
+
+	_weighAt: function(/*Integer*/ cen, /*Integer*/ i){
+		var dist = Math.abs(cen - i);
+		var limit = ((cen - i) > 0) ? this.children[i].effectRangeRght : this.children[i].effectRangeLeft;
+		return (dist > limit) ? 0 : (1 - dist / limit); // Integer
+	},
+
+	_setItemSize: function(p, scale){
+		scale *= this.timerScale;
+		var w = Math.round(this.itemWidth  + ((this.itemMaxWidth  - this.itemWidth ) * scale));
+		var h = Math.round(this.itemHeight + ((this.itemMaxHeight - this.itemHeight) * scale));
+
+		if(this.isHorizontal){
+
+			this.children[p].sizeW = w;
+			this.children[p].sizeH = h;
+
+			this.children[p].sizeMain = w;
+			this.children[p].sizeOff  = h;
+
+			var y = 0;
+			if(this.anchorEdge == this.EDGE.TOP){
+				y = (this.children[p].cenY - (this.itemHeight / 2));
+			}else if(this.anchorEdge == this.EDGE.BOTTOM){
+				y = (this.children[p].cenY - (h - (this.itemHeight / 2)));
+			}else{
+				y = (this.children[p].cenY - (h / 2));
+			}
+
+			this.children[p].usualX = Math.round(this.children[p].cenX - (w / 2));
+			this.children[p].domNode.style.top  = y + 'px';
+			this.children[p].domNode.style.left  = this.children[p].usualX + 'px';
+
+		}else{
+
+			this.children[p].sizeW = w;
+			this.children[p].sizeH = h;
+
+			this.children[p].sizeOff  = w;
+			this.children[p].sizeMain = h;
+
+			var x = 0;
+			if(this.anchorEdge == this.EDGE.LEFT){
+				x = this.children[p].cenX - (this.itemWidth / 2);
+			}else if (this.anchorEdge == this.EDGE.RIGHT){
+				x = this.children[p].cenX - (w - (this.itemWidth / 2));
+			}else{
+				x = this.children[p].cenX - (w / 2);
+			}
+
+			this.children[p].domNode.style.left = x + 'px';
+			this.children[p].usualY = Math.round(this.children[p].cenY - (h / 2));
+
+			this.children[p].domNode.style.top  = this.children[p].usualY + 'px';
+		}
+
+		this.children[p].domNode.style.width  = w + 'px';
+		this.children[p].domNode.style.height = h + 'px';
+
+		if(this.children[p].svgNode){
+			this.children[p].svgNode.setSize(w, h);
+		}
+	},
+
+	_positionElementsFrom: function(p, offset){
+		var pos = 0;
+
+		if(this.isHorizontal){
+			pos = Math.round(this.children[p].usualX + offset);
+			this.children[p].domNode.style.left = pos + 'px';
+		}else{
+			pos = Math.round(this.children[p].usualY + offset);
+			this.children[p].domNode.style.top = pos + 'px';
+		}
+		this._positionLabel(this.children[p]);
+
+		// position before
+		var bpos = pos;
+		for(var i=p-1; i>=0; i--){
+			bpos -= this.children[i].sizeMain;
+
+			if (this.isHorizontal){
+				this.children[i].domNode.style.left = bpos + 'px';
+			}else{
+				this.children[i].domNode.style.top = bpos + 'px';
+			}
+			this._positionLabel(this.children[i]);
+		}
+
+		// position after
+		var apos = pos;
+		for(var i=p+1; i<this.itemCount; i++){
+			apos += this.children[i-1].sizeMain;
+			if(this.isHorizontal){
+				this.children[i].domNode.style.left = apos + 'px';
+			}else{
+				this.children[i].domNode.style.top = apos + 'px';
+			}
+			this._positionLabel(this.children[i]);
+		}
+
+	},
+
+	_positionLabel: function(itm){
+		var x = 0;
+		var y = 0;
+		
+		var mb = dojo.marginBox(itm.lblNode);
+
+		if(this.labelEdge == this.EDGE.TOP){
+			x = Math.round((itm.sizeW / 2) - (mb.w / 2));
+			y = -mb.h;
+		}
+
+		if(this.labelEdge == this.EDGE.BOTTOM){
+			x = Math.round((itm.sizeW / 2) - (mb.w / 2));
+			y = itm.sizeH;
+		}
+
+		if(this.labelEdge == this.EDGE.LEFT){
+			x = -mb.w;
+			y = Math.round((itm.sizeH / 2) - (mb.h / 2));
+		}
+
+		if(this.labelEdge == this.EDGE.RIGHT){
+			x = itm.sizeW;
+			y = Math.round((itm.sizeH / 2) - (mb.h / 2));
+		}
+
+		itm.lblNode.style.left = x + 'px';
+		itm.lblNode.style.top  = y + 'px';
+	},
+
+	_calcHitGrid: function(){
+
+		var pos = dojo.coords(this.domNode, true);
+
+		this.hitX1 = pos.x - this.proximityLeft;
+		this.hitY1 = pos.y - this.proximityTop;
+		this.hitX2 = this.hitX1 + this.totalWidth;
+		this.hitY2 = this.hitY1 + this.totalHeight;
+
+	},
+
+	_toEdge: function(inp, def){
+		return this.EDGE[inp.toUpperCase()] || def;
+	},
+
+	_expandSlowly: function(){
+		// summary: slowly expand the image to user specified max size
+		if(!this.isOver){ return; }
+		this.timerScale += 0.2;
+		this._paint();
+		if(this.timerScale<1.0){
+			setTimeout(dojo.hitch(this, "_expandSlowly"), 10);
+		}
+	},
+
+	destroyRecursive: function(){
+		// need to disconnect when we destroy
+		dojo.disconnect(this._onMouseOutHandle);
+		dojo.disconnect(this._onMouseMoveHandle);
+		dojo.disconnect(this._addChildHandle);
+		if (this.isFixed) { dojo.disconnect(this._onScrollHandle); }
+		dojo.disconnect(this._onResizeHandle); 
+		this.inherited("destroyRecursive",arguments);
+	}
+});
+
+dojo.declare("dojox.widget.FisheyeListItem", [dijit._Widget, dijit._Templated, dijit._Contained], {
+	/*
+	 * summary
+	 *	Menu item inside of a FisheyeList.
+	 *	See FisheyeList documentation for details on usage.
+	 */
+
+	// iconSrc: String
+	//	pathname to image file (jpg, gif, png, etc.) of icon for this menu item
+	iconSrc: "",
+
+	// label: String
+	//	label to print next to the icon, when it is moused-over
+	label: "",
+
+	// id: String
+	//	will be set to the id of the orginal div element
+	id: "",
+
+	_blankImgPath: dojo.moduleUrl("dojox.widget", "FisheyeList/blank.gif"),
+
+	templateString:
+		'<div class="dojoxFisheyeListItem">' +
+		'  <img class="dojoxFisheyeListItemImage" dojoAttachPoint="imgNode" dojoAttachEvent="onmouseover:onMouseOver,onmouseout:onMouseOut,onclick:onClick">' +
+		'  <div class="dojoxFisheyeListItemLabel" dojoAttachPoint="lblNode"></div>' +
+		'</div>',
+
+	_isNode: function(/* object */wh){
+		//	summary:
+		//		checks to see if wh is actually a node.
+		if(typeof Element == "function") {
+			try{
+				return wh instanceof Element;	//	boolean
+			}catch(e){}
+		}else{
+			// best-guess
+			return wh && !isNaN(wh.nodeType);	//	boolean
+		}
+	},
+
+	_hasParent: function(/*Node*/node){
+		//	summary:
+		//		returns whether or not node is a child of another node.
+		return Boolean(node && node.parentNode && this._isNode(node.parentNode));	//	boolean
+	},
+
+	postCreate: function() {
+
+		// set image
+		if((this.iconSrc.toLowerCase().substring(this.iconSrc.length-4)==".png")&&(dojo.isIE)&&(dojo.isIE<7)){
+			/* we set the id of the new fisheyeListItem to the id of the div defined in the HTML */
+			if(this._hasParent(this.imgNode) && this.id != ""){
+				var parent = this.imgNode.parentNode;
+				parent.setAttribute("id", this.id);
+			}
+			this.imgNode.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this.iconSrc+"', sizingMethod='scale')";
+			this.imgNode.src = this._blankImgPath.toString();
+		}else{
+			if(this._hasParent(this.imgNode) && this.id != ""){
+				var parent = this.imgNode.parentNode;
+				parent.setAttribute("id", this.id);
+			}
+			this.imgNode.src = this.iconSrc;
+		}
+
+		// Label
+		if(this.lblNode){
+			this.lblNode.appendChild(document.createTextNode(this.label));
+		}
+		dojo.setSelectable(this.domNode, false);
+		this.startup();
+	},
+
+	startup: function(){
+		this.parent = this.getParent();
+	},
+	
+	onMouseOver: function(/*Event*/ e){
+		// summary: callback when user moves mouse over this menu item
+		// in conservative mode, don't activate the menu until user mouses over an icon
+		if(!this.parent.isOver){
+			this.parent._setActive(e);
+		}
+		if(this.label != "" ){
+			dojo.addClass(this.lblNode, "dojoxFishSelected");
+			this.parent._positionLabel(this);
+		}
+	},
+	
+	onMouseOut: function(/*Event*/ e){
+		// summary: callback when user moves mouse off of this menu item
+		dojo.removeClass(this.lblNode, "dojoxFishSelected");
+	},
+
+	onClick: function(/*Event*/ e){
+		// summary: user overridable callback when user clicks this menu item
+	}
+});
+
+}
+
 }});
-A.declare("dojox.widget.FisheyeListItem",[dijit._Widget,dijit._Templated,dijit._Contained],{iconSrc:"",label:"",id:"",_blankImgPath:A.moduleUrl("dojox.widget","FisheyeList/blank.gif"),templateString:'<div class="dojoxFisheyeListItem">  <img class="dojoxFisheyeListItemImage" dojoAttachPoint="imgNode" dojoAttachEvent="onmouseover:onMouseOver,onmouseout:onMouseOut,onclick:onClick">  <div class="dojoxFisheyeListItemLabel" dojoAttachPoint="lblNode"></div></div>',_isNode:function(B){if(typeof Element=="function"){try{return B instanceof Element
-}catch(C){}}else{return B&&!isNaN(B.nodeType)
-}},_hasParent:function(B){return Boolean(B&&B.parentNode&&this._isNode(B.parentNode))
-},postCreate:function(){if((this.iconSrc.toLowerCase().substring(this.iconSrc.length-4)==".png")&&(A.isIE)&&(A.isIE<7)){if(this._hasParent(this.imgNode)&&this.id!=""){var B=this.imgNode.parentNode;
-B.setAttribute("id",this.id)
-}this.imgNode.style.filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this.iconSrc+"', sizingMethod='scale')";
-this.imgNode.src=this._blankImgPath.toString()
-}else{if(this._hasParent(this.imgNode)&&this.id!=""){var B=this.imgNode.parentNode;
-B.setAttribute("id",this.id)
-}this.imgNode.src=this.iconSrc
-}if(this.lblNode){this.lblNode.appendChild(document.createTextNode(this.label))
-}A.setSelectable(this.domNode,false);
-this.startup()
-},startup:function(){this.parent=this.getParent()
-},onMouseOver:function(B){if(!this.parent.isOver){this.parent._setActive(B)
-}if(this.label!=""){A.addClass(this.lblNode,"dojoxFishSelected");
-this.parent._positionLabel(this)
-}},onMouseOut:function(B){A.removeClass(this.lblNode,"dojoxFishSelected")
-},onClick:function(B){}})
-}}});

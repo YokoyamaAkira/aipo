@@ -103,11 +103,11 @@
 	<classpathentry kind="var" path="M2_REPO/javax/activation/activation/1.1.1/activation-1.1.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/servlet/jsp-api/2.0/jsp-api-2.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/mail/mail/1.4/mail-1.4.jar" sourcepath="M2_REPO/javax/mail/mail/1.4/mail-1.4-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar" sourcepath="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar" sourcepath="SOURCE_ATTACHER/servlet-api-2.5-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ant/ant/1.5/ant-1.5.jar"/>
 	<classpathentry kind="var" path="M2_REPO/aopalliance/aopalliance/1.0/aopalliance-1.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/castor/castor/0.9.3/castor-0.9.3.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/cayenne/cayenne/2.0.4/cayenne-2.0.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/cayenne/cayenne/2.0.4/cayenne-2.0.4.jar" sourcepath="SOURCE_ATTACHER/cayenne-2.0.4-sources-1551325107881.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils-core/1.7.0/commons-beanutils-core-1.7.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-betwixt/commons-betwixt/0.8/commons-betwixt-0.8.jar"/>

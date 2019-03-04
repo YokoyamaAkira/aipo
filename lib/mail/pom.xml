@@ -13,7 +13,7 @@
 
   <groupId>com.aimluck.eip</groupId>
   <artifactId>aipo-lib-mail</artifactId>
-  <version>${aipo.version}</version>
+<!--  <version>${aipo.version}</version> -->
   <packaging>jar</packaging>
 
   <name>Aipo Mail Library</name>

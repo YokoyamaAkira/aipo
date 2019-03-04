@@ -1,91 +1,91 @@
 if(!dojo._hasResource["dojo.parser"]){dojo._hasResource["dojo.parser"]=true;
 dojo.provide("dojo.parser");
 dojo.require("dojo.date.stamp");
-dojo.parser=new function(){var D=dojo;
-function E(F){if(D.isString(F)){return"string"
+dojo.parser=new function(){var E=dojo;
+function A(F){if(E.isString(F)){return"string"
 }if(typeof F=="number"){return"number"
 }if(typeof F=="boolean"){return"boolean"
-}if(D.isFunction(F)){return"function"
-}if(D.isArray(F)){return"array"
+}if(E.isFunction(F)){return"function"
+}if(E.isArray(F)){return"array"
 }if(F instanceof Date){return"date"
-}if(F instanceof D._Url){return"url"
+}if(F instanceof E._Url){return"url"
 }return"object"
-}function A(H,G){switch(G){case"string":return H;
-case"number":return H.length?Number(H):NaN;
-case"boolean":return typeof H=="boolean"?H:!(H.toLowerCase()=="false");
-case"function":if(D.isFunction(H)){H=H.toString();
-H=D.trim(H.substring(H.indexOf("{")+1,H.length-1))
-}try{if(H.search(/[^\w\.]+/i)!=-1){H=D.parser._nameAnonFunc(new Function(H),this)
-}return D.getObject(H,false)
-}catch(F){return new Function()
-}case"array":return H.split(/\s*,\s*/);
-case"date":switch(H){case"":return new Date("");
+}function B(G,F){switch(F){case"string":return G;
+case"number":return G.length?Number(G):NaN;
+case"boolean":return typeof G=="boolean"?G:!(G.toLowerCase()=="false");
+case"function":if(E.isFunction(G)){G=G.toString();
+G=E.trim(G.substring(G.indexOf("{")+1,G.length-1))
+}try{if(G.search(/[^\w\.]+/i)!=-1){G=E.parser._nameAnonFunc(new Function(G),this)
+}return E.getObject(G,false)
+}catch(H){return new Function()
+}case"array":return G.split(/\s*,\s*/);
+case"date":switch(G){case"":return new Date("");
 case"now":return new Date();
-default:return D.date.stamp.fromISOString(H)
-}case"url":return D.baseUrl+H;
-default:return D.fromJson(H)
-}}var C={};
-function B(I){if(!C[I]){var G=D.getObject(I);
-if(!D.isFunction(G)){throw new Error("Could not load class '"+I+"'. Did you spell the name correctly and use a full path, like 'dijit.form.Button'?")
-}var J=G.prototype;
-var F={};
-for(var H in J){if(H.charAt(0)=="_"){continue
-}var K=J[H];
-F[H]=E(K)
-}C[I]={cls:G,params:F}
-}return C[I]
-}this._functionFromScript=function(H){var I="";
-var F="";
-var G=H.getAttribute("args");
-if(G){D.forEach(G.split(/\s*,\s*/),function(L,K){I+="var "+L+" = arguments["+K+"]; "
+default:return E.date.stamp.fromISOString(G)
+}case"url":return E.baseUrl+G;
+default:return E.fromJson(G)
+}}var D={};
+function C(H){if(!D[H]){var F=E.getObject(H);
+if(!E.isFunction(F)){throw new Error("Could not load class '"+H+"'. Did you spell the name correctly and use a full path, like 'dijit.form.Button'?")
+}var I=F.prototype;
+var K={};
+for(var G in I){if(G.charAt(0)=="_"){continue
+}var J=I[G];
+K[G]=A(J)
+}D[H]={cls:F,params:K}
+}return D[H]
+}this._functionFromScript=function(G){var H="";
+var J="";
+var F=G.getAttribute("args");
+if(F){E.forEach(F.split(/\s*,\s*/),function(L,K){H+="var "+L+" = arguments["+K+"]; "
 })
-}var J=H.getAttribute("with");
-if(J&&J.length){D.forEach(J.split(/\s*,\s*/),function(K){I+="with("+K+"){";
-F+="}"
+}var I=G.getAttribute("with");
+if(I&&I.length){E.forEach(I.split(/\s*,\s*/),function(K){H+="with("+K+"){";
+J+="}"
 })
-}return new Function(I+H.innerHTML+F)
+}return new Function(H+G.innerHTML+J)
 };
-this.instantiate=function(G){var F=[];
-D.forEach(G,function(O){if(!O){return 
-}var J=O.getAttribute("dojoType");
-if((!J)||(!J.length)){return 
-}var T=B(J);
-var U=T.cls;
-var M=U._noScript||U.prototype._noScript;
-var P={};
-var R=O.attributes;
-for(var N in T.params){var H=R.getNamedItem(N);
-if(!H||(!H.specified&&(!dojo.isIE||N.toLowerCase()!="value"))){continue
-}var L=H.value;
-switch(N){case"class":L=O.className;
+this.instantiate=function(F){var G=[];
+E.forEach(F,function(J){if(!J){return 
+}var R=J.getAttribute("dojoType");
+if((!R)||(!R.length)){return 
+}var O=C(R);
+var P=O.cls;
+var H=P._noScript||P.prototype._noScript;
+var K={};
+var M=J.attributes;
+for(var I in O.params){var V=M.getNamedItem(I);
+if(!V||(!V.specified&&(!dojo.isIE||I.toLowerCase()!="value"))){continue
+}var T=V.value;
+switch(I){case"class":T=J.className;
 break;
-case"style":L=O.style&&O.style.cssText
-}var S=T.params[N];
-P[N]=A(L,S)
-}if(!M){var Q=[],I=[];
-D.query("> script[type^='dojo/']",O).orphan().forEach(function(Z){var X=Z.getAttribute("event"),a=Z.getAttribute("type"),Y=D.parser._functionFromScript(Z);
-if(X){if(a=="dojo/connect"){Q.push({event:X,func:Y})
-}else{P[X]=Y
-}}else{I.push(Y)
+case"style":T=J.style&&J.style.cssText
+}var N=O.params[I];
+K[I]=B(T,N)
+}if(!H){var L=[],W=[];
+E.query("> script[type^='dojo/']",J).orphan().forEach(function(X){var Z=X.getAttribute("event"),Y=X.getAttribute("type"),a=E.parser._functionFromScript(X);
+if(Z){if(Y=="dojo/connect"){L.push({event:Z,func:a})
+}else{K[Z]=a
+}}else{W.push(a)
 }})
-}var K=U.markupFactory;
-if(!K&&U.prototype){K=U.prototype.markupFactory
-}var W=K?K(P,O,U):new U(P,O);
-F.push(W);
-var V=O.getAttribute("jsId");
-if(V){D.setObject(V,W)
-}if(!M){dojo.forEach(Q,function(X){dojo.connect(W,X.event,null,X.func)
+}var S=P.markupFactory;
+if(!S&&P.prototype){S=P.prototype.markupFactory
+}var U=S?S(K,J,P):new P(K,J);
+G.push(U);
+var Q=J.getAttribute("jsId");
+if(Q){E.setObject(Q,U)
+}if(!H){dojo.forEach(L,function(X){dojo.connect(U,X.event,null,X.func)
 });
-dojo.forEach(I,function(X){X.call(W)
+dojo.forEach(W,function(X){X.call(U)
 })
 }});
-D.forEach(F,function(H){if(H&&(H.startup)&&((!H.getParent)||(!H.getParent()))){H.startup()
+E.forEach(G,function(H){if(H&&(H.startup)&&((!H.getParent)||(!H.getParent()))){H.startup()
 }});
-return F
+return G
 };
-this.parse=function(G){var H=D.query("[dojoType]",G);
-var F=this.instantiate(H);
-return F
+this.parse=function(F){var G=E.query("[dojoType]",F);
+var H=this.instantiate(G);
+return H
 }
 }();
 (function(){var A=function(){if(djConfig.parseOnLoad==true){dojo.parser.parse()
@@ -95,13 +95,13 @@ if(dojo.exists("dijit.wai.onload")&&(dijit.wai.onload===dojo._loaders[0])){dojo.
 }})();
 dojo.parser._anonCtr=0;
 dojo.parser._anon={};
-dojo.parser._nameAnonFunc=function(F,D){var C="$joinpoint";
-var B=(D||dojo.parser._anon);
-if(dojo.isIE){var E=F.__dojoNameCache;
-if(E&&B[E]===F){return F.__dojoNameCache
-}}var A="__"+dojo.parser._anonCtr++;
-while(typeof B[A]!="undefined"){A="__"+dojo.parser._anonCtr++
-}B[A]=F;
-return A
+dojo.parser._nameAnonFunc=function(A,E){var D="$joinpoint";
+var C=(E||dojo.parser._anon);
+if(dojo.isIE){var F=A.__dojoNameCache;
+if(F&&C[F]===A){return A.__dojoNameCache
+}}var B="__"+dojo.parser._anonCtr++;
+while(typeof C[B]!="undefined"){B="__"+dojo.parser._anonCtr++
+}C[B]=A;
+return B
 }
 };

@@ -7,16 +7,16 @@ A.require("dojo.parser");
 A.require("dojo.dnd.Source");
 A.declare("aimluck.dnd.DragMoveObject",[A.dnd.Mover],{_pageY:0,_pageX:0,portletId:null,leftTop:null,onFirstMove:function(B){A.dnd.Mover.prototype.onFirstMove.apply(this,arguments)
 },onMouseUp:function(B){A.dnd.Mover.prototype.onMouseUp.apply(this,arguments)
-},onMouseDown:function(B){var C=this.marginBox;
-this.leftTop={l:C.l+B.pageX,t:C.t+B.pageY};
+},onMouseDown:function(C){var B=this.marginBox;
+this.leftTop={l:B.l+C.pageX,t:B.t+C.pageY};
 A.dnd.Mover.prototype.onMouseDown.apply(this,arguments)
-},onMouseMove:function(B){this._pageX=B.pageX;
-this._pageY=B.pageY;
-A.dnd.autoScroll(B);
-var C=this.marginBox;
-this.leftTop={l:C.l+B.pageX,t:C.t+B.pageY}
+},onMouseMove:function(C){this._pageX=C.pageX;
+this._pageY=C.pageY;
+A.dnd.autoScroll(C);
+var B=this.marginBox;
+this.leftTop={l:B.l+C.pageX,t:B.t+C.pageY}
 }});
-A.declare("aimluck.dnd.Draggable",A.dnd.Moveable,{DragMoveObject:aimluck.dnd.DragMoveObject,portletId:null,constructor:function(C,B){this.portletId=B.pid
+A.declare("aimluck.dnd.Draggable",A.dnd.Moveable,{DragMoveObject:aimluck.dnd.DragMoveObject,portletId:null,constructor:function(B,C){this.portletId=C.pid
 },onMouseDown:function(B){if(this.skip&&A.dnd.isFormElement(B)){return 
 }if(this.delay){this.events.push(A.connect(this.handle,"onmousemove",this,"onMouseMove"));
 this.events.push(A.connect(this.handle,"onmouseup",this,"onMouseUp"))

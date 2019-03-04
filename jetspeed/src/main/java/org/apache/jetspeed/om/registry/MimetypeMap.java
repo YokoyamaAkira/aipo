@@ -28,7 +28,7 @@ import org.apache.jetspeed.util.MimeType;
  * </P>
  *
  * @author <a href="shesmer@raleigh.ibm.com">Stephan Hesmer</a>
- * @author <a href="raphael@apache.org">Raphaël Luta</a>
+ * @author <a href="raphael@apache.org">Rapha Luta</a>
  * @version $Id: MimetypeMap.java,v 1.3 2004/02/23 03:11:39 jford Exp $
  */
 public interface MimetypeMap

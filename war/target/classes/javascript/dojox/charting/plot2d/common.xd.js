@@ -3,63 +3,63 @@ A.provide("dojox.charting.plot2d.common");
 A.require("dojo.colors");
 A.require("dojox.gfx");
 A.require("dojox.lang.functional");
-(function(){var B=dojox.lang.functional,C=dojox.charting.plot2d.common;
+(function(){var C=dojox.lang.functional,B=dojox.charting.plot2d.common;
 A.mixin(dojox.charting.plot2d.common,{makeStroke:function(D){if(!D){return D
 }if(typeof D=="string"||D instanceof A.Color){D={color:D}
 }return dojox.gfx.makeParameters(dojox.gfx.defaultStroke,D)
 },augmentColor:function(F,D){var E=new A.Color(F),G=new A.Color(D);
 G.a=E.a;
 return G
-},augmentStroke:function(F,D){var E=C.makeStroke(F);
-if(E){E.color=C.augmentColor(E.color,D)
+},augmentStroke:function(F,D){var E=B.makeStroke(F);
+if(E){E.color=B.augmentColor(E.color,D)
 }return E
 },augmentFill:function(F,D){var E,G=new A.Color(D);
-if(typeof F=="string"||F instanceof A.Color){return C.augmentColor(F,D)
+if(typeof F=="string"||F instanceof A.Color){return B.augmentColor(F,D)
 }return F
-},defaultStats:{hmin:Number.POSITIVE_INFINITY,hmax:Number.NEGATIVE_INFINITY,vmin:Number.POSITIVE_INFINITY,vmax:Number.NEGATIVE_INFINITY},collectSimpleStats:function(H){var G=A.clone(C.defaultStats);
-for(var F=0;
-F<H.length;
-++F){var D=H[F];
-if(!D.data.length){continue
-}if(typeof D.data[0]=="number"){var E=G.vmin,K=G.vmax;
-if(!("ymin" in D)||!("ymax" in D)){A.forEach(D.data,function(M,L){var O=L+1,N=M;
-if(isNaN(N)){N=0
-}G.hmin=Math.min(G.hmin,O);
-G.hmax=Math.max(G.hmax,O);
-G.vmin=Math.min(G.vmin,N);
-G.vmax=Math.max(G.vmax,N)
-})
-}if("ymin" in D){G.vmin=Math.min(E,D.ymin)
-}if("ymax" in D){G.vmax=Math.max(K,D.ymax)
-}}else{var J=G.hmin,I=G.hmax,E=G.vmin,K=G.vmax;
-if(!("xmin" in D)||!("xmax" in D)||!("ymin" in D)||!("ymax" in D)){A.forEach(D.data,function(M,L){var O=M.x,N=M.y;
-if(isNaN(O)){O=0
-}if(isNaN(N)){N=0
-}G.hmin=Math.min(G.hmin,O);
-G.hmax=Math.max(G.hmax,O);
-G.vmin=Math.min(G.vmin,N);
-G.vmax=Math.max(G.vmax,N)
-})
-}if("xmin" in D){G.hmin=Math.min(J,D.xmin)
-}if("xmax" in D){G.hmax=Math.max(I,D.xmax)
-}if("ymin" in D){G.vmin=Math.min(E,D.ymin)
-}if("ymax" in D){G.vmax=Math.max(K,D.ymax)
-}}}return G
-},collectStackedStats:function(H){var F=A.clone(C.defaultStats);
-if(H.length){F.hmin=Math.min(F.hmin,1);
-F.hmax=B.foldl(H,"seed, run -> Math.max(seed, run.data.length)",F.hmax);
+},defaultStats:{hmin:Number.POSITIVE_INFINITY,hmax:Number.NEGATIVE_INFINITY,vmin:Number.POSITIVE_INFINITY,vmax:Number.NEGATIVE_INFINITY},collectSimpleStats:function(G){var F=A.clone(B.defaultStats);
 for(var E=0;
-E<F.hmax;
-++E){var G=H[0].data[E];
-if(isNaN(G)){G=0
-}F.vmin=Math.min(F.vmin,G);
-for(var I=1;
-I<H.length;
-++I){var D=H[I].data[E];
+E<G.length;
+++E){var J=G[E];
+if(!J.data.length){continue
+}if(typeof J.data[0]=="number"){var D=F.vmin,I=F.vmax;
+if(!("ymin" in J)||!("ymax" in J)){A.forEach(J.data,function(N,M){var L=M+1,O=N;
+if(isNaN(O)){O=0
+}F.hmin=Math.min(F.hmin,L);
+F.hmax=Math.max(F.hmax,L);
+F.vmin=Math.min(F.vmin,O);
+F.vmax=Math.max(F.vmax,O)
+})
+}if("ymin" in J){F.vmin=Math.min(D,J.ymin)
+}if("ymax" in J){F.vmax=Math.max(I,J.ymax)
+}}else{var K=F.hmin,H=F.hmax,D=F.vmin,I=F.vmax;
+if(!("xmin" in J)||!("xmax" in J)||!("ymin" in J)||!("ymax" in J)){A.forEach(J.data,function(N,M){var L=N.x,O=N.y;
+if(isNaN(L)){L=0
+}if(isNaN(O)){O=0
+}F.hmin=Math.min(F.hmin,L);
+F.hmax=Math.max(F.hmax,L);
+F.vmin=Math.min(F.vmin,O);
+F.vmax=Math.max(F.vmax,O)
+})
+}if("xmin" in J){F.hmin=Math.min(K,J.xmin)
+}if("xmax" in J){F.hmax=Math.max(H,J.xmax)
+}if("ymin" in J){F.vmin=Math.min(D,J.ymin)
+}if("ymax" in J){F.vmax=Math.max(I,J.ymax)
+}}}return F
+},collectStackedStats:function(I){var H=A.clone(B.defaultStats);
+if(I.length){H.hmin=Math.min(H.hmin,1);
+H.hmax=C.foldl(I,"seed, run -> Math.max(seed, run.data.length)",H.hmax);
+for(var G=0;
+G<H.hmax;
+++G){var D=I[0].data[G];
 if(isNaN(D)){D=0
-}G+=D
-}F.vmax=Math.max(F.vmax,G)
-}}return F
+}H.vmin=Math.min(H.vmin,D);
+for(var E=1;
+E<I.length;
+++E){var F=I[E].data[G];
+if(isNaN(F)){F=0
+}D+=F
+}H.vmax=Math.max(H.vmax,D)
+}}return H
 }})
 })()
 }}});

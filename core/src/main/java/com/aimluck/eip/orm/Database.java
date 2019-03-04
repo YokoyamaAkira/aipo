@@ -60,12 +60,12 @@ import com.aimluck.eip.orm.query.SelectQuery;
 
 /**
  * データベース操作ユーティリティ
- * 
+ *
  */
 public class Database {
 
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(Database.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(Database.class.getName());
 
   public static final String DEFAULT_ORG = "org001";
 
@@ -73,7 +73,7 @@ public class Database {
 
   /**
    * 検索用クエリを作成します。
-   * 
+   *
    * @param <M>
    * @param modelClass
    * @return
@@ -84,7 +84,7 @@ public class Database {
 
   /**
    * 検索用クエリを作成します。
-   * 
+   *
    * @param <M>
    * @param dataContext
    * @param modelClass
@@ -97,7 +97,7 @@ public class Database {
 
   /**
    * 検索用クエリを作成します。
-   * 
+   *
    * @param <M>
    * @param modelClass
    * @param exp
@@ -109,7 +109,7 @@ public class Database {
 
   /**
    * 検索用クエリを作成します。
-   * 
+   *
    * @param <M>
    * @param dataContext
    * @param modelClass
@@ -123,7 +123,7 @@ public class Database {
 
   /**
    * SQL検索クエリを作成します。
-   * 
+   *
    * @param <M>
    * @param modelClass
    * @param sql
@@ -135,7 +135,7 @@ public class Database {
 
   /**
    * SQL検索クエリを作成します。
-   * 
+   *
    * @param <M>
    * @param dataContext
    * @param modelClass
@@ -149,7 +149,7 @@ public class Database {
 
   /**
    * プライマリキーで指定されたオブジェクトモデルを取得します。
-   * 
+   *
    * @param <M>
    * @param modelClass
    * @param primaryKey
@@ -161,7 +161,7 @@ public class Database {
 
   /**
    * 指定されたオブジェクトモデルを取得します。
-   * 
+   *
    * @param <M>
    * @param dataContext
    * @param modelClass
@@ -176,7 +176,7 @@ public class Database {
   }
 
   /**
-   * 
+   *
    * @param <M>
    * @param modelClass
    * @param key
@@ -188,7 +188,7 @@ public class Database {
   }
 
   /**
-   * 
+   *
    * @param <M>
    * @param dataContext
    * @param modelClass
@@ -200,13 +200,13 @@ public class Database {
   public static <M> M get(DataContext dataContext, Class<M> modelClass,
       String key, Object value) {
     beginTransaction(dataContext);
-    return (M) dataContext.refetchObject(new ObjectId(modelClass
-      .getSimpleName(), key, value));
+    return (M) dataContext
+      .refetchObject(new ObjectId(modelClass.getSimpleName(), key, value));
   }
 
   /**
    * オブジェクトモデルを新規作成します。
-   * 
+   *
    * @param <M>
    * @param modelClass
    * @return
@@ -217,7 +217,7 @@ public class Database {
 
   /**
    * オブジェクトモデルを新規作成します。
-   * 
+   *
    * @param <M>
    * @param dataContext
    * @param modelClass
@@ -231,7 +231,7 @@ public class Database {
 
   /**
    * オブジェクトモデルを削除します。
-   * 
+   *
    * @param target
    */
   public static void delete(Persistent target) {
@@ -240,7 +240,7 @@ public class Database {
 
   /**
    * オブジェクトモデルを削除します。
-   * 
+   *
    * @param dataContext
    * @param target
    */
@@ -250,7 +250,7 @@ public class Database {
 
   /**
    * オブジェクトモデルをすべて削除します。
-   * 
+   *
    * @param target
    */
   public static void deleteAll(List<?> target) {
@@ -259,7 +259,7 @@ public class Database {
 
   /**
    * オブジェクトモデルをすべて削除します。
-   * 
+   *
    * @param dataContext
    * @param target
    */
@@ -270,7 +270,7 @@ public class Database {
 
   /**
    * オブジェクトモデルをすべて削除します。
-   * 
+   *
    * @param target
    */
   public static void deleteAll(DataObject... target) {
@@ -279,7 +279,7 @@ public class Database {
 
   /**
    * オブジェクトモデルをすべて削除します。
-   * 
+   *
    * @param dataContext
    * @param target
    */
@@ -289,7 +289,7 @@ public class Database {
 
   /**
    * 現在までの更新をコミットします。
-   * 
+   *
    */
   public static void commit() {
     commit(DataContext.getThreadDataContext());
@@ -297,7 +297,7 @@ public class Database {
 
   /**
    * 現在までの更新をコミットします。
-   * 
+   *
    * @param dataContext
    */
   public static void commit(DataContext dataContext) {
@@ -321,7 +321,7 @@ public class Database {
 
   /**
    * 現在までの更新をロールバックします。
-   * 
+   *
    */
   public static void rollback() {
     rollback(DataContext.getThreadDataContext());
@@ -329,7 +329,7 @@ public class Database {
 
   /**
    * 現在までの更新をロールバックします。
-   * 
+   *
    * @param dataContext
    */
   public static void rollback(DataContext dataContext) {
@@ -343,7 +343,7 @@ public class Database {
 
   /**
    * DataRow から指定したキーの値を取得します。
-   * 
+   *
    * @param dataRow
    * @param key
    * @return
@@ -363,8 +363,10 @@ public class Database {
       CayenneDataObject obj = (CayenneDataObject) model;
 
       ObjEntity objEntity =
-        DataContext.getThreadDataContext().getEntityResolver().lookupObjEntity(
-          obj);
+        DataContext
+          .getThreadDataContext()
+          .getEntityResolver()
+          .lookupObjEntity(obj);
 
       ObjectId objId =
         createObjectId(objEntity.getName(), dataRow, objEntity.getDbEntity());
@@ -412,9 +414,8 @@ public class Database {
     Map<String, Object> idMap = new HashMap<String, Object>(pk.size() * 2);
     DbAttribute attribute;
     Object val;
-    for (Iterator<DbAttribute> it = pk.iterator(); it.hasNext(); idMap.put(
-      attribute.getName(),
-      val)) {
+    for (Iterator<DbAttribute> it = pk.iterator(); it.hasNext(); idMap
+      .put(attribute.getName(), val)) {
       attribute = it.next();
       String key = attribute.getName();
 
@@ -447,12 +448,12 @@ public class Database {
     destDataDomain.setTransactionDelegate(dataDomain.getTransactionDelegate());
     DataNode dataNode = new DataNode(orgId + "domainNode");
     dataNode.setDataMaps(dataDomain.getDataMaps());
-    dataSourceFactory.initializeWithParentConfiguration(Configuration
-      .getSharedConfiguration());
+    dataSourceFactory
+      .initializeWithParentConfiguration(
+        Configuration.getSharedConfiguration());
     DataSource dataSource =
-      dataSourceFactory.getDataSource("datasource/dbcp-"
-        + orgId
-        + ".properties");
+      dataSourceFactory
+        .getDataSource("datasource/dbcp-" + orgId + ".properties");
 
     dataNode.setDataSource(dataSource);
     dataNode.setAdapter(new AutoAdapter(dataSource));

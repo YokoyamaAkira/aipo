@@ -4,37 +4,37 @@ dijit.typematic={_fireEventAndReload:function(){this._timer=null;
 this._callback(++this._count,this._node,this._evt);
 this._currentTimeout=(this._currentTimeout<0)?this._initialDelay:((this._subsequentDelay>1)?this._subsequentDelay:Math.round(this._currentTimeout*this._subsequentDelay));
 this._timer=setTimeout(dojo.hitch(this,"_fireEventAndReload"),this._currentTimeout)
-},trigger:function(E,D,G,C,B,F,A){if(B!=this._obj){this.stop();
-this._initialDelay=A||500;
-this._subsequentDelay=F||0.9;
-this._obj=B;
-this._evt=E;
-this._node=G;
+},trigger:function(A,G,C,F,E,B,D){if(E!=this._obj){this.stop();
+this._initialDelay=D||500;
+this._subsequentDelay=B||0.9;
+this._obj=E;
+this._evt=A;
+this._node=C;
 this._currentTimeout=-1;
 this._count=-1;
-this._callback=dojo.hitch(D,C);
+this._callback=dojo.hitch(G,F);
 this._fireEventAndReload()
 }},stop:function(){if(this._timer){clearTimeout(this._timer);
 this._timer=null
 }if(this._obj){this._callback(-1,this._node,this._evt);
 this._obj=null
-}},addKeyListener:function(B,F,E,D,A,C){return[dojo.connect(B,"onkeypress",this,function(G){if(G.keyCode==F.keyCode&&(!F.charCode||F.charCode==G.charCode)&&(F.ctrlKey===undefined||F.ctrlKey==G.ctrlKey)&&(F.altKey===undefined||F.altKey==G.ctrlKey)&&(F.shiftKey===undefined||F.shiftKey==G.ctrlKey)){dojo.stopEvent(G);
-dijit.typematic.trigger(F,E,B,D,F,A,C)
-}else{if(dijit.typematic._obj==F){dijit.typematic.stop()
-}}}),dojo.connect(B,"onkeyup",this,function(G){if(dijit.typematic._obj==F){dijit.typematic.stop()
+}},addKeyListener:function(C,A,F,E,B,D){return[dojo.connect(C,"onkeypress",this,function(G){if(G.keyCode==A.keyCode&&(!A.charCode||A.charCode==G.charCode)&&(A.ctrlKey===undefined||A.ctrlKey==G.ctrlKey)&&(A.altKey===undefined||A.altKey==G.ctrlKey)&&(A.shiftKey===undefined||A.shiftKey==G.ctrlKey)){dojo.stopEvent(G);
+dijit.typematic.trigger(A,F,C,E,A,B,D)
+}else{if(dijit.typematic._obj==A){dijit.typematic.stop()
+}}}),dojo.connect(C,"onkeyup",this,function(G){if(dijit.typematic._obj==A){dijit.typematic.stop()
 }})]
-},addMouseListener:function(B,E,D,A,C){var F=dojo.connect;
-return[F(B,"mousedown",this,function(G){dojo.stopEvent(G);
-dijit.typematic.trigger(G,E,B,D,B,A,C)
-}),F(B,"mouseup",this,function(G){dojo.stopEvent(G);
+},addMouseListener:function(C,F,E,B,D){var A=dojo.connect;
+return[A(C,"mousedown",this,function(G){dojo.stopEvent(G);
+dijit.typematic.trigger(G,F,C,E,C,B,D)
+}),A(C,"mouseup",this,function(G){dojo.stopEvent(G);
 dijit.typematic.stop()
-}),F(B,"mouseout",this,function(G){dojo.stopEvent(G);
+}),A(C,"mouseout",this,function(G){dojo.stopEvent(G);
 dijit.typematic.stop()
-}),F(B,"mousemove",this,function(G){dojo.stopEvent(G)
-}),F(B,"dblclick",this,function(G){dojo.stopEvent(G);
-if(dojo.isIE){dijit.typematic.trigger(G,E,B,D,B,A,C);
+}),A(C,"mousemove",this,function(G){dojo.stopEvent(G)
+}),A(C,"dblclick",this,function(G){dojo.stopEvent(G);
+if(dojo.isIE){dijit.typematic.trigger(G,F,C,E,C,B,D);
 setTimeout(dijit.typematic.stop,50)
 }})]
-},addListener:function(A,B,E,D,C,F,G){return this.addKeyListener(B,E,D,C,F,G).concat(this.addMouseListener(A,D,C,F,G))
+},addListener:function(D,E,A,G,F,B,C){return this.addKeyListener(E,A,G,F,B,C).concat(this.addMouseListener(D,G,F,B,C))
 }}
 };

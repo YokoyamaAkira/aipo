@@ -25,7 +25,7 @@ package org.apache.jetspeed.portal;
  * inner object and can thus be transparently cascaded or substituted to
  * a simple portlet wherever in a PSML object tree.
  *
- * @author <a href="mailto:raphael@apache.org">Raphaël Luta</a>
+ * @author <a href="mailto:raphael@apache.org">Rapha Luta</a>
  * @version $Id: PortletControl.java,v 1.24 2004/02/23 04:05:35 jford Exp $
  */
 public interface PortletControl extends Portlet, PortletSet

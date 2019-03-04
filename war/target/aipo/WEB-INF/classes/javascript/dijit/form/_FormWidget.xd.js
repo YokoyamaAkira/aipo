@@ -8,49 +8,49 @@ if(this.focusNode){this.focusNode.disabled=B
 this._active=false
 }dijit.setWaiState(this.focusNode||this.domNode,"disabled",B);
 this._setStateClass()
-},_onMouse:function(E){var B=E.target;
-if(B&&B.getAttribute){this.stateModifier=B.getAttribute("stateModifier")||""
-}if(!this.disabled){switch(E.type){case"mouseenter":case"mouseover":this._hovering=true;
+},_onMouse:function(D){var E=D.target;
+if(E&&E.getAttribute){this.stateModifier=E.getAttribute("stateModifier")||""
+}if(!this.disabled){switch(D.type){case"mouseenter":case"mouseover":this._hovering=true;
 break;
 case"mouseout":case"mouseleave":this._hovering=false;
 break;
 case"mousedown":this._active=true;
-var C=this;
-var D=this.connect(A.body(),"onmouseup",function(){C._active=false;
-C._setStateClass();
-C.disconnect(D)
+var B=this;
+var C=this.connect(A.body(),"onmouseup",function(){B._active=false;
+B._setStateClass();
+B.disconnect(C)
 });
 break
 }this._setStateClass()
 }},isFocusable:function(){return !this.disabled&&(A.style(this.domNode,"display")!="none")
 },focus:function(){dijit.focus(this.focusNode)
 },_setStateClass:function(){if(!("staticClass" in this)){this.staticClass=(this.stateNode||this.domNode).className
-}var B=[this.baseClass];
-function C(D){B=B.concat(A.map(B,function(E){return E+D
+}var C=[this.baseClass];
+function B(D){C=C.concat(A.map(C,function(E){return E+D
 }))
-}if(this.checked){C("Checked")
-}if(this.state){C(this.state)
-}if(this.selected){C("Selected")
-}if(this.disabled){C("Disabled")
-}else{if(this._active){C(this.stateModifier+"Active")
-}else{if(this._focused){C("Focused")
-}if((this.stateModifier||!this._focused)&&this._hovering){C(this.stateModifier+"Hover")
-}}}(this.stateNode||this.domNode).className=this.staticClass+" "+B.join(" ")
+}if(this.checked){B("Checked")
+}if(this.state){B(this.state)
+}if(this.selected){B("Selected")
+}if(this.disabled){B("Disabled")
+}else{if(this._active){B(this.stateModifier+"Active")
+}else{if(this._focused){B("Focused")
+}if((this.stateModifier||!this._focused)&&this._hovering){B(this.stateModifier+"Hover")
+}}}(this.stateNode||this.domNode).className=this.staticClass+" "+C.join(" ")
 },onChange:function(B){},postCreate:function(){this.setValue(this.value,null);
 this.setDisabled(this.disabled);
 this._setStateClass()
-},setValue:function(B,C){this._lastValue=B;
+},setValue:function(C,B){this._lastValue=C;
 dijit.setWaiState(this.focusNode||this.domNode,"valuenow",this.forWaiValuenow());
-if(C===undefined){C=true
-}if(this._lastValueReported==undefined&&C===null){this._lastValueReported=B
-}if((this.intermediateChanges||C)&&((B&&B.toString)?B.toString():B)!==((this._lastValueReported&&this._lastValueReported.toString)?this._lastValueReported.toString():this._lastValueReported)){this._lastValueReported=B;
-this.onChange(B)
+if(B===undefined){B=true
+}if(this._lastValueReported==undefined&&B===null){this._lastValueReported=C
+}if((this.intermediateChanges||B)&&((C&&C.toString)?C.toString():C)!==((this._lastValueReported&&this._lastValueReported.toString)?this._lastValueReported.toString():this._lastValueReported)){this._lastValueReported=C;
+this.onChange(C)
 }},getValue:function(){return this._lastValue
 },undo:function(){this.setValue(this._lastValueReported,false)
-},_onKeyPress:function(D){if(D.keyCode==A.keys.ESCAPE&&!D.shiftKey&&!D.ctrlKey&&!D.altKey){var C=this.getValue();
-var B=this._lastValueReported;
-if((typeof B!="undefined")&&((C!==null&&C.toString)?C.toString():null)!==B.toString()){this.undo();
-A.stopEvent(D);
+},_onKeyPress:function(C){if(C.keyCode==A.keys.ESCAPE&&!C.shiftKey&&!C.ctrlKey&&!C.altKey){var B=this.getValue();
+var D=this._lastValueReported;
+if((typeof D!="undefined")&&((B!==null&&B.toString)?B.toString():null)!==D.toString()){this.undo();
+A.stopEvent(C);
 return false
 }}return true
 },forWaiValuenow:function(){return this.getValue()

@@ -1,24 +1,24 @@
 if(!dojo._hasResource["dojox.validate.isbn"]){dojo._hasResource["dojox.validate.isbn"]=true;
 dojo.provide("dojox.validate.isbn");
-dojox.validate.isValidIsbn=function(E){var F,C,D;
-if(typeof E!="string"){E=String(E)
-}E=E.replace(/[- ]/g,"");
-F=E.length;
-C=0;
-if(F==10){D=10;
-for(var B=0;
-B<9;
-B++){C+=parseInt(E.charAt(B))*D;
-D--
-}var A=E.charAt(9).toUpperCase();
-C+=A=="X"?10:parseInt(A);
-return C%11==0
-}else{if(F==13){D=-1;
-for(var B=0;
-B<F;
-B++){C+=parseInt(E.charAt(B))*(2+D);
-D*=-1
-}return C%10==0
+dojox.validate.isValidIsbn=function(F){var A,D,E;
+if(typeof F!="string"){F=String(F)
+}F=F.replace(/[- ]/g,"");
+A=F.length;
+D=0;
+if(A==10){E=10;
+for(var C=0;
+C<9;
+C++){D+=parseInt(F.charAt(C))*E;
+E--
+}var B=F.charAt(9).toUpperCase();
+D+=B=="X"?10:parseInt(B);
+return D%11==0
+}else{if(A==13){E=-1;
+for(var C=0;
+C<A;
+C++){D+=parseInt(F.charAt(C))*(2+E);
+E*=-1
+}return D%10==0
 }else{return false
 }}}
 };

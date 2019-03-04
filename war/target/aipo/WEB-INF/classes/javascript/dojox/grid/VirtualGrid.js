@@ -54,9 +54,9 @@ this.viewsNode.appendChild(view.domNode);
 this.headerNode.appendChild(view.headerNode);
 this.views.addView(view);
 return view
-},buildViews:function(){for(var B=0,A;
-(A=this.layout.structure[B]);
-B++){this.createView(A.type||"dojox.GridView").setStructure(A)
+},buildViews:function(){for(var A=0,B;
+(B=this.layout.structure[A]);
+A++){this.createView(B.type||"dojox.GridView").setStructure(B)
 }this.scroller.setContentNodes(this.views.getContentNodes())
 },setStructure:function(A){this.views.destroyViews();
 this.structure=A;
@@ -68,28 +68,28 @@ this._structureChanged()
 },_structureChanged:function(){this.buildViews();
 if(this.autoRender){this.render()
 }},resize:function(){if(!this.domNode.parentNode){return 
-}var D=dojo._getPadBorderExtents(this.domNode);
+}var E=dojo._getPadBorderExtents(this.domNode);
 if(this.autoHeight){this.domNode.style.height="auto";
 this.viewsNode.style.height=""
-}else{if(this.flex>0){}else{if(this.domNode.clientHeight<=D.h){if(this.domNode.parentNode==document.body){this.domNode.style.height=this.defaultHeight
+}else{if(this.flex>0){}else{if(this.domNode.clientHeight<=E.h){if(this.domNode.parentNode==document.body){this.domNode.style.height=this.defaultHeight
 }else{this.fitTo="parent"
-}}}}if(this.fitTo=="parent"){var C=dojo._getContentBox(this.domNode.parentNode).h;
-dojo.marginBox(this.domNode,{h:Math.max(0,C)})
-}var B=this.views.measureHeader();
-this.headerNode.style.height=B+"px";
-var A=1,C=(this.autoHeight?-1:Math.max(this.domNode.clientHeight-B,0)||0);
-if(this.autoWidth){this.domNode.style.width=this.views.arrange(A,0,0,C)+"px"
-}else{var E=this.domNode.clientWidth||(this.domNode.offsetWidth-D.w);
-this.views.arrange(A,0,E,C)
-}this.scroller.windowHeight=C;
+}}}}if(this.fitTo=="parent"){var D=dojo._getContentBox(this.domNode.parentNode).h;
+dojo.marginBox(this.domNode,{h:Math.max(0,D)})
+}var C=this.views.measureHeader();
+this.headerNode.style.height=C+"px";
+var B=1,D=(this.autoHeight?-1:Math.max(this.domNode.clientHeight-C,0)||0);
+if(this.autoWidth){this.domNode.style.width=this.views.arrange(B,0,0,D)+"px"
+}else{var A=this.domNode.clientWidth||(this.domNode.offsetWidth-E.w);
+this.views.arrange(B,0,A,D)
+}this.scroller.windowHeight=D;
 this.scroller.defaultRowHeight=this.rows.getDefaultHeightPx()+1;
 this.postresize()
-},resizeHeight:function(){var B=this.views.measureHeader();
-this.headerNode.style.height=B+"px";
-var A=(this.autoHeight?-1:Math.max(this.domNode.clientHeight-B,0)||0);
-this.views.onEach("setSize",[0,A]);
+},resizeHeight:function(){var A=this.views.measureHeader();
+this.headerNode.style.height=A+"px";
+var B=(this.autoHeight?-1:Math.max(this.domNode.clientHeight-A,0)||0);
+this.views.onEach("setSize",[0,B]);
 this.views.onEach("resizeHeight");
-this.scroller.windowHeight=A
+this.scroller.windowHeight=B
 },render:function(){if(!this.domNode){return 
 }this.update=this.defaultUpdate;
 this.scroller.init(this.rowCount,this.keepRows,this.rowsPerPage);
@@ -102,7 +102,7 @@ this.resize()
 this.focus.initFocusView();
 dojo.setSelectable(this.domNode,false)
 },postresize:function(){if(this.autoHeight){this.viewsNode.style.height=this.views.measureContent()+"px"
-}},renderRow:function(A,B){this.views.renderRow(A,B)
+}},renderRow:function(B,A){this.views.renderRow(B,A)
 },rowRemoved:function(A){this.views.rowRemoved(A)
 },invalidated:null,updating:false,beginUpdate:function(){this.invalidated=[];
 this.updating=true
@@ -133,38 +133,38 @@ this.resize()
 },updateRowStyles:function(A){this.views.updateRowStyles(A)
 },rowHeightChanged:function(A){this.views.renormalizeRow(A);
 this.scroller.rowHeightChanged(A)
-},fastScroll:true,delayScroll:false,scrollRedrawThreshold:(dojo.isIE?100:50),scrollTo:function(B){if(!this.fastScroll){this.setScrollTop(B);
+},fastScroll:true,delayScroll:false,scrollRedrawThreshold:(dojo.isIE?100:50),scrollTo:function(A){if(!this.fastScroll){this.setScrollTop(A);
 return 
-}var A=Math.abs(this.lastScrollTop-B);
-this.lastScrollTop=B;
-if(A>this.scrollRedrawThreshold||this.delayScroll){this.delayScroll=true;
-this.scrollTop=B;
-this.views.setScrollTop(B);
+}var B=Math.abs(this.lastScrollTop-A);
+this.lastScrollTop=A;
+if(B>this.scrollRedrawThreshold||this.delayScroll){this.delayScroll=true;
+this.scrollTop=A;
+this.views.setScrollTop(A);
 dojox.grid.jobs.job("dojoxGrid-scroll",200,dojo.hitch(this,"finishScrollJob"))
-}else{this.setScrollTop(B)
+}else{this.setScrollTop(A)
 }},finishScrollJob:function(){this.delayScroll=false;
 this.setScrollTop(this.scrollTop)
 },setScrollTop:function(A){this.scrollTop=this.views.setScrollTop(A);
 this.scroller.scroll(this.scrollTop)
 },scrollToRow:function(A){this.setScrollTop(this.scroller.findScrollTop(A)+1)
-},styleRowNode:function(A,B){if(B){this.rows.styleRowNode(A,B)
+},styleRowNode:function(B,A){if(A){this.rows.styleRowNode(B,A)
 }},getCell:function(A){return this.layout.cells[A]
-},setCellWidth:function(A,B){this.getCell(A).unitWidth=B
+},setCellWidth:function(B,A){this.getCell(B).unitWidth=A
 },getCellName:function(A){return"Cell "+A.index
 },canSort:function(A){},sort:function(){},getSortAsc:function(A){A=A==undefined?this.sortInfo:A;
 return Boolean(A>0)
 },getSortIndex:function(A){A=A==undefined?this.sortInfo:A;
 return Math.abs(A)-1
-},setSortIndex:function(B,A){var C=B+1;
-if(A!=undefined){C*=(A?1:-1)
-}else{if(this.getSortIndex()==B){C=-this.sortInfo
-}}this.setSortInfo(C)
+},setSortIndex:function(C,B){var A=C+1;
+if(B!=undefined){A*=(B?1:-1)
+}else{if(this.getSortIndex()==C){A=-this.sortInfo
+}}this.setSortInfo(A)
 },setSortInfo:function(A){if(this.canSort(A)){this.sortInfo=A;
 this.sort();
 this.update()
 }},doKeyEvent:function(A){A.dispatch="do"+A.type;
 this.onKeyEvent(A)
-},_dispatch:function(B,A){if(B in this){return this[B](A)
+},_dispatch:function(A,B){if(A in this){return this[A](B)
 }},dispatchKeyEvent:function(A){this._dispatch(A.dispatch,A)
 },dispatchContentEvent:function(A){this.edit.dispatchEvent(A)||A.sourceView.dispatchContentEvent(A)||this._dispatch(A.dispatch,A)
 },dispatchHeaderEvent:function(A){A.sourceView.dispatchHeaderEvent(A)||this._dispatch("doheader"+A.type,A)
@@ -181,8 +181,8 @@ this.onKeyEvent(A)
 }else{this.onHeaderDblClick(A)
 }},doheadercontextmenu:function(A){if(A.cellNode){this.onHeaderCellContextMenu(A)
 }else{this.onHeaderContextMenu(A)
-}},doStartEdit:function(B,A){this.onStartEdit(B,A)
-},doApplyCellEdit:function(C,B,A){this.onApplyCellEdit(C,B,A)
+}},doStartEdit:function(A,B){this.onStartEdit(A,B)
+},doApplyCellEdit:function(A,C,B){this.onApplyCellEdit(A,C,B)
 },doCancelEdit:function(A){this.onCancelEdit(A)
 },doApplyEdit:function(A){this.onApplyEdit(A)
 },addRow:function(){this.updateRowCount(this.rowCount+1)

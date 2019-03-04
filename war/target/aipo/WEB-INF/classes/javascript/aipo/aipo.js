@@ -1,46 +1,46 @@
 window.aipo=window.aipo||{};
-aipo.namespace=function(B){if(!B||!B.length){return null
-}var C=B.split(".");
-var A=aipo;
-for(var D=(C[0]=="aipo")?1:0;
-D<C.length;
-++D){A[C[D]]=A[C[D]]||{};
-A=A[C[D]]
-}return A
+aipo.namespace=function(C){if(!C||!C.length){return null
+}var D=C.split(".");
+var B=aipo;
+for(var A=(D[0]=="aipo")?1:0;
+A<D.length;
+++A){B[D[A]]=B[D[A]]||{};
+B=B[D[A]]
+}return B
 };
 var ptConfig=[];
-aipo.onReceiveMessage=function(B,A){if(!B){var C=dijit.byId("modalDialog");
-C.hide();
-aipo.portletReload(A)
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
+aipo.onReceiveMessage=function(C,B){if(!C){var A=dijit.byId("modalDialog");
+A.hide();
+aipo.portletReload(B)
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=C
 }};
-aipo.getCookie=function(C){var B="";
+aipo.getCookie=function(D){var C="";
+var F=0;
 var E=0;
-var D=0;
-var F=C+"=";
-var A="";
-while(E<document.cookie.length){D=E+F.length;
-if(document.cookie.substring(E,D)==F){A=document.cookie.indexOf(";",D);
-if(A==-1){B=document.cookie.substring(D,document.cookie.length)
-}else{B=document.cookie.substring(D,A)
+var A=D+"=";
+var B="";
+while(F<document.cookie.length){E=F+A.length;
+if(document.cookie.substring(F,E)==A){B=document.cookie.indexOf(";",E);
+if(B==-1){C=document.cookie.substring(E,document.cookie.length)
+}else{C=document.cookie.substring(E,B)
 }break
-}E=document.cookie.indexOf(" ",E)+1;
-if(E==0){break
-}}return B
+}F=document.cookie.indexOf(" ",F)+1;
+if(F==0){break
+}}return C
 };
-aipo.setCookie=function(A,D,C,B){var E=new Date();
-E.setTime(E.getTime()+(typeof B!="number"?10*24*60*60*1000:B));
-if(typeof C=="undefined"||C==null){document.cookie=A+"="+D+"; expires="+E.toGMTString()+"; path=${context_path}/"
-}else{document.cookie=A+"="+D+"; expires="+E.toGMTString()+"; path="+C
+aipo.setCookie=function(B,E,D,C){var A=new Date();
+A.setTime(A.getTime()+(typeof C!="number"?10*24*60*60*1000:C));
+if(typeof D=="undefined"||D==null){document.cookie=B+"="+E+"; expires="+A.toGMTString()+"; path=${context_path}/"
+}else{document.cookie=B+"="+E+"; expires="+A.toGMTString()+"; path="+D
 }};
-aipo.removeCookie=function remove_cookie(A,B){var C;
-var D=new Date();
-D.setTime(D.getTime()-1);
-C=get_cookie(A);
-if(typeof B=="undefined"){document.cookie=A+"="+C+"; expires="+D.toGMTString()+"; path=${context_path}/"
-}else{document.cookie=A+"="+C+"; expires="+D.toGMTString()+"; path="+B
+aipo.removeCookie=function remove_cookie(B,C){var D;
+var A=new Date();
+A.setTime(A.getTime()-1);
+D=get_cookie(B);
+if(typeof C=="undefined"){document.cookie=B+"="+D+"; expires="+A.toGMTString()+"; path=${context_path}/"
+}else{document.cookie=B+"="+D+"; expires="+A.toGMTString()+"; path="+C
 }};
-aipo.portletReload=function(B,A){for(var C in ptConfig){if(C!=A){if(ptConfig[C].group==B){ptConfig[C].reloadFunction.call(ptConfig[C].reloadFunction,C)
+aipo.portletReload=function(C,B){for(var A in ptConfig){if(A!=B){if(ptConfig[A].group==C){ptConfig[A].reloadFunction.call(ptConfig[A].reloadFunction,A)
 }}}};
 aipo.reloadPage=function(A){if(typeof ptConfig[A].reloadUrl=="undefined"){aipo.viewPage(ptConfig[A].initUrl,A)
 }else{aipo.viewPage(ptConfig[A].reloadUrl,A)
@@ -55,38 +55,38 @@ var A=dojo.connect(dojo.query("body")[0],"onclick",null,function(){if(dojo.query
 }});
 if(aipo.onloadSmartPhone!=null){aipo.onloadSmartPhone()
 }};
-aipo.viewPage=function(D,A,C){var B=dijit.byId("portlet_"+A);
-if(!B){B=new aimluck.widget.Contentpane({},"portlet_"+A)
-}if(B){ptConfig[A].reloadUrl=D;
-if(C){for(i=0;
-i<C.length;
-i++){B.setParam(C[i][0],C[i][1])
-}}B.onLoad=dojo.hitch(B.onLoad,setMouseListener);
-B.viewPage(D)
+aipo.viewPage=function(A,B,D){var C=dijit.byId("portlet_"+B);
+if(!C){C=new aimluck.widget.Contentpane({},"portlet_"+B)
+}if(C){ptConfig[B].reloadUrl=A;
+if(D){for(i=0;
+i<D.length;
+i++){C.setParam(D[i][0],D[i][1])
+}}C.onLoad=dojo.hitch(C.onLoad,setMouseListener);
+C.viewPage(A)
 }};
-aipo.errorTreatment=function(A,B){if(A.error){if(A.error==1){window.location.href=B
+aipo.errorTreatment=function(B,A){if(B.error){if(B.error==1){window.location.href=A
 }else{return true
 }return false
 }else{return true
 }};
 var favicon={change:function(A){this.addLink(A,"icon");
 this.addLink(A,"shortcut icon")
-},addLink:function(B,A){var C=document.createElement("link");
-C.type="image/x-icon";
-C.rel=A;
-C.href=B;
-this.removeLinkIfExists(A);
-this.docHead.appendChild(C)
-},removeLinkIfExists:function(C){var D=this.docHead.getElementsByTagName("link");
-for(var A=0;
-A<D.length;
-A++){var B=D[A];
-if(B.type=="image/x-icon"&&B.rel==C){this.docHead.removeChild(B);
+},addLink:function(C,B){var A=document.createElement("link");
+A.type="image/x-icon";
+A.rel=B;
+A.href=C;
+this.removeLinkIfExists(B);
+this.docHead.appendChild(A)
+},removeLinkIfExists:function(D){var A=this.docHead.getElementsByTagName("link");
+for(var B=0;
+B<A.length;
+B++){var C=A[B];
+if(C.type=="image/x-icon"&&C.rel==D){this.docHead.removeChild(C);
 return 
 }}},docHead:document.getElementsByTagName("head")[0]};
-function CronTask(A,C,B){this.task=A;
-this.isDecay=B;
-this.interval=C;
+function CronTask(B,A,C){this.task=B;
+this.isDecay=C;
+this.interval=A;
 this.decayRate=1;
 this.decayMultiplier=1.5;
 this.maxDecayTime=5*60*1000
@@ -112,12 +112,12 @@ aipo.userAgent={__userAgent:window.navigator.userAgent.toLowerCase(),isAndroid:f
 },isIphone:function(){return this.__userAgent.indexOf("iphone")>-1
 },isSmartPhone:function(){return this.isAndroid()||this.isIphone()
 }};
-aipo.escapeHTML=function(A){var B=function(C){switch(C){case"<":return"&lt;";
+aipo.escapeHTML=function(B){var A=function(C){switch(C){case"<":return"&lt;";
 case">":return"&gt;";
 case"&":return"&amp;";
 case"'":return"&#39;";
 case'"':return"&quot;"
 }return"?"
 };
-return String(A).replace(/[<>&"']/g,B)
+return String(B).replace(/[<>&"']/g,A)
 };

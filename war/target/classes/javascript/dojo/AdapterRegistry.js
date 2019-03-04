@@ -3,17 +3,17 @@ dojo.provide("dojo.AdapterRegistry");
 dojo.AdapterRegistry=function(A){this.pairs=[];
 this.returnWrappers=A||false
 };
-dojo.extend(dojo.AdapterRegistry,{register:function(B,A,D,E,C){this.pairs[((C)?"unshift":"push")]([B,A,D,E])
-},match:function(){for(var B=0;
-B<this.pairs.length;
-B++){var A=this.pairs[B];
-if(A[1].apply(this,arguments)){if((A[3])||(this.returnWrappers)){return A[2]
-}else{return A[2].apply(this,arguments)
-}}}throw new Error("No match found")
-},unregister:function(C){for(var A=0;
+dojo.extend(dojo.AdapterRegistry,{register:function(C,B,E,A,D){this.pairs[((D)?"unshift":"push")]([C,B,E,A])
+},match:function(){for(var A=0;
 A<this.pairs.length;
 A++){var B=this.pairs[A];
-if(B[0]==C){this.pairs.splice(A,1);
+if(B[1].apply(this,arguments)){if((B[3])||(this.returnWrappers)){return B[2]
+}else{return B[2].apply(this,arguments)
+}}}throw new Error("No match found")
+},unregister:function(A){for(var B=0;
+B<this.pairs.length;
+B++){var C=this.pairs[B];
+if(C[0]==A){this.pairs.splice(B,1);
 return true
 }}return false
 }})

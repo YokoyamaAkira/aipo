@@ -12,14 +12,14 @@ this.silentlyCancelled=false
 A.extend(A.Deferred,{_nextId:(function(){var B=1;
 return function(){return B++
 }
-})(),cancel:function(){var B;
-if(this.fired==-1){if(this.canceller){B=this.canceller(this)
+})(),cancel:function(){var C;
+if(this.fired==-1){if(this.canceller){C=this.canceller(this)
 }else{this.silentlyCancelled=true
-}if(this.fired==-1){if(!(B instanceof Error)){var C=B;
-B=new Error("Deferred Cancelled");
-B.dojoType="cancel";
-B.cancelResult=C
-}this.errback(B)
+}if(this.fired==-1){if(!(C instanceof Error)){var B=C;
+C=new Error("Deferred Cancelled");
+C.dojoType="cancel";
+C.cancelResult=B
+}this.errback(C)
 }}else{if((this.fired==0)&&(this.results[0] instanceof A.Deferred)){this.results[0].cancel()
 }}},_resback:function(B){this.fired=((B instanceof Error)?1:0);
 this.results[this.fired]=B;
@@ -32,37 +32,37 @@ this._resback(B)
 },errback:function(B){this._check();
 if(!(B instanceof Error)){B=new Error(B)
 }this._resback(B)
-},addBoth:function(C,D){var B=A.hitch(C,D);
-if(arguments.length>2){B=A.partial(B,arguments,2)
-}return this.addCallbacks(B,B)
-},addCallback:function(C,D){var B=A.hitch(C,D);
-if(arguments.length>2){B=A.partial(B,arguments,2)
-}return this.addCallbacks(B,null)
-},addErrback:function(C,D){var B=A.hitch(C,D);
-if(arguments.length>2){B=A.partial(B,arguments,2)
-}return this.addCallbacks(null,B)
-},addCallbacks:function(C,B){this.chain.push([C,B]);
+},addBoth:function(B,C){var D=A.hitch(B,C);
+if(arguments.length>2){D=A.partial(D,arguments,2)
+}return this.addCallbacks(D,D)
+},addCallback:function(B,C){var D=A.hitch(B,C);
+if(arguments.length>2){D=A.partial(D,arguments,2)
+}return this.addCallbacks(D,null)
+},addErrback:function(B,C){var D=A.hitch(B,C);
+if(arguments.length>2){D=A.partial(D,arguments,2)
+}return this.addCallbacks(null,D)
+},addCallbacks:function(B,C){this.chain.push([B,C]);
 if(this.fired>=0){this._fire()
 }return this
-},_fire:function(){var D=this.chain;
-var C=this.fired;
-var B=this.results[C];
-var H=this;
-var G=null;
-while((D.length>0)&&(this.paused==0)){var F=D.shift()[C];
-if(!F){continue
-}try{B=F(B);
-C=((B instanceof Error)?1:0);
-if(B instanceof A.Deferred){G=function(I){H._resback(I);
-H.paused--;
-if((H.paused==0)&&(H.fired>=0)){H._fire()
+},_fire:function(){var E=this.chain;
+var H=this.fired;
+var D=this.results[H];
+var C=this;
+var B=null;
+while((E.length>0)&&(this.paused==0)){var G=E.shift()[H];
+if(!G){continue
+}try{D=G(D);
+H=((D instanceof Error)?1:0);
+if(D instanceof A.Deferred){B=function(I){C._resback(I);
+C.paused--;
+if((C.paused==0)&&(C.fired>=0)){C._fire()
 }};
 this.paused++
-}}catch(E){console.debug(E);
-C=1;
-B=E
-}}this.fired=C;
-this.results[C]=B;
-if((G)&&(this.paused)){B.addBoth(G)
+}}catch(F){console.debug(F);
+H=1;
+D=F
+}}this.fired=H;
+this.results[H]=D;
+if((B)&&(this.paused)){D.addBoth(B)
 }}})
 }}});

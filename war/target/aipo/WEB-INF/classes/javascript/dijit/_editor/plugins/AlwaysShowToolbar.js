@@ -5,16 +5,16 @@ A.onLoadDeferred.addCallback(dojo.hitch(this,this.enable))
 },enable:function(A){this._updateHeight();
 this._connects=[dojo.connect(window,"onscroll",this,"globalOnScrollHandler"),dojo.connect(this.editor,"onNormalizedDisplayChanged",this,"_updateHeight")];
 return A
-},_updateHeight:function(){var A=this.editor;
-if(!A.isLoaded){return 
-}if(A.height){return 
-}var B=dojo.marginBox(A.editNode).h;
-if(dojo.isOpera){B=A.editNode.scrollHeight
-}if(!B){B=dojo.marginBox(A.document.body).h
-}if(B==0){console.debug("Can not figure out the height of the editing area!");
+},_updateHeight:function(){var B=this.editor;
+if(!B.isLoaded){return 
+}if(B.height){return 
+}var A=dojo.marginBox(B.editNode).h;
+if(dojo.isOpera){A=B.editNode.scrollHeight
+}if(!A){A=dojo.marginBox(B.document.body).h
+}if(A==0){console.debug("Can not figure out the height of the editing area!");
 return 
-}if(B!=this._lastHeight){this._lastHeight=B;
-dojo.marginBox(A.iframe,{h:this._lastHeight})
+}if(A!=this._lastHeight){this._lastHeight=A;
+dojo.marginBox(B.iframe,{h:this._lastHeight})
 }},_lastHeight:0,globalOnScrollHandler:function(){var isIE=dojo.isIE&&dojo.isIE<7;
 if(!this._handleScroll){return 
 }var tdn=this.editor.toolbar.domNode;

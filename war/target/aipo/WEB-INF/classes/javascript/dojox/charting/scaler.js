@@ -1,55 +1,55 @@
 if(!dojo._hasResource["dojox.charting.scaler"]){dojo._hasResource["dojox.charting.scaler"]=true;
 dojo.provide("dojox.charting.scaler");
-(function(){var C=3;
-var B=function(D,F){D=D.toLowerCase();
-for(var E=0;
-E<F.length;
-++E){if(D==F[E]){return true
+(function(){var A=3;
+var C=function(F,E){F=F.toLowerCase();
+for(var D=0;
+D<E.length;
+++D){if(F==E[D]){return true
 }}return false
 };
-var A=function(U,W,F,R,L,I,V){F=dojo.clone(F);
-if(!R){if(F.fixUpper=="major"){F.fixUpper="minor"
-}if(F.fixLower=="major"){F.fixLower="minor"
-}}if(!L){if(F.fixUpper=="minor"){F.fixUpper="micro"
-}if(F.fixLower=="minor"){F.fixLower="micro"
-}}if(!I){if(F.fixUpper=="micro"){F.fixUpper="none"
-}if(F.fixLower=="micro"){F.fixLower="none"
-}}var M=B(F.fixLower,["major"])?Math.floor(U/R)*R:B(F.fixLower,["minor"])?Math.floor(U/L)*L:B(F.fixLower,["micro"])?Math.floor(U/I)*unit:U,P=B(F.fixUpper,["major"])?Math.ceil(W/R)*R:B(F.fixUpper,["minor"])?Math.ceil(W/L)*L:B(F.fixUpper,["unit"])?Math.ceil(W/unit)*unit:W,J=(B(F.fixLower,["major"])||!R)?M:Math.ceil(M/R)*R,O=(B(F.fixLower,["major","minor"])||!L)?M:Math.ceil(M/L)*L,D=(B(F.fixLower,["major","minor","micro"])||!I)?M:Math.ceil(M/I)*I,K=!R?0:(B(F.fixUpper,["major"])?Math.round((P-J)/R):Math.floor((P-J)/R))+1,Q=!L?0:(B(F.fixUpper,["major","minor"])?Math.round((P-O)/L):Math.floor((P-O)/L))+1,E=!I?0:(B(F.fixUpper,["major","minor","micro"])?Math.round((P-D)/I):Math.floor((P-D)/I))+1,T=L?Math.round(R/L):0,N=I?Math.round(L/I):0,H=R?Math.floor(Math.log(R)/Math.LN10):0,S=L?Math.floor(Math.log(L)/Math.LN10):0,G=V/(P-M);
-if(!isFinite(G)){G=1
-}return{bounds:{lower:M,upper:P},major:{tick:R,start:J,count:K,prec:H},minor:{tick:L,start:O,count:Q,prec:S},micro:{tick:I,start:D,count:E,prec:0},minorPerMajor:T,microPerMinor:N,scale:G}
+var B=function(O,Q,T,L,F,W,P){T=dojo.clone(T);
+if(!L){if(T.fixUpper=="major"){T.fixUpper="minor"
+}if(T.fixLower=="major"){T.fixLower="minor"
+}}if(!F){if(T.fixUpper=="minor"){T.fixUpper="micro"
+}if(T.fixLower=="minor"){T.fixLower="micro"
+}}if(!W){if(T.fixUpper=="micro"){T.fixUpper="none"
+}if(T.fixLower=="micro"){T.fixLower="none"
+}}var G=C(T.fixLower,["major"])?Math.floor(O/L)*L:C(T.fixLower,["minor"])?Math.floor(O/F)*F:C(T.fixLower,["micro"])?Math.floor(O/W)*unit:O,J=C(T.fixUpper,["major"])?Math.ceil(Q/L)*L:C(T.fixUpper,["minor"])?Math.ceil(Q/F)*F:C(T.fixUpper,["unit"])?Math.ceil(Q/unit)*unit:Q,D=(C(T.fixLower,["major"])||!L)?G:Math.ceil(G/L)*L,I=(C(T.fixLower,["major","minor"])||!F)?G:Math.ceil(G/F)*F,R=(C(T.fixLower,["major","minor","micro"])||!W)?G:Math.ceil(G/W)*W,E=!L?0:(C(T.fixUpper,["major"])?Math.round((J-D)/L):Math.floor((J-D)/L))+1,K=!F?0:(C(T.fixUpper,["major","minor"])?Math.round((J-I)/F):Math.floor((J-I)/F))+1,S=!W?0:(C(T.fixUpper,["major","minor","micro"])?Math.round((J-R)/W):Math.floor((J-R)/W))+1,N=F?Math.round(L/F):0,H=W?Math.round(F/W):0,V=L?Math.floor(Math.log(L)/Math.LN10):0,M=F?Math.floor(Math.log(F)/Math.LN10):0,U=P/(J-G);
+if(!isFinite(U)){U=1
+}return{bounds:{lower:G,upper:J},major:{tick:L,start:D,count:E,prec:V},minor:{tick:F,start:I,count:K,prec:M},micro:{tick:W,start:R,count:S,prec:0},minorPerMajor:N,microPerMinor:H,scale:U}
 };
-dojox.charting.scaler=function(G,M,E,K){var J={fixUpper:"none",fixLower:"none",natural:false};
-if(K){if("fixUpper" in K){J.fixUpper=String(K.fixUpper)
-}if("fixLower" in K){J.fixLower=String(K.fixLower)
-}if("natural" in K){J.natural=Boolean(K.natural)
-}}if(M<=G){return A(G,M,J,0,0,0,E)
-}var H=Math.floor(Math.log(M-G)/Math.LN10),L=K&&("majorTick" in K)?K.majorTick:Math.pow(10,H),I=0,F=0,D;
-if(K&&("minorTick" in K)){I=K.minorTick
-}else{do{I=L/10;
-if(!J.natural||I>0.9){D=A(G,M,J,L,I,0,E);
-if(D.scale*D.minor.tick>C){break
-}}I=L/5;
-if(!J.natural||I>0.9){D=A(G,M,J,L,I,0,E);
-if(D.scale*D.minor.tick>C){break
-}}I=L/2;
-if(!J.natural||I>0.9){D=A(G,M,J,L,I,0,E);
-if(D.scale*D.minor.tick>C){break
-}}return A(G,M,J,L,0,0,E)
+dojox.charting.scaler=function(E,K,M,I){var H={fixUpper:"none",fixLower:"none",natural:false};
+if(I){if("fixUpper" in I){H.fixUpper=String(I.fixUpper)
+}if("fixLower" in I){H.fixLower=String(I.fixLower)
+}if("natural" in I){H.natural=Boolean(I.natural)
+}}if(K<=E){return B(E,K,H,0,0,0,M)
+}var F=Math.floor(Math.log(K-E)/Math.LN10),J=I&&("majorTick" in I)?I.majorTick:Math.pow(10,F),G=0,D=0,L;
+if(I&&("minorTick" in I)){G=I.minorTick
+}else{do{G=J/10;
+if(!H.natural||G>0.9){L=B(E,K,H,J,G,0,M);
+if(L.scale*L.minor.tick>A){break
+}}G=J/5;
+if(!H.natural||G>0.9){L=B(E,K,H,J,G,0,M);
+if(L.scale*L.minor.tick>A){break
+}}G=J/2;
+if(!H.natural||G>0.9){L=B(E,K,H,J,G,0,M);
+if(L.scale*L.minor.tick>A){break
+}}return B(E,K,H,J,0,0,M)
 }while(false)
-}if(K&&("microTick" in K)){F=K.microTick;
-D=A(G,M,J,L,I,F,E)
-}else{do{F=I/10;
-if(!J.natural||F>0.9){D=A(G,M,J,L,I,F,E);
-if(D.scale*D.micro.tick>C){break
-}}F=I/5;
-if(!J.natural||F>0.9){D=A(G,M,J,L,I,F,E);
-if(D.scale*D.micro.tick>C){break
-}}F=I/2;
-if(!J.natural||F>0.9){D=A(G,M,J,L,I,F,E);
-if(D.scale*D.micro.tick>C){break
-}}F=0
+}if(I&&("microTick" in I)){D=I.microTick;
+L=B(E,K,H,J,G,D,M)
+}else{do{D=G/10;
+if(!H.natural||D>0.9){L=B(E,K,H,J,G,D,M);
+if(L.scale*L.micro.tick>A){break
+}}D=G/5;
+if(!H.natural||D>0.9){L=B(E,K,H,J,G,D,M);
+if(L.scale*L.micro.tick>A){break
+}}D=G/2;
+if(!H.natural||D>0.9){L=B(E,K,H,J,G,D,M);
+if(L.scale*L.micro.tick>A){break
+}}D=0
 }while(false)
-}return F?D:A(G,M,J,L,I,0,E)
+}return D?L:B(E,K,H,J,G,0,M)
 }
 })()
 };

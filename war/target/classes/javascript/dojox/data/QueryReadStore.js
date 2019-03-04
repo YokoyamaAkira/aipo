@@ -5,111 +5,111 @@ dojo.provide("dojox.data.QueryReadStore.InvalidAttributeError");
 dojo.require("dojo.string");
 dojo.require("dojo.data.util.simpleFetch");
 dojo.declare("dojox.data.QueryReadStore",null,{url:"",requestMethod:"get",_className:"dojox.data.QueryReadStore",_items:[],_lastServerQuery:null,lastRequestHash:null,doClientPaging:true,_itemsByIdentity:null,_identifier:null,_features:{"dojo.data.api.Read":true,"dojo.data.api.Identity":true},constructor:function(A){dojo.mixin(this,A)
-},getValue:function(B,A,C){this._assertIsItem(B);
-if(!dojo.isString(A)){throw new Error(this._className+".getValue(): Invalid attribute, string expected!")
-}if(!this.hasAttribute(B,A)){if(C){return C
-}console.log(this._className+".getValue(): Item does not have the attribute '"+A+"'.")
-}return B.i[A]
-},getValues:function(B,A){var C=[];
-if(this.hasAttribute(B,A)){C.push(B.i[A])
-}return C
-},getAttributes:function(B){this._assertIsItem(B);
-var C=[];
-for(var A in B.i){C.push(A)
-}return C
-},hasAttribute:function(A,B){return this.isItem(A)&&typeof A.i[B]!="undefined"
-},containsValue:function(D,C,E){var A=this.getValues(D,C);
-var F=A.length;
-for(var B=0;
-B<F;
-B++){if(A[B]==E){return true
+},getValue:function(C,B,A){this._assertIsItem(C);
+if(!dojo.isString(B)){throw new Error(this._className+".getValue(): Invalid attribute, string expected!")
+}if(!this.hasAttribute(C,B)){if(A){return A
+}console.log(this._className+".getValue(): Item does not have the attribute '"+B+"'.")
+}return C.i[B]
+},getValues:function(C,B){var A=[];
+if(this.hasAttribute(C,B)){A.push(C.i[B])
+}return A
+},getAttributes:function(C){this._assertIsItem(C);
+var A=[];
+for(var B in C.i){A.push(B)
+}return A
+},hasAttribute:function(B,A){return this.isItem(B)&&typeof B.i[A]!="undefined"
+},containsValue:function(E,D,F){var B=this.getValues(E,D);
+var A=B.length;
+for(var C=0;
+C<A;
+C++){if(B[C]==F){return true
 }}return false
 },isItem:function(A){if(A){return typeof A.r!="undefined"&&A.r==this
 }return false
 },isItemLoaded:function(A){return this.isItem(A)
 },loadItem:function(A){if(this.isItemLoaded(A.item)){return 
-}},fetch:function(C){C=C||{};
-if(!C.store){C.store=this
-}var A=this;
-var B=function(E,F){if(F.onError){var G=F.scope||dojo.global;
-F.onError.call(G,E,F)
+}},fetch:function(D){D=D||{};
+if(!D.store){D.store=this
+}var B=this;
+var C=function(G,E){if(E.onError){var F=E.scope||dojo.global;
+E.onError.call(F,G,E)
 }};
-var D=function(M,N){var G=N.abort||null;
-var I=false;
-var E=N.start?N.start:0;
-if(A.doClientPaging==false){E=0
-}var L=N.count?(E+N.count):M.length;
-N.abort=function(){I=true;
-if(G){G.call(N)
+var A=function(I,J){var M=J.abort||null;
+var E=false;
+var K=J.start?J.start:0;
+if(B.doClientPaging==false){K=0
+}var H=J.count?(K+J.count):I.length;
+J.abort=function(){E=true;
+if(M){M.call(J)
 }};
-var H=N.scope||dojo.global;
-if(!N.store){N.store=A
-}if(N.onBegin){N.onBegin.call(H,M.length,N)
-}if(N.sort){M.sort(dojo.data.util.sorter.createSortFunction(N.sort,A))
-}if(N.onItem){for(var K=E;
-(K<M.length)&&(K<L);
-++K){var F=M[K];
-if(!I){N.onItem.call(H,F,N)
-}}}if(N.onComplete&&!I){var J=null;
-if(!N.onItem){J=M.slice(E,L)
-}N.onComplete.call(H,J,N)
+var N=J.scope||dojo.global;
+if(!J.store){J.store=B
+}if(J.onBegin){J.onBegin.call(N,I.length,J)
+}if(J.sort){I.sort(dojo.data.util.sorter.createSortFunction(J.sort,B))
+}if(J.onItem){for(var G=K;
+(G<I.length)&&(G<H);
+++G){var L=I[G];
+if(!E){J.onItem.call(N,L,J)
+}}}if(J.onComplete&&!E){var F=null;
+if(!J.onItem){F=I.slice(K,H)
+}J.onComplete.call(N,F,J)
 }};
-this._fetchItems(C,D,B);
-return C
+this._fetchItems(D,A,C);
+return D
 },getFeatures:function(){return this._features
 },close:function(A){},getLabel:function(A){return undefined
 },getLabelAttributes:function(A){return null
-},_fetchItems:function(C,E,B){var A=C.serverQuery||C.query||{};
-if(!this.doClientPaging){A.start=C.start||0;
-if(C.count){A.count=C.count
-}}if(this.doClientPaging&&this._lastServerQuery!==null&&dojo.toJson(A)==dojo.toJson(this._lastServerQuery)){E(this._items,C)
-}else{var F=this.requestMethod.toLowerCase()=="post"?dojo.xhrPost:dojo.xhrGet;
-var D=F({url:this.url,handleAs:"json-comment-optional",content:A});
-D.addCallback(dojo.hitch(this,function(G){G=this._filterResponse(G);
+},_fetchItems:function(D,F,C){var B=D.serverQuery||D.query||{};
+if(!this.doClientPaging){B.start=D.start||0;
+if(D.count){B.count=D.count
+}}if(this.doClientPaging&&this._lastServerQuery!==null&&dojo.toJson(B)==dojo.toJson(this._lastServerQuery)){F(this._items,D)
+}else{var A=this.requestMethod.toLowerCase()=="post"?dojo.xhrPost:dojo.xhrGet;
+var E=A({url:this.url,handleAs:"json-comment-optional",content:B});
+E.addCallback(dojo.hitch(this,function(J){J=this._filterResponse(J);
 this._items=[];
-dojo.forEach(G.items,function(K){this._items.push({i:K,r:this})
+dojo.forEach(J.items,function(K){this._items.push({i:K,r:this})
 },this);
-var I=G.identifier;
+var H=J.identifier;
 this._itemsByIdentity={};
-if(I){this._identifier=I;
+if(H){this._identifier=H;
 for(i=0;
 i<this._items.length;
-++i){var J=this._items[i].i;
-var H=J[I];
-if(!this._itemsByIdentity[H]){this._itemsByIdentity[H]=J
-}else{throw new Error("dojo.data.QueryReadStore:  The json data as specified by: ["+this.url+"] is malformed.  Items within the list have identifier: ["+I+"].  Value collided: ["+H+"]")
+++i){var I=this._items[i].i;
+var G=I[H];
+if(!this._itemsByIdentity[G]){this._itemsByIdentity[G]=I
+}else{throw new Error("dojo.data.QueryReadStore:  The json data as specified by: ["+this.url+"] is malformed.  Items within the list have identifier: ["+H+"].  Value collided: ["+G+"]")
 }}}else{this._identifier=Number;
 for(i=0;
 i<this._items.length;
 ++i){this._items[i].n=i
-}}E(this._items,C)
+}}F(this._items,D)
 }));
-D.addErrback(function(G){B(G,C)
+E.addErrback(function(G){C(G,D)
 });
 this.lastRequestHash=new Date().getTime()+"-"+String(Math.random()).substring(2);
-this._lastServerQuery=dojo.mixin({},A)
+this._lastServerQuery=dojo.mixin({},B)
 }},_filterResponse:function(A){return A
 },_assertIsItem:function(A){if(!this.isItem(A)){throw new dojox.data.QueryReadStore.InvalidItemError(this._className+": a function was passed an item argument that was not an item")
 }},_assertIsAttribute:function(A){if(typeof A!=="string"){throw new dojox.data.QueryReadStore.InvalidAttributeError(this._className+": '"+A+"' is not a valid attribute identifier.")
-}},fetchItemByIdentity:function(A){if(this._itemsByIdentity){var E=this._itemsByIdentity[A.identity];
-if(!(E===undefined)){if(A.onItem){var C=A.scope?A.scope:dojo.global;
-A.onItem.call(C,{i:E,r:this})
+}},fetchItemByIdentity:function(B){if(this._itemsByIdentity){var F=this._itemsByIdentity[B.identity];
+if(!(F===undefined)){if(B.onItem){var D=B.scope?B.scope:dojo.global;
+B.onItem.call(D,{i:F,r:this})
 }return 
-}}var B=function(G,H){var I=A.scope?A.scope:dojo.global;
-if(A.onError){A.onError.call(I,error)
+}}var C=function(I,G){var H=B.scope?B.scope:dojo.global;
+if(B.onError){B.onError.call(H,error)
 }};
-var F=function(I,H){var K=A.scope?A.scope:dojo.global;
-try{var G=null;
-if(I&&I.length==1){G=I[0]
-}if(A.onItem){A.onItem.call(K,G)
-}}catch(J){if(A.onError){A.onError.call(K,J)
+var A=function(H,G){var J=B.scope?B.scope:dojo.global;
+try{var K=null;
+if(H&&H.length==1){K=H[0]
+}if(B.onItem){B.onItem.call(J,K)
+}}catch(I){if(B.onError){B.onError.call(J,I)
 }}};
-var D={serverQuery:{id:A.identity}};
-this._fetchItems(D,F,B)
-},getIdentity:function(A){var B=null;
-if(this._identifier===Number){B=A.n
-}else{B=A.i[this._identifier]
-}return B
+var E={serverQuery:{id:B.identity}};
+this._fetchItems(E,A,C)
+},getIdentity:function(B){var A=null;
+if(this._identifier===Number){A=B.n
+}else{A=B.i[this._identifier]
+}return A
 },getIdentityAttributes:function(A){return[this._identifier]
 }});
 dojo.declare("dojox.data.QueryReadStore.InvalidItemError",Error,{});

@@ -2,31 +2,31 @@ dojo._xdResourceLoaded({depends:[["provide","dijit._tree.dndSelector"],["require
 A.provide("dijit._tree.dndSelector");
 A.require("dojo.dnd.common");
 A.require("dijit._tree.dndContainer");
-A.declare("dijit._tree.dndSelector",dijit._tree.dndContainer,{constructor:function(C,B){this.selection={};
+A.declare("dijit._tree.dndSelector",dijit._tree.dndContainer,{constructor:function(B,C){this.selection={};
 this.anchor=null;
 this.simpleSelection=false;
 this.events.push(A.connect(this.tree.domNode,"onmousedown",this,"onMouseDown"),A.connect(this.tree.domNode,"onmouseup",this,"onMouseUp"))
-},singular:false,getSelectedItems:function(){var B=[];
-for(var C in this.selection){B.push(dijit.getEnclosingWidget(this.selection[C]).item)
-}return B
+},singular:false,getSelectedItems:function(){var C=[];
+for(var B in this.selection){C.push(dijit.getEnclosingWidget(this.selection[B]).item)
+}return C
 },getSelectedNodes:function(){return this.selection
 },selectNone:function(){return this._removeSelection()._removeAnchor()
-},insertItems:function(B,C){},destroy:function(){A.dnd.Selector.superclass.destroy.call(this);
+},insertItems:function(C,B){},destroy:function(){A.dnd.Selector.superclass.destroy.call(this);
 this.selection=this.anchor=null
-},onMouseDown:function(D){if(!this.current){return 
-}var C=dijit.getEnclosingWidget(this.current).item;
-var B=this.tree.store.getIdentity(C);
-if(!this.current.id){this.current.id=B
+},onMouseDown:function(C){if(!this.current){return 
+}var B=dijit.getEnclosingWidget(this.current).item;
+var D=this.tree.store.getIdentity(B);
+if(!this.current.id){this.current.id=D
 }if(!this.current.type){this.current.type="data"
-}if(!this.singular&&!A.dnd.getCopyKeyState(D)&&!D.shiftKey&&(this.current.id in this.selection)){this.simpleSelection=true;
-A.stopEvent(D);
+}if(!this.singular&&!A.dnd.getCopyKeyState(C)&&!C.shiftKey&&(this.current.id in this.selection)){this.simpleSelection=true;
+A.stopEvent(C);
 return 
-}if(this.singular){if(this.anchor==this.current){if(A.dnd.getCopyKeyState(D)){this.selectNone()
+}if(this.singular){if(this.anchor==this.current){if(A.dnd.getCopyKeyState(C)){this.selectNone()
 }}else{this.selectNone();
 this.anchor=this.current;
 this._addItemClass(this.anchor,"Anchor");
 this.selection[this.current.id]=this.current
-}}else{if(!this.singular&&D.shiftKey){if(A.dnd.getCopyKeyState(D)){}else{}}else{if(A.dnd.getCopyKeyState(D)){if(this.anchor==this.current){delete this.selection[this.anchor.id];
+}}else{if(!this.singular&&C.shiftKey){if(A.dnd.getCopyKeyState(C)){}else{}}else{if(A.dnd.getCopyKeyState(C)){if(this.anchor==this.current){delete this.selection[this.anchor.id];
 this._removeAnchor()
 }else{if(this.current.id in this.selection){this._removeItemClass(this.current,"Selected");
 delete this.selection[this.current.id]
@@ -35,13 +35,13 @@ this._addItemClass(this.anchor,"Selected")
 }this.anchor=this.current;
 this._addItemClass(this.current,"Anchor");
 this.selection[this.current.id]=this.current
-}}}else{var C=dijit.getEnclosingWidget(this.current).item;
-var B=this.tree.store.getIdentity(C);
-if(!(B in this.selection)){this.selectNone();
+}}}else{var B=dijit.getEnclosingWidget(this.current).item;
+var D=this.tree.store.getIdentity(B);
+if(!(D in this.selection)){this.selectNone();
 this.anchor=this.current;
 this._addItemClass(this.current,"Anchor");
-this.selection[B]=this.current
-}}}}A.stopEvent(D)
+this.selection[D]=this.current
+}}}}A.stopEvent(C)
 },onMouseMove:function(){},onOverEvent:function(){this.onmousemoveEvent=A.connect(this.node,"onmousemove",this,"onMouseMove")
 },onMouseUp:function(B){if(!this.simpleSelection){return 
 }this.simpleSelection=false;
@@ -49,10 +49,10 @@ this.selectNone();
 if(this.current){this.anchor=this.current;
 this._addItemClass(this.anchor,"Anchor");
 this.selection[this.current.id]=this.current
-}},_removeSelection:function(){var B=A.dnd._empty;
-for(var C in this.selection){if(C in B){continue
-}var D=A.byId(C);
-if(D){this._removeItemClass(D,"Selected")
+}},_removeSelection:function(){var D=A.dnd._empty;
+for(var B in this.selection){if(B in D){continue
+}var C=A.byId(B);
+if(C){this._removeItemClass(C,"Selected")
 }}this.selection={};
 return this
 },_removeAnchor:function(){if(this.anchor){this._removeItemClass(this.anchor,"Anchor");

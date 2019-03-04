@@ -2,10 +2,10 @@ if(!dojo._hasResource["dojox.gfx"]){dojo._hasResource["dojox.gfx"]=true;
 dojo.provide("dojox.gfx");
 dojo.require("dojox.gfx.matrix");
 dojo.require("dojox.gfx._base");
-(function(){var B=(typeof djConfig.gfxRenderer=="string"?djConfig.gfxRenderer:"svg,vml,silverlight,canvas").split(",");
-for(var A=0;
-A<B.length;
-++A){switch(B[A]){case"svg":if(!dojo.isIE&&(navigator.userAgent.indexOf("iPhone")<0)&&(navigator.userAgent.indexOf("iPod")<0)){dojox.gfx.renderer="svg"
+(function(){var A=(typeof djConfig.gfxRenderer=="string"?djConfig.gfxRenderer:"svg,vml,silverlight,canvas").split(",");
+for(var B=0;
+B<A.length;
+++B){switch(A[B]){case"svg":if(!dojo.isIE&&(navigator.userAgent.indexOf("iPhone")<0)&&(navigator.userAgent.indexOf("iPod")<0)){dojox.gfx.renderer="svg"
 }break;
 case"vml":if(dojo.isIE!=0){dojox.gfx.renderer="vml"
 }break;

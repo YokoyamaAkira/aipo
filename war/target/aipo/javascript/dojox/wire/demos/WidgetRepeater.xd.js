@@ -1,13 +1,42 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.wire.demos.WidgetRepeater"],["require","dojo.parser"],["require","dijit._Widget"],["require","dijit._Templated"],["require","dijit._Container"],["require",this.widget]],defineResource:function(A){if(!A._hasResource["dojox.wire.demos.WidgetRepeater"]){A._hasResource["dojox.wire.demos.WidgetRepeater"]=true;
-A.provide("dojox.wire.demos.WidgetRepeater");
-A.require("dojo.parser");
-A.require("dijit._Widget");
-A.require("dijit._Templated");
-A.require("dijit._Container");
-A.declare("dojox.wire.demos.WidgetRepeater",[dijit._Widget,dijit._Templated,dijit._Container],{templateString:"<div class='WidgetRepeater' dojoAttachPoint='repeaterNode'></div>",widget:null,repeater:null,createNew:function(C){try{if(A.isString(this.widget)){A.require(this.widget);
-this.widget=A.getObject(this.widget)
-}this.addChild(new this.widget(C));
-this.repeaterNode.appendChild(document.createElement("br"))
-}catch(B){console.debug(B)
-}}})
-}}});
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.wire.demos.WidgetRepeater"],
+["require", "dojo.parser"],
+["require", "dijit._Widget"],
+["require", "dijit._Templated"],
+["require", "dijit._Container"],
+["require", this.widget]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.wire.demos.WidgetRepeater"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.wire.demos.WidgetRepeater"] = true;
+dojo.provide("dojox.wire.demos.WidgetRepeater")
+		
+dojo.require("dojo.parser");
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
+dojo.require("dijit._Container");
+
+dojo.declare("dojox.wire.demos.WidgetRepeater", [ dijit._Widget, dijit._Templated, dijit._Container ], {
+	//	summary:
+	//		Simple widget that does generation of widgets repetatively, based on calls to 
+	//		the createNew function and contains them as child widgets.
+	templateString: "<div class='WidgetRepeater' dojoAttachPoint='repeaterNode'></div>",
+	widget: null,
+	repeater: null,
+	createNew: function(obj){
+		//	summary:
+		//		Function to handle the creation of a new widget and appending it into the widget tree.
+		//	obj:	
+		//		The parameters to pass to the widget.
+		try{
+			if(dojo.isString(this.widget)){
+				dojo.require(this.widget);
+				this.widget = dojo.getObject(this.widget);
+			}
+			this.addChild(new this.widget(obj));
+			this.repeaterNode.appendChild(document.createElement("br"));
+		}catch(e){ console.debug(e); }
+	}
+});
+
+}
+
+}});

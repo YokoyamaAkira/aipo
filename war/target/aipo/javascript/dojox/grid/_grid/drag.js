@@ -1,55 +1,113 @@
-if(!dojo._hasResource["dojox.grid._grid.drag"]){dojo._hasResource["dojox.grid._grid.drag"]=true;
+if(!dojo._hasResource["dojox.grid._grid.drag"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.grid._grid.drag"] = true;
 dojo.provide("dojox.grid._grid.drag");
-(function(){var A=dojox.grid.drag={};
-A.dragging=false;
-A.hysteresis=2;
-A.capture=function(B){if(B.setCapture){B.setCapture()
-}else{document.addEventListener("mousemove",B.onmousemove,true);
-document.addEventListener("mouseup",B.onmouseup,true);
-document.addEventListener("click",B.onclick,true)
-}};
-A.release=function(B){if(B.releaseCapture){B.releaseCapture()
-}else{document.removeEventListener("click",B.onclick,true);
-document.removeEventListener("mouseup",B.onmouseup,true);
-document.removeEventListener("mousemove",B.onmousemove,true)
-}};
-A.start=function(E,D,F,B,C){if(!E||A.dragging){console.debug("failed to start drag: bad input node or already dragging");
-return 
-}A.dragging=true;
-A.elt=E;
-A.events={drag:D||dojox.grid.nop,end:F||dojox.grid.nop,start:C||dojox.grid.nop,oldmove:E.onmousemove,oldup:E.onmouseup,oldclick:E.onclick};
-A.positionX=(B&&("screenX" in B)?B.screenX:false);
-A.positionY=(B&&("screenY" in B)?B.screenY:false);
-A.started=(A.position===false);
-E.onmousemove=A.mousemove;
-E.onmouseup=A.mouseup;
-E.onclick=A.click;
-A.capture(A.elt)
-};
-A.end=function(){A.release(A.elt);
-A.elt.onmousemove=A.events.oldmove;
-A.elt.onmouseup=A.events.oldup;
-A.elt.onclick=A.events.oldclick;
-A.elt=null;
-try{if(A.started){A.events.end()
-}}finally{A.dragging=false
-}};
-A.calcDelta=function(B){B.deltaX=B.screenX-A.positionX;
-B.deltaY=B.screenY-A.positionY
-};
-A.hasMoved=function(B){return Math.abs(B.deltaX)+Math.abs(B.deltaY)>A.hysteresis
-};
-A.mousemove=function(B){B=dojo.fixEvent(B);
-dojo.stopEvent(B);
-A.calcDelta(B);
-if((!A.started)&&(A.hasMoved(B))){A.events.start(B);
-A.started=true
-}if(A.started){A.events.drag(B)
-}};
-A.mouseup=function(B){dojo.stopEvent(dojo.fixEvent(B));
-A.end()
-};
-A.click=function(B){dojo.stopEvent(dojo.fixEvent(B))
+
+// summary:
+//	utility functions for dragging as used in grid.
+// begin closure
+(function(){
+
+var dgdrag = dojox.grid.drag = {};
+
+dgdrag.dragging = false;
+dgdrag.hysteresis = 2;
+
+dgdrag.capture = function(inElement) {
+	//console.debug('dojox.grid.drag.capture');
+	if (inElement.setCapture)
+		inElement.setCapture();
+	else {
+		document.addEventListener("mousemove", inElement.onmousemove, true);
+		document.addEventListener("mouseup", inElement.onmouseup, true);
+		document.addEventListener("click", inElement.onclick, true);
+	}
 }
-})()
-};
+
+dgdrag.release = function(inElement) {
+	//console.debug('dojox.grid.drag.release');
+	if(inElement.releaseCapture){
+		inElement.releaseCapture();
+	}else{
+		document.removeEventListener("click", inElement.onclick, true);
+		document.removeEventListener("mouseup", inElement.onmouseup, true);
+		document.removeEventListener("mousemove", inElement.onmousemove, true);
+	}
+}
+
+dgdrag.start = function(inElement, inOnDrag, inOnEnd, inEvent, inOnStart){
+	if(/*dgdrag.elt ||*/ !inElement || dgdrag.dragging){
+		console.debug('failed to start drag: bad input node or already dragging');
+		return;
+	}
+	dgdrag.dragging = true;
+	dgdrag.elt = inElement;
+	dgdrag.events = {
+		drag: inOnDrag || dojox.grid.nop, 
+		end: inOnEnd || dojox.grid.nop, 
+		start: inOnStart || dojox.grid.nop, 
+		oldmove: inElement.onmousemove, 
+		oldup: inElement.onmouseup, 
+		oldclick: inElement.onclick 
+	};
+	dgdrag.positionX = (inEvent && ('screenX' in inEvent) ? inEvent.screenX : false);
+	dgdrag.positionY = (inEvent && ('screenY' in inEvent) ? inEvent.screenY : false);
+	dgdrag.started = (dgdrag.position === false);
+	inElement.onmousemove = dgdrag.mousemove;
+	inElement.onmouseup = dgdrag.mouseup;
+	inElement.onclick = dgdrag.click;
+	dgdrag.capture(dgdrag.elt);
+}
+
+dgdrag.end = function(){
+	//console.debug("dojox.grid.drag.end");
+	dgdrag.release(dgdrag.elt);
+	dgdrag.elt.onmousemove = dgdrag.events.oldmove;
+	dgdrag.elt.onmouseup = dgdrag.events.oldup;
+	dgdrag.elt.onclick = dgdrag.events.oldclick;
+	dgdrag.elt = null;
+	try{
+		if(dgdrag.started){
+			dgdrag.events.end();
+		}
+	}finally{
+		dgdrag.dragging = false;
+	}
+}
+
+dgdrag.calcDelta = function(inEvent){
+	inEvent.deltaX = inEvent.screenX - dgdrag.positionX;
+	inEvent.deltaY = inEvent.screenY - dgdrag.positionY;
+}
+
+dgdrag.hasMoved = function(inEvent){
+	return Math.abs(inEvent.deltaX) + Math.abs(inEvent.deltaY) > dgdrag.hysteresis;
+}
+
+dgdrag.mousemove = function(inEvent){
+	inEvent = dojo.fixEvent(inEvent);
+	dojo.stopEvent(inEvent);
+	dgdrag.calcDelta(inEvent);
+	if((!dgdrag.started)&&(dgdrag.hasMoved(inEvent))){
+		dgdrag.events.start(inEvent);
+		dgdrag.started = true;
+	}
+	if(dgdrag.started){
+		dgdrag.events.drag(inEvent);
+	}
+}
+
+dgdrag.mouseup = function(inEvent){
+	//console.debug("dojox.grid.drag.mouseup");
+	dojo.stopEvent(dojo.fixEvent(inEvent));
+	dgdrag.end();
+}
+
+dgdrag.click = function(inEvent){
+	dojo.stopEvent(dojo.fixEvent(inEvent));
+	//dgdrag.end();
+}
+
+})();
+// end closure
+
+}

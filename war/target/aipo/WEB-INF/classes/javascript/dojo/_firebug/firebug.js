@@ -1,13 +1,13 @@
 if(!dojo._hasResource["dojo._firebug.firebug"]){dojo._hasResource["dojo._firebug.firebug"]=true;
 dojo.provide("dojo._firebug.firebug");
-dojo.deprecated=function(C,D,A){var B="DEPRECATED: "+C;
-if(D){B+=" "+D
-}if(A){B+=" -- will be removed in version: "+A
-}console.debug(B)
+dojo.deprecated=function(D,A,B){var C="DEPRECATED: "+D;
+if(A){C+=" "+A
+}if(B){C+=" -- will be removed in version: "+B
+}console.debug(C)
 };
-dojo.experimental=function(A,C){var B="EXPERIMENTAL: "+A+" -- APIs subject to change without notice.";
-if(C){B+=" "+C
-}console.debug(B)
+dojo.experimental=function(B,A){var C="EXPERIMENTAL: "+B+" -- APIs subject to change without notice.";
+if(A){C+=" "+A
+}console.debug(C)
 };
 if(((!("console" in window))||(!("firebug" in console)))&&((djConfig.noFirebugLite!==true))){(function(){try{if(window!=window.parent){if(window.parent.console){window.console=window.parent.console
 }return 

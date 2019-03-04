@@ -1,62 +1,138 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.collections.ArrayList"],["require","dojox.collections._base"]],defineResource:function(A){if(!A._hasResource["dojox.collections.ArrayList"]){A._hasResource["dojox.collections.ArrayList"]=true;
-A.provide("dojox.collections.ArrayList");
-A.require("dojox.collections._base");
-dojox.collections.ArrayList=function(B){var C=[];
-if(B){C=C.concat(B)
-}this.count=C.length;
-this.add=function(D){C.push(D);
-this.count=C.length
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.collections.ArrayList"],
+["require", "dojox.collections._base"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.collections.ArrayList"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.collections.ArrayList"] = true;
+dojo.provide("dojox.collections.ArrayList");
+dojo.require("dojox.collections._base");
+
+dojox.collections.ArrayList=function(/* array? */arr){
+	//	summary
+	//	Returns a new object of type dojox.collections.ArrayList
+	var items=[];
+	if(arr) items=items.concat(arr);
+	this.count=items.length;
+	this.add=function(/* object */obj){
+		//	summary
+		//	Add an element to the collection.
+		items.push(obj);
+		this.count=items.length;
+	};
+	this.addRange=function(/* array */a){
+		//	summary
+		//	Add a range of objects to the ArrayList
+		if(a.getIterator){
+			var e=a.getIterator();
+			while(!e.atEnd()){
+				this.add(e.get());
+			}
+			this.count=items.length;
+		}else{
+			for(var i=0; i<a.length; i++){
+				items.push(a[i]);
+			}
+			this.count=items.length;
+		}
+	};
+	this.clear=function(){
+		//	summary
+		//	Clear all elements out of the collection, and reset the count.
+		items.splice(0, items.length);
+		this.count=0;
+	};
+	this.clone=function(){
+		//	summary
+		//	Clone the array list
+		return new dojox.collections.ArrayList(items);	//	dojox.collections.ArrayList
+	};
+	this.contains=function(/* object */obj){
+		//	summary
+		//	Check to see if the passed object is a member in the ArrayList
+		for(var i=0; i < items.length; i++){
+			if(items[i] == obj) {
+				return true;	//	bool
+			}
+		}
+		return false;	//	bool
+	};
+	this.forEach=function(/* function */ fn, /* object? */ scope){
+		//	summary
+		//	functional iterator, following the mozilla spec.
+		dojo.forEach(items, fn, scope);
+	};
+	this.getIterator=function(){
+		//	summary
+		//	Get an Iterator for this object
+		return new dojox.collections.Iterator(items);	//	dojox.collections.Iterator
+	};
+	this.indexOf=function(/* object */obj){
+		//	summary
+		//	Return the numeric index of the passed object; will return -1 if not found.
+		for(var i=0; i < items.length; i++){
+			if(items[i] == obj) {
+				return i;	//	int
+			}
+		}
+		return -1;	// int
+	};
+	this.insert=function(/* int */ i, /* object */ obj){
+		//	summary
+		//	Insert the passed object at index i
+		items.splice(i,0,obj);
+		this.count=items.length;
+	};
+	this.item=function(/* int */ i){
+		//	summary
+		//	return the element at index i
+		return items[i];	//	object
+	};
+	this.remove=function(/* object */obj){
+		//	summary
+		//	Look for the passed object, and if found, remove it from the internal array.
+		var i=this.indexOf(obj);
+		if(i >=0) {
+			items.splice(i,1);
+		}
+		this.count=items.length;
+	};
+	this.removeAt=function(/* int */ i){
+		//	summary
+		//	return an array with function applied to all elements
+		items.splice(i,1);
+		this.count=items.length;
+	};
+	this.reverse=function(){
+		//	summary
+		//	Reverse the internal array
+		items.reverse();
+	};
+	this.sort=function(/* function? */ fn){
+		//	summary
+		//	sort the internal array
+		if(fn){
+			items.sort(fn);
+		}else{
+			items.sort();
+		}
+	};
+	this.setByIndex=function(/* int */ i, /* object */ obj){
+		//	summary
+		//	Set an element in the array by the passed index.
+		items[i]=obj;
+		this.count=items.length;
+	};
+	this.toArray=function(){
+		//	summary
+		//	Return a new array with all of the items of the internal array concatenated.
+		return [].concat(items);
+	}
+	this.toString=function(/* string */ delim){
+		//	summary
+		//	implementation of toString, follows [].toString();
+		return items.join((delim||","));
+	};
 };
-this.addRange=function(D){if(D.getIterator){var F=D.getIterator();
-while(!F.atEnd()){this.add(F.get())
-}this.count=C.length
-}else{for(var E=0;
-E<D.length;
-E++){C.push(D[E])
-}this.count=C.length
-}};
-this.clear=function(){C.splice(0,C.length);
-this.count=0
-};
-this.clone=function(){return new dojox.collections.ArrayList(C)
-};
-this.contains=function(E){for(var D=0;
-D<C.length;
-D++){if(C[D]==E){return true
-}}return false
-};
-this.forEach=function(E,D){A.forEach(C,E,D)
-};
-this.getIterator=function(){return new dojox.collections.Iterator(C)
-};
-this.indexOf=function(E){for(var D=0;
-D<C.length;
-D++){if(C[D]==E){return D
-}}return -1
-};
-this.insert=function(D,E){C.splice(D,0,E);
-this.count=C.length
-};
-this.item=function(D){return C[D]
-};
-this.remove=function(E){var D=this.indexOf(E);
-if(D>=0){C.splice(D,1)
-}this.count=C.length
-};
-this.removeAt=function(D){C.splice(D,1);
-this.count=C.length
-};
-this.reverse=function(){C.reverse()
-};
-this.sort=function(D){if(D){C.sort(D)
-}else{C.sort()
-}};
-this.setByIndex=function(D,E){C[D]=E;
-this.count=C.length
-};
-this.toArray=function(){return[].concat(C)
-};
-this.toString=function(D){return C.join((D||","))
+
 }
-}
-}}});
+
+}});

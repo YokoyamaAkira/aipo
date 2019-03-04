@@ -1,62 +1,62 @@
 if(!dojo._hasResource["dojox.collections.ArrayList"]){dojo._hasResource["dojox.collections.ArrayList"]=true;
 dojo.provide("dojox.collections.ArrayList");
 dojo.require("dojox.collections._base");
-dojox.collections.ArrayList=function(B){var A=[];
-if(B){A=A.concat(B)
-}this.count=A.length;
-this.add=function(C){A.push(C);
-this.count=A.length
+dojox.collections.ArrayList=function(A){var B=[];
+if(A){B=B.concat(A)
+}this.count=B.length;
+this.add=function(C){B.push(C);
+this.count=B.length
 };
-this.addRange=function(D){if(D.getIterator){var C=D.getIterator();
-while(!C.atEnd()){this.add(C.get())
-}this.count=A.length
-}else{for(var E=0;
-E<D.length;
-E++){A.push(D[E])
-}this.count=A.length
+this.addRange=function(C){if(C.getIterator){var E=C.getIterator();
+while(!E.atEnd()){this.add(E.get())
+}this.count=B.length
+}else{for(var D=0;
+D<C.length;
+D++){B.push(C[D])
+}this.count=B.length
 }};
-this.clear=function(){A.splice(0,A.length);
+this.clear=function(){B.splice(0,B.length);
 this.count=0
 };
-this.clone=function(){return new dojox.collections.ArrayList(A)
+this.clone=function(){return new dojox.collections.ArrayList(B)
 };
-this.contains=function(C){for(var D=0;
-D<A.length;
-D++){if(A[D]==C){return true
+this.contains=function(D){for(var C=0;
+C<B.length;
+C++){if(B[C]==D){return true
 }}return false
 };
-this.forEach=function(C,D){dojo.forEach(A,C,D)
+this.forEach=function(D,C){dojo.forEach(B,D,C)
 };
-this.getIterator=function(){return new dojox.collections.Iterator(A)
+this.getIterator=function(){return new dojox.collections.Iterator(B)
 };
-this.indexOf=function(C){for(var D=0;
-D<A.length;
-D++){if(A[D]==C){return D
+this.indexOf=function(D){for(var C=0;
+C<B.length;
+C++){if(B[C]==D){return C
 }}return -1
 };
-this.insert=function(D,C){A.splice(D,0,C);
-this.count=A.length
+this.insert=function(C,D){B.splice(C,0,D);
+this.count=B.length
 };
-this.item=function(C){return A[C]
+this.item=function(C){return B[C]
 };
-this.remove=function(C){var D=this.indexOf(C);
-if(D>=0){A.splice(D,1)
-}this.count=A.length
+this.remove=function(D){var C=this.indexOf(D);
+if(C>=0){B.splice(C,1)
+}this.count=B.length
 };
-this.removeAt=function(C){A.splice(C,1);
-this.count=A.length
+this.removeAt=function(C){B.splice(C,1);
+this.count=B.length
 };
-this.reverse=function(){A.reverse()
+this.reverse=function(){B.reverse()
 };
-this.sort=function(C){if(C){A.sort(C)
-}else{A.sort()
+this.sort=function(C){if(C){B.sort(C)
+}else{B.sort()
 }};
-this.setByIndex=function(D,C){A[D]=C;
-this.count=A.length
+this.setByIndex=function(C,D){B[C]=D;
+this.count=B.length
 };
-this.toArray=function(){return[].concat(A)
+this.toArray=function(){return[].concat(B)
 };
-this.toString=function(C){return A.join((C||","))
+this.toString=function(C){return B.join((C||","))
 }
 }
 };

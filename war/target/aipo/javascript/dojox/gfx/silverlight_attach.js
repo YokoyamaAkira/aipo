@@ -1,41 +1,87 @@
 dojo.require("dojox.gfx.silverlight");
+
 dojo.experimental("dojox.gfx.silverlight_attach");
-(function(){dojox.gfx.attachNode=function(G){return null;
-if(!G){return null
-}var F=null;
-switch(G.tagName.toLowerCase()){case dojox.gfx.Rect.nodeType:F=new dojox.gfx.Rect(G);
-break;
-case dojox.gfx.Ellipse.nodeType:if(G.width==G.height){F=new dojox.gfx.Circle(G)
-}else{F=new dojox.gfx.Ellipse(G)
-}break;
-case dojox.gfx.Polyline.nodeType:F=new dojox.gfx.Polyline(G);
-break;
-case dojox.gfx.Path.nodeType:F=new dojox.gfx.Path(G);
-break;
-case dojox.gfx.Line.nodeType:F=new dojox.gfx.Line(G);
-break;
-case dojox.gfx.Image.nodeType:F=new dojox.gfx.Image(G);
-break;
-case dojox.gfx.Text.nodeType:F=new dojox.gfx.Text(G);
-D(F);
-break;
-default:return null
-}A(F);
-if(!(F instanceof dojox.gfx.Image)){B(F);
-E(F)
-}C(F);
-return F
-};
-dojox.gfx.attachSurface=function(F){return null
-};
-var B=function(F){return null
-};
-var E=function(F){return null
-};
-var C=function(F){return null
-};
-var D=function(F){return null
-};
-var A=function(F){return null
-}
+
+(function(){
+	dojox.gfx.attachNode = function(node){
+		// summary: creates a shape from a Node
+		// node: Node: an Silverlight node
+		return null;	// for now
+		if(!node) return null;
+		var s = null;
+		switch(node.tagName.toLowerCase()){
+			case dojox.gfx.Rect.nodeType:
+				s = new dojox.gfx.Rect(node);
+				break;
+			case dojox.gfx.Ellipse.nodeType:
+				if(node.width == node.height){
+					s = new dojox.gfx.Circle(node);
+				}else{
+					s = new dojox.gfx.Ellipse(node);
+				}
+				break;
+			case dojox.gfx.Polyline.nodeType:
+				s = new dojox.gfx.Polyline(node);
+				break;
+			case dojox.gfx.Path.nodeType:
+				s = new dojox.gfx.Path(node);
+				break;
+			case dojox.gfx.Line.nodeType:
+				s = new dojox.gfx.Line(node);
+				break;
+			case dojox.gfx.Image.nodeType:
+				s = new dojox.gfx.Image(node);
+				break;
+			case dojox.gfx.Text.nodeType:
+				s = new dojox.gfx.Text(node);
+				attachFont(s);
+				break;
+			default:
+				//console.debug("FATAL ERROR! tagName = " + node.tagName);
+				return null;
+		}
+		attachShape(s);
+		if(!(s instanceof dojox.gfx.Image)){
+			attachFill(s);
+			attachStroke(s);
+		}
+		attachTransform(s);
+		return s;	// dojox.gfx.Shape
+	};
+
+	dojox.gfx.attachSurface = function(node){
+		// summary: creates a surface from a Node
+		// node: Node: an Silverlight node
+		return null;	// dojox.gfx.Surface
+	};
+
+	var attachFill = function(rawNode){
+		// summary: deduces a fill style from a Node.
+		// rawNode: Node: an Silverlight node
+		return null;	// Object
+	};
+	
+	var attachStroke = function(rawNode){
+		// summary: deduces a stroke style from a Node.
+		// rawNode: Node: an SVG node
+		return null;	// Object
+	};
+
+	var attachTransform = function(rawNode){
+		// summary: deduces a transformation matrix from a Node.
+		// rawNode: Node: an Silverlight node
+		return null;	// dojox.gfx.matrix.Matrix
+	};
+	
+	var attachFont = function(rawNode){
+		// summary: deduces a font style from a Node.
+		// rawNode: Node: an Silverlight node
+		return null;	// Object
+	};
+	
+	var attachShape = function(rawNode){
+		// summary: builds a shape from a Node.
+		// rawNode: Node: an Silverlight node
+		return null;	// dojox.gfx.Shape
+	};
 })();

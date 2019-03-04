@@ -1,52 +1,94 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.encoding.lzw"]],defineResource:function(A){if(!A._hasResource["dojox.encoding.lzw"]){A._hasResource["dojox.encoding.lzw"]=true;
-A.provide("dojox.encoding.lzw");
-(function(){var B=function(C){var D=1;
-for(var E=2;
-C>=E;
-E<<=1,++D){}return D
-};
-dojox.encoding.lzw.Encoder=function(C){this.size=C;
-this.init()
-};
-A.extend(dojox.encoding.lzw.Encoder,{init:function(){this.dict={};
-for(var C=0;
-C<this.size;
-++C){this.dict[String.fromCharCode(C)]=C
-}this.width=B(this.code=this.size);
-this.p=""
-},encode:function(D,F){var G=String.fromCharCode(D),E=this.p+G,C=0;
-if(E in this.dict){this.p=E;
-return C
-}F.putBits(this.dict[this.p],this.width);
-if((this.code&(this.code+1))==0){F.putBits(this.code++,C=this.width++)
-}this.dict[E]=this.code++;
-this.p=G;
-return C+this.width
-},flush:function(C){if(this.p.length==0){return 0
-}C.putBits(this.dict[this.p],this.width);
-this.p="";
-return this.width
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.encoding.lzw"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.encoding.lzw"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.encoding.lzw"] = true;
+dojo.provide("dojox.encoding.lzw");
+
+(function(){
+	var _bits = function(x){
+		var w = 1;
+		for(var v = 2; x >= v; v <<= 1, ++w);
+		return w;
+	};
+
+	dojox.encoding.lzw.Encoder = function(n){
+		this.size = n;
+		this.init();
+	};
+
+	dojo.extend(dojox.encoding.lzw.Encoder, {
+		init: function(){
+			this.dict = {};
+			for(var i = 0; i < this.size; ++i){
+				this.dict[String.fromCharCode(i)] = i;
+			}
+			this.width = _bits(this.code = this.size);
+			this.p = "";
+		},
+		encode: function(value, stream){
+			var c = String.fromCharCode(value), p = this.p + c, r = 0;
+			// if already in the dictionary
+			if(p in this.dict){
+				this.p = p;
+				return r;
+			}
+			stream.putBits(this.dict[this.p], this.width);
+			// if we need to increase the code length
+			if((this.code & (this.code + 1)) == 0){
+				stream.putBits(this.code++, r = this.width++);
+			}
+			// add new string
+			this.dict[p] = this.code++;
+			this.p = c;
+			return r + this.width;
+		},
+		flush: function(stream){
+			if(this.p.length == 0){
+				return 0;
+			}
+			stream.putBits(this.dict[this.p], this.width);
+			this.p = "";
+			return this.width;
+		}
+	});
+
+	dojox.encoding.lzw.Decoder = function(n){
+		this.size = n;
+		this.init();
+	};
+
+	dojo.extend(dojox.encoding.lzw.Decoder, {
+		init: function(){
+			this.codes = new Array(this.size);
+			for(var i = 0; i < this.size; ++i){
+				this.codes[i] = String.fromCharCode(i);
+			}
+			this.width = _bits(this.size);
+			this.p = -1;
+		},
+		decode: function(stream){
+			var c = stream.getBits(this.width), v;
+			if(c < this.codes.length){
+				v = this.codes[c];
+				if(this.p >= 0){
+					this.codes.push(this.codes[this.p] + v.substr(0, 1));
+				}
+			}else{
+				if((c & (c + 1)) == 0){
+					this.codes.push("");
+					++this.width;
+					return "";
+				}
+				var x = this.codes[this.p];
+				v = x + x.substr(0, 1);
+				this.codes.push(v);
+			}
+			this.p = c;
+			return v;
+		}
+	});
+})();
+
+}
+
 }});
-dojox.encoding.lzw.Decoder=function(C){this.size=C;
-this.init()
-};
-A.extend(dojox.encoding.lzw.Decoder,{init:function(){this.codes=new Array(this.size);
-for(var C=0;
-C<this.size;
-++C){this.codes[C]=String.fromCharCode(C)
-}this.width=B(this.size);
-this.p=-1
-},decode:function(E){var F=E.getBits(this.width),D;
-if(F<this.codes.length){D=this.codes[F];
-if(this.p>=0){this.codes.push(this.codes[this.p]+D.substr(0,1))
-}}else{if((F&(F+1))==0){this.codes.push("");
-++this.width;
-return""
-}var C=this.codes[this.p];
-D=C+C.substr(0,1);
-this.codes.push(D)
-}this.p=F;
-return D
-}})
-})()
-}}});

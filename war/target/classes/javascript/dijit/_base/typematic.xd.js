@@ -4,37 +4,37 @@ dijit.typematic={_fireEventAndReload:function(){this._timer=null;
 this._callback(++this._count,this._node,this._evt);
 this._currentTimeout=(this._currentTimeout<0)?this._initialDelay:((this._subsequentDelay>1)?this._subsequentDelay:Math.round(this._currentTimeout*this._subsequentDelay));
 this._timer=setTimeout(A.hitch(this,"_fireEventAndReload"),this._currentTimeout)
-},trigger:function(G,C,B,F,E,H,D){if(E!=this._obj){this.stop();
-this._initialDelay=D||500;
-this._subsequentDelay=H||0.9;
-this._obj=E;
-this._evt=G;
-this._node=B;
+},trigger:function(B,H,D,G,F,C,E){if(F!=this._obj){this.stop();
+this._initialDelay=E||500;
+this._subsequentDelay=C||0.9;
+this._obj=F;
+this._evt=B;
+this._node=D;
 this._currentTimeout=-1;
 this._count=-1;
-this._callback=A.hitch(C,F);
+this._callback=A.hitch(H,G);
 this._fireEventAndReload()
 }},stop:function(){if(this._timer){clearTimeout(this._timer);
 this._timer=null
 }if(this._obj){this._callback(-1,this._node,this._evt);
 this._obj=null
-}},addKeyListener:function(E,C,B,G,D,F){return[A.connect(E,"onkeypress",this,function(H){if(H.keyCode==C.keyCode&&(!C.charCode||C.charCode==H.charCode)&&(C.ctrlKey===undefined||C.ctrlKey==H.ctrlKey)&&(C.altKey===undefined||C.altKey==H.ctrlKey)&&(C.shiftKey===undefined||C.shiftKey==H.ctrlKey)){A.stopEvent(H);
-dijit.typematic.trigger(C,B,E,G,C,D,F)
-}else{if(dijit.typematic._obj==C){dijit.typematic.stop()
-}}}),A.connect(E,"onkeyup",this,function(H){if(dijit.typematic._obj==C){dijit.typematic.stop()
+}},addKeyListener:function(D,B,G,F,C,E){return[A.connect(D,"onkeypress",this,function(H){if(H.keyCode==B.keyCode&&(!B.charCode||B.charCode==H.charCode)&&(B.ctrlKey===undefined||B.ctrlKey==H.ctrlKey)&&(B.altKey===undefined||B.altKey==H.ctrlKey)&&(B.shiftKey===undefined||B.shiftKey==H.ctrlKey)){A.stopEvent(H);
+dijit.typematic.trigger(B,G,D,F,B,C,E)
+}else{if(dijit.typematic._obj==B){dijit.typematic.stop()
+}}}),A.connect(D,"onkeyup",this,function(H){if(dijit.typematic._obj==B){dijit.typematic.stop()
 }})]
-},addMouseListener:function(E,C,G,D,F){var B=A.connect;
-return[B(E,"mousedown",this,function(H){A.stopEvent(H);
-dijit.typematic.trigger(H,C,E,G,E,D,F)
-}),B(E,"mouseup",this,function(H){A.stopEvent(H);
+},addMouseListener:function(D,G,F,C,E){var B=A.connect;
+return[B(D,"mousedown",this,function(H){A.stopEvent(H);
+dijit.typematic.trigger(H,G,D,F,D,C,E)
+}),B(D,"mouseup",this,function(H){A.stopEvent(H);
 dijit.typematic.stop()
-}),B(E,"mouseout",this,function(H){A.stopEvent(H);
+}),B(D,"mouseout",this,function(H){A.stopEvent(H);
 dijit.typematic.stop()
-}),B(E,"mousemove",this,function(H){A.stopEvent(H)
-}),B(E,"dblclick",this,function(H){A.stopEvent(H);
-if(A.isIE){dijit.typematic.trigger(H,C,E,G,E,D,F);
+}),B(D,"mousemove",this,function(H){A.stopEvent(H)
+}),B(D,"dblclick",this,function(H){A.stopEvent(H);
+if(A.isIE){dijit.typematic.trigger(H,G,D,F,D,C,E);
 setTimeout(dijit.typematic.stop,50)
 }})]
-},addListener:function(D,E,G,C,F,H,B){return this.addKeyListener(E,G,C,F,H,B).concat(this.addMouseListener(D,C,F,H,B))
+},addListener:function(E,F,B,H,G,C,D){return this.addKeyListener(F,B,H,G,C,D).concat(this.addMouseListener(E,H,G,C,D))
 }}
 }}});

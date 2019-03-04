@@ -1,11 +1,33 @@
-if(!dojo._hasResource["dijit._base.scroll"]){dojo._hasResource["dijit._base.scroll"]=true;
+if(!dojo._hasResource["dijit._base.scroll"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dijit._base.scroll"] = true;
 dojo.provide("dijit._base.scroll");
-dijit.scrollIntoView=function(C){if(dojo.isIE){if(dojo.marginBox(C.parentNode).h<=C.parentNode.scrollHeight){C.scrollIntoView(false)
-}}else{if(dojo.isMozilla){C.scrollIntoView(false)
-}else{var A=C.parentNode;
-var B=A.scrollTop+dojo.marginBox(A).h;
-var D=C.offsetTop+dojo.marginBox(C).h;
-if(B<D){A.scrollTop+=(D-B)
-}else{if(A.scrollTop>C.offsetTop){A.scrollTop-=(A.scrollTop-C.offsetTop)
-}}}}}
+
+dijit.scrollIntoView = function(/* DomNode */node){
+	//	summary
+	//	Scroll the passed node into view, if it is not.
+
+	// don't rely on that node.scrollIntoView works just because the function is there
+	// it doesnt work in Konqueror or Opera even though the function is there and probably
+	// not safari either
+	// dont like browser sniffs implementations but sometimes you have to use it
+	if(dojo.isIE){
+		//only call scrollIntoView if there is a scrollbar for this menu,
+		//otherwise, scrollIntoView will scroll the window scrollbar
+		if(dojo.marginBox(node.parentNode).h <= node.parentNode.scrollHeight){ //PORT was getBorderBox
+			node.scrollIntoView(false);
+		}
+	}else if(dojo.isMozilla){
+		node.scrollIntoView(false);
+	}else{
+		var parent = node.parentNode;
+		var parentBottom = parent.scrollTop + dojo.marginBox(parent).h; //PORT was getBorderBox
+		var nodeBottom = node.offsetTop + dojo.marginBox(node).h;
+		if(parentBottom < nodeBottom){
+			parent.scrollTop += (nodeBottom - parentBottom);
+		}else if(parent.scrollTop > node.offsetTop){
+			parent.scrollTop -= (parent.scrollTop - node.offsetTop);
+		}
+	}
 };
+
+}

@@ -8,11 +8,11 @@ A.declare("dojox.dtl._Widget",[dijit._Widget,dijit._Contained],{buffer:0,buildRe
 if(this.domNode){var B=this.getParent();
 if(B){this.setAttachPoint(B)
 }}},setAttachPoint:function(B){this._attach=B
-},render:function(C,B){if(!this._attach){throw new Error("You must use an attach point with dojox.dtl.TemplatedWidget")
-}B.setThis(this);
-this._attach.render(C,B)
+},render:function(B,C){if(!this._attach){throw new Error("You must use an attach point with dojox.dtl.TemplatedWidget")
+}C.setThis(this);
+this._attach.render(B,C)
 }});
-A.declare("dojox.dtl.AttachPoint",[dijit._Widget,dijit._Container],{constructor:function(C,B){this._render=new dojox.dtl.render.html.Render(B)
-},render:function(C,B){this._render.render(C,B)
+A.declare("dojox.dtl.AttachPoint",[dijit._Widget,dijit._Container],{constructor:function(B,C){this._render=new dojox.dtl.render.html.Render(C)
+},render:function(B,C){this._render.render(B,C)
 }})
 }}});

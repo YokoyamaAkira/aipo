@@ -23,90 +23,90 @@ this.advice;
 this.pendingSubscriptions={};
 this.pendingUnsubscriptions={};
 this._subscriptions=[];
-this.tunnelInit=function(B,A){};
+this.tunnelInit=function(A,B){};
 this.tunnelCollapse=function(){console.debug("tunnel collapsed!")
 };
-this.init=function(G,F,J){F=F||{};
-F.version=this.version;
-F.minimumVersion=this.minimumVersion;
-F.channel="/meta/handshake";
-F.id=""+this.messageId++;
-this.url=G||djConfig.cometdRoot;
+this.init=function(K,J,C){J=J||{};
+J.version=this.version;
+J.minimumVersion=this.minimumVersion;
+J.channel="/meta/handshake";
+J.id=""+this.messageId++;
+this.url=K||djConfig.cometdRoot;
 if(!this.url){console.debug("no cometd root specified in djConfig and no root passed");
 return 
-}var E="^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$";
-var H=(""+window.location).match(new RegExp(E));
-if(H[4]){var C=H[4].split(":");
-var I=C[0];
-var A=C[1]||"80";
-H=this.url.match(new RegExp(E));
-if(H[4]){C=H[4].split(":");
-var K=C[0];
-var D=C[1]||"80";
-this._isXD=((K!=I)||(D!=A))
-}}if(!this._isXD){if(F.ext){if(F.ext["json-comment-filtered"]!==true&&F.ext["json-comment-filtered"]!==false){F.ext["json-comment-filtered"]=true
-}}else{F.ext={"json-comment-filtered":true}
-}}var B={url:this.url,handleAs:this.handleAs,content:{message:dojo.toJson([F])},load:dojo.hitch(this,"finishInit"),error:function(L){console.debug("handshake error!:",L)
+}var I="^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$";
+var A=(""+window.location).match(new RegExp(I));
+if(A[4]){var G=A[4].split(":");
+var B=G[0];
+var E=G[1]||"80";
+A=this.url.match(new RegExp(I));
+if(A[4]){G=A[4].split(":");
+var D=G[0];
+var H=G[1]||"80";
+this._isXD=((D!=B)||(H!=E))
+}}if(!this._isXD){if(J.ext){if(J.ext["json-comment-filtered"]!==true&&J.ext["json-comment-filtered"]!==false){J.ext["json-comment-filtered"]=true
+}}else{J.ext={"json-comment-filtered":true}
+}}var F={url:this.url,handleAs:this.handleAs,content:{message:dojo.toJson([J])},load:dojo.hitch(this,"finishInit"),error:function(L){console.debug("handshake error!:",L)
 }};
-if(J){dojo.mixin(B,J)
-}this._props=F;
+if(C){dojo.mixin(F,C)
+}this._props=J;
 this._initialized=true;
 this.batch=0;
 this.startBatch();
-if(this._isXD){B.callbackParamName="jsonp";
-return dojo.io.script.get(B)
-}return dojo.xhrPost(B)
+if(this._isXD){F.callbackParamName="jsonp";
+return dojo.io.script.get(F)
+}return dojo.xhrPost(F)
 };
-this.finishInit=function(A){A=A[0];
-this.handshakeReturn=A;
-if(A.advice){this.advice=A.advice
-}if(!A.successful){console.debug("cometd init failed");
+this.finishInit=function(B){B=B[0];
+this.handshakeReturn=B;
+if(B.advice){this.advice=B.advice
+}if(!B.successful){console.debug("cometd init failed");
 if(this.advice&&this.advice.reconnect=="none"){return 
-}if(this.advice&&this.advice.interval&&this.advice.interval>0){var B=this;
-setTimeout(function(){B.init(B.url,B._props)
+}if(this.advice&&this.advice.interval&&this.advice.interval>0){var A=this;
+setTimeout(function(){A.init(A.url,A._props)
 },this.advice.interval)
 }else{this.init(this.url,this._props)
 }return 
-}if(A.version<this.minimumVersion){console.debug("cometd protocol version mismatch. We wanted",this.minimumVersion,"but got",A.version);
+}if(B.version<this.minimumVersion){console.debug("cometd protocol version mismatch. We wanted",this.minimumVersion,"but got",B.version);
 return 
-}this.currentTransport=this.connectionTypes.match(A.supportedConnectionTypes,A.version,this._isXD);
+}this.currentTransport=this.connectionTypes.match(B.supportedConnectionTypes,B.version,this._isXD);
 this.currentTransport._cometd=this;
-this.currentTransport.version=A.version;
-this.clientId=A.clientId;
+this.currentTransport.version=B.version;
+this.clientId=B.clientId;
 this.tunnelInit=dojo.hitch(this.currentTransport,"tunnelInit");
 this.tunnelCollapse=dojo.hitch(this.currentTransport,"tunnelCollapse");
-this.currentTransport.startup(A)
+this.currentTransport.startup(B)
 };
 this.deliver=function(A){dojo.forEach(A,this._deliver,this);
 return A
 };
-this._deliver=function(A){if(!A.channel){if(A.success!==true){console.debug("cometd error: no channel for message!",A);
+this._deliver=function(B){if(!B.channel){if(B.success!==true){console.debug("cometd error: no channel for message!",B);
 return 
-}}this.lastMessage=A;
-if(A.advice){this.advice=A.advice
-}if((A.channel)&&(A.channel.length>5)&&(A.channel.substr(0,5)=="/meta")){switch(A.channel){case"/meta/connect":if(A.successful&&!this._connected){this._connected=this._initialized;
+}}this.lastMessage=B;
+if(B.advice){this.advice=B.advice
+}if((B.channel)&&(B.channel.length>5)&&(B.channel.substr(0,5)=="/meta")){switch(B.channel){case"/meta/connect":if(B.successful&&!this._connected){this._connected=this._initialized;
 this.endBatch()
 }else{if(!this._initialized){this._connected=false
 }}break;
-case"/meta/subscribe":var B=this.pendingSubscriptions[A.subscription];
-if(!A.successful){if(B){B.errback(new Error(A.error));
-delete this.pendingSubscriptions[A.subscription]
+case"/meta/subscribe":var C=this.pendingSubscriptions[B.subscription];
+if(!B.successful){if(C){C.errback(new Error(B.error));
+delete this.pendingSubscriptions[B.subscription]
 }return 
-}dojox.cometd.subscribed(A.subscription,A);
-if(B){B.callback(true);
-delete this.pendingSubscriptions[A.subscription]
+}dojox.cometd.subscribed(B.subscription,B);
+if(C){C.callback(true);
+delete this.pendingSubscriptions[B.subscription]
 }break;
-case"/meta/unsubscribe":var B=this.pendingUnsubscriptions[A.subscription];
-if(!A.successful){if(B){B.errback(new Error(A.error));
-delete this.pendingUnsubscriptions[A.subscription]
+case"/meta/unsubscribe":var C=this.pendingUnsubscriptions[B.subscription];
+if(!B.successful){if(C){C.errback(new Error(B.error));
+delete this.pendingUnsubscriptions[B.subscription]
 }return 
-}this.unsubscribed(A.subscription,A);
-if(B){B.callback(true);
-delete this.pendingUnsubscriptions[A.subscription]
+}this.unsubscribed(B.subscription,B);
+if(C){C.callback(true);
+delete this.pendingUnsubscriptions[B.subscription]
 }break
-}}this.currentTransport.deliver(A);
-if(A.data){var C="/cometd"+A.channel;
-dojo.publish(C,[A])
+}}this.currentTransport.deliver(B);
+if(B.data){var A="/cometd"+B.channel;
+dojo.publish(A,[B])
 }};
 this.disconnect=function(){dojo.forEach(this._subscriptions,dojo.unsubscribe);
 this._subscriptions=[];
@@ -116,37 +116,37 @@ this.currentTransport.disconnect()
 }this._initialized=false;
 if(!this._polling){this._connected=false
 }};
-this.publish=function(B,C,D){var A={data:C,channel:B};
-if(D){dojo.mixin(A,D)
-}this._sendMessage(A)
+this.publish=function(C,D,A){var B={data:D,channel:C};
+if(A){dojo.mixin(B,A)
+}this._sendMessage(B)
 };
 this._sendMessage=function(A){if(this.currentTransport&&this._connected&&this.batch==0){return this.currentTransport.sendMessages([A])
 }else{this._messageQ.push(A)
 }};
-this.subscribe=function(B,G,D){if(this.pendingSubscriptions[B]){var E=this.pendingSubscriptions[B];
-E.cancel();
-delete this.pendingSubscriptions[B]
-}var C=new dojo.Deferred();
-this.pendingSubscriptions[B]=C;
-if(G){var A="/cometd"+B;
-if(this.topics[A]){dojo.unsubscribe(this.topics[A])
-}var F=dojo.subscribe(A,G,D);
-this.topics[A]=F
-}this._sendMessage({channel:"/meta/subscribe",subscription:B});
-return C
+this.subscribe=function(E,C,G){if(this.pendingSubscriptions[E]){var A=this.pendingSubscriptions[E];
+A.cancel();
+delete this.pendingSubscriptions[E]
+}var F=new dojo.Deferred();
+this.pendingSubscriptions[E]=F;
+if(C){var D="/cometd"+E;
+if(this.topics[D]){dojo.unsubscribe(this.topics[D])
+}var B=dojo.subscribe(D,C,G);
+this.topics[D]=B
+}this._sendMessage({channel:"/meta/subscribe",subscription:E});
+return F
 };
-this.subscribed=function(A,B){};
-this.unsubscribe=function(B){if(this.pendingUnsubscriptions[B]){var D=this.pendingUnsubscriptions[B];
-D.cancel();
-delete this.pendingUnsubscriptions[B]
-}var C=new dojo.Deferred();
-this.pendingUnsubscriptions[B]=C;
-var A="/cometd"+B;
-if(this.topics[A]){dojo.unsubscribe(this.topics[A])
-}this._sendMessage({channel:"/meta/unsubscribe",subscription:B});
-return C
+this.subscribed=function(B,A){};
+this.unsubscribe=function(C){if(this.pendingUnsubscriptions[C]){var A=this.pendingUnsubscriptions[C];
+A.cancel();
+delete this.pendingUnsubscriptions[C]
+}var D=new dojo.Deferred();
+this.pendingUnsubscriptions[C]=D;
+var B="/cometd"+C;
+if(this.topics[B]){dojo.unsubscribe(this.topics[B])
+}this._sendMessage({channel:"/meta/unsubscribe",subscription:C});
+return D
 };
-this.unsubscribed=function(A,B){};
+this.unsubscribed=function(B,A){};
 this.startBatch=function(){this.batch++
 };
 this.endBatch=function(){if(--this.batch<=0&&this.currentTransport&&this._connected){this.batch=0;
@@ -160,7 +160,7 @@ this._onUnload=function(){dojo.addOnUnload(dojox.cometd,"disconnect")
 dojox.cometd.longPollTransport=new function(){this._connectionType="long-polling";
 this._cometd=null;
 this.lastTimestamp=null;
-this.check=function(B,C,A){return((!A)&&(dojo.indexOf(B,"long-polling")>=0))
+this.check=function(C,A,B){return((!B)&&(dojo.indexOf(C,"long-polling")>=0))
 };
 this.tunnelInit=function(){if(this._cometd._polling){return 
 }this.openTunnelWith({message:dojo.toJson([{channel:"/meta/connect",clientId:this._cometd.clientId,connectionType:this._connectionType,id:""+this._cometd.messageId++}])})
@@ -178,7 +178,7 @@ this._connect=function(){if((this._cometd.advice)&&(this._cometd.advice.reconnec
 }}};
 this.deliver=function(A){if(A.timestamp){this.lastTimestamp=A.timestamp
 }};
-this.openTunnelWith=function(A,C){var B=dojo.xhrPost({url:(C||this._cometd.url),content:A,handleAs:this._cometd.handleAs,load:dojo.hitch(this,function(D){this._cometd._polling=false;
+this.openTunnelWith=function(B,A){var C=dojo.xhrPost({url:(A||this._cometd.url),content:B,handleAs:this._cometd.handleAs,load:dojo.hitch(this,function(D){this._cometd._polling=false;
 this._cometd.deliver(D);
 this.tunnelCollapse()
 }),error:function(D){console.debug("tunnel opening failed:",D);
@@ -186,11 +186,11 @@ dojo.cometd._polling=false
 }});
 this._cometd._polling=true
 };
-this.sendMessages=function(A){for(var B=0;
-B<A.length;
-B++){A[B].clientId=this._cometd.clientId;
-A[B].id=""+this._cometd.messageId++
-}return dojo.xhrPost({url:this._cometd.url||djConfig.cometdRoot,handleAs:this._cometd.handleAs,load:dojo.hitch(this._cometd,"deliver"),content:{message:dojo.toJson(A)}})
+this.sendMessages=function(B){for(var A=0;
+A<B.length;
+A++){B[A].clientId=this._cometd.clientId;
+B[A].id=""+this._cometd.messageId++
+}return dojo.xhrPost({url:this._cometd.url||djConfig.cometdRoot,handleAs:this._cometd.handleAs,load:dojo.hitch(this._cometd,"deliver"),content:{message:dojo.toJson(B)}})
 };
 this.startup=function(A){if(this._cometd._connected){return 
 }this.tunnelInit()
@@ -201,7 +201,7 @@ this.disconnect=function(){dojo.xhrPost({url:this._cometd.url||djConfig.cometdRo
 dojox.cometd.callbackPollTransport=new function(){this._connectionType="callback-polling";
 this._cometd=null;
 this.lastTimestamp=null;
-this.check=function(B,C,A){return(dojo.indexOf(B,"callback-polling")>=0)
+this.check=function(C,A,B){return(dojo.indexOf(C,"callback-polling")>=0)
 };
 this.tunnelInit=function(){if(this._cometd._polling){return 
 }this.openTunnelWith({message:dojo.toJson([{channel:"/meta/connect",clientId:this._cometd.clientId,connectionType:this._connectionType,id:""+this._cometd.messageId++}])})
@@ -209,20 +209,20 @@ this.tunnelInit=function(){if(this._cometd._polling){return
 this.tunnelCollapse=dojox.cometd.longPollTransport.tunnelCollapse;
 this._connect=dojox.cometd.longPollTransport._connect;
 this.deliver=dojox.cometd.longPollTransport.deliver;
-this.openTunnelWith=function(A,B){dojo.io.script.get({load:dojo.hitch(this,function(C){this._cometd._polling=false;
+this.openTunnelWith=function(B,A){dojo.io.script.get({load:dojo.hitch(this,function(C){this._cometd._polling=false;
 this._cometd.deliver(C);
 this.tunnelCollapse()
 }),error:function(){this._cometd._polling=false;
 console.debug("tunnel opening failed")
-},url:(B||this._cometd.url),content:A,callbackParamName:"jsonp"});
+},url:(A||this._cometd.url),content:B,callbackParamName:"jsonp"});
 this._cometd._polling=true
 };
-this.sendMessages=function(B){for(var A=0;
-A<B.length;
-A++){B[A].clientId=this._cometd.clientId;
-B[A].id=""+this._cometd.messageId++
-}var C={url:this._cometd.url||djConfig.cometdRoot,load:dojo.hitch(this._cometd,"deliver"),callbackParamName:"jsonp",content:{message:dojo.toJson(B)}};
-return dojo.io.script.get(C)
+this.sendMessages=function(C){for(var B=0;
+B<C.length;
+B++){C[B].clientId=this._cometd.clientId;
+C[B].id=""+this._cometd.messageId++
+}var A={url:this._cometd.url||djConfig.cometdRoot,load:dojo.hitch(this._cometd,"deliver"),callbackParamName:"jsonp",content:{message:dojo.toJson(C)}};
+return dojo.io.script.get(A)
 };
 this.startup=function(A){if(this._cometd._connected){return 
 }this.tunnelInit()

@@ -1,4 +1,11 @@
-dojo._xdResourceLoaded({depends:[["require","dojox._sql.common"],["provide","dojox.sql"]],defineResource:function(A){if(!A._hasResource["dojox.sql"]){A._hasResource["dojox.sql"]=true;
-A.require("dojox._sql.common");
-A.provide("dojox.sql")
-}}});
+dojo._xdResourceLoaded({
+depends: [["require", "dojox._sql.common"],
+["provide", "dojox.sql"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.sql"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.sql"] = true;
+dojo.require("dojox._sql.common");
+dojo.provide("dojox.sql");
+
+}
+
+}});

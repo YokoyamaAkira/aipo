@@ -13,50 +13,50 @@ A.require("dijit.form.Slider");
 A.require("dijit.Editor");
 A.declare("dojox.grid.editors.Dijit",dojox.grid.editors.base,{editorClass:"dijit.form.TextBox",constructor:function(B){this.editor=null;
 this.editorClass=A.getObject(this.cell.editorClass||this.editorClass)
-},format:function(B,C){this.needFormatNode(B,C);
+},format:function(C,B){this.needFormatNode(C,B);
 return"<div></div>"
 },getValue:function(B){return this.editor.getValue()
-},setValue:function(B,C){if(this.editor&&this.editor.setValue){this.editor.setValue(C)
+},setValue:function(C,B){if(this.editor&&this.editor.setValue){this.editor.setValue(B)
 }else{this.inherited(arguments)
 }},getEditorProps:function(B){return A.mixin({},this.cell.editorProps||{},{constraints:A.mixin({},this.cell.constraint)||{},value:B})
-},createEditor:function(B,D,C){return new this.editorClass(this.getEditorProps(D),B)
-},attachEditor:function(B,D,C){B.appendChild(this.editor.domNode);
-this.setValue(C,D)
-},formatNode:function(B,D,C){if(!this.editorClass){return D
+},createEditor:function(D,C,B){return new this.editorClass(this.getEditorProps(C),D)
+},attachEditor:function(D,C,B){D.appendChild(this.editor.domNode);
+this.setValue(B,C)
+},formatNode:function(D,C,B){if(!this.editorClass){return C
 }if(!this.editor){this.editor=this.createEditor.apply(this,arguments)
 }else{this.attachEditor.apply(this,arguments)
 }this.sizeEditor.apply(this,arguments);
-this.cell.grid.rowHeightChanged(C);
+this.cell.grid.rowHeightChanged(B);
 this.focus()
-},sizeEditor:function(B,F,E){var D=this.cell.getNode(E),C=A.contentBox(D);
-A.marginBox(this.editor.domNode,{w:C.w})
-},focus:function(C,B){if(this.editor){setTimeout(A.hitch(this.editor,function(){dojox.grid.fire(this,"focus")
+},sizeEditor:function(F,E,D){var C=this.cell.getNode(D),B=A.contentBox(C);
+A.marginBox(this.editor.domNode,{w:B.w})
+},focus:function(B,C){if(this.editor){setTimeout(A.hitch(this.editor,function(){dojox.grid.fire(this,"focus")
 }),0)
 }},_finish:function(B){this.inherited(arguments);
 dojox.grid.removeNode(this.editor.domNode)
 }});
-A.declare("dojox.grid.editors.ComboBox",dojox.grid.editors.Dijit,{editorClass:"dijit.form.ComboBox",getEditorProps:function(B){var D=[];
-A.forEach(this.cell.options,function(E){D.push({name:E,value:E})
+A.declare("dojox.grid.editors.ComboBox",dojox.grid.editors.Dijit,{editorClass:"dijit.form.ComboBox",getEditorProps:function(D){var C=[];
+A.forEach(this.cell.options,function(E){C.push({name:E,value:E})
 });
-var C=new A.data.ItemFileReadStore({data:{identifier:"name",items:D}});
-return A.mixin({},this.cell.editorProps||{},{value:B,store:C})
+var B=new A.data.ItemFileReadStore({data:{identifier:"name",items:C}});
+return A.mixin({},this.cell.editorProps||{},{value:D,store:B})
 },getValue:function(){var B=this.editor;
 B.setDisplayedValue(B.getDisplayedValue());
 return B.getValue()
 }});
-A.declare("dojox.grid.editors.DateTextBox",dojox.grid.editors.Dijit,{editorClass:"dijit.form.DateTextBox",setValue:function(B,C){if(this.editor){this.editor.setValue(new Date(C))
+A.declare("dojox.grid.editors.DateTextBox",dojox.grid.editors.Dijit,{editorClass:"dijit.form.DateTextBox",setValue:function(C,B){if(this.editor){this.editor.setValue(new Date(B))
 }else{this.inherited(arguments)
 }},getEditorProps:function(B){return A.mixin(this.inherited(arguments),{value:new Date(B)})
 }});
 A.declare("dojox.grid.editors.CheckBox",dojox.grid.editors.Dijit,{editorClass:"dijit.form.CheckBox",getValue:function(){return this.editor.checked
 }});
 A.declare("dojox.grid.editors.Editor",dojox.grid.editors.Dijit,{editorClass:"dijit.Editor",getEditorProps:function(B){return A.mixin({},this.cell.editorProps||{},{height:this.cell.editorHeight||"100px"})
-},createEditor:function(B,E,D){var C=new this.editorClass(this.getEditorProps(E),B);
-C.setValue(E);
-return C
-},formatNode:function(B,E,D){this.inherited(arguments);
-var C=this.editor;
-C.open();
-if(this.cell.editorToolbar){A.place(C.toolbar.domNode,C.editingArea,"before")
+},createEditor:function(E,D,C){var B=new this.editorClass(this.getEditorProps(D),E);
+B.setValue(D);
+return B
+},formatNode:function(E,D,C){this.inherited(arguments);
+var B=this.editor;
+B.open();
+if(this.cell.editorToolbar){A.place(B.toolbar.domNode,B.editingArea,"before")
 }}})
 }}});

@@ -1,68 +1,188 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.charting.plot2d.Pie"],["require","dojox.charting.Element"],["require","dojox.charting.axis2d.common"],["require","dojox.charting.plot2d.common"],["require","dojox.lang.functional"],["require","dojox.gfx"]],defineResource:function(A){if(!A._hasResource["dojox.charting.plot2d.Pie"]){A._hasResource["dojox.charting.plot2d.Pie"]=true;
-A.provide("dojox.charting.plot2d.Pie");
-A.require("dojox.charting.Element");
-A.require("dojox.charting.axis2d.common");
-A.require("dojox.charting.plot2d.common");
-A.require("dojox.lang.functional");
-A.require("dojox.gfx");
-(function(){var G=dojox.lang.functional,E=dojox.lang.utils,C=dojox.charting.plot2d.common,D=dojox.charting.axis2d.common,F=dojox.gfx,B=0.8;
-A.declare("dojox.charting.plot2d.Pie",dojox.charting.Element,{defaultParams:{labels:true,ticks:false,fixed:true,precision:1,labelOffset:20,labelStyle:"default",htmlLabels:true},optionalParams:{font:"",fontColor:"",radius:0},constructor:function(I,H){this.opt=A.clone(this.defaultParams);
-E.updateWithObject(this.opt,H);
-E.updateWithPattern(this.opt,H,this.optionalParams);
-this.run=null;
-this.dyn=[]
-},clear:function(){this.dirty=true;
-this.dyn=[];
-return this
-},setAxis:function(H){return this
-},addSeries:function(H){this.run=H;
-return this
-},calculateAxes:function(H){return this
-},getRequiredColors:function(){return this.run?this.run.data.length:0
-},render:function(X,P){if(!this.dirty){return this
-}this.dirty=false;
-this.cleanGroup();
-var S=this.group,W,R=this.chart.theme;
-var O=(X.width-P.l-P.r)/2,N=(X.height-P.t-P.b)/2,U=Math.min(O,N),b="font" in this.opt?this.opt.font:R.axis.font,J="fontColor" in this.opt?this.opt.fontColor:R.axis.fontColor,K=G.foldl1(this.run.data,"+"),M=0,Q,I=A.map(this.run.data,function(c){return c/K
-}),Y,V,T;
-if(this.opt.labels){var a=A.map(I,function(c){return this._getLabel(c*100)+"%"
-},this);
-Y=G.foldl1(A.map(a,G.pluck("length")),"x, y -> Math.max(x, y)");
-V=b?F.normalizedLength(F.splitFontString(b).size):0;
-Y=Math.max(Y*B,1)/2*V;
-if(this.opt.labelOffset<0){U=Math.min(O-2*Y,N-V)+this.opt.labelOffset
-}T=U-this.opt.labelOffset
-}if("radius" in this.opt){U=this.opt.radius;
-T=U-this.opt.labelOffset
-}var L={cx:P.l+O,cy:P.t+N,r:U};
-this.dyn=[];
-if(!this.run||!this.run.data.length){return this
-}if(this.run.data.length==1){W=new A.Color(R.next("color"));
-var H=S.createCircle(L).setFill(C.augmentFill(R.run.fill,W)).setStroke(C.augmentStroke(R.series.stroke,W));
-this.dyn.push({color:W,fill:H.getFill(),stroke:H.getStroke()});
-if(this.opt.labels){var Y=4,b="font" in this.opt?this.opt.font:R.axis.font,J="fontColor" in this.opt?this.opt.fontColor:R.axis.fontColor,V=b?F.normalizedLength(F.splitFontString(b).size):0;
-Y=Math.max(Y*B,1)/2*V;
-var Z=D.createText[this.opt.htmlLabels?"html":"gfx"](this.chart,S,L.cx,L.cy+V/2,"middle","100%",b,J);
-if(this.opt.htmlLabels){this.htmlElements.push(Z)
-}}return this
-}A.forEach(I,function(l,g){var f=M+l*2*Math.PI;
-if(g+1==I.length){f=2*Math.PI
-}var e=f-M,d=L.cx+U*Math.cos(M),k=L.cy+U*Math.sin(M),c=L.cx+U*Math.cos(f),j=L.cy+U*Math.sin(f);
-W=new A.Color(R.next("color"));
-var h=S.createPath({}).moveTo(L.cx,L.cy).lineTo(d,k).arcTo(U,U,0,e>Math.PI,true,c,j).lineTo(L.cx,L.cy).closePath().setFill(C.augmentFill(R.series.fill,W)).setStroke(C.augmentStroke(R.series.stroke,W));
-this.dyn.push({color:W,fill:h.getFill(),stroke:h.getStroke()});
-M=f
-},this);
-if(this.opt.labels){M=0;
-A.forEach(I,function(c,f){var d=M+c*2*Math.PI;
-if(f+1==I.length){d=2*Math.PI
-}var e=(M+d)/2,c=L.cx+T*Math.cos(e),h=L.cy+T*Math.sin(e)+V/2;
-var g=D.createText[this.opt.htmlLabels?"html":"gfx"](this.chart,S,c,h,"middle",a[f],b,J);
-if(this.opt.htmlLabels){this.htmlElements.push(g)
-}M=d
-},this)
-}return this
-},_getLabel:function(H){return this.opt.fixed?H.toFixed(this.opt.precision):H.toString()
-}})
-})()
-}}});
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.charting.plot2d.Pie"],
+["require", "dojox.charting.Element"],
+["require", "dojox.charting.axis2d.common"],
+["require", "dojox.charting.plot2d.common"],
+["require", "dojox.lang.functional"],
+["require", "dojox.gfx"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.charting.plot2d.Pie"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.charting.plot2d.Pie"] = true;
+dojo.provide("dojox.charting.plot2d.Pie");
+
+dojo.require("dojox.charting.Element");
+dojo.require("dojox.charting.axis2d.common");
+dojo.require("dojox.charting.plot2d.common");
+
+dojo.require("dojox.lang.functional");
+dojo.require("dojox.gfx");
+
+(function(){
+	var df = dojox.lang.functional, du = dojox.lang.utils,
+		dc = dojox.charting.plot2d.common,
+		da = dojox.charting.axis2d.common,
+		g = dojox.gfx,
+		labelFudgeFactor = 0.8;		// in percents (to convert font's heigth to label width)
+
+	dojo.declare("dojox.charting.plot2d.Pie", dojox.charting.Element, {
+		defaultParams: {
+			labels:			true,
+			ticks:			false,
+			fixed:			true,
+			precision:		1,
+			labelOffset:	20,
+			labelStyle:		"default",	// default/rows/auto
+			htmlLabels:		true		// use HTML to draw labels
+		},
+		optionalParams: {
+			font:		"",
+			fontColor:	"",
+			radius:		0
+		},
+
+		constructor: function(chart, kwArgs){
+			this.opt = dojo.clone(this.defaultParams);
+			du.updateWithObject(this.opt, kwArgs);
+			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
+			this.run = null;
+			this.dyn = [];
+		},
+		clear: function(){
+			this.dirty = true;
+			this.dyn = [];
+			return this;
+		},
+		setAxis: function(axis){
+			// nothing
+			return this;
+		},
+		addSeries: function(run){
+			this.run = run;
+			return this;
+		},
+		calculateAxes: function(dim){
+			// nothing
+			return this;
+		},
+		getRequiredColors: function(){
+			return this.run ? this.run.data.length : 0;
+		},
+		render: function(dim, offsets){
+			if(!this.dirty){ return this; }
+			this.dirty = false;
+			this.cleanGroup();
+			var s = this.group, color, t = this.chart.theme;
+
+			// calculate the geometry
+			var rx = (dim.width  - offsets.l - offsets.r) / 2,
+				ry = (dim.height - offsets.t - offsets.b) / 2,
+				r  = Math.min(rx, ry),
+				taFont = "font" in this.opt ? this.opt.font : t.axis.font,
+				taFontColor = "fontColor" in this.opt ? this.opt.fontColor : t.axis.fontColor,
+				sum = df.foldl1(this.run.data, "+"), start = 0, step,
+				slices = dojo.map(this.run.data, function(x){ return x / sum; }),
+				shift, size, labelR;
+			if(this.opt.labels){
+				var labels = dojo.map(slices, function(x){
+					return this._getLabel(x * 100) + "%";
+				}, this);
+				shift = df.foldl1(dojo.map(labels, df.pluck("length")), "x, y -> Math.max(x, y)");
+				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
+				shift = Math.max(shift * labelFudgeFactor, 1) / 2 * size;
+				if(this.opt.labelOffset < 0){
+					r = Math.min(rx - 2 * shift, ry - size) + this.opt.labelOffset;
+				}
+				labelR = r - this.opt.labelOffset;
+			}
+			if("radius" in this.opt){
+				r = this.opt.radius;
+				labelR = r - this.opt.labelOffset;
+			}
+			var	circle = {
+					cx: offsets.l + rx,
+					cy: offsets.t + ry,
+					r:  r
+				};
+
+			this.dyn = [];			
+			if(!this.run || !this.run.data.length){
+				return this;
+			}
+			if(this.run.data.length == 1){
+				// need autogenerated color
+				color = new dojo.Color(t.next("color"));
+				var shape = s.createCircle(circle).
+						setFill(dc.augmentFill(t.run.fill, color)).
+						setStroke(dc.augmentStroke(t.series.stroke, color));
+				this.dyn.push({color: color, fill: shape.getFill(), stroke: shape.getStroke()});
+				if(this.opt.labels){
+					var shift = 4,
+						taFont = "font" in this.opt ? this.opt.font : t.axis.font,
+						taFontColor = "fontColor" in this.opt ? this.opt.fontColor : t.axis.fontColor,
+						size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0;
+					shift = Math.max(shift * labelFudgeFactor, 1) / 2 * size;
+					// draw the label
+					var elem = da.createText[this.opt.htmlLabels ? "html" : "gfx"]
+									(this.chart, s, circle.cx, circle.cy + size / 2, "middle",
+										"100%", taFont, taFontColor);
+					if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
+				}
+				return this;
+			}
+			// draw slices
+			dojo.forEach(slices, function(x, i){
+				// calculate the geometry of the slice
+				var end = start + x * 2 * Math.PI;
+				if(i + 1 == slices.length){
+					end = 2 * Math.PI;
+				}
+				var	step = end - start,
+					x1 = circle.cx + r * Math.cos(start),
+					y1 = circle.cy + r * Math.sin(start),
+					x2 = circle.cx + r * Math.cos(end),
+					y2 = circle.cy + r * Math.sin(end);
+				// draw the slice
+				color = new dojo.Color(t.next("color"));
+				var shape = s.createPath({}).
+						moveTo(circle.cx, circle.cy).
+						lineTo(x1, y1).
+						arcTo(r, r, 0, step > Math.PI, true, x2, y2).
+						lineTo(circle.cx, circle.cy).
+						closePath().
+						setFill(dc.augmentFill(t.series.fill, color)).
+						setStroke(dc.augmentStroke(t.series.stroke, color));
+				this.dyn.push({color: color, fill: shape.getFill(), stroke: shape.getStroke()});
+				start = end;
+			}, this);
+			// draw labels
+			if(this.opt.labels){
+				start = 0;
+				dojo.forEach(slices, function(x, i){
+					// calculate the geometry of the slice
+					var end = start + x * 2 * Math.PI;
+					if(i + 1 == slices.length){
+						end = 2 * Math.PI;
+					}
+					var	labelAngle = (start + end) / 2,
+						x = circle.cx + labelR * Math.cos(labelAngle),
+						y = circle.cy + labelR * Math.sin(labelAngle) + size / 2;
+					// draw the label
+					var elem = da.createText[this.opt.htmlLabels ? "html" : "gfx"]
+									(this.chart, s, x, y, "middle",
+										labels[i], taFont, taFontColor);
+					if(this.opt.htmlLabels){ this.htmlElements.push(elem); }
+					start = end;
+				}, this);
+			}
+			return this;
+		},
+		
+		// utilities
+		_getLabel: function(number){
+			return this.opt.fixed ? number.toFixed(this.opt.precision) : number.toString();
+		}
+	});
+})();
+
+}
+
+}});

@@ -47,15 +47,15 @@ import com.aimluck.eip.util.ALEipUtils;
 
 /**
  * CSV ファイルから読み込んだアカウント情報を表示するクラス．
- * 
+ *
  */
-public class FileIOAccountCsvSelectData
-    extends
+public class FileIOAccountCsvSelectData extends
     ALCsvAbstractSelectData<FileIOAccountCsvResultData, FileIOAccountCsvResultData> {
 
   /** logger */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(FileIOAccountCsvSelectData.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(FileIOAccountCsvSelectData.class.getName());
 
   /** 最大登録可能数を超えているかのフラグ */
   private boolean overMaxUser = false;
@@ -71,7 +71,7 @@ public class FileIOAccountCsvSelectData
 
   /**
    * アカウント一覧を取得します。 ただし、論理削除されているアカウントは取得しません。
-   * 
+   *
    * @param rundata
    * @param context
    * @return
@@ -90,9 +90,11 @@ public class FileIOAccountCsvSelectData
             + ALStorageService.separator()
             + FileIOAccountCsvUtils.CSV_ACCOUNT_TEMP_FILENAME;
         return new ResultList<FileIOAccountCsvResultData>(
-          readAccountInfoFromCsvPage(rundata, filepath, (rundata
-            .getParameters()
-            .getInteger("csvpage") - 1), ALCsvTokenizer.CSV_SHOW_SIZE));
+          readAccountInfoFromCsvPage(
+            rundata,
+            filepath,
+            (rundata.getParameters().getInteger("csvpage") - 1),
+            ALCsvTokenizer.CSV_SHOW_SIZE));
       } else if (stats == ALCsvTokenizer.CSV_LIST_MODE_ERROR) {
         if (this.error_count > 0) {
           filepath =
@@ -130,7 +132,7 @@ public class FileIOAccountCsvSelectData
 
   /**
    * CSVファイルを読み込んで表示用リストを作成します <BR>
-   * 
+   *
    * @param rundata
    * @return
    * @throws Exception
@@ -342,7 +344,7 @@ public class FileIOAccountCsvSelectData
 
   /**
    * CSVファイルを読み込んでページ毎の表示用リストを作成します <BR>
-   * 
+   *
    * @param rundata
    * @param filepath
    * @param StartLine
@@ -490,7 +492,7 @@ public class FileIOAccountCsvSelectData
   }
 
   /**
-   * 
+   *
    * @return
    */
   private Map<String, TurbineUser> getAllUsersFromDB() {
@@ -516,7 +518,7 @@ public class FileIOAccountCsvSelectData
   /**
    * @param obj
    * @return
-   * 
+   *
    */
   @Override
   protected Object getResultData(FileIOAccountCsvResultData obj) {
@@ -534,7 +536,7 @@ public class FileIOAccountCsvSelectData
 
   /**
    * @return
-   * 
+   *
    */
   @Override
   protected Attributes getColumnMap() {

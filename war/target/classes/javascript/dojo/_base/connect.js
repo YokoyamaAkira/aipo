@@ -1,48 +1,48 @@
 if(!dojo._hasResource["dojo._base.connect"]){dojo._hasResource["dojo._base.connect"]=true;
 dojo.provide("dojo._base.connect");
 dojo.require("dojo._base.lang");
-dojo._listener={getDispatcher:function(){return function(){var C=Array.prototype,E=arguments.callee,F=E._listeners,B=E.target;
-var D=B&&B.apply(this,arguments);
-for(var A in F){if(!(A in C)){F[A].apply(this,arguments)
-}}return D
+dojo._listener={getDispatcher:function(){return function(){var D=Array.prototype,F=arguments.callee,A=F._listeners,C=F.target;
+var E=C&&C.apply(this,arguments);
+for(var B in A){if(!(B in D)){A[B].apply(this,arguments)
+}}return E
 }
-},add:function(B,D,A){B=B||dojo.global;
-var E=B[D];
-if(!E||!E._listeners){var C=dojo._listener.getDispatcher();
-C.target=E;
-C._listeners=[];
-E=B[D]=C
-}return E._listeners.push(A)
-},remove:function(B,C,A){var D=(B||dojo.global)[C];
-if(D&&D._listeners&&A--){delete D._listeners[A]
+},add:function(C,E,B){C=C||dojo.global;
+var A=C[E];
+if(!A||!A._listeners){var D=dojo._listener.getDispatcher();
+D.target=A;
+D._listeners=[];
+A=C[E]=D
+}return A._listeners.push(B)
+},remove:function(C,D,B){var A=(C||dojo.global)[D];
+if(A&&A._listeners&&B--){delete A._listeners[B]
 }}};
-dojo.connect=function(B,H,J,G,F){var E=arguments,D=[],C=0;
-D.push(dojo.isString(E[0])?null:E[C++],E[C++]);
-var I=E[C+1];
-D.push(dojo.isString(I)||dojo.isFunction(I)?E[C++]:null,E[C++]);
-for(var A=E.length;
-C<A;
-C++){D.push(E[C])
-}return dojo._connect.apply(this,D)
+dojo.connect=function(F,B,D,A,J){var I=arguments,H=[],G=0;
+H.push(dojo.isString(I[0])?null:I[G++],I[G++]);
+var C=I[G+1];
+H.push(dojo.isString(C)||dojo.isFunction(C)?I[G++]:null,I[G++]);
+for(var E=I.length;
+G<E;
+G++){H.push(I[G])
+}return dojo._connect.apply(this,H)
 };
-dojo._connect=function(D,C,A,E){var F=dojo._listener,B=F.add(D,C,dojo.hitch(A,E));
-return[D,C,B,F]
+dojo._connect=function(E,D,B,F){var A=dojo._listener,C=A.add(E,D,dojo.hitch(B,F));
+return[E,D,C,A]
 };
 dojo.disconnect=function(A){if(A&&A[0]!==undefined){dojo._disconnect.apply(this,A);
 delete A[0]
 }};
-dojo._disconnect=function(C,D,B,A){A.remove(C,D,B)
+dojo._disconnect=function(D,A,C,B){B.remove(D,A,C)
 };
 dojo._topics={};
-dojo.subscribe=function(C,A,B){return[C,dojo._listener.add(dojo._topics,C,dojo.hitch(A,B))]
+dojo.subscribe=function(A,B,C){return[A,dojo._listener.add(dojo._topics,A,dojo.hitch(B,C))]
 };
 dojo.unsubscribe=function(A){if(A){dojo._listener.remove(dojo._topics,A[0],A[1])
 }};
-dojo.publish=function(A,C){var B=dojo._topics[A];
-if(B){B.apply(this,C||[])
+dojo.publish=function(B,A){var C=dojo._topics[B];
+if(C){C.apply(this,A||[])
 }};
-dojo.connectPublisher=function(A,C,B){var D=function(){dojo.publish(A,arguments)
+dojo.connectPublisher=function(B,D,C){var A=function(){dojo.publish(B,arguments)
 };
-return(B)?dojo.connect(C,B,D):dojo.connect(C,D)
+return(C)?dojo.connect(D,C,A):dojo.connect(D,A)
 }
 };

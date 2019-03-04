@@ -2,22 +2,22 @@ if(!dojo._hasResource["dojox.storage.Provider"]){dojo._hasResource["dojox.storag
 dojo.provide("dojox.storage.Provider");
 dojo.declare("dojox.storage.Provider",null,{constructor:function(){},SUCCESS:"success",FAILED:"failed",PENDING:"pending",SIZE_NOT_AVAILABLE:"Size not available",SIZE_NO_LIMIT:"No size limit",DEFAULT_NAMESPACE:"default",onHideSettingsUI:null,initialize:function(){console.warn("dojox.storage.initialize not implemented")
 },isAvailable:function(){console.warn("dojox.storage.isAvailable not implemented")
-},put:function(D,C,B,A){console.warn("dojox.storage.put not implemented")
-},get:function(B,A){console.warn("dojox.storage.get not implemented")
-},hasKey:function(B,A){return(this.get(B)!=null)
+},put:function(A,D,C,B){console.warn("dojox.storage.put not implemented")
+},get:function(A,B){console.warn("dojox.storage.get not implemented")
+},hasKey:function(A,B){return(this.get(A)!=null)
 },getKeys:function(A){console.warn("dojox.storage.getKeys not implemented")
 },clear:function(A){console.warn("dojox.storage.clear not implemented")
-},remove:function(B,A){console.warn("dojox.storage.remove not implemented")
+},remove:function(A,B){console.warn("dojox.storage.remove not implemented")
 },getNamespaces:function(){console.warn("dojox.storage.getNamespaces not implemented")
 },isPermanent:function(){console.warn("dojox.storage.isPermanent not implemented")
 },getMaximumSize:function(){console.warn("dojox.storage.getMaximumSize not implemented")
-},putMultiple:function(C,D,B,A){console.warn("dojox.storage.putMultiple not implemented")
-},getMultiple:function(A,B){console.warn("dojox.storage.getMultiple not implemented")
-},removeMultiple:function(A,B){console.warn("dojox.storage.remove not implemented")
-},isValidKeyArray:function(A){if(A===null||typeof A==="undefined"||!A instanceof Array){return false
-}for(var B=0;
-B<A.length;
-B++){if(!this.isValidKey(A[B])){return false
+},putMultiple:function(D,A,C,B){console.warn("dojox.storage.putMultiple not implemented")
+},getMultiple:function(B,A){console.warn("dojox.storage.getMultiple not implemented")
+},removeMultiple:function(B,A){console.warn("dojox.storage.remove not implemented")
+},isValidKeyArray:function(B){if(B===null||typeof B==="undefined"||!B instanceof Array){return false
+}for(var A=0;
+A<B.length;
+A++){if(!this.isValidKey(B[A])){return false
 }}return true
 },hasSettingsUI:function(){return false
 },showSettingsUI:function(){console.warn("dojox.storage.showSettingsUI not implemented")
@@ -95,38 +95,38 @@ return results
 }
 }if(!dojo._hasResource["dojox._sql._crypto"]){dojo._hasResource["dojox._sql._crypto"]=true;
 dojo.provide("dojox._sql._crypto");
-dojo.mixin(dojox._sql._crypto,{_POOL_SIZE:100,encrypt:function(A,D,C){this._initWorkerPool();
-var B={plaintext:A,password:D};
-B=dojo.toJson(B);
-B="encr:"+String(B);
-this._assignWork(B,C)
-},decrypt:function(A,D,C){this._initWorkerPool();
-var B={ciphertext:A,password:D};
-B=dojo.toJson(B);
-B="decr:"+String(B);
-this._assignWork(B,C)
+dojo.mixin(dojox._sql._crypto,{_POOL_SIZE:100,encrypt:function(B,A,D){this._initWorkerPool();
+var C={plaintext:B,password:A};
+C=dojo.toJson(C);
+C="encr:"+String(C);
+this._assignWork(C,D)
+},decrypt:function(B,A,D){this._initWorkerPool();
+var C={ciphertext:B,password:A};
+C=dojo.toJson(C);
+C="decr:"+String(C);
+this._assignWork(C,D)
 },_initWorkerPool:function(){if(!this._manager){try{this._manager=google.gears.factory.create("beta.workerpool","1.0");
 this._unemployed=[];
 this._employed={};
 this._handleMessage=[];
-var A=this;
-this._manager.onmessage=function(I,G){var F=A._employed["_"+G];
-A._employed["_"+G]=undefined;
-A._unemployed.push("_"+G);
-if(A._handleMessage.length){var H=A._handleMessage.shift();
-A._assignWork(H.msg,H.callback)
-}F(I)
+var B=this;
+this._manager.onmessage=function(H,F){var I=B._employed["_"+F];
+B._employed["_"+F]=undefined;
+B._unemployed.push("_"+F);
+if(B._handleMessage.length){var G=B._handleMessage.shift();
+B._assignWork(G.msg,G.callback)
+}I(H)
 };
-var E="function _workerInit(){gearsWorkerPool.onmessage = "+String(this._workerHandler)+";}";
-var C=E+" _workerInit();";
-for(var B=0;
-B<this._POOL_SIZE;
-B++){this._unemployed.push("_"+this._manager.createWorker(C))
-}}catch(D){throw D.message||D
-}}},_assignWork:function(A,B){if(!this._handleMessage.length&&this._unemployed.length){var C=this._unemployed.shift().substring(1);
-this._employed["_"+C]=B;
-this._manager.sendMessage(A,C)
-}else{this._handleMessage={msg:A,callback:B}
+var A="function _workerInit(){gearsWorkerPool.onmessage = "+String(this._workerHandler)+";}";
+var D=A+" _workerInit();";
+for(var C=0;
+C<this._POOL_SIZE;
+C++){this._unemployed.push("_"+this._manager.createWorker(D))
+}}catch(E){throw E.message||E
+}}},_assignWork:function(B,C){if(!this._handleMessage.length&&this._unemployed.length){var A=this._unemployed.shift().substring(1);
+this._employed["_"+A]=C;
+this._manager.sendMessage(B,A)
+}else{this._handleMessage={msg:B,callback:C}
 }},_workerHandler:function(msg,sender){var Sbox=[99,124,119,123,242,107,111,197,48,1,103,43,254,215,171,118,202,130,201,125,250,89,71,240,173,212,162,175,156,164,114,192,183,253,147,38,54,63,247,204,52,165,229,241,113,216,49,21,4,199,35,195,24,150,5,154,7,18,128,226,235,39,178,117,9,131,44,26,27,110,90,160,82,59,214,179,41,227,47,132,83,209,0,237,32,252,177,91,106,203,190,57,74,76,88,207,208,239,170,251,67,77,51,133,69,249,2,127,80,60,159,168,81,163,64,143,146,157,56,245,188,182,218,33,16,255,243,210,205,12,19,236,95,151,68,23,196,167,126,61,100,93,25,115,96,129,79,220,34,42,144,136,70,238,184,20,222,94,11,219,224,50,58,10,73,6,36,92,194,211,172,98,145,149,228,121,231,200,55,109,141,213,78,169,108,86,244,234,101,122,174,8,186,120,37,46,28,166,180,198,232,221,116,31,75,189,139,138,112,62,181,102,72,3,246,14,97,53,87,185,134,193,29,158,225,248,152,17,105,217,142,148,155,30,135,233,206,85,40,223,140,161,137,13,191,230,66,104,65,153,45,15,176,84,187,22];
 var Rcon=[[0,0,0,0],[1,0,0,0],[2,0,0,0],[4,0,0,0],[8,0,0,0],[16,0,0,0],[32,0,0,0],[64,0,0,0],[128,0,0,0],[27,0,0,0],[54,0,0,0]];
 function Cipher(input,w){var Nb=4;
@@ -319,171 +319,171 @@ gearsWorkerPool.sendMessage(String(results),sender)
 }if(!dojo._hasResource["dojox._sql.common"]){dojo._hasResource["dojox._sql.common"]=true;
 dojo.provide("dojox._sql.common");
 dojox.sql=new Function("return dojox.sql._exec(arguments);");
-dojo.mixin(dojox.sql,{dbName:null,debug:(dojo.exists("dojox.sql.debug")?dojox.sql.debug:false),open:function(B){if(this._dbOpen&&(!B||B==this.dbName)){return 
+dojo.mixin(dojox.sql,{dbName:null,debug:(dojo.exists("dojox.sql.debug")?dojox.sql.debug:false),open:function(A){if(this._dbOpen&&(!A||A==this.dbName)){return 
 }if(!this.dbName){this.dbName="dot_store_"+window.location.href.replace(/[^0-9A-Za-z_]/g,"_")
-}if(!B){B=this.dbName
+}if(!A){A=this.dbName
 }try{this._initDb();
-this.db.open(B);
+this.db.open(A);
 this._dbOpen=true
-}catch(A){throw A.message||A
-}},close:function(B){if(dojo.isIE){return 
-}if(!this._dbOpen&&(!B||B==this.dbName)){return 
-}if(!B){B=this.dbName
-}try{this.db.close(B);
+}catch(B){throw B.message||B
+}},close:function(A){if(dojo.isIE){return 
+}if(!this._dbOpen&&(!A||A==this.dbName)){return 
+}if(!A){A=this.dbName
+}try{this.db.close(A);
 this._dbOpen=false
-}catch(A){throw A.message||A
-}},_exec:function(G){try{this._initDb();
+}catch(B){throw B.message||B
+}},_exec:function(B){try{this._initDb();
 if(!this._dbOpen){this.open();
 this._autoClose=true
-}var E=null;
-var D=null;
-var C=null;
-var B=dojo._toArray(G);
-E=B.splice(0,1)[0];
-if(this._needsEncrypt(E)||this._needsDecrypt(E)){D=B.splice(B.length-1,1)[0];
-C=B.splice(B.length-1,1)[0]
-}if(this.debug){this._printDebugSQL(E,B)
-}if(this._needsEncrypt(E)){var F=new dojox.sql._SQLCrypto("encrypt",E,C,B,D);
+}var I=null;
+var H=null;
+var G=null;
+var F=dojo._toArray(B);
+I=F.splice(0,1)[0];
+if(this._needsEncrypt(I)||this._needsDecrypt(I)){H=F.splice(F.length-1,1)[0];
+G=F.splice(F.length-1,1)[0]
+}if(this.debug){this._printDebugSQL(I,F)
+}if(this._needsEncrypt(I)){var A=new dojox.sql._SQLCrypto("encrypt",I,G,F,H);
 return 
-}else{if(this._needsDecrypt(E)){var F=new dojox.sql._SQLCrypto("decrypt",E,C,B,D);
+}else{if(this._needsDecrypt(I)){var A=new dojox.sql._SQLCrypto("decrypt",I,G,F,H);
 return 
-}}var I=this.db.execute(E,B);
-I=this._normalizeResults(I);
+}}var D=this.db.execute(I,F);
+D=this._normalizeResults(D);
 if(this._autoClose){this.close()
-}return I
-}catch(H){H=H.message||H;
-console.debug("SQL Exception: "+H);
+}return D
+}catch(C){C=C.message||C;
+console.debug("SQL Exception: "+C);
 if(this._autoClose){try{this.close()
-}catch(A){console.debug("Error closing database: "+A.message||A)
-}}throw H
+}catch(E){console.debug("Error closing database: "+E.message||E)
+}}throw C
 }},_initDb:function(){if(!this.db){try{this.db=google.gears.factory.create("beta.database","1.0")
 }catch(A){dojo.setObject("google.gears.denied",true);
 dojox.off.onFrameworkEvent("coreOperationFailed");
 throw"Google Gears must be allowed to run"
-}}},_printDebugSQL:function(C,D){var B='dojox.sql("'+C+'"';
-for(var A=0;
-A<D.length;
-A++){if(typeof D[A]=="string"){B+=', "'+D[A]+'"'
-}else{B+=", "+D[A]
-}}B+=")";
-console.debug(B)
-},_normalizeResults:function(F){var B=[];
-if(!F){return[]
-}while(F.isValidRow()){var D={};
-for(var A=0;
-A<F.fieldCount();
-A++){var E=F.fieldName(A);
-var C=F.field(A);
-D[E]=C
-}B.push(D);
-F.next()
-}F.close();
-return B
+}}},_printDebugSQL:function(D,A){var C='dojox.sql("'+D+'"';
+for(var B=0;
+B<A.length;
+B++){if(typeof A[B]=="string"){C+=', "'+A[B]+'"'
+}else{C+=", "+A[B]
+}}C+=")";
+console.debug(C)
+},_normalizeResults:function(A){var C=[];
+if(!A){return[]
+}while(A.isValidRow()){var E={};
+for(var B=0;
+B<A.fieldCount();
+B++){var F=A.fieldName(B);
+var D=A.field(B);
+E[F]=D
+}C.push(E);
+A.next()
+}A.close();
+return C
 },_needsEncrypt:function(A){return/encrypt\([^\)]*\)/i.test(A)
 },_needsDecrypt:function(A){return/decrypt\([^\)]*\)/i.test(A)
 }});
-dojo.declare("dojox.sql._SQLCrypto",null,{constructor:function(B,C,A,E,D){if(B=="encrypt"){this._execEncryptSQL(C,A,E,D)
-}else{this._execDecryptSQL(C,A,E,D)
-}},_execEncryptSQL:function(B,G,F,D){var C=this._stripCryptoSQL(B);
-var A=this._flagEncryptedArgs(B,F);
-var E=this;
-this._encrypt(C,G,F,A,function(H){var L=false;
-var M=[];
-var J=null;
-try{M=dojox.sql.db.execute(C,H)
-}catch(N){L=true;
-J=N.message||N
-}if(J!=null){if(dojox.sql._autoClose){try{dojox.sql.close()
-}catch(I){}}D(null,true,J.toString());
+dojo.declare("dojox.sql._SQLCrypto",null,{constructor:function(C,D,B,A,E){if(C=="encrypt"){this._execEncryptSQL(D,B,A,E)
+}else{this._execDecryptSQL(D,B,A,E)
+}},_execEncryptSQL:function(E,C,B,G){var F=this._stripCryptoSQL(E);
+var D=this._flagEncryptedArgs(E,B);
+var A=this;
+this._encrypt(F,C,B,D,function(L){var I=false;
+var J=[];
+var N=null;
+try{J=dojox.sql.db.execute(F,L)
+}catch(K){I=true;
+N=K.message||K
+}if(N!=null){if(dojox.sql._autoClose){try{dojox.sql.close()
+}catch(M){}}G(null,true,N.toString());
 return 
-}M=dojox.sql._normalizeResults(M);
+}J=dojox.sql._normalizeResults(J);
 if(dojox.sql._autoClose){dojox.sql.close()
-}if(dojox.sql._needsDecrypt(B)){var K=E._determineDecryptedColumns(B);
-E._decrypt(M,K,G,function(O){D(O,false,null)
+}if(dojox.sql._needsDecrypt(E)){var H=A._determineDecryptedColumns(E);
+A._decrypt(J,H,C,function(O){G(O,false,null)
 })
-}else{D(M,false,null)
+}else{G(J,false,null)
 }})
-},_execDecryptSQL:function(G,C,J,E){var F=this._stripCryptoSQL(G);
-var D=this._determineDecryptedColumns(G);
-var K=false;
-var B=[];
-var H=null;
-try{B=dojox.sql.db.execute(F,J)
-}catch(A){K=true;
-H=A.message||A
-}if(H!=null){if(dojox.sql._autoClose){try{dojox.sql.close()
-}catch(I){}}E(B,true,H.toString());
+},_execDecryptSQL:function(K,G,C,I){var J=this._stripCryptoSQL(K);
+var H=this._determineDecryptedColumns(K);
+var D=false;
+var F=[];
+var A=null;
+try{F=dojox.sql.db.execute(J,C)
+}catch(E){D=true;
+A=E.message||E
+}if(A!=null){if(dojox.sql._autoClose){try{dojox.sql.close()
+}catch(B){}}I(F,true,A.toString());
 return 
-}B=dojox.sql._normalizeResults(B);
+}F=dojox.sql._normalizeResults(F);
 if(dojox.sql._autoClose){dojox.sql.close()
-}this._decrypt(B,D,C,function(L){E(L,false,null)
+}this._decrypt(F,H,G,function(L){I(L,false,null)
 })
-},_encrypt:function(B,E,D,H,C){this._totalCrypto=0;
+},_encrypt:function(G,B,A,E,H){this._totalCrypto=0;
 this._finishedCrypto=0;
 this._finishedSpawningCrypto=false;
-this._finalArgs=D;
-for(var F=0;
-F<D.length;
-F++){if(H[F]){var A=D[F];
-var G=F;
+this._finalArgs=A;
+for(var C=0;
+C<A.length;
+C++){if(E[C]){var F=A[C];
+var D=C;
 this._totalCrypto++;
-dojox._sql._crypto.encrypt(A,E,dojo.hitch(this,function(I){this._finalArgs[G]=I;
+dojox._sql._crypto.encrypt(F,B,dojo.hitch(this,function(I){this._finalArgs[D]=I;
 this._finishedCrypto++;
-if(this._finishedCrypto>=this._totalCrypto&&this._finishedSpawningCrypto){C(this._finalArgs)
+if(this._finishedCrypto>=this._totalCrypto&&this._finishedSpawningCrypto){H(this._finalArgs)
 }}))
 }}this._finishedSpawningCrypto=true
-},_decrypt:function(H,E,F,C){this._totalCrypto=0;
+},_decrypt:function(E,B,C,H){this._totalCrypto=0;
 this._finishedCrypto=0;
 this._finishedSpawningCrypto=false;
-this._finalResultSet=H;
-for(var G=0;
-G<H.length;
-G++){var B=H[G];
-for(var D in B){if(E=="*"||E[D]){this._totalCrypto++;
-var A=B[D];
-this._decryptSingleColumn(D,A,F,G,function(I){C(I)
+this._finalResultSet=E;
+for(var D=0;
+D<E.length;
+D++){var G=E[D];
+for(var A in G){if(B=="*"||B[A]){this._totalCrypto++;
+var F=G[A];
+this._decryptSingleColumn(A,F,C,D,function(I){H(I)
 })
 }}}this._finishedSpawningCrypto=true
-},_stripCryptoSQL:function(C){C=C.replace(/DECRYPT\(\*\)/ig,"*");
-var A=C.match(/ENCRYPT\([^\)]*\)/ig);
-if(A!=null){for(var G=0;
-G<A.length;
-G++){var E=A[G];
-var D=E.match(/ENCRYPT\(([^\)]*)\)/i)[1];
-C=C.replace(E,D)
-}}A=C.match(/DECRYPT\([^\)]*\)/ig);
-if(A!=null){for(var G=0;
-G<A.length;
-G++){var F=A[G];
-var B=F.match(/DECRYPT\(([^\)]*)\)/i)[1];
-C=C.replace(F,B)
-}}return C
-},_flagEncryptedArgs:function(C,F){var E=new RegExp(/([\"][^\"]*\?[^\"]*[\"])|([\'][^\']*\?[^\']*[\'])|(\?)/ig);
-var A;
-var H=0;
-var G=[];
-while((A=E.exec(C))!=null){var D=RegExp.lastMatch+"";
-if(/^[\"\']/.test(D)){continue
-}var B=false;
-if(/ENCRYPT\([^\)]*$/i.test(RegExp.leftContext)){B=true
-}G[H]=B;
-H++
-}return G
-},_determineDecryptedColumns:function(C){var A={};
-if(/DECRYPT\(\*\)/i.test(C)){A="*"
-}else{var F=/DECRYPT\((?:\s*\w*\s*\,?)*\)/ig;
-var B;
-while(B=F.exec(C)){var E=new String(RegExp.lastMatch);
-var D=E.replace(/DECRYPT\(/i,"");
-D=D.replace(/\)/,"");
-D=D.split(/\s*,\s*/);
-dojo.forEach(D,function(G){if(/\s*\w* AS (\w*)/i.test(G)){G=G.match(/\s*\w* AS (\w*)/i)[1]
-}A[G]=true
+},_stripCryptoSQL:function(F){F=F.replace(/DECRYPT\(\*\)/ig,"*");
+var D=F.match(/ENCRYPT\([^\)]*\)/ig);
+if(D!=null){for(var C=0;
+C<D.length;
+C++){var A=D[C];
+var G=A.match(/ENCRYPT\(([^\)]*)\)/i)[1];
+F=F.replace(A,G)
+}}D=F.match(/DECRYPT\([^\)]*\)/ig);
+if(D!=null){for(var C=0;
+C<D.length;
+C++){var B=D[C];
+var E=B.match(/DECRYPT\(([^\)]*)\)/i)[1];
+F=F.replace(B,E)
+}}return F
+},_flagEncryptedArgs:function(H,C){var B=new RegExp(/([\"][^\"]*\?[^\"]*[\"])|([\'][^\']*\?[^\']*[\'])|(\?)/ig);
+var F;
+var E=0;
+var D=[];
+while((F=B.exec(H))!=null){var A=RegExp.lastMatch+"";
+if(/^[\"\']/.test(A)){continue
+}var G=false;
+if(/ENCRYPT\([^\)]*$/i.test(RegExp.leftContext)){G=true
+}D[E]=G;
+E++
+}return D
+},_determineDecryptedColumns:function(D){var B={};
+if(/DECRYPT\(\*\)/i.test(D)){B="*"
+}else{var A=/DECRYPT\((?:\s*\w*\s*\,?)*\)/ig;
+var C;
+while(C=A.exec(D)){var F=new String(RegExp.lastMatch);
+var E=F.replace(/DECRYPT\(/i,"");
+E=E.replace(/\)/,"");
+E=E.split(/\s*,\s*/);
+dojo.forEach(E,function(G){if(/\s*\w* AS (\w*)/i.test(G)){G=G.match(/\s*\w* AS (\w*)/i)[1]
+}B[G]=true
 })
-}}return A
-},_decryptSingleColumn:function(E,C,A,B,D){dojox._sql._crypto.decrypt(C,A,dojo.hitch(this,function(F){this._finalResultSet[B][E]=F;
+}}return B
+},_decryptSingleColumn:function(A,D,B,C,E){dojox._sql._crypto.decrypt(D,B,dojo.hitch(this,function(F){this._finalResultSet[C][A]=F;
 this._finishedCrypto++;
-if(this._finishedCrypto>=this._totalCrypto&&this._finishedSpawningCrypto){D(this._finalResultSet)
+if(this._finishedCrypto>=this._totalCrypto&&this._finishedSpawningCrypto){E(this._finalResultSet)
 }}))
 }})
 }if(!dojo._hasResource["dojox.sql"]){dojo._hasResource["dojox.sql"]=true;
@@ -501,82 +501,82 @@ return
 }this.initialized=true;
 dojox.storage.manager.loaded()
 },isAvailable:function(){return this._available=dojo.isGears
-},put:function(E,C,B,A){if(this.isValidKey(E)==false){throw new Error("Invalid key given: "+E)
-}A=A||this.DEFAULT_NAMESPACE;
-if(dojo.isString(C)){C="string:"+C
-}else{C=dojo.toJson(C)
-}try{dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?",A,E);
-dojox.sql("INSERT INTO "+this.TABLE_NAME+" VALUES (?, ?, ?)",A,E,C)
-}catch(D){console.debug("dojox.storage.GearsStorageProvider.put:",D);
-B(this.FAILED,E,D.toString());
-return 
-}if(B){B(dojox.storage.SUCCESS,E,null)
-}},get:function(A,B){if(this.isValidKey(A)==false){throw new Error("Invalid key given: "+A)
+},put:function(A,D,C,B){if(this.isValidKey(A)==false){throw new Error("Invalid key given: "+A)
 }B=B||this.DEFAULT_NAMESPACE;
-var C=dojox.sql("SELECT * FROM "+this.TABLE_NAME+" WHERE namespace = ? AND  key = ?",B,A);
-if(!C.length){return null
-}else{C=C[0].value
-}if(dojo.isString(C)&&(/^string:/.test(C))){C=C.substring("string:".length)
-}else{C=dojo.fromJson(C)
+if(dojo.isString(D)){D="string:"+D
+}else{D=dojo.toJson(D)
+}try{dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?",B,A);
+dojox.sql("INSERT INTO "+this.TABLE_NAME+" VALUES (?, ?, ?)",B,A,D)
+}catch(E){console.debug("dojox.storage.GearsStorageProvider.put:",E);
+C(this.FAILED,A,E.toString());
+return 
+}if(C){C(dojox.storage.SUCCESS,A,null)
+}},get:function(B,C){if(this.isValidKey(B)==false){throw new Error("Invalid key given: "+B)
+}C=C||this.DEFAULT_NAMESPACE;
+var A=dojox.sql("SELECT * FROM "+this.TABLE_NAME+" WHERE namespace = ? AND  key = ?",C,B);
+if(!A.length){return null
+}else{A=A[0].value
+}if(dojo.isString(A)&&(/^string:/.test(A))){A=A.substring("string:".length)
+}else{A=dojo.fromJson(A)
+}return A
+},getNamespaces:function(){var C=[dojox.storage.DEFAULT_NAMESPACE];
+var A=dojox.sql("SELECT namespace FROM "+this.TABLE_NAME+" DESC GROUP BY namespace");
+for(var B=0;
+B<A.length;
+B++){if(A[B].namespace!=dojox.storage.DEFAULT_NAMESPACE){C.push(A[B].namespace)
+}}return C
+},getKeys:function(D){D=D||this.DEFAULT_NAMESPACE;
+if(this.isValidKey(D)==false){throw new Error("Invalid namespace given: "+D)
+}var A=dojox.sql("SELECT key FROM "+this.TABLE_NAME+" WHERE namespace = ?",D);
+var C=[];
+for(var B=0;
+B<A.length;
+B++){C.push(A[B].key)
 }return C
-},getNamespaces:function(){var B=[dojox.storage.DEFAULT_NAMESPACE];
-var C=dojox.sql("SELECT namespace FROM "+this.TABLE_NAME+" DESC GROUP BY namespace");
-for(var A=0;
-A<C.length;
-A++){if(C[A].namespace!=dojox.storage.DEFAULT_NAMESPACE){B.push(C[A].namespace)
-}}return B
-},getKeys:function(C){C=C||this.DEFAULT_NAMESPACE;
-if(this.isValidKey(C)==false){throw new Error("Invalid namespace given: "+C)
-}var D=dojox.sql("SELECT key FROM "+this.TABLE_NAME+" WHERE namespace = ?",C);
-var B=[];
-for(var A=0;
-A<D.length;
-A++){B.push(D[A].key)
-}return B
 },clear:function(A){if(this.isValidKey(A)==false){throw new Error("Invalid namespace given: "+A)
 }A=A||this.DEFAULT_NAMESPACE;
 dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ?",A)
-},remove:function(B,A){A=A||this.DEFAULT_NAMESPACE;
-dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?",A,B)
-},putMultiple:function(A,D,H,G){if(this.isValidKeyArray(A)===false||!D instanceof Array||A.length!=D.length){throw new Error("Invalid arguments: keys = ["+A+"], values = ["+D+"]")
-}if(G==null||typeof G=="undefined"){G=dojox.storage.DEFAULT_NAMESPACE
-}if(this.isValidKey(G)==false){throw new Error("Invalid namespace given: "+G)
-}this._statusHandler=H;
-try{dojox.sql.open();
-dojox.sql.db.execute("BEGIN TRANSACTION");
-var F="REPLACE INTO "+this.TABLE_NAME+" VALUES (?, ?, ?)";
-for(var E=0;
-E<A.length;
-E++){var B=D[E];
-if(dojo.isString(B)){B="string:"+B
-}else{B=dojo.toJson(B)
-}dojox.sql.db.execute(F,[G,A[E],B])
-}dojox.sql.db.execute("COMMIT TRANSACTION");
-dojox.sql.close()
-}catch(C){console.debug("dojox.storage.GearsStorageProvider.putMultiple:",C);
-if(H){H(this.FAILED,A,C.toString())
-}return 
-}if(H){H(dojox.storage.SUCCESS,key,null)
-}},getMultiple:function(E,D){if(this.isValidKeyArray(E)===false){throw new ("Invalid key array given: "+E)
+},remove:function(A,B){B=B||this.DEFAULT_NAMESPACE;
+dojox.sql("DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?",B,A)
+},putMultiple:function(F,A,E,D){if(this.isValidKeyArray(F)===false||!A instanceof Array||F.length!=A.length){throw new Error("Invalid arguments: keys = ["+F+"], values = ["+A+"]")
 }if(D==null||typeof D=="undefined"){D=dojox.storage.DEFAULT_NAMESPACE
 }if(this.isValidKey(D)==false){throw new Error("Invalid namespace given: "+D)
-}var C="SELECT * FROM "+this.TABLE_NAME+" WHERE namespace = ? AND  key = ?";
-var B=[];
-for(var A=0;
-A<E.length;
-A++){var F=dojox.sql(C,D,E[A]);
-if(!F.length){B[A]=null
-}else{F=F[0].value;
-if(dojo.isString(F)&&(/^string:/.test(F))){B[A]=F.substring("string:".length)
-}else{B[A]=dojo.fromJson(F)
-}}}return B
-},removeMultiple:function(C,B){B=B||this.DEFAULT_NAMESPACE;
+}this._statusHandler=E;
+try{dojox.sql.open();
+dojox.sql.db.execute("BEGIN TRANSACTION");
+var C="REPLACE INTO "+this.TABLE_NAME+" VALUES (?, ?, ?)";
+for(var B=0;
+B<F.length;
+B++){var G=A[B];
+if(dojo.isString(G)){G="string:"+G
+}else{G=dojo.toJson(G)
+}dojox.sql.db.execute(C,[D,F[B],G])
+}dojox.sql.db.execute("COMMIT TRANSACTION");
+dojox.sql.close()
+}catch(H){console.debug("dojox.storage.GearsStorageProvider.putMultiple:",H);
+if(E){E(this.FAILED,F,H.toString())
+}return 
+}if(E){E(dojox.storage.SUCCESS,key,null)
+}},getMultiple:function(F,E){if(this.isValidKeyArray(F)===false){throw new ("Invalid key array given: "+F)
+}if(E==null||typeof E=="undefined"){E=dojox.storage.DEFAULT_NAMESPACE
+}if(this.isValidKey(E)==false){throw new Error("Invalid namespace given: "+E)
+}var D="SELECT * FROM "+this.TABLE_NAME+" WHERE namespace = ? AND  key = ?";
+var C=[];
+for(var B=0;
+B<F.length;
+B++){var A=dojox.sql(D,E,F[B]);
+if(!A.length){C[B]=null
+}else{A=A[0].value;
+if(dojo.isString(A)&&(/^string:/.test(A))){C[B]=A.substring("string:".length)
+}else{C[B]=dojo.fromJson(A)
+}}}return C
+},removeMultiple:function(D,C){C=C||this.DEFAULT_NAMESPACE;
 dojox.sql.open();
 dojox.sql.db.execute("BEGIN TRANSACTION");
-var A="DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?";
-for(var D=0;
-D<C.length;
-D++){dojox.sql.db.execute(A,[B,C[D]])
+var B="DELETE FROM "+this.TABLE_NAME+" WHERE namespace = ? AND key = ?";
+for(var A=0;
+A<D.length;
+A++){dojox.sql.db.execute(B,[C,D[A]])
 }dojox.sql.db.execute("COMMIT TRANSACTION");
 dojox.sql.close()
 },isPermanent:function(){return true
@@ -596,34 +596,34 @@ dojo.provide("dojox.storage")
 }if(!dojo._hasResource["dojox.off.files"]){dojo._hasResource["dojox.off.files"]=true;
 dojo.provide("dojox.off.files");
 dojox.off.files={versionURL:"version.js",listOfURLs:[],refreshing:false,_cancelID:null,_error:false,_errorMessages:[],_currentFileIndex:0,_store:null,_doSlurp:false,slurp:function(){this._doSlurp=true
-},cache:function(B){if(dojo.isString(B)){var A=this._trimAnchor(B+"");
-if(!this.isAvailable(A)){this.listOfURLs.push(A)
-}}else{if(B instanceof dojo._Url){var A=this._trimAnchor(B.uri);
-if(!this.isAvailable(A)){this.listOfURLs.push(A)
-}}else{dojo.forEach(B,function(C){C=this._trimAnchor(C);
+},cache:function(A){if(dojo.isString(A)){var B=this._trimAnchor(A+"");
+if(!this.isAvailable(B)){this.listOfURLs.push(B)
+}}else{if(A instanceof dojo._Url){var B=this._trimAnchor(A.uri);
+if(!this.isAvailable(B)){this.listOfURLs.push(B)
+}}else{dojo.forEach(A,function(C){C=this._trimAnchor(C);
 if(!this.isAvailable(C)){this.listOfURLs.push(C)
 }},this)
 }}},printURLs:function(){console.debug("The following URLs are cached for offline use:");
 dojo.forEach(this.listOfURLs,function(A){console.debug(A)
 })
-},remove:function(B){for(var A=0;
-A<this.listOfURLs.length;
-A++){if(this.listOfURLs[A]==B){this.listOfURLs=this.listOfURLs.splice(A,1);
+},remove:function(A){for(var B=0;
+B<this.listOfURLs.length;
+B++){if(this.listOfURLs[B]==A){this.listOfURLs=this.listOfURLs.splice(B,1);
 break
-}}},isAvailable:function(B){for(var A=0;
-A<this.listOfURLs.length;
-A++){if(this.listOfURLs[A]==B){return true
+}}},isAvailable:function(A){for(var B=0;
+B<this.listOfURLs.length;
+B++){if(this.listOfURLs[B]==A){return true
 }}return false
-},refresh:function(A){try{if(djConfig.isDebug){this.printURLs()
+},refresh:function(B){try{if(djConfig.isDebug){this.printURLs()
 }this.refreshing=true;
-if(this.versionURL){this._getVersionInfo(function(D,E,C){if(djConfig.isDebug||!E||C||!D||D!=E){console.warn("Refreshing offline file list");
-this._doRefresh(A,E)
+if(this.versionURL){this._getVersionInfo(function(C,D,E){if(djConfig.isDebug||!D||E||!C||C!=D){console.warn("Refreshing offline file list");
+this._doRefresh(B,D)
 }else{console.warn("No need to refresh offline file list");
-A(false,[])
+B(false,[])
 }})
 }else{console.warn("Refreshing offline file list");
-this._doRefresh(A)
-}}catch(B){this.refreshing=false;
+this._doRefresh(B)
+}}catch(A){this.refreshing=false;
 dojox.off.coreOpFailed=true;
 dojox.off.enabled=false;
 dojox.off.onFrameworkEvent("coreOperationFailed")
@@ -634,30 +634,30 @@ this.refreshing=false
 }var A=dojo.hitch(this,function(B){if(this._sameLocation(B)){this.cache(B)
 }});
 A(window.location.href);
-dojo.query("script").forEach(function(C){try{A(C.getAttribute("src"))
-}catch(B){}});
-dojo.query("link").forEach(function(C){try{if(!C.getAttribute("rel")||C.getAttribute("rel").toLowerCase()!="stylesheet"){return 
-}A(C.getAttribute("href"))
-}catch(B){}});
-dojo.query("img").forEach(function(C){try{A(C.getAttribute("src"))
-}catch(B){}});
-dojo.query("a").forEach(function(C){try{A(C.getAttribute("href"))
-}catch(B){}});
-dojo.forEach(document.styleSheets,function(E){try{if(E.cssRules){dojo.forEach(E.cssRules,function(J){var K=J.cssText;
+dojo.query("script").forEach(function(B){try{A(B.getAttribute("src"))
+}catch(C){}});
+dojo.query("link").forEach(function(B){try{if(!B.getAttribute("rel")||B.getAttribute("rel").toLowerCase()!="stylesheet"){return 
+}A(B.getAttribute("href"))
+}catch(C){}});
+dojo.query("img").forEach(function(B){try{A(B.getAttribute("src"))
+}catch(C){}});
+dojo.query("a").forEach(function(B){try{A(B.getAttribute("href"))
+}catch(C){}});
+dojo.forEach(document.styleSheets,function(D){try{if(D.cssRules){dojo.forEach(D.cssRules,function(J){var K=J.cssText;
 if(K){var I=K.match(/url\(\s*([^\) ]*)\s*\)/i);
 if(!I){return 
 }for(var H=1;
 H<I.length;
 H++){A(I[H])
 }}})
-}else{if(E.cssText){var F;
-var C=E.cssText.toString();
-var B=C.split(/\f|\r|\n/);
-for(var D=0;
-D<B.length;
-D++){F=B[D].match(/url\(\s*([^\) ]*)\s*\)/i);
-if(F&&F.length){A(F[1])
-}}}}}catch(G){}})
+}else{if(D.cssText){var E;
+var G=D.cssText.toString();
+var B=G.split(/\f|\r|\n/);
+for(var C=0;
+C<B.length;
+C++){E=B[C].match(/url\(\s*([^\) ]*)\s*\)/i);
+if(E&&E.length){A(E[1])
+}}}}}catch(F){}})
 },_sameLocation:function(A){if(!A){return false
 }if(A.length&&A.charAt(0)=="#"){return false
 }A=new dojo._Url(A);
@@ -666,40 +666,40 @@ if(!A.scheme&&!A.port&&!A.host){return true
 }if(!A.scheme&&A.host&&!A.port&&window.location.hostname==A.host&&window.location.port==80){return true
 }return window.location.protocol==(A.scheme+":")&&window.location.hostname==A.host&&(window.location.port==A.port||!window.location.port&&!A.port)
 },_trimAnchor:function(A){return A.replace(/\#.*$/,"")
-},_doRefresh:function(D,A){var B;
-try{B=google.gears.factory.create("beta.localserver","1.0")
-}catch(C){dojo.setObject("google.gears.denied",true);
+},_doRefresh:function(G,D){var E;
+try{E=google.gears.factory.create("beta.localserver","1.0")
+}catch(F){dojo.setObject("google.gears.denied",true);
 dojox.off.onFrameworkEvent("coreOperationFailed");
 throw"Google Gears must be allowed to run"
-}var G="dot_store_"+window.location.href.replace(/[^0-9A-Za-z_]/g,"_");
-B.removeStore(G);
-B.openStore(G);
-var F=B.createStore(G);
-this._store=F;
-var E=this;
+}var C="dot_store_"+window.location.href.replace(/[^0-9A-Za-z_]/g,"_");
+E.removeStore(C);
+E.openStore(C);
+var B=E.createStore(C);
+this._store=B;
+var A=this;
 this._currentFileIndex=0;
-this._cancelID=F.capture(this.listOfURLs,function(J,H,I){if(!H&&E.refreshing){E._cancelID=null;
-E.refreshing=false;
-var K=[];
-K.push("Unable to capture: "+J);
-D(true,K);
+this._cancelID=B.capture(this.listOfURLs,function(I,K,H){if(!K&&A.refreshing){A._cancelID=null;
+A.refreshing=false;
+var J=[];
+J.push("Unable to capture: "+I);
+G(true,J);
 return 
-}else{if(H){E._currentFileIndex++
-}}if(H&&E._currentFileIndex>=E.listOfURLs.length){E._cancelID=null;
-E.refreshing=false;
-if(A){dojox.storage.put("oldVersion",A,null,dojox.off.STORAGE_NAMESPACE)
+}else{if(K){A._currentFileIndex++
+}}if(K&&A._currentFileIndex>=A.listOfURLs.length){A._cancelID=null;
+A.refreshing=false;
+if(D){dojox.storage.put("oldVersion",D,null,dojox.off.STORAGE_NAMESPACE)
 }dojox.storage.put("justDebugged",djConfig.isDebug,null,dojox.off.STORAGE_NAMESPACE);
-D(false,[])
+G(false,[])
 }})
-},_getVersionInfo:function(C){var B=dojox.storage.get("justDebugged",dojox.off.STORAGE_NAMESPACE);
-var D=dojox.storage.get("oldVersion",dojox.off.STORAGE_NAMESPACE);
-var A=null;
-C=dojo.hitch(this,C);
+},_getVersionInfo:function(D){var C=dojox.storage.get("justDebugged",dojox.off.STORAGE_NAMESPACE);
+var A=dojox.storage.get("oldVersion",dojox.off.STORAGE_NAMESPACE);
+var B=null;
+D=dojo.hitch(this,D);
 dojo.xhrGet({url:this.versionURL+"?browserbust="+new Date().getTime(),timeout:5*1000,handleAs:"javascript",error:function(E){dojox.storage.remove("oldVersion",dojox.off.STORAGE_NAMESPACE);
 dojox.storage.remove("justDebugged",dojox.off.STORAGE_NAMESPACE);
-C(D,A,B)
-},load:function(E){if(E){A=E
-}C(D,A,B)
+D(A,B,C)
+},load:function(E){if(E){B=E
+}D(A,B,C)
 }})
 }}
 }if(!dojo._hasResource["dojox.off.sync"]){dojo._hasResource["dojox.off.sync"]=true;
@@ -714,9 +714,9 @@ this.start()
 }this.cancelled=true;
 if(dojox.off.files.refreshing){dojox.off.files.abortRefresh()
 }this.onSync("cancel")
-},finishedDownloading:function(A,B){if(typeof A=="undefined"){A=true
-}if(!A){this.successful=false;
-this.details.push(B);
+},finishedDownloading:function(B,A){if(typeof B=="undefined"){B=true
+}if(!B){this.successful=false;
+this.details.push(A);
 this.error=true
 }this.finished()
 },start:function(){if(this.cancelled){this.finished();
@@ -726,11 +726,11 @@ this.refreshFiles()
 },refreshFiles:function(){if(this.cancelled){this.finished();
 return 
 }this.onSync("refreshFiles");
-dojox.off.files.refresh(dojo.hitch(this,function(C,B){if(C){this.error=true;
+dojox.off.files.refresh(dojo.hitch(this,function(A,C){if(A){this.error=true;
 this.successful=false;
-for(var A=0;
-A<B.length;
-A++){this.details.push(B[A])
+for(var B=0;
+B<C.length;
+B++){this.details.push(C[B])
 }}this.upload()
 }))
 },upload:function(){if(this.cancelled){this.finished();
@@ -752,27 +752,27 @@ this.onSync("finished")
 dojo.declare("dojox.off.sync.ActionLog",null,{entries:[],reasonHalted:null,isReplaying:false,autoSave:true,add:function(A){if(this.isReplaying){throw"Programming error: you can not call dojox.off.sync.actions.add() while we are replaying an action log"
 }this.entries.push(A);
 if(this.autoSave){this._save()
-}},onReplay:function(B,A){},length:function(){return this.entries.length
-},haltReplay:function(A){if(!this.isReplaying){return 
-}if(A){this.reasonHalted=A.toString()
-}if(this.autoSave){var B=this;
-this._save(function(){B.isReplaying=false;
-B.onReplayFinished()
+}},onReplay:function(A,B){},length:function(){return this.entries.length
+},haltReplay:function(B){if(!this.isReplaying){return 
+}if(B){this.reasonHalted=B.toString()
+}if(this.autoSave){var A=this;
+this._save(function(){A.isReplaying=false;
+A.onReplayFinished()
 })
 }else{this.isReplaying=false;
 this.onReplayFinished()
 }},continueReplay:function(){if(!this.isReplaying){return 
 }this.entries.shift();
-if(!this.entries.length){if(this.autoSave){var A=this;
-this._save(function(){A.isReplaying=false;
-A.onReplayFinished()
+if(!this.entries.length){if(this.autoSave){var B=this;
+this._save(function(){B.isReplaying=false;
+B.onReplayFinished()
 });
 return 
 }else{this.isReplaying=false;
 this.onReplayFinished();
 return 
-}}var B=this.entries[0];
-this.onReplay(B,this)
+}}var A=this.entries[0];
+this.onReplay(A,this)
 },clear:function(){if(this.isReplaying){return 
 }this.entries=[];
 if(this.autoSave){this._save()
@@ -783,30 +783,30 @@ return
 }this.isReplaying=true;
 var A=this.entries[0];
 this.onReplay(A,this)
-},onReplayFinished:function(){},toString:function(){var B="";
-B+="[";
-for(var A=0;
-A<this.entries.length;
-A++){B+="{";
-for(var C in this.entries[A]){B+=C+': "'+this.entries[A][C]+'"';
-B+=", "
-}B+="}, "
-}B+="]";
-return B
-},_save:function(C){if(!C){C=function(){}
-}try{var D=this;
-var A=function(F,G,E){if(F==dojox.storage.FAILED){dojox.off.onFrameworkEvent("save",{status:dojox.storage.FAILED,isCoreSave:true,key:G,value:E,namespace:dojox.off.STORAGE_NAMESPACE});
-C()
-}else{if(F==dojox.storage.SUCCESS){C()
+},onReplayFinished:function(){},toString:function(){var C="";
+C+="[";
+for(var B=0;
+B<this.entries.length;
+B++){C+="{";
+for(var A in this.entries[B]){C+=A+': "'+this.entries[B][A]+'"';
+C+=", "
+}C+="}, "
+}C+="]";
+return C
+},_save:function(D){if(!D){D=function(){}
+}try{var A=this;
+var B=function(E,F,G){if(E==dojox.storage.FAILED){dojox.off.onFrameworkEvent("save",{status:dojox.storage.FAILED,isCoreSave:true,key:F,value:G,namespace:dojox.off.STORAGE_NAMESPACE});
+D()
+}else{if(E==dojox.storage.SUCCESS){D()
 }}};
-dojox.storage.put("actionlog",this.entries,A,dojox.off.STORAGE_NAMESPACE)
-}catch(B){console.debug("dojox.off.sync._save: "+B.message||B);
+dojox.storage.put("actionlog",this.entries,B,dojox.off.STORAGE_NAMESPACE)
+}catch(C){console.debug("dojox.off.sync._save: "+C.message||C);
 dojox.off.onFrameworkEvent("save",{status:dojox.storage.FAILED,isCoreSave:true,key:"actionlog",value:this.entries,namespace:dojox.off.STORAGE_NAMESPACE});
-C()
-}},_load:function(A){var B=dojox.storage.get("actionlog",dojox.off.STORAGE_NAMESPACE);
-if(!B){B=[]
-}this.entries=B;
-A()
+D()
+}},_load:function(B){var A=dojox.storage.get("actionlog",dojox.off.STORAGE_NAMESPACE);
+if(!A){A=[]
+}this.entries=A;
+B()
 }});
 dojox.off.sync.actions=new dojox.off.sync.ActionLog()
 }if(!dojo._hasResource["dojox.off._common"]){dojo._hasResource["dojox.off._common"]=true;
@@ -820,10 +820,10 @@ this.isOnline=false
 }this.goingOnline=true;
 this.isOnline=false;
 this._isSiteAvailable(A)
-},onFrameworkEvent:function(A,B){if(A=="save"){if(B.isCoreSave&&(B.status==dojox.storage.FAILED)){dojox.off.coreOpFailed=true;
+},onFrameworkEvent:function(B,A){if(B=="save"){if(A.isCoreSave&&(A.status==dojox.storage.FAILED)){dojox.off.coreOpFailed=true;
 dojox.off.enabled=false;
 dojox.off.onFrameworkEvent("coreOperationFailed")
-}}else{if(A=="coreOperationFailed"){dojox.off.coreOpFailed=true;
+}}else{if(B=="coreOperationFailed"){dojox.off.coreOpFailed=true;
 dojox.off.enabled=false
 }}},_checkOfflineCacheAvailable:function(A){this.hasOfflineCache=dojo.isGears;
 A()
@@ -857,9 +857,9 @@ if(A){A(true)
 }else{this.onNetwork("online")
 }})})
 },_startNetworkThread:function(){if(!this.doNetChecking){return 
-}window.setInterval(dojo.hitch(this,function(){var A=dojo.xhrGet({url:this._getAvailabilityURL(),handleAs:"text",timeout:this.NET_CHECK*1000,error:dojo.hitch(this,function(C){if(this.isOnline){this.isOnline=false;
+}window.setInterval(dojo.hitch(this,function(){var A=dojo.xhrGet({url:this._getAvailabilityURL(),handleAs:"text",timeout:this.NET_CHECK*1000,error:dojo.hitch(this,function(B){if(this.isOnline){this.isOnline=false;
 try{if(typeof A.ioArgs.xhr.abort=="function"){A.ioArgs.xhr.abort()
-}}catch(B){}dojox.off.sync.isSyncing=false;
+}}catch(C){}dojox.off.sync.isSyncing=false;
 this.onNetwork("offline")
 }}),load:dojo.hitch(this,function(B){if(!this.isOnline){this.isOnline=true;
 this.onNetwork("online")
@@ -871,18 +871,18 @@ if(A.indexOf("?")==-1){A+="?"
 }A+="browserbust="+new Date().getTime();
 return A
 },_onOfflineCacheInstalled:function(){this.onFrameworkEvent("offlineCacheInstalled")
-},_cacheDojoResources:function(){var A=true;
-dojo.forEach(dojo.query("script"),function(D){var C=D.getAttribute("src");
-if(!C){return 
-}if(C.indexOf("_base/_loader/bootstrap.js")!=-1){A=false
+},_cacheDojoResources:function(){var B=true;
+dojo.forEach(dojo.query("script"),function(C){var D=C.getAttribute("src");
+if(!D){return 
+}if(D.indexOf("_base/_loader/bootstrap.js")!=-1){B=false
 }});
-if(!A){dojox.off.files.cache(dojo.moduleUrl("dojo","_base.js").uri);
+if(!B){dojox.off.files.cache(dojo.moduleUrl("dojo","_base.js").uri);
 dojox.off.files.cache(dojo.moduleUrl("dojo","_base/_loader/loader.js").uri);
 dojox.off.files.cache(dojo.moduleUrl("dojo","_base/_loader/bootstrap.js").uri);
 dojox.off.files.cache(dojo.moduleUrl("dojo","_base/_loader/hostenv_browser.js").uri)
-}for(var B=0;
-B<dojo._loadedUrls.length;
-B++){dojox.off.files.cache(dojo._loadedUrls[B])
+}for(var A=0;
+A<dojo._loadedUrls.length;
+A++){dojox.off.files.cache(dojo._loadedUrls[A])
 }},_save:function(){},_load:function(A){dojox.off.sync._load(A)
 }});
 dojox.storage.manager.addOnLoad(dojo.hitch(dojox.off,"_onStorageLoad"));
@@ -903,8 +903,8 @@ if(this.autoEmbed){this._doAutoEmbed()
 A=A.message||A;
 alert("Error loading the Dojo Offline Widget from "+this.htmlTemplatePath+": "+A)
 },load:dojo.hitch(this,this._templateLoaded)})
-},_templateLoaded:function(B){var C=dojo.byId(this.autoEmbedID);
-if(C){C.innerHTML=B
+},_templateLoaded:function(C){var A=dojo.byId(this.autoEmbedID);
+if(A){A.innerHTML=C
 }this._initImages();
 this._updateNetIndicator();
 this._initLearnHow();
@@ -913,8 +913,8 @@ if(!dojox.off.hasOfflineCache){this._showNeedsOfflineCache();
 return 
 }if(dojox.off.hasOfflineCache&&dojox.off.browserRestart){this._needsBrowserRestart();
 return 
-}else{var A=dojo.byId("dot-widget-browser-restart");
-if(A){A.style.display="none"
+}else{var B=dojo.byId("dot-widget-browser-restart");
+if(B){B.style.display="none"
 }}this._updateSyncUI();
 this._initMainEvtHandlers();
 this._setOfflineEnabled(dojox.off.enabled);
@@ -923,122 +923,122 @@ this._testNet()
 },_testNet:function(){dojox.off.goOnline(dojo.hitch(this,function(A){this._onNetwork(A?"online":"offline");
 this.onLoad()
 }))
-},_updateNetIndicator:function(){var B=dojo.byId("dot-widget-network-indicator-online");
-var C=dojo.byId("dot-widget-network-indicator-offline");
-var A=dojo.byId("dot-widget-title-text");
-if(B&&C){if(dojox.off.isOnline==true){B.style.display="inline";
-C.style.display="none"
-}else{B.style.display="none";
-C.style.display="inline"
-}}if(A){if(dojox.off.isOnline){A.innerHTML="Online"
-}else{A.innerHTML="Offline"
-}}},_initLearnHow:function(){var B=dojo.byId("dot-widget-learn-how-link");
-if(!B){return 
-}if(!this.customLearnHowPath){var A=djConfig.baseRelativePath;
-this.learnHowPath+="?appName="+encodeURIComponent(this.appName)+"&hasOfflineCache="+dojox.off.hasOfflineCache+"&runLink="+encodeURIComponent(this.runLink)+"&runLinkText="+encodeURIComponent(this.runLinkText)+"&baseRelativePath="+encodeURIComponent(A);
+},_updateNetIndicator:function(){var C=dojo.byId("dot-widget-network-indicator-online");
+var A=dojo.byId("dot-widget-network-indicator-offline");
+var B=dojo.byId("dot-widget-title-text");
+if(C&&A){if(dojox.off.isOnline==true){C.style.display="inline";
+A.style.display="none"
+}else{C.style.display="none";
+A.style.display="inline"
+}}if(B){if(dojox.off.isOnline){B.innerHTML="Online"
+}else{B.innerHTML="Offline"
+}}},_initLearnHow:function(){var C=dojo.byId("dot-widget-learn-how-link");
+if(!C){return 
+}if(!this.customLearnHowPath){var B=djConfig.baseRelativePath;
+this.learnHowPath+="?appName="+encodeURIComponent(this.appName)+"&hasOfflineCache="+dojox.off.hasOfflineCache+"&runLink="+encodeURIComponent(this.runLink)+"&runLinkText="+encodeURIComponent(this.runLinkText)+"&baseRelativePath="+encodeURIComponent(B);
 dojox.off.files.cache(this.learnHowJSPath);
 dojox.off.files.cache(this.learnHowPath)
-}B.setAttribute("href",this.learnHowPath);
-var C=dojo.byId("dot-widget-learn-how-app-name");
-if(!C){return 
-}C.innerHTML="";
-C.appendChild(document.createTextNode(this.appName))
+}C.setAttribute("href",this.learnHowPath);
+var A=dojo.byId("dot-widget-learn-how-app-name");
+if(!A){return 
+}A.innerHTML="";
+A.appendChild(document.createTextNode(this.appName))
 },_validateAppName:function(A){if(!A){return false
 }return(/^[a-z0-9 ]*$/i.test(A))
-},_updateSyncUI:function(){var C=dojo.byId("dot-roller");
-var D=dojo.byId("dot-success-checkmark");
-var A=dojo.byId("dot-sync-messages");
-var E=dojo.byId("dot-sync-details");
-var B=dojo.byId("dot-sync-cancel");
+},_updateSyncUI:function(){var D=dojo.byId("dot-roller");
+var E=dojo.byId("dot-success-checkmark");
+var B=dojo.byId("dot-sync-messages");
+var A=dojo.byId("dot-sync-details");
+var C=dojo.byId("dot-sync-cancel");
 if(dojox.off.sync.isSyncing){this._clearSyncMessage();
-if(C){C.style.display="inline"
-}if(D){D.style.display="none"
-}if(A){dojo.removeClass(A,"dot-sync-error")
+if(D){D.style.display="inline"
 }if(E){E.style.display="none"
-}if(B){B.style.display="inline"
-}}else{if(C){C.style.display="none"
-}if(B){B.style.display="none"
-}if(A){dojo.removeClass(A,"dot-sync-error")
-}}},_setSyncMessage:function(B){var A=dojo.byId("dot-sync-messages");
-if(A){while(A.firstChild){A.removeChild(A.firstChild)
-}A.appendChild(document.createTextNode(B))
+}if(B){dojo.removeClass(B,"dot-sync-error")
+}if(A){A.style.display="none"
+}if(C){C.style.display="inline"
+}}else{if(D){D.style.display="none"
+}if(C){C.style.display="none"
+}if(B){dojo.removeClass(B,"dot-sync-error")
+}}},_setSyncMessage:function(A){var B=dojo.byId("dot-sync-messages");
+if(B){while(B.firstChild){B.removeChild(B.firstChild)
+}B.appendChild(document.createTextNode(A))
 }},_clearSyncMessage:function(){this._setSyncMessage("")
-},_initImages:function(){var C=dojo.byId("dot-widget-network-indicator-online");
-if(C){C.setAttribute("src",this.onlineImagePath)
-}var D=dojo.byId("dot-widget-network-indicator-offline");
-if(D){D.setAttribute("src",this.offlineImagePath)
-}var A=dojo.byId("dot-roller");
-if(A){A.setAttribute("src",this.rollerImagePath)
-}var B=dojo.byId("dot-success-checkmark");
-if(B){B.setAttribute("src",this.checkmarkImagePath)
-}},_showDetails:function(A){A.preventDefault();
-A.stopPropagation();
+},_initImages:function(){var D=dojo.byId("dot-widget-network-indicator-online");
+if(D){D.setAttribute("src",this.onlineImagePath)
+}var A=dojo.byId("dot-widget-network-indicator-offline");
+if(A){A.setAttribute("src",this.offlineImagePath)
+}var B=dojo.byId("dot-roller");
+if(B){B.setAttribute("src",this.rollerImagePath)
+}var C=dojo.byId("dot-success-checkmark");
+if(C){C.setAttribute("src",this.checkmarkImagePath)
+}},_showDetails:function(B){B.preventDefault();
+B.stopPropagation();
 if(!dojox.off.sync.details.length){return 
-}var C="";
-C+="<html><head><title>Sync Details</title><head><body>";
-C+="<h1>Sync Details</h1>\n";
-C+="<ul>\n";
-for(var B=0;
-B<dojox.off.sync.details.length;
-B++){C+="<li>";
-C+=dojox.off.sync.details[B];
-C+="</li>"
-}C+="</ul>\n";
-C+="<a href='javascript:window.close()' style='text-align: right; padding-right: 2em;'>Close Window</a>\n";
-C+="</body></html>";
-var D="height=400,width=600,resizable=true,scrollbars=true,toolbar=no,menubar=no,location=no,directories=no,dependent=yes";
-var E=window.open("","SyncDetails",D);
-if(!E){alert("Please allow popup windows for this domain; can't display sync details window");
+}var D="";
+D+="<html><head><title>Sync Details</title><head><body>";
+D+="<h1>Sync Details</h1>\n";
+D+="<ul>\n";
+for(var C=0;
+C<dojox.off.sync.details.length;
+C++){D+="<li>";
+D+=dojox.off.sync.details[C];
+D+="</li>"
+}D+="</ul>\n";
+D+="<a href='javascript:window.close()' style='text-align: right; padding-right: 2em;'>Close Window</a>\n";
+D+="</body></html>";
+var E="height=400,width=600,resizable=true,scrollbars=true,toolbar=no,menubar=no,location=no,directories=no,dependent=yes";
+var A=window.open("","SyncDetails",E);
+if(!A){alert("Please allow popup windows for this domain; can't display sync details window");
 return 
-}E.document.open();
-E.document.write(C);
-E.document.close();
-if(E.focus){E.focus()
+}A.document.open();
+A.document.write(D);
+A.document.close();
+if(A.focus){A.focus()
 }},_cancel:function(A){A.preventDefault();
 A.stopPropagation();
 dojox.off.sync.cancel()
-},_needsBrowserRestart:function(){var B=dojo.byId("dot-widget-browser-restart");
-if(B){dojo.addClass(B,"dot-needs-browser-restart")
-}var C=dojo.byId("dot-widget-browser-restart-app-name");
-if(C){C.innerHTML="";
-C.appendChild(document.createTextNode(this.appName))
-}var A=dojo.byId("dot-sync-status");
-if(A){A.style.display="none"
+},_needsBrowserRestart:function(){var C=dojo.byId("dot-widget-browser-restart");
+if(C){dojo.addClass(C,"dot-needs-browser-restart")
+}var A=dojo.byId("dot-widget-browser-restart-app-name");
+if(A){A.innerHTML="";
+A.appendChild(document.createTextNode(this.appName))
+}var B=dojo.byId("dot-sync-status");
+if(B){B.style.display="none"
 }},_showNeedsOfflineCache:function(){var A=dojo.byId("dot-widget-container");
 if(A){dojo.addClass(A,"dot-needs-offline-cache")
 }},_hideNeedsOfflineCache:function(){var A=dojo.byId("dot-widget-container");
 if(A){dojo.removeClass(A,"dot-needs-offline-cache")
-}},_initMainEvtHandlers:function(){var A=dojo.byId("dot-sync-details-button");
-if(A){dojo.connect(A,"onclick",this,this._showDetails)
-}var B=dojo.byId("dot-sync-cancel-button");
-if(B){dojo.connect(B,"onclick",this,this._cancel)
-}},_setOfflineEnabled:function(A){var C=[];
-C.push(dojo.byId("dot-sync-status"));
-for(var B=0;
-B<C.length;
-B++){if(C[B]){C[B].style.visibility=(A?"visible":"hidden")
+}},_initMainEvtHandlers:function(){var B=dojo.byId("dot-sync-details-button");
+if(B){dojo.connect(B,"onclick",this,this._showDetails)
+}var A=dojo.byId("dot-sync-cancel-button");
+if(A){dojo.connect(A,"onclick",this,this._cancel)
+}},_setOfflineEnabled:function(B){var A=[];
+A.push(dojo.byId("dot-sync-status"));
+for(var C=0;
+C<A.length;
+C++){if(A[C]){A[C].style.visibility=(B?"visible":"hidden")
 }}},_syncFinished:function(){this._updateSyncUI();
-var B=dojo.byId("dot-success-checkmark");
-var C=dojo.byId("dot-sync-details");
+var C=dojo.byId("dot-success-checkmark");
+var A=dojo.byId("dot-sync-details");
 if(dojox.off.sync.successful==true){this._setSyncMessage("Sync Successful");
-if(B){B.style.display="inline"
+if(C){C.style.display="inline"
 }}else{if(dojox.off.sync.cancelled==true){this._setSyncMessage("Sync Cancelled");
-if(B){B.style.display="none"
+if(C){C.style.display="none"
 }}else{this._setSyncMessage("Sync Error");
-var A=dojo.byId("dot-sync-messages");
-if(A){dojo.addClass(A,"dot-sync-error")
-}if(B){B.style.display="none"
-}}}if(dojox.off.sync.details.length&&C){C.style.display="inline"
-}},_onFrameworkEvent:function(B,C){if(B=="save"){if(C.status==dojox.storage.FAILED&&!C.isCoreSave){alert("Please increase the amount of local storage available to this application");
+var B=dojo.byId("dot-sync-messages");
+if(B){dojo.addClass(B,"dot-sync-error")
+}if(C){C.style.display="none"
+}}}if(dojox.off.sync.details.length&&A){A.style.display="inline"
+}},_onFrameworkEvent:function(C,A){if(C=="save"){if(A.status==dojox.storage.FAILED&&!A.isCoreSave){alert("Please increase the amount of local storage available to this application");
 if(dojox.storage.hasSettingsUI()){dojox.storage.showSettingsUI()
-}}}else{if(B=="coreOperationFailed"){console.log("Application does not have permission to use Dojo Offline");
+}}}else{if(C=="coreOperationFailed"){console.log("Application does not have permission to use Dojo Offline");
 if(!this._userInformed){alert("This application will not work if Google Gears is not allowed to run");
 this._userInformed=true
-}}else{if(B=="offlineCacheInstalled"){this._hideNeedsOfflineCache();
+}}else{if(C=="offlineCacheInstalled"){this._hideNeedsOfflineCache();
 if(dojox.off.hasOfflineCache==true&&dojox.off.browserRestart==true){this._needsBrowserRestart();
 return 
-}else{var A=dojo.byId("dot-widget-browser-restart");
-if(A){A.style.display="none"
+}else{var B=dojo.byId("dot-widget-browser-restart");
+if(B){B.style.display="none"
 }}this._updateSyncUI();
 this._initMainEvtHandlers();
 this._setOfflineEnabled(dojox.off.enabled);
@@ -1057,11 +1057,11 @@ case"cancel":this._setSyncMessage("Canceling Sync...");
 break;
 default:dojo.warn("Programming error: Unknown sync type in dojox.off.ui: "+A);
 break
-}},_onNetwork:function(A){if(!this._initialized){return 
+}},_onNetwork:function(B){if(!this._initialized){return 
 }this._updateNetIndicator();
-if(A=="offline"){this._setSyncMessage("You are working offline");
-var B=dojo.byId("dot-sync-details");
-if(B){B.style.display="none"
+if(B=="offline"){this._setSyncMessage("You are working offline");
+var A=dojo.byId("dot-sync-details");
+if(A){A.style.display="none"
 }this._updateSyncUI()
 }else{if(dojox.off.sync.autoSync){window.setTimeout("dojox.off.sync.synchronize()",1000)
 }}}});

@@ -22,11 +22,11 @@ dojo.require("dojox.charting.plot2d.StackedBars");
 dojo.require("dojox.charting.plot2d.ClusteredBars");
 dojo.require("dojox.charting.plot2d.Grid");
 dojo.require("dojox.charting.plot2d.Pie");
-(function(){var D=dojox.lang.functional,F=dojox.charting,E=D.lambda("item.clear()"),G=D.lambda("item.purgeGroup()"),C=D.lambda("item.destroy()"),A=D.lambda("item.dirty = false"),B=D.lambda("item.dirty = true");
-dojo.declare("dojox.charting.Chart2D",null,{constructor:function(H,I){if(!I){I={}
-}this.margins=I.margins?I.margins:{l:10,t:10,r:10,b:10};
-this.stroke=I.stroke;
-this.fill=I.fill;
+(function(){var G=dojox.lang.functional,B=dojox.charting,A=G.lambda("item.clear()"),C=G.lambda("item.purgeGroup()"),F=G.lambda("item.destroy()"),D=G.lambda("item.dirty = false"),E=G.lambda("item.dirty = true");
+dojo.declare("dojox.charting.Chart2D",null,{constructor:function(J,H){if(!H){H={}
+}this.margins=H.margins?H.margins:{l:10,t:10,r:10,b:10};
+this.stroke=H.stroke;
+this.fill=H.fill;
 this.theme=null;
 this.axes={};
 this.stack=[];
@@ -35,136 +35,136 @@ this.series=[];
 this.runs={};
 this.dirty=true;
 this.coords=null;
-this.node=dojo.byId(H);
-var J=dojo.marginBox(H);
-this.surface=dojox.gfx.createSurface(this.node,J.w,J.h)
-},destroy:function(){dojo.forEach(this.series,C);
-dojo.forEach(this.stack,C);
-D.forIn(this.axes,C)
+this.node=dojo.byId(J);
+var I=dojo.marginBox(J);
+this.surface=dojox.gfx.createSurface(this.node,I.w,I.h)
+},destroy:function(){dojo.forEach(this.series,F);
+dojo.forEach(this.stack,F);
+G.forIn(this.axes,F)
 },getCoords:function(){if(!this.coords){this.coords=dojo.coords(this.node,true)
 }return this.coords
 },setTheme:function(H){this.theme=H;
 this.dirty=true;
 return this
-},addAxis:function(I,J){var H;
-if(!J||!("type" in J)){H=new F.axis2d.Default(this,J)
-}else{H=typeof J.type=="string"?new F.axis2d[J.type](this,J):new J.type(this,J)
-}H.name=I;
-H.dirty=true;
-if(I in this.axes){this.axes[I].destroy()
-}this.axes[I]=H;
+},addAxis:function(H,I){var J;
+if(!I||!("type" in I)){J=new B.axis2d.Default(this,I)
+}else{J=typeof I.type=="string"?new B.axis2d[I.type](this,I):new I.type(this,I)
+}J.name=H;
+J.dirty=true;
+if(H in this.axes){this.axes[H].destroy()
+}this.axes[H]=J;
 this.dirty=true;
 return this
-},addPlot:function(I,J){var H;
-if(!J||!("type" in J)){H=new F.plot2d.Default(this,J)
-}else{H=typeof J.type=="string"?new F.plot2d[J.type](this,J):new J.type(this,J)
-}H.name=I;
-H.dirty=true;
-if(I in this.plots){this.stack[this.plots[I]].destroy();
-this.stack[this.plots[I]]=H
-}else{this.plots[I]=this.stack.length;
-this.stack.push(H)
+},addPlot:function(H,I){var J;
+if(!I||!("type" in I)){J=new B.plot2d.Default(this,I)
+}else{J=typeof I.type=="string"?new B.plot2d[I.type](this,I):new I.type(this,I)
+}J.name=H;
+J.dirty=true;
+if(H in this.plots){this.stack[this.plots[H]].destroy();
+this.stack[this.plots[H]]=J
+}else{this.plots[H]=this.stack.length;
+this.stack.push(J)
 }this.dirty=true;
 return this
-},addSeries:function(I,K,J){var H=new F.Series(this,K,J);
-if(I in this.runs){this.series[this.runs[I]].destroy();
-this.series[this.runs[I]]=H
-}else{this.runs[I]=this.series.length;
-this.series.push(H)
+},addSeries:function(H,J,I){var K=new B.Series(this,J,I);
+if(H in this.runs){this.series[this.runs[H]].destroy();
+this.series[this.runs[H]]=K
+}else{this.runs[H]=this.series.length;
+this.series.push(K)
 }this.dirty=true;
-if(!("ymin" in H)&&"min" in H){H.ymin=H.min
-}if(!("ymax" in H)&&"max" in H){H.ymax=H.max
+if(!("ymin" in K)&&"min" in K){K.ymin=K.min
+}if(!("ymax" in K)&&"max" in K){K.ymax=K.max
 }return this
-},updateSeries:function(I,K){if(I in this.runs){var H=this.series[this.runs[I]],L=this.stack[this.plots[H.plot]],J;
-H.data=K;
-H.dirty=true;
-if(L.hAxis){J=this.axes[L.hAxis];
-if(J.dependOnData()){J.dirty=true;
-dojo.forEach(this.stack,function(M){if(M.hAxis&&M.hAxis==L.hAxis){M.dirty=true
+},updateSeries:function(H,J){if(H in this.runs){var L=this.series[this.runs[H]],K=this.stack[this.plots[L.plot]],I;
+L.data=J;
+L.dirty=true;
+if(K.hAxis){I=this.axes[K.hAxis];
+if(I.dependOnData()){I.dirty=true;
+dojo.forEach(this.stack,function(M){if(M.hAxis&&M.hAxis==K.hAxis){M.dirty=true
 }})
-}}else{L.dirty=true
-}if(L.vAxis){J=this.axes[L.vAxis];
-if(J.dependOnData()){J.dirty=true;
-dojo.forEach(this.stack,function(M){if(M.vAxis&&M.vAxis==L.vAxis){M.dirty=true
+}}else{K.dirty=true
+}if(K.vAxis){I=this.axes[K.vAxis];
+if(I.dependOnData()){I.dirty=true;
+dojo.forEach(this.stack,function(M){if(M.vAxis&&M.vAxis==K.vAxis){M.dirty=true
 }})
-}}else{L.dirty=true
+}}else{K.dirty=true
 }}return this
-},resize:function(J,I){var H;
-switch(arguments.length){case 0:H=dojo.marginBox(this.node);
+},resize:function(I,H){var J;
+switch(arguments.length){case 0:J=dojo.marginBox(this.node);
 break;
-case 1:H=J;
+case 1:J=I;
 break;
-default:H={w:J,h:I};
+default:J={w:I,h:H};
 break
-}dojo.marginBox(this.node,H);
-this.surface.setDimensions(H.w,H.h);
+}dojo.marginBox(this.node,J);
+this.surface.setDimensions(J.w,J.h);
 this.dirty=true;
 this.coords=null;
 return this.render()
 },render:function(){if(this.dirty){return this.fullRender()
 }dojo.forEach(this.stack,function(H){if(H.dirty||(H.hAxis&&this.axes[H.hAxis].dirty)||(H.vAxis&&this.axes[H.vAxis].dirty)){H.calculateAxes(this.plotArea)
 }},this);
-D.forEachReversed(this.stack,function(H){H.render(this.dim,this.offsets)
+G.forEachReversed(this.stack,function(H){H.render(this.dim,this.offsets)
 },this);
-D.forIn(this.axes,function(H){H.render(this.dim,this.offsets)
+G.forIn(this.axes,function(H){H.render(this.dim,this.offsets)
 },this);
 this._makeClean();
 if(this.surface.render){this.surface.render()
 }return this
 },fullRender:function(){this._makeDirty();
-dojo.forEach(this.stack,E);
-dojo.forEach(this.series,G);
-D.forIn(this.axes,G);
-dojo.forEach(this.stack,G);
+dojo.forEach(this.stack,A);
+dojo.forEach(this.series,C);
+G.forIn(this.axes,C);
+dojo.forEach(this.stack,C);
 this.surface.clear();
-dojo.forEach(this.series,function(N){if(!(N.plot in this.plots)){var O=new F.plot2d.Default(this,{});
-O.name=N.plot;
-this.plots[N.plot]=this.stack.length;
-this.stack.push(O)
-}this.stack[this.plots[N.plot]].addSeries(N)
+dojo.forEach(this.series,function(O){if(!(O.plot in this.plots)){var N=new B.plot2d.Default(this,{});
+N.name=O.plot;
+this.plots[O.plot]=this.stack.length;
+this.stack.push(N)
+}this.stack[this.plots[O.plot]].addSeries(O)
 },this);
 dojo.forEach(this.stack,function(N){if(N.hAxis){N.setAxis(this.axes[N.hAxis])
 }if(N.vAxis){N.setAxis(this.axes[N.vAxis])
 }},this);
 if(!this.theme){this.theme=new dojox.charting.Theme(dojox.charting._def)
-}var K=D.foldl(this.stack,"z + plot.getRequiredColors()",0);
-this.theme.defineColors({num:K,cache:false});
-var I=this.dim=this.surface.getDimensions();
-I.width=dojox.gfx.normalizedLength(I.width);
-I.height=dojox.gfx.normalizedLength(I.height);
-D.forIn(this.axes,E);
-dojo.forEach(this.stack,function(N){N.calculateAxes(I)
+}var I=G.foldl(this.stack,"z + plot.getRequiredColors()",0);
+this.theme.defineColors({num:I,cache:false});
+var M=this.dim=this.surface.getDimensions();
+M.width=dojox.gfx.normalizedLength(M.width);
+M.height=dojox.gfx.normalizedLength(M.height);
+G.forIn(this.axes,A);
+dojo.forEach(this.stack,function(N){N.calculateAxes(M)
 });
-var L=this.offsets={l:0,r:0,t:0,b:0};
-D.forIn(this.axes,function(N){D.forIn(N.getOffsets(),function(P,O){L[O]+=P
+var J=this.offsets={l:0,r:0,t:0,b:0};
+G.forIn(this.axes,function(N){G.forIn(N.getOffsets(),function(P,O){J[O]+=P
 })
 });
-D.forIn(this.margins,function(N,O){L[O]+=N
+G.forIn(this.margins,function(O,N){J[N]+=O
 });
-this.plotArea={width:I.width-L.l-L.r,height:I.height-L.t-L.b};
-D.forIn(this.axes,E);
+this.plotArea={width:M.width-J.l-J.r,height:M.height-J.t-J.b};
+G.forIn(this.axes,A);
 dojo.forEach(this.stack,function(N){N.calculateAxes(this.plotArea)
 },this);
-var J=this.theme,H=this.fill?this.fill:(J.chart&&J.chart.fill),M=this.stroke?this.stroke:(J.chart&&J.chart.stroke);
-if(H){this.surface.createRect({width:I.width,height:I.height}).setFill(H)
-}if(M){this.surface.createRect({width:I.width-1,height:I.height-1}).setStroke(M)
-}H=J.plotarea&&J.plotarea.fill;
-M=J.plotarea&&J.plotarea.stroke;
-if(H){this.surface.createRect({x:L.l,y:L.t,width:I.width-L.l-L.r,height:I.height-L.t-L.b}).setFill(H)
-}if(M){this.surface.createRect({x:L.l,y:L.t,width:I.width-L.l-L.r-1,height:I.height-L.t-L.b-1}).setStroke(M)
-}D.foldr(this.stack,function(N,O){return O.render(I,L),0
+var H=this.theme,L=this.fill?this.fill:(H.chart&&H.chart.fill),K=this.stroke?this.stroke:(H.chart&&H.chart.stroke);
+if(L){this.surface.createRect({width:M.width,height:M.height}).setFill(L)
+}if(K){this.surface.createRect({width:M.width-1,height:M.height-1}).setStroke(K)
+}L=H.plotarea&&H.plotarea.fill;
+K=H.plotarea&&H.plotarea.stroke;
+if(L){this.surface.createRect({x:J.l,y:J.t,width:M.width-J.l-J.r,height:M.height-J.t-J.b}).setFill(L)
+}if(K){this.surface.createRect({x:J.l,y:J.t,width:M.width-J.l-J.r-1,height:M.height-J.t-J.b-1}).setStroke(K)
+}G.foldr(this.stack,function(O,N){return N.render(M,J),0
 },0);
-D.forIn(this.axes,function(N){N.render(I,L)
+G.forIn(this.axes,function(N){N.render(M,J)
 });
 this._makeClean();
 return this
-},_makeClean:function(){dojo.forEach(this.axes,A);
-dojo.forEach(this.stack,A);
-dojo.forEach(this.series,A);
+},_makeClean:function(){dojo.forEach(this.axes,D);
+dojo.forEach(this.stack,D);
+dojo.forEach(this.series,D);
 this.dirty=false
-},_makeDirty:function(){dojo.forEach(this.axes,B);
-dojo.forEach(this.stack,B);
-dojo.forEach(this.series,B);
+},_makeDirty:function(){dojo.forEach(this.axes,E);
+dojo.forEach(this.stack,E);
+dojo.forEach(this.series,E);
 this.dirty=true
 }})
 })()

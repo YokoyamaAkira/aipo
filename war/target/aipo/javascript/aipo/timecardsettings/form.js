@@ -1,10 +1,10 @@
 dojo.provide("aipo.timecardsettings");
-aipo.timecardsettings.onReceiveMessage=function(D){if(!D){var C=dijit.byId("modalDialog");
-if(C){C.hide()
+aipo.timecardsettings.onReceiveMessage=function(B){if(!B){var A=dijit.byId("modalDialog");
+if(A){A.hide()
 }aipo.portletReload("timecardsettings")
-}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=D
+}if(dojo.byId("messageDiv")){dojo.byId("messageDiv").innerHTML=B
 }};
-aipo.timecardsettings.hideDialog=function(){var B=dijit.byId("modalDialog");
-if(B){B.hide()
+aipo.timecardsettings.hideDialog=function(){var A=dijit.byId("modalDialog");
+if(A){A.hide()
 }aipo.portletReload("timecardsettings")
 };

@@ -2,171 +2,171 @@ dojo._xdResourceLoaded({depends:[["provide","dojox._sql.common"],["require","doj
 A.provide("dojox._sql.common");
 A.require("dojox._sql._crypto");
 dojox.sql=new Function("return dojox.sql._exec(arguments);");
-A.mixin(dojox.sql,{dbName:null,debug:(A.exists("dojox.sql.debug")?dojox.sql.debug:false),open:function(C){if(this._dbOpen&&(!C||C==this.dbName)){return 
+A.mixin(dojox.sql,{dbName:null,debug:(A.exists("dojox.sql.debug")?dojox.sql.debug:false),open:function(B){if(this._dbOpen&&(!B||B==this.dbName)){return 
 }if(!this.dbName){this.dbName="dot_store_"+window.location.href.replace(/[^0-9A-Za-z_]/g,"_")
-}if(!C){C=this.dbName
+}if(!B){B=this.dbName
 }try{this._initDb();
-this.db.open(C);
+this.db.open(B);
 this._dbOpen=true
-}catch(B){throw B.message||B
-}},close:function(C){if(A.isIE){return 
-}if(!this._dbOpen&&(!C||C==this.dbName)){return 
-}if(!C){C=this.dbName
-}try{this.db.close(C);
+}catch(C){throw C.message||C
+}},close:function(B){if(A.isIE){return 
+}if(!this._dbOpen&&(!B||B==this.dbName)){return 
+}if(!B){B=this.dbName
+}try{this.db.close(B);
 this._dbOpen=false
-}catch(B){throw B.message||B
-}},_exec:function(J){try{this._initDb();
+}catch(C){throw C.message||C
+}},_exec:function(C){try{this._initDb();
 if(!this._dbOpen){this.open();
 this._autoClose=true
-}var H=null;
-var G=null;
-var F=null;
-var E=A._toArray(J);
-H=E.splice(0,1)[0];
-if(this._needsEncrypt(H)||this._needsDecrypt(H)){G=E.splice(E.length-1,1)[0];
-F=E.splice(E.length-1,1)[0]
-}if(this.debug){this._printDebugSQL(H,E)
-}if(this._needsEncrypt(H)){var I=new dojox.sql._SQLCrypto("encrypt",H,F,E,G);
+}var J=null;
+var I=null;
+var H=null;
+var G=A._toArray(C);
+J=G.splice(0,1)[0];
+if(this._needsEncrypt(J)||this._needsDecrypt(J)){I=G.splice(G.length-1,1)[0];
+H=G.splice(G.length-1,1)[0]
+}if(this.debug){this._printDebugSQL(J,G)
+}if(this._needsEncrypt(J)){var B=new dojox.sql._SQLCrypto("encrypt",J,H,G,I);
 return 
-}else{if(this._needsDecrypt(H)){var I=new dojox.sql._SQLCrypto("decrypt",H,F,E,G);
+}else{if(this._needsDecrypt(J)){var B=new dojox.sql._SQLCrypto("decrypt",J,H,G,I);
 return 
-}}var C=this.db.execute(H,E);
-C=this._normalizeResults(C);
+}}var E=this.db.execute(J,G);
+E=this._normalizeResults(E);
 if(this._autoClose){this.close()
-}return C
-}catch(B){B=B.message||B;
-console.debug("SQL Exception: "+B);
+}return E
+}catch(D){D=D.message||D;
+console.debug("SQL Exception: "+D);
 if(this._autoClose){try{this.close()
-}catch(D){console.debug("Error closing database: "+D.message||D)
-}}throw B
+}catch(F){console.debug("Error closing database: "+F.message||F)
+}}throw D
 }},_initDb:function(){if(!this.db){try{this.db=google.gears.factory.create("beta.database","1.0")
 }catch(B){A.setObject("google.gears.denied",true);
 dojox.off.onFrameworkEvent("coreOperationFailed");
 throw"Google Gears must be allowed to run"
-}}},_printDebugSQL:function(B,C){var E='dojox.sql("'+B+'"';
-for(var D=0;
-D<C.length;
-D++){if(typeof C[D]=="string"){E+=', "'+C[D]+'"'
-}else{E+=", "+C[D]
-}}E+=")";
-console.debug(E)
-},_normalizeResults:function(C){var E=[];
-if(!C){return[]
-}while(C.isValidRow()){var G={};
-for(var D=0;
-D<C.fieldCount();
-D++){var B=C.fieldName(D);
-var F=C.field(D);
-G[B]=F
-}E.push(G);
-C.next()
-}C.close();
-return E
+}}},_printDebugSQL:function(E,B){var D='dojox.sql("'+E+'"';
+for(var C=0;
+C<B.length;
+C++){if(typeof B[C]=="string"){D+=', "'+B[C]+'"'
+}else{D+=", "+B[C]
+}}D+=")";
+console.debug(D)
+},_normalizeResults:function(B){var D=[];
+if(!B){return[]
+}while(B.isValidRow()){var F={};
+for(var C=0;
+C<B.fieldCount();
+C++){var G=B.fieldName(C);
+var E=B.field(C);
+F[G]=E
+}D.push(F);
+B.next()
+}B.close();
+return D
 },_needsEncrypt:function(B){return/encrypt\([^\)]*\)/i.test(B)
 },_needsDecrypt:function(B){return/decrypt\([^\)]*\)/i.test(B)
 }});
-A.declare("dojox.sql._SQLCrypto",null,{constructor:function(E,F,D,C,B){if(E=="encrypt"){this._execEncryptSQL(F,D,C,B)
-}else{this._execDecryptSQL(F,D,C,B)
-}},_execEncryptSQL:function(E,C,H,B){var F=this._stripCryptoSQL(E);
-var D=this._flagEncryptedArgs(E,H);
-var G=this;
-this._encrypt(F,C,H,D,function(M){var L=false;
-var N=[];
-var J=null;
-try{N=dojox.sql.db.execute(F,M)
-}catch(O){L=true;
-J=O.message||O
-}if(J!=null){if(dojox.sql._autoClose){try{dojox.sql.close()
-}catch(I){}}B(null,true,J.toString());
+A.declare("dojox.sql._SQLCrypto",null,{constructor:function(D,E,C,B,F){if(D=="encrypt"){this._execEncryptSQL(E,C,B,F)
+}else{this._execDecryptSQL(E,C,B,F)
+}},_execEncryptSQL:function(F,D,C,H){var G=this._stripCryptoSQL(F);
+var E=this._flagEncryptedArgs(F,C);
+var B=this;
+this._encrypt(G,D,C,E,function(M){var J=false;
+var K=[];
+var O=null;
+try{K=dojox.sql.db.execute(G,M)
+}catch(L){J=true;
+O=L.message||L
+}if(O!=null){if(dojox.sql._autoClose){try{dojox.sql.close()
+}catch(N){}}H(null,true,O.toString());
 return 
-}N=dojox.sql._normalizeResults(N);
+}K=dojox.sql._normalizeResults(K);
 if(dojox.sql._autoClose){dojox.sql.close()
-}if(dojox.sql._needsDecrypt(E)){var K=G._determineDecryptedColumns(E);
-G._decrypt(N,K,C,function(P){B(P,false,null)
+}if(dojox.sql._needsDecrypt(F)){var I=B._determineDecryptedColumns(F);
+B._decrypt(K,I,D,function(P){H(P,false,null)
 })
-}else{B(N,false,null)
+}else{H(K,false,null)
 }})
-},_execDecryptSQL:function(J,F,B,H){var I=this._stripCryptoSQL(J);
-var G=this._determineDecryptedColumns(J);
-var C=false;
-var E=[];
-var K=null;
-try{E=dojox.sql.db.execute(I,B)
-}catch(D){C=true;
-K=D.message||D
-}if(K!=null){if(dojox.sql._autoClose){try{dojox.sql.close()
-}catch(L){}}H(E,true,K.toString());
+},_execDecryptSQL:function(L,H,D,J){var K=this._stripCryptoSQL(L);
+var I=this._determineDecryptedColumns(L);
+var E=false;
+var G=[];
+var B=null;
+try{G=dojox.sql.db.execute(K,D)
+}catch(F){E=true;
+B=F.message||F
+}if(B!=null){if(dojox.sql._autoClose){try{dojox.sql.close()
+}catch(C){}}J(G,true,B.toString());
 return 
-}E=dojox.sql._normalizeResults(E);
+}G=dojox.sql._normalizeResults(G);
 if(dojox.sql._autoClose){dojox.sql.close()
-}this._decrypt(E,G,F,function(M){H(M,false,null)
+}this._decrypt(G,I,H,function(M){J(M,false,null)
 })
-},_encrypt:function(E,G,F,C,B){this._totalCrypto=0;
+},_encrypt:function(H,C,B,F,I){this._totalCrypto=0;
 this._finishedCrypto=0;
 this._finishedSpawningCrypto=false;
-this._finalArgs=F;
-for(var H=0;
-H<F.length;
-H++){if(C[H]){var D=F[H];
-var I=H;
+this._finalArgs=B;
+for(var D=0;
+D<B.length;
+D++){if(F[D]){var G=B[D];
+var E=D;
 this._totalCrypto++;
-dojox._sql._crypto.encrypt(D,G,A.hitch(this,function(J){this._finalArgs[I]=J;
+dojox._sql._crypto.encrypt(G,C,A.hitch(this,function(J){this._finalArgs[E]=J;
 this._finishedCrypto++;
-if(this._finishedCrypto>=this._totalCrypto&&this._finishedSpawningCrypto){B(this._finalArgs)
+if(this._finishedCrypto>=this._totalCrypto&&this._finishedSpawningCrypto){I(this._finalArgs)
 }}))
 }}this._finishedSpawningCrypto=true
-},_decrypt:function(C,G,H,B){this._totalCrypto=0;
+},_decrypt:function(F,C,D,I){this._totalCrypto=0;
 this._finishedCrypto=0;
 this._finishedSpawningCrypto=false;
-this._finalResultSet=C;
-for(var I=0;
-I<C.length;
-I++){var E=C[I];
-for(var F in E){if(G=="*"||G[F]){this._totalCrypto++;
-var D=E[F];
-this._decryptSingleColumn(F,D,H,I,function(J){B(J)
+this._finalResultSet=F;
+for(var E=0;
+E<F.length;
+E++){var H=F[E];
+for(var B in H){if(C=="*"||C[B]){this._totalCrypto++;
+var G=H[B];
+this._decryptSingleColumn(B,G,D,E,function(J){I(J)
 })
 }}}this._finishedSpawningCrypto=true
-},_stripCryptoSQL:function(F){F=F.replace(/DECRYPT\(\*\)/ig,"*");
-var D=F.match(/ENCRYPT\([^\)]*\)/ig);
-if(D!=null){for(var C=0;
-C<D.length;
-C++){var G=D[C];
-var B=G.match(/ENCRYPT\(([^\)]*)\)/i)[1];
-F=F.replace(G,B)
-}}D=F.match(/DECRYPT\([^\)]*\)/ig);
-if(D!=null){for(var C=0;
-C<D.length;
-C++){var H=D[C];
-var E=H.match(/DECRYPT\(([^\)]*)\)/i)[1];
-F=F.replace(H,E)
-}}return F
-},_flagEncryptedArgs:function(C,H){var G=new RegExp(/([\"][^\"]*\?[^\"]*[\"])|([\'][^\']*\?[^\']*[\'])|(\?)/ig);
+},_stripCryptoSQL:function(G){G=G.replace(/DECRYPT\(\*\)/ig,"*");
+var E=G.match(/ENCRYPT\([^\)]*\)/ig);
+if(E!=null){for(var D=0;
+D<E.length;
+D++){var B=E[D];
+var H=B.match(/ENCRYPT\(([^\)]*)\)/i)[1];
+G=G.replace(B,H)
+}}E=G.match(/DECRYPT\([^\)]*\)/ig);
+if(E!=null){for(var D=0;
+D<E.length;
+D++){var C=E[D];
+var F=C.match(/DECRYPT\(([^\)]*)\)/i)[1];
+G=G.replace(C,F)
+}}return G
+},_flagEncryptedArgs:function(I,D){var C=new RegExp(/([\"][^\"]*\?[^\"]*[\"])|([\'][^\']*\?[^\']*[\'])|(\?)/ig);
+var G;
+var F=0;
+var E=[];
+while((G=C.exec(I))!=null){var B=RegExp.lastMatch+"";
+if(/^[\"\']/.test(B)){continue
+}var H=false;
+if(/ENCRYPT\([^\)]*$/i.test(RegExp.leftContext)){H=true
+}E[F]=H;
+F++
+}return E
+},_determineDecryptedColumns:function(E){var C={};
+if(/DECRYPT\(\*\)/i.test(E)){C="*"
+}else{var B=/DECRYPT\((?:\s*\w*\s*\,?)*\)/ig;
 var D;
-var B=0;
-var I=[];
-while((D=G.exec(C))!=null){var F=RegExp.lastMatch+"";
-if(/^[\"\']/.test(F)){continue
-}var E=false;
-if(/ENCRYPT\([^\)]*$/i.test(RegExp.leftContext)){E=true
-}I[B]=E;
-B++
-}return I
-},_determineDecryptedColumns:function(F){var D={};
-if(/DECRYPT\(\*\)/i.test(F)){D="*"
-}else{var C=/DECRYPT\((?:\s*\w*\s*\,?)*\)/ig;
-var E;
-while(E=C.exec(F)){var B=new String(RegExp.lastMatch);
-var G=B.replace(/DECRYPT\(/i,"");
-G=G.replace(/\)/,"");
-G=G.split(/\s*,\s*/);
-A.forEach(G,function(H){if(/\s*\w* AS (\w*)/i.test(H)){H=H.match(/\s*\w* AS (\w*)/i)[1]
-}D[H]=true
+while(D=B.exec(E)){var G=new String(RegExp.lastMatch);
+var F=G.replace(/DECRYPT\(/i,"");
+F=F.replace(/\)/,"");
+F=F.split(/\s*,\s*/);
+A.forEach(F,function(H){if(/\s*\w* AS (\w*)/i.test(H)){H=H.match(/\s*\w* AS (\w*)/i)[1]
+}C[H]=true
 })
-}}return D
-},_decryptSingleColumn:function(C,F,D,E,B){dojox._sql._crypto.decrypt(F,D,A.hitch(this,function(G){this._finalResultSet[E][C]=G;
+}}return C
+},_decryptSingleColumn:function(B,E,C,D,F){dojox._sql._crypto.decrypt(E,C,A.hitch(this,function(G){this._finalResultSet[D][B]=G;
 this._finishedCrypto++;
-if(this._finishedCrypto>=this._totalCrypto&&this._finishedSpawningCrypto){B(this._finalResultSet)
+if(this._finishedCrypto>=this._totalCrypto&&this._finishedSpawningCrypto){F(this._finalResultSet)
 }}))
 }})
 }}});

@@ -5,14 +5,14 @@ dojo.require("dijit._Container");
 dojo.declare("dijit.form.Button",dijit.form._FormWidget,{label:"",showLabel:true,iconClass:"",type:"button",baseClass:"dijitButton",templateString:'<div class="dijit dijitLeft dijitInline dijitButton"\r\n\tdojoAttachEvent="onclick:_onButtonClick,onmouseenter:_onMouse,onmouseleave:_onMouse,onmousedown:_onMouse"\r\n\t><div class=\'dijitRight\'\r\n\t\t><button class="dijitStretch dijitButtonNode dijitButtonContents" dojoAttachPoint="focusNode,titleNode"\r\n\t\t\ttype="${type}" waiRole="button" waiState="labelledby-${id}_label"\r\n\t\t\t><span class="dijitInline ${iconClass}" dojoAttachPoint="iconNode" \r\n \t\t\t\t><span class="dijitToggleButtonIconChar">&#10003</span \r\n\t\t\t></span\r\n\t\t\t><span class="dijitButtonText" id="${id}_label" dojoAttachPoint="containerNode">${label}</span\r\n\t\t></button\r\n\t></div\r\n></div>\r\n',_onClick:function(A){if(this.disabled){return false
 }this._clicked();
 return this.onClick(A)
-},_onButtonClick:function(C){dojo.stopEvent(C);
-var B=this._onClick(C)!==false;
-if(this.type=="submit"&&B){for(var D=this.domNode;
-D;
-D=D.parentNode){var A=dijit.byNode(D);
-if(A&&A._onSubmit){A._onSubmit(C);
+},_onButtonClick:function(D){dojo.stopEvent(D);
+var C=this._onClick(D)!==false;
+if(this.type=="submit"&&C){for(var A=this.domNode;
+A;
+A=A.parentNode){var B=dijit.byNode(A);
+if(B&&B._onSubmit){B._onSubmit(D);
 break
-}if(D.tagName.toLowerCase()=="form"){if(!D.onsubmit||D.onsubmit()){D.submit()
+}if(A.tagName.toLowerCase()=="form"){if(!A.onsubmit||A.onsubmit()){A.submit()
 }break
 }}}},postCreate:function(){if(this.showLabel==false){var A="";
 this.label=this.containerNode.innerHTML;
@@ -21,11 +21,11 @@ this.titleNode.title=A;
 dojo.addClass(this.containerNode,"dijitDisplayNone")
 }this.inherited(arguments)
 },onClick:function(A){return true
-},_clicked:function(A){},setLabel:function(C){this.containerNode.innerHTML=this.label=C;
-if(dojo.isMozilla){var A=dojo.getComputedStyle(this.domNode).display;
+},_clicked:function(A){},setLabel:function(A){this.containerNode.innerHTML=this.label=A;
+if(dojo.isMozilla){var B=dojo.getComputedStyle(this.domNode).display;
 this.domNode.style.display="none";
-var B=this;
-setTimeout(function(){B.domNode.style.display=A
+var C=this;
+setTimeout(function(){C.domNode.style.display=B
 },1)
 }if(this.showLabel==false){this.titleNode.title=dojo.trim(this.containerNode.innerText||this.containerNode.textContent)
 }}});
@@ -39,8 +39,8 @@ delete this.dropDownContainer
 this.dropDown.domNode.style.display="none"
 },_onArrowClick:function(A){if(this.disabled){return 
 }this._toggleDropDown()
-},_onDropDownClick:function(A){var B=dojo.isFF&&dojo.isFF<3&&navigator.appVersion.indexOf("Macintosh")!=-1;
-if(!B||A.detail!=0||this._seenKeydown){this._onArrowClick(A)
+},_onDropDownClick:function(B){var A=dojo.isFF&&dojo.isFF<3&&navigator.appVersion.indexOf("Macintosh")!=-1;
+if(!A||B.detail!=0||this._seenKeydown){this._onArrowClick(B)
 }this._seenKeydown=false
 },_onDropDownKeydown:function(A){this._seenKeydown=true
 },_onDropDownBlur:function(A){this._seenKeydown=false
@@ -50,33 +50,33 @@ return this._toggleDropDown()
 }}},_onBlur:function(){this._closeDropDown()
 },_toggleDropDown:function(){if(this.disabled){return 
 }dijit.focus(this.popupStateNode);
-var B=this.dropDown;
-if(!B){return false
-}if(!B.isShowingNow){if(B.href&&!B.isLoaded){var C=this;
-var A=dojo.connect(B,"onLoad",function(){dojo.disconnect(A);
-C._openDropDown()
+var C=this.dropDown;
+if(!C){return false
+}if(!C.isShowingNow){if(C.href&&!C.isLoaded){var A=this;
+var B=dojo.connect(C,"onLoad",function(){dojo.disconnect(B);
+A._openDropDown()
 });
-B._loadCheck(true);
+C._loadCheck(true);
 return 
 }else{this._openDropDown()
 }}else{this._closeDropDown()
-}},_openDropDown:function(){var D=this.dropDown;
-var A=D.domNode.style.width;
-var B=this;
-dijit.popup.open({parent:this,popup:D,around:this.domNode,orient:this.isLeftToRight()?{BL:"TL",BR:"TR",TL:"BL",TR:"BR"}:{BR:"TR",BL:"TL",TR:"BR",TL:"BL"},onExecute:function(){B._closeDropDown(true)
-},onCancel:function(){B._closeDropDown(true)
-},onClose:function(){D.domNode.style.width=A;
-B.popupStateNode.removeAttribute("popupActive");
+}},_openDropDown:function(){var E=this.dropDown;
+var B=E.domNode.style.width;
+var C=this;
+dijit.popup.open({parent:this,popup:E,around:this.domNode,orient:this.isLeftToRight()?{BL:"TL",BR:"TR",TL:"BL",TR:"BR"}:{BR:"TR",BL:"TL",TR:"BR",TL:"BL"},onExecute:function(){C._closeDropDown(true)
+},onCancel:function(){C._closeDropDown(true)
+},onClose:function(){E.domNode.style.width=B;
+C.popupStateNode.removeAttribute("popupActive");
 this._opened=false
 }});
-if(this.domNode.offsetWidth>D.domNode.offsetWidth){var C=null;
-if(!this.isLeftToRight()){C=D.domNode.parentNode;
-var E=C.offsetLeft+C.offsetWidth
-}dojo.marginBox(D.domNode,{w:this.domNode.offsetWidth});
-if(C){C.style.left=E-this.domNode.offsetWidth+"px"
+if(this.domNode.offsetWidth>E.domNode.offsetWidth){var D=null;
+if(!this.isLeftToRight()){D=E.domNode.parentNode;
+var A=D.offsetLeft+D.offsetWidth
+}dojo.marginBox(E.domNode,{w:this.domNode.offsetWidth});
+if(D){D.style.left=A-this.domNode.offsetWidth+"px"
 }}this.popupStateNode.setAttribute("popupActive","true");
 this._opened=true;
-if(D.focus){D.focus()
+if(E.focus){E.focus()
 }},_closeDropDown:function(A){if(this._opened){dijit.popup.close(this.dropDown);
 if(A){this.focus()
 }this._opened=false

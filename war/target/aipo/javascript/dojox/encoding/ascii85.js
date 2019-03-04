@@ -1,46 +1,63 @@
-if(!dojo._hasResource["dojox.encoding.ascii85"]){dojo._hasResource["dojox.encoding.ascii85"]=true;
+if(!dojo._hasResource["dojox.encoding.ascii85"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.encoding.ascii85"] = true;
 dojo.provide("dojox.encoding.ascii85");
-(function(){var A=function(D,G,C){var F,E,H,B=[0,0,0,0,0];
-for(F=0;
-F<G;
-F+=4){H=((D[F]*256+D[F+1])*256+D[F+2])*256+D[F+3];
-if(!H){C.push("z")
-}else{for(E=0;
-E<5;
-B[E++]=H%85+33,H=Math.floor(H/85)){}}C.push(String.fromCharCode(B[4],B[3],B[2],B[1],B[0]))
-}};
-dojox.encoding.ascii85.encode=function(E){var C=[],D=E.length%4,G=E.length-D;
-A(E,G,C);
-if(D){var F=E.slice(G);
-while(F.length<4){F.push(0)
-}A(F,4,C);
-var B=C.pop();
-if(B=="z"){B="!!!!!"
-}C.push(B.substr(0,D+1))
-}return C.join("")
-};
-dojox.encoding.ascii85.decode=function(I){var C=I.length,B=[],H=[0,0,0,0,0],E,D,K,J,G,F;
-for(E=0;
-E<C;
-++E){if(I.charAt(E)=="z"){B.push(0,0,0,0);
-continue
-}for(D=0;
-D<5;
-++D){H[D]=I.charCodeAt(E+D)-33
-}F=C-E;
-if(F<5){for(D=F;
-D<4;
-H[++D]=0){}H[F]=85
-}K=(((H[0]*85+H[1])*85+H[2])*85+H[3])*85+H[4];
-J=K&255;
-K>>>=8;
-G=K&255;
-K>>>=8;
-B.push(K>>>8,K&255,G,J);
-for(D=F;
-D<5;
-++D,B.pop()){}E+=4
-}return B
+
+(function(){
+	var c = function(input, length, result){
+		var i, j, n, b = [0, 0, 0, 0, 0];
+		for(i = 0; i < length; i += 4){
+			n = ((input[i] * 256 + input[i+1]) * 256 + input[i+2]) * 256 + input[i+3];
+			if(!n){
+				result.push("z");
+			}else{
+				for(j = 0; j < 5; b[j++] = n % 85 + 33, n = Math.floor(n / 85));
+			}
+			result.push(String.fromCharCode(b[4], b[3], b[2], b[1], b[0]));
+		}
+	};
+	
+	dojox.encoding.ascii85.encode = function(input){
+		// summary: encodes input data in ascii85 string
+		// input: Array: an array of numbers (0-255) to encode
+		var result = [], reminder = input.length % 4, length = input.length - reminder;
+		c(input, length, result);
+		if(reminder){
+			var t = input.slice(length);
+			while(t.length < 4){ t.push(0); }
+			c(t, 4, result);
+			var x = result.pop();
+			if(x == "z"){ x = "!!!!!"; }
+			result.push(x.substr(0, reminder + 1));
+		}
+		return result.join("");	// String
+	};
+
+	dojox.encoding.ascii85.decode = function(input){
+		// summary: decodes the input string back to array of numbers
+		// input: String: the input string to decode
+		var n = input.length, r = [], b = [0, 0, 0, 0, 0], i, j, t, x, y, d;
+		for(i = 0; i < n; ++i){
+			if(input.charAt(i) == "z"){
+				r.push(0, 0, 0, 0);
+				continue;
+			}
+			for(j = 0; j < 5; ++j){ b[j] = input.charCodeAt(i + j) - 33; }
+			d = n - i;
+			if(d < 5){
+				for(j = d; j < 4; b[++j] = 0);
+				b[d] = 85;
+			}
+			t = (((b[0] * 85 + b[1]) * 85 + b[2]) * 85 + b[3]) * 85 + b[4];
+			x = t & 255;
+			t >>>= 8;
+			y = t & 255;
+			t >>>= 8;
+			r.push(t >>> 8, t & 255, y, x);
+			for(j = d; j < 5; ++j, r.pop());
+			i += 4;
+		}
+		return r;
+	};
+})();
+
 }
-})()
-};

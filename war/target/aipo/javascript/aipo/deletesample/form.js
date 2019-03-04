@@ -1,2 +1,2 @@
 dojo.provide("aipo.deletesample");
-aipo.deletesample.onLoadDeleteSampleDialog=function(B){};
+aipo.deletesample.onLoadDeleteSampleDialog=function(A){};

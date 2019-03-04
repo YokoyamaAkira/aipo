@@ -1,100 +1,220 @@
-if(!dojo._hasResource["dojox.grid._grid.lib"]){dojo._hasResource["dojox.grid._grid.lib"]=true;
+if(!dojo._hasResource["dojox.grid._grid.lib"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.grid._grid.lib"] = true;
 dojo.provide("dojox.grid._grid.lib");
-dojo.isNumber=function(A){return(typeof A=="number")||(A instanceof Number)
-};
-dojo.mixin(dojox.grid,{na:"...",nop:function(){},getTdIndex:function(A){return A.cellIndex>=0?A.cellIndex:dojo.indexOf(A.parentNode.cells,A)
-},getTrIndex:function(A){return A.rowIndex>=0?A.rowIndex:dojo.indexOf(A.parentNode.childNodes,A)
-},getTr:function(B,A){return B&&((B.rows||0)[A]||B.childNodes[A])
-},getTd:function(B,C,A){return(dojox.grid.getTr(inTable,C)||0)[A]
-},findTable:function(A){for(var B=A;
-B&&B.tagName!="TABLE";
-B=B.parentNode){}return B
-},ascendDom:function(C,A){for(var B=C;
-B&&A(B);
-B=B.parentNode){}return B
-},makeNotTagName:function(B){var A=B.toUpperCase();
-return function(C){return C.tagName!=A
+
+dojo.isNumber = function(v){
+	return (typeof v == 'number') || (v instanceof Number);
 }
-},fire:function(A,D,B){var C=A&&D&&A[D];
-return C&&(B?C.apply(A,B):A[D]())
-},setStyleText:function(B,A){if(B.style.cssText==undefined){B.setAttribute("style",A)
-}else{B.style.cssText=A
-}},getStyleText:function(B,A){return(B.style.cssText==undefined?B.getAttribute("style"):B.style.cssText)
-},setStyle:function(C,A,B){if(C&&C.style[A]!=B){C.style[A]=B
-}},setStyleHeightPx:function(B,A){if(A>=0){dojox.grid.setStyle(B,"height",A+"px")
-}},mouseEvents:["mouseover","mouseout","mousedown","mouseup","click","dblclick","contextmenu"],keyEvents:["keyup","keydown","keypress"],funnelEvents:function(G,E,D,F){var B=(F?F:dojox.grid.mouseEvents.concat(dojox.grid.keyEvents));
-for(var C=0,A=B.length;
-C<A;
-C++){dojo.connect(G,"on"+B[C],E,D)
-}},removeNode:function(A){A=dojo.byId(A);
-A&&A.parentNode&&A.parentNode.removeChild(A);
-return A
-},getScrollbarWidth:function(){if(this._scrollBarWidth){return this._scrollBarWidth
-}this._scrollBarWidth=18;
-try{var B=document.createElement("div");
-B.style.cssText="top:0;left:0;width:100px;height:100px;overflow:scroll;position:absolute;visibility:hidden;";
-document.body.appendChild(B);
-this._scrollBarWidth=B.offsetWidth-B.clientWidth;
-document.body.removeChild(B);
-delete B
-}catch(A){}return this._scrollBarWidth
-},getRef:function(A,D,C){var G=C||dojo.global,F=A.split("."),H=F.pop();
-for(var B=0,E;
-G&&(E=F[B]);
-B++){G=(E in G?G[E]:(D?G[E]={}:undefined))
-}return{obj:G,prop:H}
-},getProp:function(name,create,context){with(dojox.grid.getRef(name,create,context)){return(obj)&&(prop)&&(prop in obj?obj[prop]:(create?obj[prop]={}:undefined))
-}},indexInParent:function(D){var A=0,C,B=D.parentNode;
-while(C=B.childNodes[A++]){if(C==D){return A-1
-}}return -1
-},cleanNode:function(E){if(!E){return 
-}var D=function(F){return F.domNode&&dojo.isDescendant(F.domNode,E,true)
-};
-var B=dijit.registry.filter(D);
-for(var C=0,A;
-(A=B[C]);
-C++){A.destroy()
-}delete B
-},getTagName:function(A){var B=dojo.byId(A);
-return(B&&B.tagName?B.tagName.toLowerCase():"")
-},nodeKids:function(E,D){var A=[];
-var B=0,C;
-while(C=E.childNodes[B++]){if(dojox.grid.getTagName(C)==D){A.push(C)
-}}return A
-},divkids:function(A){return dojox.grid.nodeKids(A,"div")
-},focusSelectNode:function(B){try{dojox.grid.fire(B,"focus");
-dojox.grid.fire(B,"select")
-}catch(A){}},whenIdle:function(){setTimeout(dojo.hitch.apply(dojo,arguments),0)
-},arrayCompare:function(D,C){for(var B=0,A=D.length;
-B<A;
-B++){if(D[B]!=C[B]){return false
-}}return(D.length==C.length)
-},arrayInsert:function(B,C,A){if(B.length<=C){B[C]=A
-}else{B.splice(C,0,A)
-}},arrayRemove:function(A,B){A.splice(B,1)
-},arraySwap:function(D,B,A){var C=D[B];
-D[B]=D[A];
-D[A]=C
-},initTextSizePoll:function(inInterval){var f=document.createElement("div");
-with(f.style){top="0px";
-left="0px";
-position="absolute";
-visibility="hidden"
-}f.innerHTML="TheQuickBrownFoxJumpedOverTheLazyDog";
-document.body.appendChild(f);
-var fw=f.offsetWidth;
-var job=function(){if(f.offsetWidth!=fw){fw=f.offsetWidth;
-dojox.grid.textSizeChanged()
-}};
-window.setInterval(job,inInterval||200);
-dojox.grid.initTextSizePoll=dojox.grid.nop
-},textSizeChanged:function(){}});
-dojox.grid.jobs={cancel:function(A){if(A){window.clearTimeout(A)
-}},jobs:[],job:function(C,D,A){dojox.grid.jobs.cancelJob(C);
-var B=function(){delete dojox.grid.jobs.jobs[C];
-A()
-};
-dojox.grid.jobs.jobs[C]=setTimeout(B,D)
-},cancelJob:function(A){dojox.grid.jobs.cancel(dojox.grid.jobs.jobs[A])
-}}
-};
+
+// summary:
+//	grid utility library
+
+dojo.mixin(dojox.grid, {
+	na: '...',
+	nop: function() {
+	},
+	getTdIndex: function(td){
+		return td.cellIndex >=0 ? td.cellIndex : dojo.indexOf(td.parentNode.cells, td);
+	},
+	getTrIndex: function(tr){
+		return tr.rowIndex >=0 ? tr.rowIndex : dojo.indexOf(tr.parentNode.childNodes, tr);
+	},
+	getTr: function(rowOwner, index){
+		return rowOwner && ((rowOwner.rows||0)[index] || rowOwner.childNodes[index]);
+	},
+	getTd: function(rowOwner, rowIndex, cellIndex){
+		return (dojox.grid.getTr(inTable, rowIndex)||0)[cellIndex];
+	},
+	findTable: function(node){
+		for (var n=node; n && n.tagName!='TABLE'; n=n.parentNode);
+		return n;
+	},
+	ascendDom: function(inNode, inWhile){
+		for (var n=inNode; n && inWhile(n); n=n.parentNode);
+		return n;
+	},
+	makeNotTagName: function(inTagName){
+		var name = inTagName.toUpperCase();
+		return function(node){ return node.tagName != name; };
+	},
+	fire: function(ob, ev, args){
+		var fn = ob && ev && ob[ev];
+		return fn && (args ? fn.apply(ob, args) : ob[ev]());
+	},
+	// from lib.js
+	setStyleText: function(inNode, inStyleText){
+		if(inNode.style.cssText == undefined){
+			inNode.setAttribute("style", inStyleText);
+		}else{
+			inNode.style.cssText = inStyleText;
+		}
+	},
+	getStyleText: function(inNode, inStyleText){
+		return (inNode.style.cssText == undefined ? inNode.getAttribute("style") : inNode.style.cssText);
+	},
+	setStyle: function(inElement, inStyle, inValue){
+		if(inElement && inElement.style[inStyle] != inValue){
+			inElement.style[inStyle] = inValue;
+		}
+	},
+	setStyleHeightPx: function(inElement, inHeight){
+		if(inHeight >= 0){
+			dojox.grid.setStyle(inElement, 'height', inHeight + 'px');
+		}
+	},
+	mouseEvents: [ 'mouseover', 'mouseout', /*'mousemove',*/ 'mousedown', 'mouseup', 'click', 'dblclick', 'contextmenu' ],
+	keyEvents: [ 'keyup', 'keydown', 'keypress' ],
+	funnelEvents: function(inNode, inObject, inMethod, inEvents){
+		var evts = (inEvents ? inEvents : dojox.grid.mouseEvents.concat(dojox.grid.keyEvents));
+		for (var i=0, l=evts.length; i<l; i++){
+			dojo.connect(inNode, 'on' + evts[i], inObject, inMethod);
+		}
+	},
+	removeNode: function(inNode){
+		inNode = dojo.byId(inNode);
+		inNode && inNode.parentNode && inNode.parentNode.removeChild(inNode);
+		return inNode;
+	},
+	getScrollbarWidth: function(){
+		if(this._scrollBarWidth){
+			return this._scrollBarWidth;
+		}
+		this._scrollBarWidth = 18;
+		try{
+			var e = document.createElement("div");
+			e.style.cssText = "top:0;left:0;width:100px;height:100px;overflow:scroll;position:absolute;visibility:hidden;";
+			document.body.appendChild(e);
+			this._scrollBarWidth = e.offsetWidth - e.clientWidth;
+			document.body.removeChild(e);
+			delete e;
+		}catch (ex){}
+		return this._scrollBarWidth;
+	},
+	// needed? dojo has _getProp
+	getRef: function(name, create, context){
+		var obj=context||dojo.global, parts=name.split("."), prop=parts.pop();
+		for(var i=0, p; obj&&(p=parts[i]); i++){
+			obj = (p in obj ? obj[p] : (create ? obj[p]={} : undefined));
+		}
+		return { obj: obj, prop: prop }; 
+	},
+	getProp: function(name, create, context){
+		with(dojox.grid.getRef(name, create, context)){
+			return (obj)&&(prop)&&(prop in obj ? obj[prop] : (create ? obj[prop]={} : undefined));
+		}
+	},
+	indexInParent: function(inNode){
+		var i=0, n, p=inNode.parentNode;
+		while(n = p.childNodes[i++]){
+			if(n == inNode){
+				return i - 1;
+			}
+		}
+		return -1;
+	},
+	cleanNode: function(inNode){
+		if(!inNode){
+			return;
+		}
+		var filter = function(inW){
+			return inW.domNode && dojo.isDescendant(inW.domNode, inNode, true);
+		}
+		var ws = dijit.registry.filter(filter);
+		for(var i=0, w; (w=ws[i]); i++){
+			w.destroy();
+		}
+		delete ws;
+	},
+	getTagName: function(inNodeOrId){
+		var node = dojo.byId(inNodeOrId);
+		return (node && node.tagName ? node.tagName.toLowerCase() : '');
+	},
+	nodeKids: function(inNode, inTag){
+		var result = [];
+		var i=0, n;
+		while(n = inNode.childNodes[i++]){
+			if(dojox.grid.getTagName(n) == inTag){
+				result.push(n);
+			}
+		}
+		return result;
+	},
+	divkids: function(inNode){
+		return dojox.grid.nodeKids(inNode, 'div');
+	},
+	focusSelectNode: function(inNode){
+		try{
+			dojox.grid.fire(inNode, "focus");
+			dojox.grid.fire(inNode, "select");
+		}catch(e){// IE sux bad
+		}
+	},
+	whenIdle: function(/*inContext, inMethod, args ...*/){
+		setTimeout(dojo.hitch.apply(dojo, arguments), 0);
+	},
+	arrayCompare: function(inA, inB){
+		for(var i=0,l=inA.length; i<l; i++){
+			if(inA[i] != inB[i]){return false;}
+		}
+		return (inA.length == inB.length);
+	},
+	arrayInsert: function(inArray, inIndex, inValue){
+		if(inArray.length <= inIndex){
+			inArray[inIndex] = inValue;
+		}else{
+			inArray.splice(inIndex, 0, inValue);
+		}
+	},
+	arrayRemove: function(inArray, inIndex){
+		inArray.splice(inIndex, 1);
+	},
+	arraySwap: function(inArray, inI, inJ){
+		var cache = inArray[inI];
+		inArray[inI] = inArray[inJ];
+		inArray[inJ] = cache;
+	},
+	initTextSizePoll: function(inInterval) {
+		var f = document.createElement("div");
+		with (f.style) {
+			top = "0px";
+			left = "0px";
+			position = "absolute";
+			visibility = "hidden";
+		}
+		f.innerHTML = "TheQuickBrownFoxJumpedOverTheLazyDog";
+		document.body.appendChild(f);
+		var fw = f.offsetWidth;
+		var job = function() {
+			if (f.offsetWidth != fw) {
+				fw = f.offsetWidth;
+				dojox.grid.textSizeChanged();
+			}
+		}
+		window.setInterval(job, inInterval||200);
+		dojox.grid.initTextSizePoll = dojox.grid.nop;
+	},
+	textSizeChanged: function() {
+	}
+});
+
+dojox.grid.jobs = {
+	cancel: function(inHandle){
+		if(inHandle){
+			window.clearTimeout(inHandle);
+		}
+	},
+	jobs: [],
+	job: function(inName, inDelay, inJob){
+		dojox.grid.jobs.cancelJob(inName);
+		var job = function(){
+			delete dojox.grid.jobs.jobs[inName];
+			inJob();
+		}
+		dojox.grid.jobs.jobs[inName] = setTimeout(job, inDelay);
+	},
+	cancelJob: function(inName){
+		dojox.grid.jobs.cancel(dojox.grid.jobs.jobs[inName]);
+	}
+}
+
+}

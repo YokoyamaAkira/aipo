@@ -1,149 +1,400 @@
-dojo._xdResourceLoaded({depends:[["provide","dojo.dnd.Source"],["require","dojo.dnd.Selector"],["require","dojo.dnd.Manager"]],defineResource:function(A){if(!A._hasResource["dojo.dnd.Source"]){A._hasResource["dojo.dnd.Source"]=true;
-A.provide("dojo.dnd.Source");
-A.require("dojo.dnd.Selector");
-A.require("dojo.dnd.Manager");
-A.declare("dojo.dnd.Source",A.dnd.Selector,{isSource:true,horizontal:false,copyOnly:false,skipForm:false,withHandles:false,accept:["text"],constructor:function(D,E){if(!E){E={}
-}this.isSource=typeof E.isSource=="undefined"?true:E.isSource;
-var C=E.accept instanceof Array?E.accept:["text"];
-this.accept=null;
-if(C.length){this.accept={};
-for(var B=0;
-B<C.length;
-++B){this.accept[C[B]]=1
-}}this.horizontal=E.horizontal;
-this.copyOnly=E.copyOnly;
-this.withHandles=E.withHandles;
-this.isDragging=false;
-this.mouseDown=false;
-this.targetAnchor=null;
-this.targetBox=null;
-this.before=true;
-this.sourceState="";
-if(this.isSource){A.addClass(this.node,"dojoDndSource")
-}this.targetState="";
-if(this.accept){A.addClass(this.node,"dojoDndTarget")
-}if(this.horizontal){A.addClass(this.node,"dojoDndHorizontal")
-}this.topics=[A.subscribe("/dnd/source/over",this,"onDndSourceOver"),A.subscribe("/dnd/start",this,"onDndStart"),A.subscribe("/dnd/drop",this,"onDndDrop"),A.subscribe("/dnd/cancel",this,"onDndCancel")]
-},checkAcceptance:function(G,C){if(this==G){return true
-}for(var E=0;
-E<C.length;
-++E){var F=G.getItem(C[E].id).type;
-var B=false;
-for(var D=0;
-D<F.length;
-++D){if(F[D] in this.accept){B=true;
-break
-}}if(!B){return false
-}}return true
-},copyState:function(B){return this.copyOnly||B
-},destroy:function(){A.dnd.Source.superclass.destroy.call(this);
-A.forEach(this.topics,A.unsubscribe);
-this.targetAnchor=null
-},markupFactory:function(C,B){C._skipStartup=true;
-return new A.dnd.Source(B,C)
-},onMouseMove:function(E){if(this.isDragging&&this.targetState=="Disabled"){return 
-}A.dnd.Source.superclass.onMouseMove.call(this,E);
-var B=A.dnd.manager();
-if(this.isDragging){var D=false;
-if(this.current){if(!this.targetBox||this.targetAnchor!=this.current){this.targetBox={xy:A.coords(this.current,true),w:this.current.offsetWidth,h:this.current.offsetHeight}
-}if(this.horizontal){D=(E.pageX-this.targetBox.xy.x)<(this.targetBox.w/2)
-}else{D=(E.pageY-this.targetBox.xy.y)<(this.targetBox.h/2)
-}}if(this.current!=this.targetAnchor||D!=this.before){this._markTargetAnchor(D);
-B.canDrop(!this.current||B.source!=this||!(this.current.id in this.selection))
-}}else{if(this.mouseDown&&this.isSource){var C=this.getSelectedNodes();
-if(C.length){B.startDrag(this,C,this.copyState(A.dnd.getCopyKeyState(E)))
-}}}},onMouseDown:function(B){if(this._legalMouseDown(B)&&(!this.skipForm||!A.dnd.isFormElement(B))){this.mouseDown=true;
-this.mouseButton=B.button;
-A.dnd.Source.superclass.onMouseDown.call(this,B)
-}},onMouseUp:function(B){if(this.mouseDown){this.mouseDown=false;
-A.dnd.Source.superclass.onMouseUp.call(this,B)
-}},onDndSourceOver:function(C){if(this!=C){this.mouseDown=false;
-if(this.targetAnchor){this._unmarkTargetAnchor()
-}}else{if(this.isDragging){var B=A.dnd.manager();
-B.canDrop(this.targetState!="Disabled"&&(!this.current||B.source!=this||!(this.current.id in this.selection)))
-}}},onDndStart:function(C,B,E){if(this.isSource){this._changeState("Source",this==C?(E?"Copied":"Moved"):"")
-}var D=this.accept&&this.checkAcceptance(C,B);
-this._changeState("Target",D?"":"Disabled");
-if(D&&this==C){A.dnd.manager().overSource(this)
-}this.isDragging=true
-},onDndDrop:function(D,B,E){do{if(this.containerState!="Over"){break
-}var C=this._normalizedCreator;
-if(this!=D){if(this.creator){this._normalizedCreator=function(F,G){return C.call(this,D.getItem(F.id).data,G)
+dojo._xdResourceLoaded({
+depends: [["provide", "dojo.dnd.Source"],
+["require", "dojo.dnd.Selector"],
+["require", "dojo.dnd.Manager"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojo.dnd.Source"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.dnd.Source"] = true;
+dojo.provide("dojo.dnd.Source");
+
+dojo.require("dojo.dnd.Selector");
+dojo.require("dojo.dnd.Manager");
+
+/*
+	Container property:
+		"Horizontal"- if this is the horizontal container
+	Source states:
+		""			- normal state
+		"Moved"		- this source is being moved
+		"Copied"	- this source is being copied
+	Target states:
+		""			- normal state
+		"Disabled"	- the target cannot accept an avatar
+	Target anchor state:
+		""			- item is not selected
+		"Before"	- insert point is before the anchor
+		"After"		- insert point is after the anchor
+*/
+
+dojo.declare("dojo.dnd.Source", dojo.dnd.Selector, {
+	// summary: a Source object, which can be used as a DnD source, or a DnD target
+
+	// object attributes (for markup)
+	isSource: true,
+	horizontal: false,
+	copyOnly: false,
+	skipForm: false,
+	withHandles: false,
+	accept: ["text"],
+
+	constructor: function(node, params){
+		// summary: a constructor of the Source
+		// node: Node: node or node's id to build the source on
+		// params: Object: a dict of parameters, recognized parameters are:
+		//	isSource: Boolean: can be used as a DnD source, if true; assumed to be "true" if omitted
+		//	accept: Array: list of accepted types (text strings) for a target; assumed to be ["text"] if omitted
+		//	horizontal: Boolean: a horizontal container, if true, vertical otherwise or when omitted
+		//	copyOnly: Boolean: always copy items, if true, use a state of Ctrl key otherwise
+		//	withHandles: Boolean: allows dragging only by handles
+		//	the rest of parameters are passed to the selector
+		if(!params){ params = {}; }
+		this.isSource = typeof params.isSource == "undefined" ? true : params.isSource;
+		var type = params.accept instanceof Array ? params.accept : ["text"];
+		this.accept = null;
+		if(type.length){
+			this.accept = {};
+			for(var i = 0; i < type.length; ++i){
+				this.accept[type[i]] = 1;
+			}
+		}
+		this.horizontal = params.horizontal;
+		this.copyOnly = params.copyOnly;
+		this.withHandles = params.withHandles;
+		// class-specific variables
+		this.isDragging = false;
+		this.mouseDown = false;
+		this.targetAnchor = null;
+		this.targetBox = null;
+		this.before = true;
+		// states
+		this.sourceState  = "";
+		if(this.isSource){
+			dojo.addClass(this.node, "dojoDndSource");
+		}
+		this.targetState  = "";
+		if(this.accept){
+			dojo.addClass(this.node, "dojoDndTarget");
+		}
+		if(this.horizontal){
+			dojo.addClass(this.node, "dojoDndHorizontal");
+		}
+		// set up events
+		this.topics = [
+			dojo.subscribe("/dnd/source/over", this, "onDndSourceOver"),
+			dojo.subscribe("/dnd/start",  this, "onDndStart"),
+			dojo.subscribe("/dnd/drop",   this, "onDndDrop"),
+			dojo.subscribe("/dnd/cancel", this, "onDndCancel")
+		];
+	},
+
+	// methods
+	checkAcceptance: function(source, nodes){
+		// summary: checks, if the target can accept nodes from this source
+		// source: Object: the source which provides items
+		// nodes: Array: the list of transferred items
+		if(this == source){ return true; }
+		for(var i = 0; i < nodes.length; ++i){
+			var type = source.getItem(nodes[i].id).type;
+			// type instanceof Array
+			var flag = false;
+			for(var j = 0; j < type.length; ++j){
+				if(type[j] in this.accept){
+					flag = true;
+					break;
+				}
+			}
+			if(!flag){
+				return false;	// Boolean
+			}
+		}
+		return true;	// Boolean
+	},
+	copyState: function(keyPressed){
+		// summary: Returns true, if we need to copy items, false to move.
+		//		It is separated to be overwritten dynamically, if needed.
+		// keyPressed: Boolean: the "copy" was pressed
+		return this.copyOnly || keyPressed;	// Boolean
+	},
+	destroy: function(){
+		// summary: prepares the object to be garbage-collected
+		dojo.dnd.Source.superclass.destroy.call(this);
+		dojo.forEach(this.topics, dojo.unsubscribe);
+		this.targetAnchor = null;
+	},
+
+	// markup methods
+	markupFactory: function(params, node){
+		params._skipStartup = true;
+		return new dojo.dnd.Source(node, params);
+	},
+
+	// mouse event processors
+	onMouseMove: function(e){
+		// summary: event processor for onmousemove
+		// e: Event: mouse event
+		if(this.isDragging && this.targetState == "Disabled"){ return; }
+		dojo.dnd.Source.superclass.onMouseMove.call(this, e);
+		var m = dojo.dnd.manager();
+		if(this.isDragging){
+			// calculate before/after
+			var before = false;
+			if(this.current){
+				if(!this.targetBox || this.targetAnchor != this.current){
+					this.targetBox = {
+						xy: dojo.coords(this.current, true),
+						w: this.current.offsetWidth,
+						h: this.current.offsetHeight
+					};
+				}
+				if(this.horizontal){
+					before = (e.pageX - this.targetBox.xy.x) < (this.targetBox.w / 2);
+				}else{
+					before = (e.pageY - this.targetBox.xy.y) < (this.targetBox.h / 2);
+				}
+			}
+			if(this.current != this.targetAnchor || before != this.before){
+				this._markTargetAnchor(before);
+				m.canDrop(!this.current || m.source != this || !(this.current.id in this.selection));
+			}
+		}else{
+			if(this.mouseDown && this.isSource){
+				var nodes = this.getSelectedNodes();
+				if(nodes.length){
+					m.startDrag(this, nodes, this.copyState(dojo.dnd.getCopyKeyState(e)));
+				}
+			}
+		}
+	},
+	onMouseDown: function(e){
+		// summary: event processor for onmousedown
+		// e: Event: mouse event
+		if(this._legalMouseDown(e) && (!this.skipForm || !dojo.dnd.isFormElement(e))){
+			this.mouseDown = true;
+			this.mouseButton = e.button;
+			dojo.dnd.Source.superclass.onMouseDown.call(this, e);
+		}
+	},
+	onMouseUp: function(e){
+		// summary: event processor for onmouseup
+		// e: Event: mouse event
+		if(this.mouseDown){
+			this.mouseDown = false;
+			dojo.dnd.Source.superclass.onMouseUp.call(this, e);
+		}
+	},
+
+	// topic event processors
+	onDndSourceOver: function(source){
+		// summary: topic event processor for /dnd/source/over, called when detected a current source
+		// source: Object: the source which has the mouse over it
+		if(this != source){
+			this.mouseDown = false;
+			if(this.targetAnchor){
+				this._unmarkTargetAnchor();
+			}
+		}else if(this.isDragging){
+			var m = dojo.dnd.manager();
+			m.canDrop(this.targetState != "Disabled" && (!this.current || m.source != this || !(this.current.id in this.selection)));
+		}
+	},
+	onDndStart: function(source, nodes, copy){
+		// summary: topic event processor for /dnd/start, called to initiate the DnD operation
+		// source: Object: the source which provides items
+		// nodes: Array: the list of transferred items
+		// copy: Boolean: copy items, if true, move items otherwise
+		if(this.isSource){
+			this._changeState("Source", this == source ? (copy ? "Copied" : "Moved") : "");
+		}
+		var accepted = this.accept && this.checkAcceptance(source, nodes);
+		this._changeState("Target", accepted ? "" : "Disabled");
+		if(accepted && this == source){
+			dojo.dnd.manager().overSource(this);
+		}
+		this.isDragging = true;
+	},
+	onDndDrop: function(source, nodes, copy){
+		// summary: topic event processor for /dnd/drop, called to finish the DnD operation
+		// source: Object: the source which provides items
+		// nodes: Array: the list of transferred items
+		// copy: Boolean: copy items, if true, move items otherwise
+		do{ //break box
+			if(this.containerState != "Over"){ break; }
+			var oldCreator = this._normalizedCreator;
+			if(this != source){
+				// transferring nodes from the source to the target
+				if(this.creator){
+					// use defined creator
+					this._normalizedCreator = function(node, hint){
+						return oldCreator.call(this, source.getItem(node.id).data, hint);
+					};
+				}else{
+					// we have no creator defined => move/clone nodes
+					if(copy){
+						// clone nodes
+						this._normalizedCreator = function(node, hint){
+							var t = source.getItem(node.id);
+							var n = node.cloneNode(true);
+							n.id = dojo.dnd.getUniqueId();
+							return {node: n, data: t.data, type: t.type};
+						};
+					}else{
+						// move nodes
+						this._normalizedCreator = function(node, hint){
+							var t = source.getItem(node.id);
+							source.delItem(node.id);
+							return {node: node, data: t.data, type: t.type};
+						};
+					}
+				}
+			}else{
+				// transferring nodes within the single source
+				if(this.current && this.current.id in this.selection){ break; }
+				if(this.creator){
+					// use defined creator
+					if(copy){
+						// create new copies of data items
+						this._normalizedCreator = function(node, hint){
+							return oldCreator.call(this, source.getItem(node.id).data, hint);
+						};
+					}else{
+						// move nodes
+						if(!this.current){ break; }
+						this._normalizedCreator = function(node, hint){
+							var t = source.getItem(node.id);
+							return {node: node, data: t.data, type: t.type};
+						};
+					}
+				}else{
+					// we have no creator defined => move/clone nodes
+					if(copy){
+						// clone nodes
+						this._normalizedCreator = function(node, hint){
+							var t = source.getItem(node.id);
+							var n = node.cloneNode(true);
+							n.id = dojo.dnd.getUniqueId();
+							return {node: n, data: t.data, type: t.type};
+						};
+					}else{
+						// move nodes
+						if(!this.current){ break; }
+						this._normalizedCreator = function(node, hint){
+							var t = source.getItem(node.id);
+							return {node: node, data: t.data, type: t.type};
+						};
+					}
+				}
+			}
+			this._removeSelection();
+			if(this != source){
+				this._removeAnchor();
+			}
+			if(this != source && !copy && !this.creator){
+				source.selectNone();
+			}
+			this.insertNodes(true, nodes, this.before, this.current);
+			if(this != source && !copy && this.creator){
+				source.deleteSelectedNodes();
+			}
+			this._normalizedCreator = oldCreator;
+		}while(false);
+		this.onDndCancel();
+	},
+	onDndCancel: function(){
+		// summary: topic event processor for /dnd/cancel, called to cancel the DnD operation
+		if(this.targetAnchor){
+			this._unmarkTargetAnchor();
+			this.targetAnchor = null;
+		}
+		this.before = true;
+		this.isDragging = false;
+		this.mouseDown = false;
+		delete this.mouseButton;
+		this._changeState("Source", "");
+		this._changeState("Target", "");
+	},
+
+	// utilities
+	onOverEvent: function(){
+		// summary: this function is called once, when mouse is over our container
+		dojo.dnd.Source.superclass.onOverEvent.call(this);
+		dojo.dnd.manager().overSource(this);
+	},
+	onOutEvent: function(){
+		// summary: this function is called once, when mouse is out of our container
+		dojo.dnd.Source.superclass.onOutEvent.call(this);
+		dojo.dnd.manager().outSource(this);
+	},
+	_markTargetAnchor: function(before){
+		// summary: assigns a class to the current target anchor based on "before" status
+		// before: Boolean: insert before, if true, after otherwise
+		if(this.current == this.targetAnchor && this.before == before){ return; }
+		if(this.targetAnchor){
+			this._removeItemClass(this.targetAnchor, this.before ? "Before" : "After");
+		}
+		this.targetAnchor = this.current;
+		this.targetBox = null;
+		this.before = before;
+		if(this.targetAnchor){
+			this._addItemClass(this.targetAnchor, this.before ? "Before" : "After");
+		}
+	},
+	_unmarkTargetAnchor: function(){
+		// summary: removes a class of the current target anchor based on "before" status
+		if(!this.targetAnchor){ return; }
+		this._removeItemClass(this.targetAnchor, this.before ? "Before" : "After");
+		this.targetAnchor = null;
+		this.targetBox = null;
+		this.before = true;
+	},
+	_markDndStatus: function(copy){
+		// summary: changes source's state based on "copy" status
+		this._changeState("Source", copy ? "Copied" : "Moved");
+	},
+	_legalMouseDown: function(e){
+		// summary: checks if user clicked on "approved" items
+		// e: Event: mouse event
+		if(!this.withHandles){ return true; }
+		for(var node = e.target; node && !dojo.hasClass(node, "dojoDndItem"); node = node.parentNode){
+			if(dojo.hasClass(node, "dojoDndHandle")){
+
+				//aタグを同時にクリックした場合には、aタグを優先させる
+				var event=e;
+				if (!event) {event = window.event; }
+				var pos={x:event.clientX,y:event.clientY};
+				var isCollapsed=false;
+				dojo.query("a",node).forEach(function(item){
+					if(!isCollapsed){
+						var rect=item.getBoundingClientRect();
+						isCollapsed=(rect.left<=pos.x && pos.x<=rect.right && rect.top<=pos.y && pos.y<=rect.bottom);
+					}
+				});
+				if(isCollapsed){
+					return false;
+				}
+				//----------------
+
+				return true;
+			}
+		}
+		return false;	// Boolean
+	}
+});
+
+dojo.declare("dojo.dnd.Target", dojo.dnd.Source, {
+	// summary: a Target object, which can be used as a DnD target
+
+	constructor: function(node, params){
+		// summary: a constructor of the Target --- see the Source constructor for details
+		this.isSource = false;
+		dojo.removeClass(this.node, "dojoDndSource");
+	},
+
+	// markup methods
+	markupFactory: function(params, node){
+		params._skipStartup = true;
+		return new dojo.dnd.Target(node, params);
+	}
+});
+
 }
-}else{if(E){this._normalizedCreator=function(G,H){var F=D.getItem(G.id);
-var I=G.cloneNode(true);
-I.id=A.dnd.getUniqueId();
-return{node:I,data:F.data,type:F.type}
-}
-}else{this._normalizedCreator=function(G,H){var F=D.getItem(G.id);
-D.delItem(G.id);
-return{node:G,data:F.data,type:F.type}
-}
-}}}else{if(this.current&&this.current.id in this.selection){break
-}if(this.creator){if(E){this._normalizedCreator=function(F,G){return C.call(this,D.getItem(F.id).data,G)
-}
-}else{if(!this.current){break
-}this._normalizedCreator=function(G,H){var F=D.getItem(G.id);
-return{node:G,data:F.data,type:F.type}
-}
-}}else{if(E){this._normalizedCreator=function(G,H){var F=D.getItem(G.id);
-var I=G.cloneNode(true);
-I.id=A.dnd.getUniqueId();
-return{node:I,data:F.data,type:F.type}
-}
-}else{if(!this.current){break
-}this._normalizedCreator=function(G,H){var F=D.getItem(G.id);
-return{node:G,data:F.data,type:F.type}
-}
-}}}this._removeSelection();
-if(this!=D){this._removeAnchor()
-}if(this!=D&&!E&&!this.creator){D.selectNone()
-}this.insertNodes(true,B,this.before,this.current);
-if(this!=D&&!E&&this.creator){D.deleteSelectedNodes()
-}this._normalizedCreator=C
-}while(false);
-this.onDndCancel()
-},onDndCancel:function(){if(this.targetAnchor){this._unmarkTargetAnchor();
-this.targetAnchor=null
-}this.before=true;
-this.isDragging=false;
-this.mouseDown=false;
-delete this.mouseButton;
-this._changeState("Source","");
-this._changeState("Target","")
-},onOverEvent:function(){A.dnd.Source.superclass.onOverEvent.call(this);
-A.dnd.manager().overSource(this)
-},onOutEvent:function(){A.dnd.Source.superclass.onOutEvent.call(this);
-A.dnd.manager().outSource(this)
-},_markTargetAnchor:function(B){if(this.current==this.targetAnchor&&this.before==B){return 
-}if(this.targetAnchor){this._removeItemClass(this.targetAnchor,this.before?"Before":"After")
-}this.targetAnchor=this.current;
-this.targetBox=null;
-this.before=B;
-if(this.targetAnchor){this._addItemClass(this.targetAnchor,this.before?"Before":"After")
-}},_unmarkTargetAnchor:function(){if(!this.targetAnchor){return 
-}this._removeItemClass(this.targetAnchor,this.before?"Before":"After");
-this.targetAnchor=null;
-this.targetBox=null;
-this.before=true
-},_markDndStatus:function(B){this._changeState("Source",B?"Copied":"Moved")
-},_legalMouseDown:function(E){if(!this.withHandles){return true
-}for(var D=E.target;
-D&&!A.hasClass(D,"dojoDndItem");
-D=D.parentNode){if(A.hasClass(D,"dojoDndHandle")){var C=E;
-if(!C){C=window.event
-}var F={x:C.clientX,y:C.clientY};
-var B=false;
-A.query("a",D).forEach(function(H){if(!B){var G=H.getBoundingClientRect();
-B=(G.left<=F.x&&F.x<=G.right&&G.top<=F.y&&F.y<=G.bottom)
+
 }});
-if(B){return false
-}return true
-}}return false
-}});
-A.declare("dojo.dnd.Target",A.dnd.Source,{constructor:function(B,C){this.isSource=false;
-A.removeClass(this.node,"dojoDndSource")
-},markupFactory:function(C,B){C._skipStartup=true;
-return new A.dnd.Target(B,C)
-}})
-}}});

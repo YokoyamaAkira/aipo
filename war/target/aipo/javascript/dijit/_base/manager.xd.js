@@ -1,34 +1,102 @@
-dojo._xdResourceLoaded({depends:[["provide","dijit._base.manager"]],defineResource:function(A){if(!A._hasResource["dijit._base.manager"]){A._hasResource["dijit._base.manager"]=true;
-A.provide("dijit._base.manager");
-A.declare("dijit.WidgetSet",null,{constructor:function(){this._hash={}
-},add:function(B){if(this._hash[B.id]){throw new Error("Tried to register widget with id=="+B.id+" but that id is already registered")
-}this._hash[B.id]=B
-},remove:function(B){delete this._hash[B]
-},forEach:function(B){for(var C in this._hash){B(this._hash[C])
-}},filter:function(C){var B=new dijit.WidgetSet();
-this.forEach(function(D){if(C(D)){B.add(D)
-}});
-return B
-},byId:function(B){return this._hash[B]
-},byClass:function(B){return this.filter(function(C){return C.declaredClass==B
-})
-}});
-dijit.registry=new dijit.WidgetSet();
-dijit._widgetTypeCtr={};
-dijit.getUniqueId=function(B){var C;
-do{C=B+"_"+(dijit._widgetTypeCtr[B]!==undefined?++dijit._widgetTypeCtr[B]:dijit._widgetTypeCtr[B]=0)
-}while(dijit.byId(C));
-return C
+dojo._xdResourceLoaded({
+depends: [["provide", "dijit._base.manager"]],
+defineResource: function(dojo){if(!dojo._hasResource["dijit._base.manager"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dijit._base.manager"] = true;
+dojo.provide("dijit._base.manager");
+
+dojo.declare("dijit.WidgetSet", null, {
+	constructor: function(){
+		// summary:
+		//	A set of widgets indexed by id
+		this._hash={};
+	},
+
+	add: function(/*Widget*/ widget){
+		if(this._hash[widget.id]){
+			throw new Error("Tried to register widget with id==" + widget.id + " but that id is already registered");
+		}
+		this._hash[widget.id]=widget;
+	},
+
+	remove: function(/*String*/ id){
+		delete this._hash[id];
+	},
+
+	forEach: function(/*Function*/ func){
+		for(var id in this._hash){
+			func(this._hash[id]);
+		}
+	},
+
+	filter: function(/*Function*/ filter){
+		var res = new dijit.WidgetSet();
+		this.forEach(function(widget){
+			if(filter(widget)){ res.add(widget); }
+		});
+		return res;		// dijit.WidgetSet
+	},
+
+	byId: function(/*String*/ id){
+		return this._hash[id];
+	},
+
+	byClass: function(/*String*/ cls){
+		return this.filter(function(widget){ return widget.declaredClass==cls; });	// dijit.WidgetSet
+	}
+	});
+
+// registry: list of all widgets on page
+dijit.registry = new dijit.WidgetSet();
+
+dijit._widgetTypeCtr = {};
+
+dijit.getUniqueId = function(/*String*/widgetType){
+	// summary
+	//	Generates a unique id for a given widgetType
+
+	var id;
+	do{
+		id = widgetType + "_" +
+			(dijit._widgetTypeCtr[widgetType] !== undefined ?
+				++dijit._widgetTypeCtr[widgetType] : dijit._widgetTypeCtr[widgetType] = 0);
+	}while(dijit.byId(id));
+	return id; // String
 };
-if(A.isIE){A.addOnUnload(function(){dijit.registry.forEach(function(B){B.destroy()
-})
-})
-}dijit.byId=function(B){return(A.isString(B))?dijit.registry.byId(B):B
-};
-dijit.byNode=function(B){return dijit.registry.byId(B.getAttribute("widgetId"))
-};
-dijit.getEnclosingWidget=function(B){while(B){if(B.getAttribute&&B.getAttribute("widgetId")){return dijit.registry.byId(B.getAttribute("widgetId"))
-}B=B.parentNode
-}return null
+
+
+if(dojo.isIE){
+	// Only run this for IE because we think it's only necessary in that case,
+	// and because it causes problems on FF.  See bug #3531 for details.
+	dojo.addOnUnload(function(){
+		dijit.registry.forEach(function(widget){ widget.destroy(); });
+	});
 }
-}}});
+
+dijit.byId = function(/*String|Widget*/id){
+	// summary:
+	//		Returns a widget by its id, or if passed a widget, no-op (like dojo.byId())
+	return (dojo.isString(id)) ? dijit.registry.byId(id) : id; // Widget
+};
+
+dijit.byNode = function(/* DOMNode */ node){
+	// summary:
+	//		Returns the widget as referenced by node
+	return dijit.registry.byId(node.getAttribute("widgetId")); // Widget
+};
+
+dijit.getEnclosingWidget = function(/* DOMNode */ node){
+	// summary:
+	//		Returns the widget whose dom tree contains node or null if
+	//		the node is not contained within the dom tree of any widget
+	while(node){
+		if(node.getAttribute && node.getAttribute("widgetId")){
+			return dijit.registry.byId(node.getAttribute("widgetId"));
+		}
+		node = node.parentNode;
+	}
+	return null;
+};
+
+}
+
+}});

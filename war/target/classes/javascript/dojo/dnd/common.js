@@ -10,8 +10,8 @@ do{A="dojoUnique"+(++dojo.dnd._uniqueId)
 return A
 };
 dojo.dnd._empty={};
-dojo.dnd.isFormElement=function(A){var B=A.target;
-if(B.nodeType==3){B=B.parentNode
-}return" button textarea input select option ".indexOf(" "+B.tagName.toLowerCase()+" ")>=0
+dojo.dnd.isFormElement=function(B){var A=B.target;
+if(A.nodeType==3){A=A.parentNode
+}return" button textarea input select option ".indexOf(" "+A.tagName.toLowerCase()+" ")>=0
 }
 };

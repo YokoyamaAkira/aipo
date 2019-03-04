@@ -1,22 +1,22 @@
 dojo._xdResourceLoaded({depends:[["provide","dojo.string"]],defineResource:function(A){if(!A._hasResource["dojo.string"]){A._hasResource["dojo.string"]=true;
 A.provide("dojo.string");
-A.string.pad=function(B,E,F,C){var D=String(B);
-if(!F){F="0"
-}while(D.length<E){if(C){D+=F
-}else{D=F+D
-}}return D
+A.string.pad=function(F,D,E,B){var C=String(F);
+if(!E){E="0"
+}while(C.length<D){if(B){C+=E
+}else{C=E+C
+}}return C
 };
-A.string.substitute=function(E,B,D,C){return E.replace(/\$\{([^\s\:\}]+)(?:\:([^\s\:\}]+))?\}/g,function(F,G,I){var H=A.getObject(G,false,B);
-if(I){H=A.getObject(I,false,C)(H)
-}if(D){H=D(H,G)
+A.string.substitute=function(D,E,C,B){return D.replace(/\$\{([^\s\:\}]+)(?:\:([^\s\:\}]+))?\}/g,function(F,G,I){var H=A.getObject(G,false,E);
+if(I){H=A.getObject(I,false,B)(H)
+}if(C){H=C(H,G)
 }return H.toString()
 })
 };
-A.string.trim=function(B){B=B.replace(/^\s+/,"");
-for(var C=B.length-1;
-C>0;
-C--){if(/\S/.test(B.charAt(C))){B=B.substring(0,C+1);
+A.string.trim=function(C){C=C.replace(/^\s+/,"");
+for(var B=C.length-1;
+B>0;
+B--){if(/\S/.test(C.charAt(B))){C=C.substring(0,B+1);
 break
-}}return B
+}}return C
 }
 }}});

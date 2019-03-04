@@ -3,63 +3,63 @@ dojo.provide("dojox.charting.plot2d.Stacked");
 dojo.require("dojox.charting.plot2d.common");
 dojo.require("dojox.charting.plot2d.Default");
 dojo.require("dojox.lang.functional");
-(function(){var B=dojox.lang.functional,C=dojox.charting.plot2d.common,A=B.lambda("item.purgeGroup()");
-dojo.declare("dojox.charting.plot2d.Stacked",dojox.charting.plot2d.Default,{calculateAxes:function(D){var E=C.collectStackedStats(this.series);
-this._maxRunLength=E.hmax;
-this._calc(D,E);
+(function(){var C=dojox.lang.functional,A=dojox.charting.plot2d.common,B=C.lambda("item.purgeGroup()");
+dojo.declare("dojox.charting.plot2d.Stacked",dojox.charting.plot2d.Default,{calculateAxes:function(E){var D=A.collectStackedStats(this.series);
+this._maxRunLength=D.hmax;
+this._calc(E,D);
 return this
-},render:function(E,N){var L=B.repeat(this._maxRunLength,"-> 0",0);
-for(var G=0;
-G<this.series.length;
-++G){var U=this.series[G];
-for(var F=0;
-F<U.data.length;
-++F){var Q=U.data[F];
-if(isNaN(Q)){Q=0
-}L[F]+=Q
-}}if(this.dirty){dojo.forEach(this.series,A);
+},render:function(S,H){var F=C.repeat(this._maxRunLength,"-> 0",0);
+for(var U=0;
+U<this.series.length;
+++U){var O=this.series[U];
+for(var T=0;
+T<O.data.length;
+++T){var K=O.data[T];
+if(isNaN(K)){K=0
+}F[T]+=K
+}}if(this.dirty){dojo.forEach(this.series,B);
 this.cleanGroup();
-var T=this.group;
-B.forEachReversed(this.series,function(X){X.cleanGroup(T)
+var N=this.group;
+C.forEachReversed(this.series,function(X){X.cleanGroup(N)
 })
-}var S=this.chart.theme,P,M,W,O;
-for(var G=this.series.length-1;
-G>=0;
---G){var U=this.series[G];
-if(!this.dirty&&!U.dirty){continue
-}U.cleanGroup();
-var T=U.group,H=dojo.map(L,function(X,Y){return{x:this._hScaler.scale*(Y+1-this._hScaler.bounds.lower)+N.l,y:E.height-N.b-this._vScaler.scale*(X-this._vScaler.bounds.lower)}
+}var M=this.chart.theme,J,G,Q,I;
+for(var U=this.series.length-1;
+U>=0;
+--U){var O=this.series[U];
+if(!this.dirty&&!O.dirty){continue
+}O.cleanGroup();
+var N=O.group,V=dojo.map(F,function(X,Y){return{x:this._hScaler.scale*(Y+1-this._hScaler.bounds.lower)+H.l,y:S.height-H.b-this._vScaler.scale*(X-this._vScaler.bounds.lower)}
 },this);
-if(!U.fill||!U.stroke){W=new dojo.Color(S.next("color"))
-}if(this.opt.areas){var J=dojo.clone(H);
-J.push({x:H[H.length-1].x,y:E.height-N.b});
-J.push({x:H[0].x,y:E.height-N.b});
-J.push(H[0]);
-var D=U.fill?U.fill:C.augmentFill(S.series.fill,W);
-T.createPolyline(J).setFill(D)
-}if(this.opt.lines||this.opt.markers){P=U.stroke?C.makeStroke(U.stroke):C.augmentStroke(S.series.stroke,W);
-if(U.outline||S.series.outline){M=C.makeStroke(U.outline?U.outline:S.series.outline);
-M.width=2*M.width+P.width
-}}if(this.opt.markers){O=U.marker?U.marker:S.next("marker")
-}if(this.opt.shadows&&P){var I=this.opt.shadows,V=new dojo.Color([0,0,0,0.3]),K=dojo.map(H,function(X){return{x:X.x+I.dx,y:X.y+I.dy}
-}),R=dojo.clone(M?M:P);
-R.color=V;
-R.width+=I.dw?I.dw:0;
-if(this.opt.lines){T.createPolyline(K).setStroke(R)
-}if(this.opt.markers){dojo.forEach(K,function(X){T.createPath("M"+X.x+" "+X.y+" "+O).setStroke(R).setFill(V)
+if(!O.fill||!O.stroke){Q=new dojo.Color(M.next("color"))
+}if(this.opt.areas){var D=dojo.clone(V);
+D.push({x:V[V.length-1].x,y:S.height-H.b});
+D.push({x:V[0].x,y:S.height-H.b});
+D.push(V[0]);
+var R=O.fill?O.fill:A.augmentFill(M.series.fill,Q);
+N.createPolyline(D).setFill(R)
+}if(this.opt.lines||this.opt.markers){J=O.stroke?A.makeStroke(O.stroke):A.augmentStroke(M.series.stroke,Q);
+if(O.outline||M.series.outline){G=A.makeStroke(O.outline?O.outline:M.series.outline);
+G.width=2*G.width+J.width
+}}if(this.opt.markers){I=O.marker?O.marker:M.next("marker")
+}if(this.opt.shadows&&J){var W=this.opt.shadows,P=new dojo.Color([0,0,0,0.3]),E=dojo.map(V,function(X){return{x:X.x+W.dx,y:X.y+W.dy}
+}),L=dojo.clone(G?G:J);
+L.color=P;
+L.width+=W.dw?W.dw:0;
+if(this.opt.lines){N.createPolyline(E).setStroke(L)
+}if(this.opt.markers){dojo.forEach(E,function(X){N.createPath("M"+X.x+" "+X.y+" "+I).setStroke(L).setFill(P)
 },this)
-}}if(this.opt.lines){if(M){T.createPolyline(H).setStroke(M)
-}T.createPolyline(H).setStroke(P)
-}if(this.opt.markers){dojo.forEach(H,function(Y){var X="M"+Y.x+" "+Y.y+" "+O;
-if(M){T.createPath(X).setStroke(M)
-}T.createPath(X).setStroke(P).setFill(P.color)
+}}if(this.opt.lines){if(G){N.createPolyline(V).setStroke(G)
+}N.createPolyline(V).setStroke(J)
+}if(this.opt.markers){dojo.forEach(V,function(Y){var X="M"+Y.x+" "+Y.y+" "+I;
+if(G){N.createPath(X).setStroke(G)
+}N.createPath(X).setStroke(J).setFill(J.color)
 },this)
-}U.dirty=false;
-for(var F=0;
-F<U.data.length;
-++F){var Q=U.data[F];
-if(isNaN(Q)){Q=0
-}L[F]-=Q
+}O.dirty=false;
+for(var T=0;
+T<O.data.length;
+++T){var K=O.data[T];
+if(isNaN(K)){K=0
+}F[T]-=K
 }}this.dirty=false;
 return this
 }})

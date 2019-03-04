@@ -179,9 +179,13 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.0</version>
         <configuration>
           <source>1.6</source>
-          <target>1.6</target>
+          <target>1.6</target> 
+         <!-- <source>${java.version}</source>
+          <target>${java.version}</target> -->
+          <compilerArgument>${compilerArgument}</compilerArgument>
           <failOnError>true</failOnError>
           <encoding>UTF-8</encoding>
         </configuration>
@@ -189,6 +193,7 @@
       <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
+        <version>1.9.0</version>
         <configuration>
           <header>header.txt</header>
           <mapping>

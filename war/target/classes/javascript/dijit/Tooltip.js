@@ -6,18 +6,18 @@ dojo.declare("dijit._MasterTooltip",[dijit._Widget,dijit._Templated],{duration:2
 this.bgIframe=new dijit.BackgroundIframe(this.domNode);
 this.fadeIn=dojo.fadeIn({node:this.domNode,duration:this.duration,onEnd:dojo.hitch(this,"_onShow")});
 this.fadeOut=dojo.fadeOut({node:this.domNode,duration:this.duration,onEnd:dojo.hitch(this,"_onHide")})
-},show:function(C,D){if(this.aroundNode&&this.aroundNode===D){return 
+},show:function(D,A){if(this.aroundNode&&this.aroundNode===A){return 
 }if(this.fadeOut.status()=="playing"){this._onDeck=arguments;
 return 
-}this.containerNode.innerHTML=C;
+}this.containerNode.innerHTML=D;
 this.domNode.style.top=(this.domNode.offsetTop+1)+"px";
-var B=this.isLeftToRight()?{BR:"BL",BL:"BR"}:{BL:"BR",BR:"BL"};
-var A=dijit.placeOnScreenAroundElement(this.domNode,D,B);
-this.domNode.className="dijitTooltip dijitTooltip"+(A.corner=="BL"?"Right":"Left");
+var C=this.isLeftToRight()?{BR:"BL",BL:"BR"}:{BL:"BR",BR:"BL"};
+var B=dijit.placeOnScreenAroundElement(this.domNode,A,C);
+this.domNode.className="dijitTooltip dijitTooltip"+(B.corner=="BL"?"Right":"Left");
 dojo.style(this.domNode,"opacity",0);
 this.fadeIn.play();
 this.isShowingNow=true;
-this.aroundNode=D
+this.aroundNode=A
 },_onShow:function(){if(dojo.isIE){this.domNode.style.filter=""
 }},hide:function(A){if(!this.aroundNode||this.aroundNode!==A){return 
 }if(this._onDeck){this._onDeck=null;
@@ -30,19 +30,19 @@ this.fadeOut.play()
 if(this._onDeck){this.show.apply(this,this._onDeck);
 this._onDeck=null
 }}});
-dijit.showTooltip=function(A,B){if(!dijit._masterTT){dijit._masterTT=new dijit._MasterTooltip()
-}return dijit._masterTT.show(A,B)
+dijit.showTooltip=function(B,A){if(!dijit._masterTT){dijit._masterTT=new dijit._MasterTooltip()
+}return dijit._masterTT.show(B,A)
 };
 dijit.hideTooltip=function(A){if(!dijit._masterTT){dijit._masterTT=new dijit._MasterTooltip()
 }return dijit._masterTT.hide(A)
 };
 dojo.declare("dijit.Tooltip",dijit._Widget,{label:"",showDelay:400,connectId:[],postCreate:function(){if(this.srcNodeRef){this.srcNodeRef.style.display="none"
 }this._connectNodes=[];
-dojo.forEach(this.connectId,function(A){var B=dojo.byId(A);
-if(B){this._connectNodes.push(B);
-dojo.forEach(["onMouseOver","onMouseOut","onFocus","onBlur","onHover","onUnHover"],function(C){this.connect(B,C.toLowerCase(),"_"+C)
+dojo.forEach(this.connectId,function(B){var A=dojo.byId(B);
+if(A){this._connectNodes.push(A);
+dojo.forEach(["onMouseOver","onMouseOut","onFocus","onBlur","onHover","onUnHover"],function(C){this.connect(A,C.toLowerCase(),"_"+C)
 },this);
-if(dojo.isIE){B.style.zoom=1
+if(dojo.isIE){A.style.zoom=1
 }}},this)
 },_onMouseOver:function(A){this._onHover(A)
 },_onMouseOut:function(A){if(dojo.isDescendant(A.relatedTarget,A.target)){return 
@@ -51,8 +51,8 @@ if(dojo.isIE){B.style.zoom=1
 this._onHover(A)
 },_onBlur:function(A){this._focus=false;
 this._onUnHover(A)
-},_onHover:function(A){if(!this._showTimer){var B=A.target;
-this._showTimer=setTimeout(dojo.hitch(this,function(){this.open(B)
+},_onHover:function(B){if(!this._showTimer){var A=B.target;
+this._showTimer=setTimeout(dojo.hitch(this,function(){this.open(A)
 }),this.showDelay)
 }},_onUnHover:function(A){if(this._focus){return 
 }if(this._showTimer){clearTimeout(this._showTimer);

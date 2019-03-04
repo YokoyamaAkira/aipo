@@ -21,7 +21,7 @@ import org.apache.jetspeed.om.profile.Skin;
 /**
  * Default bean like implementation of the skin entry in psml
  * 
- * @author <a href="mailto:raphael@apache.org">Raphaël Luta</a>
+ * @author <a href="mailto:raphael@apache.org">Rapha Luta</a>
  * @version $Id: PsmlSkin.java,v 1.4 2004/02/23 03:02:54 jford Exp $
  */
 public class PsmlSkin extends PsmlConfigElement implements Skin

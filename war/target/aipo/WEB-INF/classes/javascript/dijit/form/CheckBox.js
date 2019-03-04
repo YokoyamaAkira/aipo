@@ -14,7 +14,7 @@ dijit.form.CheckBox.superclass.setValue.call(this,A)
 }});
 dojo.declare("dijit.form.RadioButton",dijit.form.CheckBox,{type:"radio",baseClass:"dijitRadio",_groups:{},postCreate:function(){(this._groups[this.name]=this._groups[this.name]||[]).push(this);
 this.inherited(arguments)
-},uninitialize:function(){dojo.forEach(this._groups[this.name],function(B,A,C){if(B===this){C.splice(A,1);
+},uninitialize:function(){dojo.forEach(this._groups[this.name],function(C,B,A){if(C===this){A.splice(B,1);
 return 
 }},this)
 },setChecked:function(A){if(A){dojo.forEach(this._groups[this.name],function(B){if(B!=this&&B.checked){B.setChecked(false)

@@ -1,34 +1,34 @@
 if(!dojo._hasResource["dojox.collections.Stack"]){dojo._hasResource["dojox.collections.Stack"]=true;
 dojo.provide("dojox.collections.Stack");
 dojo.require("dojox.collections._base");
-dojox.collections.Stack=function(B){var A=[];
-if(B){A=A.concat(B)
-}this.count=A.length;
-this.clear=function(){A=[];
-this.count=A.length
+dojox.collections.Stack=function(A){var B=[];
+if(A){B=B.concat(A)
+}this.count=B.length;
+this.clear=function(){B=[];
+this.count=B.length
 };
-this.clone=function(){return new dojox.collections.Stack(A)
+this.clone=function(){return new dojox.collections.Stack(B)
 };
-this.contains=function(C){for(var D=0;
-D<A.length;
-D++){if(A[D]==C){return true
+this.contains=function(D){for(var C=0;
+C<B.length;
+C++){if(B[C]==D){return true
 }}return false
 };
-this.copyTo=function(D,C){D.splice(C,0,A)
+this.copyTo=function(C,D){C.splice(D,0,B)
 };
-this.forEach=function(C,D){dojo.forEach(A,C,D)
+this.forEach=function(D,C){dojo.forEach(B,D,C)
 };
-this.getIterator=function(){return new dojox.collections.Iterator(A)
+this.getIterator=function(){return new dojox.collections.Iterator(B)
 };
-this.peek=function(){return A[(A.length-1)]
+this.peek=function(){return B[(B.length-1)]
 };
-this.pop=function(){var C=A.pop();
-this.count=A.length;
+this.pop=function(){var C=B.pop();
+this.count=B.length;
 return C
 };
-this.push=function(C){this.count=A.push(C)
+this.push=function(C){this.count=B.push(C)
 };
-this.toArray=function(){return[].concat(A)
+this.toArray=function(){return[].concat(B)
 }
 }
 };

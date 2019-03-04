@@ -1,24 +1,24 @@
 dojo._xdResourceLoaded({depends:[["provide","dijit._Widget"],["require","dijit._base"]],defineResource:function(A){if(!A._hasResource["dijit._Widget"]){A._hasResource["dijit._Widget"]=true;
 A.provide("dijit._Widget");
 A.require("dijit._base");
-A.declare("dijit._Widget",null,{id:"",lang:"",dir:"","class":"",style:"",title:"",srcNodeRef:null,domNode:null,attributeMap:{id:"",dir:"",lang:"","class":"",style:"",title:""},postscript:function(B,C){this.create(B,C)
-},create:function(B,D){this.srcNodeRef=A.byId(D);
+A.declare("dijit._Widget",null,{id:"",lang:"",dir:"","class":"",style:"",title:"",srcNodeRef:null,domNode:null,attributeMap:{id:"",dir:"",lang:"","class":"",style:"",title:""},postscript:function(C,B){this.create(C,B)
+},create:function(F,C){this.srcNodeRef=A.byId(C);
 this._connects=[];
 this._attaches=[];
 if(this.srcNodeRef&&(typeof this.srcNodeRef.id=="string")){this.id=this.srcNodeRef.id
-}if(B){A.mixin(this,B)
+}if(F){A.mixin(this,F)
 }this.postMixInProperties();
 if(!this.id){this.id=dijit.getUniqueId(this.declaredClass.replace(/\./g,"_"))
 }dijit.registry.add(this);
 this.buildRendering();
-if(this.domNode){for(var C in this.attributeMap){var F=this[this.attributeMap[C]||"domNode"];
-var E=this[C];
-if(typeof E!="object"&&(E!==""||(B&&B[C]))){switch(C){case"class":A.addClass(F,E);
+if(this.domNode){for(var B in this.attributeMap){var E=this[this.attributeMap[B]||"domNode"];
+var D=this[B];
+if(typeof D!="object"&&(D!==""||(F&&F[B]))){switch(B){case"class":A.addClass(E,D);
 break;
-case"style":if(F.style.cssText){F.style.cssText+="; "+E
-}else{F.style.cssText=E
+case"style":if(E.style.cssText){E.style.cssText+="; "+D
+}else{E.style.cssText=D
 }break;
-default:F.setAttribute(C,E)
+default:E.setAttribute(B,D)
 }}}}if(this.domNode){this.domNode.setAttribute("widgetId",this.id)
 }this.postCreate();
 if(this.srcNodeRef&&!this.srcNodeRef.parentNode){delete this.srcNodeRef
@@ -42,21 +42,21 @@ delete this.srcNodeRef
 },toString:function(){return"[Widget "+this.declaredClass+", "+(this.id||"NO ID")+"]"
 },getDescendants:function(){var B=A.query("[widgetId]",this.domNode);
 return B.map(dijit.byNode)
-},nodesWithKeyClick:["input","button"],connect:function(F,E,B){var D=[];
-if(E=="ondijitclick"){var C=this;
-if(!this.nodesWithKeyClick[F.nodeName]){D.push(A.connect(F,"onkeydown",this,function(G){if(G.keyCode==A.keys.ENTER){return(A.isString(B))?C[B](G):B.call(C,G)
+},nodesWithKeyClick:["input","button"],connect:function(E,D,F){var C=[];
+if(D=="ondijitclick"){var B=this;
+if(!this.nodesWithKeyClick[E.nodeName]){C.push(A.connect(E,"onkeydown",this,function(G){if(G.keyCode==A.keys.ENTER){return(A.isString(F))?B[F](G):F.call(B,G)
 }else{if(G.keyCode==A.keys.SPACE){A.stopEvent(G)
 }}}));
-D.push(A.connect(F,"onkeyup",this,function(G){if(G.keyCode==A.keys.SPACE){return A.isString(B)?C[B](G):B.call(C,G)
+C.push(A.connect(E,"onkeyup",this,function(G){if(G.keyCode==A.keys.SPACE){return A.isString(F)?B[F](G):F.call(B,G)
 }}))
-}E="onclick"
-}D.push(A.connect(F,E,this,B));
-this._connects.push(D);
-return D
-},disconnect:function(B){for(var C=0;
-C<this._connects.length;
-C++){if(this._connects[C]==B){A.forEach(B,A.disconnect);
-this._connects.splice(C,1);
+}D="onclick"
+}C.push(A.connect(E,D,this,F));
+this._connects.push(C);
+return C
+},disconnect:function(C){for(var B=0;
+B<this._connects.length;
+B++){if(this._connects[B]==C){A.forEach(C,A.disconnect);
+this._connects.splice(B,1);
 return 
 }}},isLeftToRight:function(){if(typeof this._ltr=="undefined"){this._ltr=A.getComputedStyle(this.domNode).direction!="rtl"
 }return this._ltr

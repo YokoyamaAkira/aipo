@@ -5772,76 +5772,76 @@ aimluck.io.createOptions(this.memberFromId,D)
 },onMemberRemoveClick:function(B){this.removeMemberSync()
 }})
 }}});
-dojo._xdResourceLoaded({depends:[["provide","aipo.workflow.MemberNormalSelectList"],["require","aipo.widget.MemberNormalSelectList"]],defineResource:function(B){if(!B._hasResource["aipo.workflow.MemberNormalSelectList"]){B._hasResource["aipo.workflow.MemberNormalSelectList"]=true;
-B.provide("aipo.workflow.MemberNormalSelectList");
-B.require("aipo.widget.MemberNormalSelectList");
-B.declare("aipo.workflow.MemberNormalSelectList",[aipo.widget.MemberNormalSelectList],{addMember:function(I,M){if(document.all){var N=I.options;
-var A=M.options;
-if(N.length==1&&N[0].value==""){return 
+dojo._xdResourceLoaded({depends:[["provide","aipo.workflow.MemberNormalSelectList"],["require","aipo.widget.MemberNormalSelectList"]],defineResource:function(A){if(!A._hasResource["aipo.workflow.MemberNormalSelectList"]){A._hasResource["aipo.workflow.MemberNormalSelectList"]=true;
+A.provide("aipo.workflow.MemberNormalSelectList");
+A.require("aipo.widget.MemberNormalSelectList");
+A.declare("aipo.workflow.MemberNormalSelectList",[aipo.widget.MemberNormalSelectList],{addMember:function(G,C){if(document.all){var B=G.options;
+var H=C.options;
+if(B.length==1&&B[0].value==""){return 
 }for(i=0;
-i<N.length;
-i++){if(!N[i].selected){continue
-}var J=false;
+i<B.length;
+i++){if(!B[i].selected){continue
+}var F=false;
 for(j=0;
-j<A.length;
-j++){if(A[j].value==N[i].value){J=true;
+j<H.length;
+j++){if(H[j].value==B[i].value){F=true;
 break
-}}if(J){continue
-}var L=document.createElement("OPTION");
-L.value=N[i].value;
-L.text=N[i].text;
-L.selected=true;
-if(A.length==1&&A[0].value==""){A.remove(0)
-}if(this.memberLimit!=0&&M.options.length>=this.memberLimit){return 
-}var K=document.createElement("OPTION");
-K.value=N[i].value;
-K.text=(j+1)+". "+N[i].text;
-K.selected=true;
-A.add(K,A.length)
-}}else{var N=I.options;
-var A=M.options;
-if(N.length==1&&N[0].value==""){return 
+}}if(F){continue
+}var D=document.createElement("OPTION");
+D.value=B[i].value;
+D.text=B[i].text;
+D.selected=true;
+if(H.length==1&&H[0].value==""){H.remove(0)
+}if(this.memberLimit!=0&&C.options.length>=this.memberLimit){return 
+}var E=document.createElement("OPTION");
+E.value=B[i].value;
+E.text=(j+1)+". "+B[i].text;
+E.selected=true;
+H.add(E,H.length)
+}}else{var B=G.options;
+var H=C.options;
+if(B.length==1&&B[0].value==""){return 
 }for(i=0;
-i<N.length;
-i++){if(!N[i].selected){continue
-}var J=false;
+i<B.length;
+i++){if(!B[i].selected){continue
+}var F=false;
 for(j=0;
-j<A.length;
-j++){if(A[j].value==N[i].value){J=true;
+j<H.length;
+j++){if(H[j].value==B[i].value){F=true;
 break
-}}if(J){continue
-}var L=document.createElement("OPTION");
-L.value=N[i].value;
-L.text=N[i].text;
-L.selected=true;
-if(M.options.length==1&&M.options[0].value==""){M.removeChild(M.options[0])
-}if(this.memberLimit!=0&&M.options.length>=this.memberLimit){return 
-}var K=document.createElement("OPTION");
-K.value=N[i].value;
-K.text=(j+1)+". "+N[i].text;
-K.selected=true;
-M.insertBefore(K,A[A.length])
-}}},removeMemberSync:function(){var D=B.byId(this.memberToId);
-if(document.all){var A=D.options;
+}}if(F){continue
+}var D=document.createElement("OPTION");
+D.value=B[i].value;
+D.text=B[i].text;
+D.selected=true;
+if(C.options.length==1&&C.options[0].value==""){C.removeChild(C.options[0])
+}if(this.memberLimit!=0&&C.options.length>=this.memberLimit){return 
+}var E=document.createElement("OPTION");
+E.value=B[i].value;
+E.text=(j+1)+". "+B[i].text;
+E.selected=true;
+C.insertBefore(E,H[H.length])
+}}},removeMemberSync:function(){var B=A.byId(this.memberToId);
+if(document.all){var C=B.options;
 for(i=0;
-i<A.length;
-i++){if(A[i].selected){A.remove(i);
+i<C.length;
+i++){if(C[i].selected){C.remove(i);
 i-=1;
-if(i+1<A.length){for(j=i+1;
-j<A.length;
-j++){if(j<9){A[j].text=A[j].text.slice(3)
-}else{A[j].text=A[j].text.slice(4)
-}A[j].text=(j+1)+". "+A[j].text
-}}}}}else{var A=D.options;
+if(i+1<C.length){for(j=i+1;
+j<C.length;
+j++){if(j<9){C[j].text=C[j].text.slice(3)
+}else{C[j].text=C[j].text.slice(4)
+}C[j].text=(j+1)+". "+C[j].text
+}}}}}else{var C=B.options;
 for(i=0;
-i<A.length;
-i++){if(A[i].selected){D.removeChild(A[i]);
+i<C.length;
+i++){if(C[i].selected){B.removeChild(C[i]);
 i-=1;
-if(i+1<A.length){for(j=i+1;
-j<A.length;
-j++){if(j<9){A[j].text=A[j].text.slice(3)
-}else{A[j].text=A[j].text.slice(4)
-}A[j].text=(j+1)+". "+A[j].text
+if(i+1<C.length){for(j=i+1;
+j<C.length;
+j++){if(j<9){C[j].text=C[j].text.slice(3)
+}else{C[j].text=C[j].text.slice(4)
+}C[j].text=(j+1)+". "+C[j].text
 }}}}}}})
 }}});
 dojo._xdResourceLoaded({depends:[["provide","aipo.widget.DateCalendar"],["require","dijit._Calendar"]],defineResource:function(A){if(!A._hasResource["aipo.widget.DateCalendar"]){A._hasResource["aipo.widget.DateCalendar"]=true;
@@ -6126,32 +6126,32 @@ delete this._showTimer
 }this.close()
 }})
 }}});
-dojo._xdResourceLoaded({depends:[["provide","aipo.fileupload.widget.FileuploadDialog"],["provide","aipo.fileupload.widget.FileuploadDialogUnderlay"],["require","aimluck.widget.Dialog"]],defineResource:function(B){if(!B._hasResource["aipo.widget.FileuploadDialog"]){B._hasResource["aipo.widget.FileuploadDialog"]=true;
-B.provide("aipo.fileupload.widget.FileuploadDialog");
-B.provide("aipo.fileupload.widget.FileuploadDialogUnderlay");
-B.require("aimluck.widget.Dialog");
-B.declare("aipo.fileupload.widget.FileuploadDialogUnderlay",[aimluck.widget.DialogUnderlay],{templateString:"<div class=fileuploadDialogUnderlayWrapper id='${id}_underlay'><div class=fileuploadDialogUnderlay dojoAttachPoint='node'></div></div>"});
-B.declare("aipo.fileupload.widget.FileuploadDialog",[aimluck.widget.Dialog],{loadingMessage:"<div class='indicator'>読み込み中...</div>",templateCssString:"fileuploadDialog",templateString:"<div id='fileuploadDialog' class='${templateCssString}' dojoattachpoint='wrapper'><span dojoattachpoint='tabStartOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap'tabindex='0'></span><span dojoattachpoint='tabStart' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><div dojoattachpoint='containerNode' style='position: relative; z-index: 2;'></div><span dojoattachpoint='tabEnd' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><span dojoattachpoint='tabEndOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span></div>",_setup:function(){this._modalconnects=[];
-if(this.titleBar){this._moveable=new B.dnd.Moveable(this.domNode,{handle:this.titleBar})
+dojo._xdResourceLoaded({depends:[["provide","aipo.fileupload.widget.FileuploadDialog"],["provide","aipo.fileupload.widget.FileuploadDialogUnderlay"],["require","aimluck.widget.Dialog"]],defineResource:function(A){if(!A._hasResource["aipo.widget.FileuploadDialog"]){A._hasResource["aipo.widget.FileuploadDialog"]=true;
+A.provide("aipo.fileupload.widget.FileuploadDialog");
+A.provide("aipo.fileupload.widget.FileuploadDialogUnderlay");
+A.require("aimluck.widget.Dialog");
+A.declare("aipo.fileupload.widget.FileuploadDialogUnderlay",[aimluck.widget.DialogUnderlay],{templateString:"<div class=fileuploadDialogUnderlayWrapper id='${id}_underlay'><div class=fileuploadDialogUnderlay dojoAttachPoint='node'></div></div>"});
+A.declare("aipo.fileupload.widget.FileuploadDialog",[aimluck.widget.Dialog],{loadingMessage:"<div class='indicator'>読み込み中...</div>",templateCssString:"fileuploadDialog",templateString:"<div id='fileuploadDialog' class='${templateCssString}' dojoattachpoint='wrapper'><span dojoattachpoint='tabStartOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap'tabindex='0'></span><span dojoattachpoint='tabStart' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><div dojoattachpoint='containerNode' style='position: relative; z-index: 2;'></div><span dojoattachpoint='tabEnd' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><span dojoattachpoint='tabEndOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span></div>",_setup:function(){this._modalconnects=[];
+if(this.titleBar){this._moveable=new A.dnd.Moveable(this.domNode,{handle:this.titleBar})
 }this._underlay=new aipo.fileupload.widget.FileuploadDialogUnderlay();
-var A=this.domNode;
-this._fadeIn=B.fx.combine([B.fadeIn({node:A,duration:this.duration}),B.fadeIn({node:this._underlay.domNode,duration:this.duration,onBegin:B.hitch(this._underlay,"show")})]);
-this._fadeOut=B.fx.combine([B.fadeOut({node:A,duration:this.duration,onEnd:function(){A.style.display="none"
-}}),B.fadeOut({node:this._underlay.domNode,duration:this.duration,onEnd:B.hitch(this._underlay,"hide")})])
+var B=this.domNode;
+this._fadeIn=A.fx.combine([A.fadeIn({node:B,duration:this.duration}),A.fadeIn({node:this._underlay.domNode,duration:this.duration,onBegin:A.hitch(this._underlay,"show")})]);
+this._fadeOut=A.fx.combine([A.fadeOut({node:B,duration:this.duration,onEnd:function(){B.style.display="none"
+}}),A.fadeOut({node:this._underlay.domNode,duration:this.duration,onEnd:A.hitch(this._underlay,"hide")})])
 }})
 }}});
-dojo._xdResourceLoaded({depends:[["provide","aipo.fileupload.widget.FileuploadViewDialog"],["provide","aipo.fileupload.widget.FileuploadViewDialogUnderlay"],["require","aimluck.widget.Dialog"]],defineResource:function(B){if(!B._hasResource["aipo.widget.FileuploadViewDialog"]){B._hasResource["aipo.widget.FileuploadViewDialog"]=true;
-B.provide("aipo.fileupload.widget.FileuploadViewDialog");
-B.provide("aipo.fileupload.widget.FileuploadViewDialogUnderlay");
-B.require("aimluck.widget.Dialog");
-B.declare("aipo.fileupload.widget.FileuploadViewDialogUnderlay",[aimluck.widget.DialogUnderlay],{templateString:"<div class='fileuploadDialogUnderlayWrapper modalDialogUnderlayWrapper' id='${id}_underlay'><div class='fileuploadViewDialogUnderlay modalDialogUnderlay' dojoAttachPoint='node'></div></div>"});
-B.declare("aipo.fileupload.widget.FileuploadViewDialog",[aimluck.widget.Dialog],{loadingMessage:"<div class='indicator'>読み込み中...</div>",templateCssString:"auiPopup imgPopup fileuploadViewDialog",templateString:"<div id='fileuploadViewDialog' class='${templateCssString}' dojoattachpoint='wrapper'><span dojoattachpoint='tabStartOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap'tabindex='0'></span><span dojoattachpoint='tabStart' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><div dojoattachpoint='containerNode' style='position: relative; z-index: 2;'></div><span dojoattachpoint='tabEnd' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><span dojoattachpoint='tabEndOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span></div>",_setup:function(){this._modalconnects=[];
-if(this.titleBar){this._moveable=new B.dnd.Moveable(this.domNode,{handle:this.titleBar})
+dojo._xdResourceLoaded({depends:[["provide","aipo.fileupload.widget.FileuploadViewDialog"],["provide","aipo.fileupload.widget.FileuploadViewDialogUnderlay"],["require","aimluck.widget.Dialog"]],defineResource:function(A){if(!A._hasResource["aipo.widget.FileuploadViewDialog"]){A._hasResource["aipo.widget.FileuploadViewDialog"]=true;
+A.provide("aipo.fileupload.widget.FileuploadViewDialog");
+A.provide("aipo.fileupload.widget.FileuploadViewDialogUnderlay");
+A.require("aimluck.widget.Dialog");
+A.declare("aipo.fileupload.widget.FileuploadViewDialogUnderlay",[aimluck.widget.DialogUnderlay],{templateString:"<div class='fileuploadDialogUnderlayWrapper modalDialogUnderlayWrapper' id='${id}_underlay'><div class='fileuploadViewDialogUnderlay modalDialogUnderlay' dojoAttachPoint='node'></div></div>"});
+A.declare("aipo.fileupload.widget.FileuploadViewDialog",[aimluck.widget.Dialog],{loadingMessage:"<div class='indicator'>読み込み中...</div>",templateCssString:"auiPopup imgPopup fileuploadViewDialog",templateString:"<div id='fileuploadViewDialog' class='${templateCssString}' dojoattachpoint='wrapper'><span dojoattachpoint='tabStartOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap'tabindex='0'></span><span dojoattachpoint='tabStart' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><div dojoattachpoint='containerNode' style='position: relative; z-index: 2;'></div><span dojoattachpoint='tabEnd' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span><span dojoattachpoint='tabEndOuter' dojoonfocus='trapTabs' dojoonblur='clearTrap' tabindex='0'></span></div>",_setup:function(){this._modalconnects=[];
+if(this.titleBar){this._moveable=new A.dnd.Moveable(this.domNode,{handle:this.titleBar})
 }this._underlay=new aipo.fileupload.widget.FileuploadViewDialogUnderlay();
-var A=this.domNode;
-this._fadeIn=B.fx.combine([B.fadeIn({node:A,duration:this.duration}),B.fadeIn({node:this._underlay.domNode,duration:this.duration,onBegin:B.hitch(this._underlay,"show")})]);
-this._fadeOut=B.fx.combine([B.fadeOut({node:A,duration:this.duration,onEnd:function(){A.style.display="none"
-}}),B.fadeOut({node:this._underlay.domNode,duration:this.duration,onEnd:B.hitch(this._underlay,"hide")})])
+var B=this.domNode;
+this._fadeIn=A.fx.combine([A.fadeIn({node:B,duration:this.duration}),A.fadeIn({node:this._underlay.domNode,duration:this.duration,onBegin:A.hitch(this._underlay,"show")})]);
+this._fadeOut=A.fx.combine([A.fadeOut({node:B,duration:this.duration,onEnd:function(){B.style.display="none"
+}}),A.fadeOut({node:this._underlay.domNode,duration:this.duration,onEnd:A.hitch(this._underlay,"hide")})])
 }})
 }}});
 var gadgets=gadgets||{};

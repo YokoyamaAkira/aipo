@@ -6,16 +6,16 @@ A.declare("dijit.form._FormMixin",null,{action:"",method:"",enctype:"",name:"","
 this.onExecute();
 this.execute(this.getValues())
 },submit:function(){this.containerNode.submit()
-},setValues:function(B){var F={};
+},setValues:function(F){var E={};
 A.forEach(this.getDescendants(),function(H){if(!H.name){return 
-}var G=F[H.name]||(F[H.name]=[]);
+}var G=E[H.name]||(E[H.name]=[]);
 G.push(H)
 });
-for(var D in F){var E=F[D],C=A.getObject(D,false,B);
-if(!A.isArray(C)){C=[C]
-}if(E[0].setChecked){A.forEach(E,function(G,H){G.setChecked(A.indexOf(C,G.value)!=-1)
+for(var C in E){var D=E[C],B=A.getObject(C,false,F);
+if(!A.isArray(B)){B=[B]
+}if(D[0].setChecked){A.forEach(D,function(G,H){G.setChecked(A.indexOf(B,G.value)!=-1)
 })
-}else{A.forEach(E,function(G,H){G.setValue(C[H])
+}else{A.forEach(D,function(G,H){G.setValue(B[H])
 })
 }}},getValues:function(){var B={};
 A.forEach(this.getDescendants(),function(F){var E=F.getValue?F.getValue():F.value;

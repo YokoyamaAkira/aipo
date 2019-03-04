@@ -1,117 +1,317 @@
-dojo._xdResourceLoaded({depends:[["provide","dojo.dnd.Container"],["require","dojo.dnd.common"],["require","dojo.parser"]],defineResource:function(A){if(!A._hasResource["dojo.dnd.Container"]){A._hasResource["dojo.dnd.Container"]=true;
-A.provide("dojo.dnd.Container");
-A.require("dojo.dnd.common");
-A.require("dojo.parser");
-A.declare("dojo.dnd.Container",null,{skipForm:false,constructor:function(B,C){this.node=A.byId(B);
-if(!C){C={}
-}this.creator=C.creator||null;
-this.skipForm=C.skipForm;
-this.defaultCreator=A.dnd._defaultCreator(this.node);
-this.map={};
-this.current=null;
-this.containerState="";
-A.addClass(this.node,"dojoDndContainer");
-if(!(C&&C._skipStartup)){this.startup()
-}this.events=[A.connect(this.node,"onmouseover",this,"onMouseOver"),A.connect(this.node,"onmouseout",this,"onMouseOut"),A.connect(this.node,"ondragstart",this,"onSelectStart"),A.connect(this.node,"onselectstart",this,"onSelectStart")]
-},creator:function(){},getItem:function(B){return this.map[B]
-},setItem:function(B,C){this.map[B]=C
-},delItem:function(B){delete this.map[B]
-},forInItems:function(D,F){F=F||A.global;
-var B=this.map,E=A.dnd._empty;
-for(var C in this.map){if(C in E){continue
-}D.call(F,B[C],C,B)
-}},clearItems:function(){this.map={}
-},getAllNodes:function(){return A.query("> .dojoDndItem",this.parent)
-},insertNodes:function(F,E,B){if(!this.parent.firstChild){B=null
-}else{if(E){if(!B){B=this.parent.firstChild
-}}else{if(B){B=B.nextSibling
-}}}if(B){for(var D=0;
-D<F.length;
-++D){var C=this._normalizedCreator(F[D]);
-this.setItem(C.node.id,{data:C.data,type:C.type});
-this.parent.insertBefore(C.node,B)
-}}else{for(var D=0;
-D<F.length;
-++D){var C=this._normalizedCreator(F[D]);
-this.setItem(C.node.id,{data:C.data,type:C.type});
-this.parent.appendChild(C.node)
-}}return this
-},destroy:function(){A.forEach(this.events,A.disconnect);
-this.clearItems();
-this.node=this.parent=this.current
-},markupFactory:function(C,B){C._skipStartup=true;
-return new A.dnd.Container(B,C)
-},startup:function(){this.parent=this.node;
-if(this.parent.tagName.toLowerCase()=="table"){var B=this.parent.getElementsByTagName("tbody");
-if(B&&B.length){this.parent=B[0]
-}}A.query("> .dojoDndItem",this.parent).forEach(function(D){if(!D.id){D.id=A.dnd.getUniqueId()
-}var C=D.getAttribute("dndType"),E=D.getAttribute("dndData");
-this.setItem(D.id,{data:E?E:D.innerHTML,type:C?C.split(/\s*,\s*/):["text"]})
-},this)
-},onMouseOver:function(C){var D=C.relatedTarget;
-while(D){if(D==this.node){break
-}try{D=D.parentNode
-}catch(B){D=null
-}}if(!D){this._changeState("Container","Over");
-this.onOverEvent()
-}D=this._getChildByEvent(C);
-if(this.current==D){return 
-}if(this.current){this._removeItemClass(this.current,"Over")
-}if(D){this._addItemClass(D,"Over")
-}this.current=D
-},onMouseOut:function(C){for(var D=C.relatedTarget;
-D;
-){if(D==this.node){return 
-}try{D=D.parentNode
-}catch(B){D=null
-}}if(this.current){this._removeItemClass(this.current,"Over");
-this.current=null
-}this._changeState("Container","");
-this.onOutEvent()
-},onSelectStart:function(B){if(!this.skipForm||!A.dnd.isFormElement(B)){A.stopEvent(B)
-}},onOverEvent:function(){},onOutEvent:function(){},_changeState:function(B,E){var D="dojoDnd"+B;
-var C=B.toLowerCase()+"State";
-A.removeClass(this.node,D+this[C]);
-A.addClass(this.node,D+E);
-this[C]=E
-},_addItemClass:function(C,B){A.addClass(C,"dojoDndItem"+B)
-},_removeItemClass:function(C,B){A.removeClass(C,"dojoDndItem"+B)
-},_getChildByEvent:function(D){var C=D.target;
-if(C){for(var B=C.parentNode;
-B;
-C=B,B=C.parentNode){if(B==this.parent&&A.hasClass(C,"dojoDndItem")){return C
-}}}return null
-},_normalizedCreator:function(C,D){var B=(this.creator?this.creator:this.defaultCreator)(C,D);
-if(!A.isArray(B.type)){B.type=["text"]
-}if(!B.node.id){B.node.id=A.dnd.getUniqueId()
-}A.addClass(B.node,"dojoDndItem");
-return B
+dojo._xdResourceLoaded({
+depends: [["provide", "dojo.dnd.Container"],
+["require", "dojo.dnd.common"],
+["require", "dojo.parser"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojo.dnd.Container"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.dnd.Container"] = true;
+dojo.provide("dojo.dnd.Container");
+
+dojo.require("dojo.dnd.common");
+dojo.require("dojo.parser");
+
+/*
+	Container states:
+		""		- normal state
+		"Over"	- mouse over a container
+	Container item states:
+		""		- normal state
+		"Over"	- mouse over a container item
+*/
+
+dojo.declare("dojo.dnd.Container", null, {
+	// summary: a Container object, which knows when mouse hovers over it, 
+	//	and know over which element it hovers
+	
+	// object attributes (for markup)
+	skipForm: false,
+	
+	constructor: function(node, params){
+		// summary: a constructor of the Container
+		// node: Node: node or node's id to build the container on
+		// params: Object: a dict of parameters, recognized parameters are:
+		//	creator: Function: a creator function, which takes a data item, and returns an object like that:
+		//		{node: newNode, data: usedData, type: arrayOfStrings}
+		//	skipForm: Boolean: don't start the drag operation, if clicked on form elements
+		//	_skipStartup: Boolean: skip startup(), which collects children, for deferred initialization
+		//		(this is used in the markup mode)
+		this.node = dojo.byId(node);
+		if(!params){ params = {}; }
+		this.creator = params.creator || null;
+		this.skipForm = params.skipForm;
+		this.defaultCreator = dojo.dnd._defaultCreator(this.node);
+
+		// class-specific variables
+		this.map = {};
+		this.current = null;
+
+		// states
+		this.containerState = "";
+		dojo.addClass(this.node, "dojoDndContainer");
+		
+		// mark up children
+		if(!(params && params._skipStartup)){
+			this.startup();
+		}
+
+		// set up events
+		this.events = [
+			dojo.connect(this.node, "onmouseover", this, "onMouseOver"),
+			dojo.connect(this.node, "onmouseout",  this, "onMouseOut"),
+			// cancel text selection and text dragging
+			dojo.connect(this.node, "ondragstart",   this, "onSelectStart"),
+			dojo.connect(this.node, "onselectstart", this, "onSelectStart")
+		];
+	},
+	
+	// object attributes (for markup)
+	creator: function(){},	// creator function, dummy at the moment
+	
+	// abstract access to the map
+	getItem: function(/*String*/ key){
+		// summary: returns a data item by its key (id)
+		return this.map[key];	// Object
+	},
+	setItem: function(/*String*/ key, /*Object*/ data){
+		// summary: associates a data item with its key (id)
+		this.map[key] = data;
+	},
+	delItem: function(/*String*/ key){
+		// summary: removes a data item from the map by its key (id)
+		delete this.map[key];
+	},
+	forInItems: function(/*Function*/ f, /*Object?*/ o){
+		// summary: iterates over a data map skipping members, which 
+		//	are present in the empty object (IE and/or 3rd-party libraries).
+		o = o || dojo.global;
+		var m = this.map, e = dojo.dnd._empty;
+		for(var i in this.map){
+			if(i in e){ continue; }
+			f.call(o, m[i], i, m);
+		}
+	},
+	clearItems: function(){
+		// summary: removes all data items from the map
+		this.map = {};
+	},
+	
+	// methods
+	getAllNodes: function(){
+		// summary: returns a list (an array) of all valid child nodes
+		return dojo.query("> .dojoDndItem", this.parent);	// NodeList
+	},
+	insertNodes: function(data, before, anchor){
+		// summary: inserts an array of new nodes before/after an anchor node
+		// data: Array: a list of data items, which should be processed by the creator function
+		// before: Boolean: insert before the anchor, if true, and after the anchor otherwise
+		// anchor: Node: the anchor node to be used as a point of insertion
+		if(!this.parent.firstChild){
+			anchor = null;
+		}else if(before){
+			if(!anchor){
+				anchor = this.parent.firstChild;
+			}
+		}else{
+			if(anchor){
+				anchor = anchor.nextSibling;
+			}
+		}
+		if(anchor){
+			for(var i = 0; i < data.length; ++i){
+				var t = this._normalizedCreator(data[i]);
+				this.setItem(t.node.id, {data: t.data, type: t.type});
+				this.parent.insertBefore(t.node, anchor);
+			}
+		}else{
+			for(var i = 0; i < data.length; ++i){
+				var t = this._normalizedCreator(data[i]);
+				this.setItem(t.node.id, {data: t.data, type: t.type});
+				this.parent.appendChild(t.node);
+			}
+		}
+		return this;	// self
+	},
+	destroy: function(){
+		// summary: prepares the object to be garbage-collected
+		dojo.forEach(this.events, dojo.disconnect);
+		this.clearItems();
+		this.node = this.parent = this.current;
+	},
+
+	// markup methods
+	markupFactory: function(params, node){
+		params._skipStartup = true;
+		return new dojo.dnd.Container(node, params);
+	},
+	startup: function(){
+		// summary: collects valid child items and populate the map
+		
+		// set up the real parent node
+		this.parent = this.node;
+		if(this.parent.tagName.toLowerCase() == "table"){
+			var c = this.parent.getElementsByTagName("tbody");
+			if(c && c.length){ this.parent = c[0]; }
+		}
+
+		// process specially marked children
+		dojo.query("> .dojoDndItem", this.parent).forEach(function(node){
+			if(!node.id){ node.id = dojo.dnd.getUniqueId(); }
+			var type = node.getAttribute("dndType"),
+				data = node.getAttribute("dndData");
+			this.setItem(node.id, {
+				data: data ? data : node.innerHTML,
+				type: type ? type.split(/\s*,\s*/) : ["text"]
+			});
+		}, this);
+	},
+
+	// mouse events
+	onMouseOver: function(e){
+		// summary: event processor for onmouseover
+		// e: Event: mouse event
+		var n = e.relatedTarget;
+		while(n){
+			if(n == this.node){ break; }
+			try{
+				n = n.parentNode;
+			}catch(x){
+				n = null;
+			}
+		}
+		if(!n){
+			this._changeState("Container", "Over");
+			this.onOverEvent();
+		}
+		n = this._getChildByEvent(e);
+		if(this.current == n){ return; }
+		if(this.current){ this._removeItemClass(this.current, "Over"); }
+		if(n){ this._addItemClass(n, "Over"); }
+		this.current = n;
+	},
+	onMouseOut: function(e){
+		// summary: event processor for onmouseout
+		// e: Event: mouse event
+		for(var n = e.relatedTarget; n;){
+			if(n == this.node){ return; }
+			try{
+				n = n.parentNode;
+			}catch(x){
+				n = null;
+			}
+		}
+		if(this.current){
+			this._removeItemClass(this.current, "Over");
+			this.current = null;
+		}
+		this._changeState("Container", "");
+		this.onOutEvent();
+	},
+	onSelectStart: function(e){
+		// summary: event processor for onselectevent and ondragevent
+		// e: Event: mouse event
+		if(!this.skipForm || !dojo.dnd.isFormElement(e)){
+			dojo.stopEvent(e);
+		}
+	},
+	
+	// utilities
+	onOverEvent: function(){
+		// summary: this function is called once, when mouse is over our container
+	},
+	onOutEvent: function(){
+		// summary: this function is called once, when mouse is out of our container
+	},
+	_changeState: function(type, newState){
+		// summary: changes a named state to new state value
+		// type: String: a name of the state to change
+		// newState: String: new state
+		var prefix = "dojoDnd" + type;
+		var state  = type.toLowerCase() + "State";
+		//dojo.replaceClass(this.node, prefix + newState, prefix + this[state]);
+		dojo.removeClass(this.node, prefix + this[state]);
+		dojo.addClass(this.node, prefix + newState);
+		this[state] = newState;
+	},
+	_addItemClass: function(node, type){
+		// summary: adds a class with prefix "dojoDndItem"
+		// node: Node: a node
+		// type: String: a variable suffix for a class name
+		dojo.addClass(node, "dojoDndItem" + type);
+	},
+	_removeItemClass: function(node, type){
+		// summary: removes a class with prefix "dojoDndItem"
+		// node: Node: a node
+		// type: String: a variable suffix for a class name
+		dojo.removeClass(node, "dojoDndItem" + type);
+	},
+	_getChildByEvent: function(e){
+		// summary: gets a child, which is under the mouse at the moment, or null
+		// e: Event: a mouse event
+		var node = e.target;
+		if(node){
+			for(var parent = node.parentNode; parent; node = parent, parent = node.parentNode){
+				if(parent == this.parent && dojo.hasClass(node, "dojoDndItem")){ return node; }
+			}
+		}
+		return null;
+	},
+	_normalizedCreator: function(item, hint){
+		// summary: adds all necessary data to the output of the user-supplied creator function
+		var t = (this.creator ? this.creator : this.defaultCreator)(item, hint);
+		if(!dojo.isArray(t.type)){ t.type = ["text"]; }
+		if(!t.node.id){ t.node.id = dojo.dnd.getUniqueId(); }
+		dojo.addClass(t.node, "dojoDndItem");
+		return t;
+	}
+});
+
+dojo.dnd._createNode = function(tag){
+	// summary: returns a function, which creates an element of given tag 
+	//	(SPAN by default) and sets its innerHTML to given text
+	// tag: String: a tag name or empty for SPAN
+	if(!tag){ return dojo.dnd._createSpan; }
+	return function(text){	// Function
+		var n = dojo.doc.createElement(tag);
+		n.innerHTML = text;
+		return n;
+	};
+};
+
+dojo.dnd._createTrTd = function(text){
+	// summary: creates a TR/TD structure with given text as an innerHTML of TD
+	// text: String: a text for TD
+	var tr = dojo.doc.createElement("tr");
+	var td = dojo.doc.createElement("td");
+	td.innerHTML = text;
+	tr.appendChild(td);
+	return tr;	// Node
+};
+
+dojo.dnd._createSpan = function(text){
+	// summary: creates a SPAN element with given text as its innerHTML
+	// text: String: a text for SPAN
+	var n = dojo.doc.createElement("span");
+	n.innerHTML = text;
+	return n;	// Node
+};
+
+// dojo.dnd._defaultCreatorNodes: Object: a dicitionary, which maps container tag names to child tag names
+dojo.dnd._defaultCreatorNodes = {ul: "li", ol: "li", div: "div", p: "div"};
+
+dojo.dnd._defaultCreator = function(node){
+	// summary: takes a container node, and returns an appropriate creator function
+	// node: Node: a container node
+	var tag = node.tagName.toLowerCase();
+	var c = tag == "table" ? dojo.dnd._createTrTd : dojo.dnd._createNode(dojo.dnd._defaultCreatorNodes[tag]);
+	return function(item, hint){	// Function
+		var isObj = dojo.isObject(item) && item;
+		var data = (isObj && item.data) ? item.data : item;
+		var type = (isObj && item.type) ? item.type : ["text"];
+		var t = String(data), n = (hint == "avatar" ? dojo.dnd._createSpan : c)(t);
+		n.id = dojo.dnd.getUniqueId();
+		return {node: n, data: data, type: type};
+	};
+};
+
+}
+
 }});
-A.dnd._createNode=function(B){if(!B){return A.dnd._createSpan
-}return function(C){var D=A.doc.createElement(B);
-D.innerHTML=C;
-return D
-}
-};
-A.dnd._createTrTd=function(C){var B=A.doc.createElement("tr");
-var D=A.doc.createElement("td");
-D.innerHTML=C;
-B.appendChild(D);
-return B
-};
-A.dnd._createSpan=function(B){var C=A.doc.createElement("span");
-C.innerHTML=B;
-return C
-};
-A.dnd._defaultCreatorNodes={ul:"li",ol:"li",div:"div",p:"div"};
-A.dnd._defaultCreator=function(C){var B=C.tagName.toLowerCase();
-var D=B=="table"?A.dnd._createTrTd:A.dnd._createNode(A.dnd._defaultCreatorNodes[B]);
-return function(H,J){var E=A.isObject(H)&&H;
-var I=(E&&H.data)?H.data:H;
-var G=(E&&H.type)?H.type:["text"];
-var F=String(I),K=(J=="avatar"?A.dnd._createSpan:D)(F);
-K.id=A.dnd.getUniqueId();
-return{node:K,data:I,type:G}
-}
-}
-}}});

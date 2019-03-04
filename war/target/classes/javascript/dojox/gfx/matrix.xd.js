@@ -34,14 +34,14 @@ return new B.Matrix2D({xx:E,xy:-C,yx:C,yy:E})
 },skewXg:function(C){return B.skewX(B._degToRad(C))
 },skewY:function(C){return new B.Matrix2D({yx:Math.tan(C)})
 },skewYg:function(C){return B.skewY(B._degToRad(C))
-},reflect:function(C,H){if(arguments.length==1){H=C.y;
-C=C.x
-}var G=C*C,D=H*H,E=G+D,F=2*C*H/E;
-return new B.Matrix2D({xx:2*G/E-1,xy:F,yx:F,yy:2*D/E-1})
-},project:function(C,H){if(arguments.length==1){H=C.y;
-C=C.x
-}var G=C*C,D=H*H,E=G+D,F=C*H/E;
-return new B.Matrix2D({xx:G/E,xy:F,yx:F,yy:D/E})
+},reflect:function(E,D){if(arguments.length==1){D=E.y;
+E=E.x
+}var C=E*E,F=D*D,G=C+F,H=2*E*D/G;
+return new B.Matrix2D({xx:2*C/G-1,xy:H,yx:H,yy:2*F/G-1})
+},project:function(E,D){if(arguments.length==1){D=E.y;
+E=E.x
+}var C=E*E,F=D*D,G=C+F,H=E*D/G;
+return new B.Matrix2D({xx:C/G,xy:H,yx:H,yy:F/G})
 },normalize:function(C){return(C instanceof B.Matrix2D)?C:new B.Matrix2D(C)
 },clone:function(C){var E=new B.Matrix2D();
 for(var D in C){if(typeof (C[D])=="number"&&typeof (E[D])=="number"&&E[D]!=C[D]){E[D]=C[D]

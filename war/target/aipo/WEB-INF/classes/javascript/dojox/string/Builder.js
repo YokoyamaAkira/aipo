@@ -10,25 +10,25 @@ return this
 },clear:function(){this._clear();
 this.length=0;
 return this
-},replace:function(C,D){var B=this.toString();
-B=B.replace(C,D);
-this._reset(B);
-this.length=B.length;
+},replace:function(B,C){var D=this.toString();
+D=D.replace(B,C);
+this._reset(D);
+this.length=D.length;
 return this
-},remove:function(B,C){if(C==0){return this
-}var D=this.toString();
+},remove:function(D,B){if(B==0){return this
+}var C=this.toString();
 this.clear();
-if(B>0){this.append(D.substring(0,B))
-}if(B+C<D.length){this.append(D.substring(B+C))
+if(D>0){this.append(C.substring(0,D))
+}if(D+B<C.length){this.append(C.substring(D+B))
 }return this
-},insert:function(C,B){var D=this.toString();
+},insert:function(B,D){var C=this.toString();
 this.clear();
-if(C==0){this.append(B);
-this.append(D);
+if(B==0){this.append(D);
+this.append(C);
 return this
-}else{this.append(D.substring(0,C));
-this.append(B);
-this.append(D.substring(C))
+}else{this.append(C.substring(0,B));
+this.append(D);
+this.append(C.substring(B))
 }return this
 },toString:function(){return this.b
 },_clear:function(){this.b=""

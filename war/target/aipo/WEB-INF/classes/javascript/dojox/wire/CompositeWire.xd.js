@@ -3,16 +3,16 @@ A.provide("dojox.wire.CompositeWire");
 A.require("dojox.wire._base");
 A.require("dojox.wire.Wire");
 A.declare("dojox.wire.CompositeWire",dojox.wire.Wire,{_wireClass:"dojox.wire.CompositeWire",constructor:function(B){this._initializeChildren(this.children)
-},_getValue:function(C){if(!C||!this.children){return C
-}var D=(A.isArray(this.children)?[]:{});
-for(var B in this.children){D[B]=this.children[B].getValue(C)
-}return D
-},_setValue:function(C,D){if(!C||!this.children){return C
-}for(var B in this.children){this.children[B].setValue(D[B],C)
+},_getValue:function(B){if(!B||!this.children){return B
+}var C=(A.isArray(this.children)?[]:{});
+for(var D in this.children){C[D]=this.children[D].getValue(B)
 }return C
-},_initializeChildren:function(C){if(!C){return 
-}for(var B in C){var D=C[B];
-D.parent=this;
-if(!dojox.wire.isWire(D)){C[B]=dojox.wire.create(D)
+},_setValue:function(B,C){if(!B||!this.children){return B
+}for(var D in this.children){this.children[D].setValue(C[D],B)
+}return B
+},_initializeChildren:function(B){if(!B){return 
+}for(var D in B){var C=B[D];
+C.parent=this;
+if(!dojox.wire.isWire(C)){B[D]=dojox.wire.create(C)
 }}}})
 }}});

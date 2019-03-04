@@ -8,90 +8,90 @@ dojox.color.fromHex=A.colorFromHex;
 dojox.color.fromArray=A.colorFromArray;
 dojox.color.fromString=A.colorFromString;
 dojox.color.greyscale=A.colors.makeGrey;
-A.mixin(dojox.color,{fromCmy:function(G,D,C){if(A.isArray(G)){D=G[1],C=G[2],G=G[0]
-}else{if(A.isObject(G)){D=G.m,C=G.y,G=G.c
-}}G/=100,D/=100,C/=100;
-var F=1-G,E=1-D,B=1-C;
-return new dojox.color.Color({r:Math.round(F*255),g:Math.round(E*255),b:Math.round(B*255)})
-},fromCmyk:function(E,H,F,C){if(A.isArray(E)){H=E[1],F=E[2],C=E[3],E=E[0]
-}else{if(A.isObject(E)){H=E.m,F=E.y,C=E.b,E=E.c
-}}E/=100,H/=100,F/=100,C/=100;
-var D,B,G;
-D=1-Math.min(1,E*(1-C)+C);
-B=1-Math.min(1,H*(1-C)+C);
-G=1-Math.min(1,F*(1-C)+C);
-return new dojox.color.Color({r:Math.round(D*255),g:Math.round(B*255),b:Math.round(G*255)})
-},fromHsl:function(D,C,E){if(A.isArray(D)){C=D[1],E=D[2],D=D[0]
-}else{if(A.isObject(D)){C=D.s,E=D.l,D=D.h
-}}C/=100;
-E/=100;
-while(D<0){D+=360
-}while(D>=360){D-=360
-}var G,F,B;
-if(D<120){G=(120-D)/60,F=D/60,B=0
-}else{if(D<240){G=0,F=(240-D)/60,B=(D-120)/60
-}else{G=(D-240)/60,F=0,B=(360-D)/60
-}}G=2*C*Math.min(G,1)+(1-C);
-F=2*C*Math.min(F,1)+(1-C);
-B=2*C*Math.min(B,1)+(1-C);
-if(E<0.5){G*=E,F*=E,B*=E
-}else{G=(1-E)*G+2*E-1;
-F=(1-E)*F+2*E-1;
-B=(1-E)*B+2*E-1
-}return new dojox.color.Color({r:Math.round(G*255),g:Math.round(F*255),b:Math.round(B*255)})
-},fromHsv:function(G,E,J){if(A.isArray(G)){E=G[1],J=G[2],G=G[0]
-}else{if(A.isObject(G)){E=G.s,J=G.v,G=G.h
-}}if(G==360){G=0
-}E/=100;
-J/=100;
-var L,F,I;
-if(E==0){L=J,I=J,F=J
-}else{var C=G/60,D=Math.floor(C),H=C-D;
-var B=J*(1-E);
-var M=J*(1-(E*H));
-var K=J*(1-(E*(1-H)));
-switch(D){case 0:L=J,F=K,I=B;
+A.mixin(dojox.color,{fromCmy:function(F,C,G){if(A.isArray(F)){C=F[1],G=F[2],F=F[0]
+}else{if(A.isObject(F)){C=F.m,G=F.y,F=F.c
+}}F/=100,C/=100,G/=100;
+var E=1-F,D=1-C,B=1-G;
+return new dojox.color.Color({r:Math.round(E*255),g:Math.round(D*255),b:Math.round(B*255)})
+},fromCmyk:function(F,C,G,H){if(A.isArray(F)){C=F[1],G=F[2],H=F[3],F=F[0]
+}else{if(A.isObject(F)){C=F.m,G=F.y,H=F.b,F=F.c
+}}F/=100,C/=100,G/=100,H/=100;
+var E,D,B;
+E=1-Math.min(1,F*(1-H)+H);
+D=1-Math.min(1,C*(1-H)+H);
+B=1-Math.min(1,G*(1-H)+H);
+return new dojox.color.Color({r:Math.round(E*255),g:Math.round(D*255),b:Math.round(B*255)})
+},fromHsl:function(C,G,D){if(A.isArray(C)){G=C[1],D=C[2],C=C[0]
+}else{if(A.isObject(C)){G=C.s,D=C.l,C=C.h
+}}G/=100;
+D/=100;
+while(C<0){C+=360
+}while(C>=360){C-=360
+}var F,E,B;
+if(C<120){F=(120-C)/60,E=C/60,B=0
+}else{if(C<240){F=0,E=(240-C)/60,B=(C-120)/60
+}else{F=(C-240)/60,E=0,B=(360-C)/60
+}}F=2*G*Math.min(F,1)+(1-G);
+E=2*G*Math.min(E,1)+(1-G);
+B=2*G*Math.min(B,1)+(1-G);
+if(D<0.5){F*=D,E*=D,B*=D
+}else{F=(1-D)*F+2*D-1;
+E=(1-D)*E+2*D-1;
+B=(1-D)*B+2*D-1
+}return new dojox.color.Color({r:Math.round(F*255),g:Math.round(E*255),b:Math.round(B*255)})
+},fromHsv:function(I,G,L){if(A.isArray(I)){G=I[1],L=I[2],I=I[0]
+}else{if(A.isObject(I)){G=I.s,L=I.v,I=I.h
+}}if(I==360){I=0
+}G/=100;
+L/=100;
+var B,H,K;
+if(G==0){B=L,K=L,H=L
+}else{var E=I/60,F=Math.floor(E),J=E-F;
+var D=L*(1-G);
+var C=L*(1-(G*J));
+var M=L*(1-(G*(1-J)));
+switch(F){case 0:B=L,H=M,K=D;
 break;
-case 1:L=M,F=J,I=B;
+case 1:B=C,H=L,K=D;
 break;
-case 2:L=B,F=J,I=K;
+case 2:B=D,H=L,K=M;
 break;
-case 3:L=B,F=M,I=J;
+case 3:B=D,H=C,K=L;
 break;
-case 4:L=K,F=B,I=J;
+case 4:B=M,H=D,K=L;
 break;
-case 5:L=J,F=B,I=M;
+case 5:B=L,H=D,K=C;
 break
-}}return new dojox.color.Color({r:Math.round(L*255),g:Math.round(F*255),b:Math.round(I*255)})
+}}return new dojox.color.Color({r:Math.round(B*255),g:Math.round(H*255),b:Math.round(K*255)})
 }});
-A.extend(dojox.color.Color,{toCmy:function(){var D=1-(this.r/255),C=1-(this.g/255),B=1-(this.b/255);
-return{c:Math.round(D*100),m:Math.round(C*100),y:Math.round(B*100)}
-},toCmyk:function(){var E,H,F,C;
-var D=this.r/255,B=this.g/255,G=this.b/255;
-C=Math.min(1-D,1-B,1-G);
-E=(1-D-C)/(1-C);
-H=(1-B-C)/(1-C);
-F=(1-G-C)/(1-C);
-return{c:Math.round(E*100),m:Math.round(H*100),y:Math.round(F*100),b:Math.round(C*100)}
-},toHsl:function(){var I=this.r/255,D=this.g/255,E=this.b/255;
-var B=Math.min(I,E,D),F=Math.max(I,D,E);
-var G=F-B;
-var C=0,H=0,J=(B+F)/2;
-if(J>0&&J<1){H=G/((J<0.5)?(2*J):(2-2*J))
-}if(G>0){if(F==I&&F!=D){C+=(D-E)/G
-}if(F==D&&F!=E){C+=(2+(E-I)/G)
-}if(F==E&&F!=I){C+=(4+(I-D)/G)
-}C*=60
-}return{h:C,s:Math.round(H*100),l:Math.round(J*100)}
-},toHsv:function(){var E=this.r/255,D=this.g/255,G=this.b/255;
-var H=Math.min(E,G,D),F=Math.max(E,D,G);
-var C=F-H;
-var B=null,I=(F==0)?0:(C/F);
-if(I==0){B=0
-}else{if(E==F){B=60*(D-G)/C
-}else{if(D==F){B=120+60*(G-E)/C
-}else{B=240+60*(E-D)/C
-}}if(B<0){B+=360
-}}return{h:B,s:Math.round(I*100),v:Math.round(F*100)}
+A.extend(dojox.color.Color,{toCmy:function(){var C=1-(this.r/255),B=1-(this.g/255),D=1-(this.b/255);
+return{c:Math.round(C*100),m:Math.round(B*100),y:Math.round(D*100)}
+},toCmyk:function(){var F,C,G,H;
+var E=this.r/255,D=this.g/255,B=this.b/255;
+H=Math.min(1-E,1-D,1-B);
+F=(1-E-H)/(1-H);
+C=(1-D-H)/(1-H);
+G=(1-B-H)/(1-H);
+return{c:Math.round(F*100),m:Math.round(C*100),y:Math.round(G*100),b:Math.round(H*100)}
+},toHsl:function(){var B=this.r/255,F=this.g/255,G=this.b/255;
+var D=Math.min(B,G,F),H=Math.max(B,F,G);
+var I=H-D;
+var E=0,J=0,C=(D+H)/2;
+if(C>0&&C<1){J=I/((C<0.5)?(2*C):(2-2*C))
+}if(I>0){if(H==B&&H!=F){E+=(F-G)/I
+}if(H==F&&H!=G){E+=(2+(G-B)/I)
+}if(H==G&&H!=B){E+=(4+(B-F)/I)
+}E*=60
+}return{h:E,s:Math.round(J*100),l:Math.round(C*100)}
+},toHsv:function(){var H=this.r/255,G=this.g/255,C=this.b/255;
+var D=Math.min(H,C,G),B=Math.max(H,G,C);
+var I=B-D;
+var F=null,E=(B==0)?0:(I/B);
+if(E==0){F=0
+}else{if(H==B){F=60*(G-C)/I
+}else{if(G==B){F=120+60*(C-H)/I
+}else{F=240+60*(H-G)/I
+}}if(F<0){F+=360
+}}return{h:F,s:Math.round(E*100),v:Math.round(B*100)}
 }})
 }}});

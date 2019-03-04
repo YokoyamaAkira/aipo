@@ -6,16 +6,16 @@ dojo.exit=function(A){quit(A)
 };
 if(typeof print=="function"){console.debug=print
 }if(typeof line2pc=="undefined"){throw new Error("attempt to use SpiderMonkey host environment when no 'line2pc' global")
-}dojo._spidermonkeyCurrentFile=function(C){var E="";
+}dojo._spidermonkeyCurrentFile=function(D){var A="";
 try{throw Error("whatever")
-}catch(B){E=B.stack
-}var A=E.match(/[^@]*\.js/gi);
-if(!A){throw Error("could not parse stack string: '"+E+"'")
-}var D=(typeof C!="undefined"&&C)?A[C+1]:A[A.length-1];
-if(!D){throw Error("could not find file name in stack string '"+E+"'")
-}return D
+}catch(C){A=C.stack
+}var B=A.match(/[^@]*\.js/gi);
+if(!B){throw Error("could not parse stack string: '"+A+"'")
+}var E=(typeof D!="undefined"&&D)?B[D+1]:B[B.length-1];
+if(!E){throw Error("could not find file name in stack string '"+A+"'")
+}return E
 };
-dojo._loadUri=function(A){var B=load(A);
+dojo._loadUri=function(B){var A=load(B);
 return 1
 };
 if(djConfig.modulePaths){for(var param in djConfig.modulePaths){dojo.registerModulePath(param,djConfig.modulePaths[param])

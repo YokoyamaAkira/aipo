@@ -1,34 +1,79 @@
-dojo._xdResourceLoaded({depends:[["provide","dojox.collections.Queue"],["require","dojox.collections._base"]],defineResource:function(A){if(!A._hasResource["dojox.collections.Queue"]){A._hasResource["dojox.collections.Queue"]=true;
-A.provide("dojox.collections.Queue");
-A.require("dojox.collections._base");
-dojox.collections.Queue=function(B){var C=[];
-if(B){C=C.concat(B)
-}this.count=C.length;
-this.clear=function(){C=[];
-this.count=C.length
+dojo._xdResourceLoaded({
+depends: [["provide", "dojox.collections.Queue"],
+["require", "dojox.collections._base"]],
+defineResource: function(dojo){if(!dojo._hasResource["dojox.collections.Queue"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.collections.Queue"] = true;
+dojo.provide("dojox.collections.Queue");
+dojo.require("dojox.collections._base");
+
+dojox.collections.Queue=function(/* array? */arr){
+	//	summary
+	//	return an object of type dojox.collections.Queue
+	var q=[];
+	if (arr){
+		q=q.concat(arr);
+	}
+	this.count=q.length;
+	this.clear=function(){
+		//	summary
+		//	clears the internal collection
+		q=[];
+		this.count=q.length;
+	};
+	this.clone=function(){
+		//	summary
+		//	creates a new Queue based on this one
+		return new dojox.collections.Queue(q);	//	dojox.collections.Queue
+	};
+	this.contains=function(/* object */ o){
+		//	summary
+		//	Check to see if the passed object is an element in this queue
+		for(var i=0; i<q.length; i++){
+			if (q[i]==o){
+				return true;	//	bool
+			}
+		}
+		return false;	//	bool
+	};
+	this.copyTo=function(/* array */ arr, /* int */ i){
+		//	summary
+		//	Copy the contents of this queue into the passed array at index i.
+		arr.splice(i,0,q);
+	};
+	this.dequeue=function(){
+		//	summary
+		//	shift the first element off the queue and return it
+		var r=q.shift();
+		this.count=q.length;
+		return r;	//	object
+	};
+	this.enqueue=function(/* object */ o){
+		//	summary
+		//	put the passed object at the end of the queue
+		this.count=q.push(o);
+	};
+	this.forEach=function(/* function */ fn, /* object? */ scope){
+		//	summary
+		//	functional iterator, following the mozilla spec.
+		dojo.forEach(q, fn, scope);
+	};
+	this.getIterator=function(){
+		//	summary
+		//	get an Iterator based on this queue.
+		return new dojox.collections.Iterator(q);	//	dojox.collections.Iterator
+	};
+	this.peek=function(){
+		//	summary
+		//	get the next element in the queue without altering the queue.
+		return q[0];
+	};
+	this.toArray=function(){
+		//	summary
+		//	return an array based on the internal array of the queue.
+		return [].concat(q);
+	};
 };
-this.clone=function(){return new dojox.collections.Queue(C)
-};
-this.contains=function(E){for(var D=0;
-D<C.length;
-D++){if(C[D]==E){return true
-}}return false
-};
-this.copyTo=function(D,E){D.splice(E,0,C)
-};
-this.dequeue=function(){var D=C.shift();
-this.count=C.length;
-return D
-};
-this.enqueue=function(D){this.count=C.push(D)
-};
-this.forEach=function(E,D){A.forEach(C,E,D)
-};
-this.getIterator=function(){return new dojox.collections.Iterator(C)
-};
-this.peek=function(){return C[0]
-};
-this.toArray=function(){return[].concat(C)
+
 }
-}
-}}});
+
+}});

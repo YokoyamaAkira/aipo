@@ -7,62 +7,62 @@ dojo.declare("dojox.data.PicasaStore",null,{constructor:function(A){if(A&&A.labe
 }},_picasaUrl:"http://picasaweb.google.com/data/feed/api/all",_storeRef:"_S",label:"title",_assertIsItem:function(A){if(!this.isItem(A)){throw new Error("dojox.data.PicasaStore: a function was passed an item argument that was not an item")
 }},_assertIsAttribute:function(A){if(typeof A!=="string"){throw new Error("dojox.data.PicasaStore: a function was passed an attribute argument that was not an attribute name string")
 }},getFeatures:function(){return{"dojo.data.api.Read":true}
-},getValue:function(B,A){var C=this.getValues(B,A);
-if(C){return C[0]
+},getValue:function(C,B){var A=this.getValues(C,B);
+if(A){return A[0]
 }return undefined
 },getAttributes:function(A){return["id","published","updated","category","title$type","title","summary$type","summary","rights$type","rights","link","author","gphoto$id","gphoto$name","location"]
-},hasAttribute:function(A,B){if(this.getValue(A,B)){return true
+},hasAttribute:function(B,A){if(this.getValue(B,A)){return true
 }return false
 },isItemLoaded:function(A){return this.isItem(A)
 },loadItem:function(A){},getLabel:function(A){return this.getValue(A,this.label)
 },getLabelAttributes:function(A){return[this.label]
-},containsValue:function(C,B,D){var E=this.getValues(C,B);
-for(var A=0;
-A<E.length;
-A++){if(E[A]===D){return true
+},containsValue:function(D,C,E){var A=this.getValues(D,C);
+for(var B=0;
+B<A.length;
+B++){if(A[B]===E){return true
 }}return false
-},getValues:function(A,B){this._assertIsItem(A);
-this._assertIsAttribute(B);
-if(B==="title"){return[this._unescapeHtml(A.title)]
-}else{if(B==="author"){return[this._unescapeHtml(A.author[0].name)]
-}else{if(B==="datePublished"){return[dojo.date.stamp.fromISOString(A.published)]
-}else{if(B==="dateTaken"){return[dojo.date.stamp.fromISOString(A.date_taken)]
-}else{if(B==="imageUrlSmall"){return[A.media.thumbnail[1].url]
-}else{if(B==="imageUrl"){return[A.content$src]
-}else{if(B==="imageUrlMedium"){return[A.media.thumbnail[2].url]
-}else{if(B==="link"){return[A.link[1]]
-}else{if(B==="tags"){return A.tags.split(" ")
-}else{if(B==="description"){return[this._unescapeHtml(A.summary)]
+},getValues:function(B,A){this._assertIsItem(B);
+this._assertIsAttribute(A);
+if(A==="title"){return[this._unescapeHtml(B.title)]
+}else{if(A==="author"){return[this._unescapeHtml(B.author[0].name)]
+}else{if(A==="datePublished"){return[dojo.date.stamp.fromISOString(B.published)]
+}else{if(A==="dateTaken"){return[dojo.date.stamp.fromISOString(B.date_taken)]
+}else{if(A==="imageUrlSmall"){return[B.media.thumbnail[1].url]
+}else{if(A==="imageUrl"){return[B.content$src]
+}else{if(A==="imageUrlMedium"){return[B.media.thumbnail[2].url]
+}else{if(A==="link"){return[B.link[1]]
+}else{if(A==="tags"){return B.tags.split(" ")
+}else{if(A==="description"){return[this._unescapeHtml(B.summary)]
 }}}}}}}}}}return undefined
 },isItem:function(A){if(A&&A[this._storeRef]===this){return true
 }return false
-},close:function(A){},_fetchItems:function(G,F,H){if(!G.query){G.query={}
-}var A={alt:"jsonm",pp:"1",psc:"G"};
-A["start-index"]="1";
-if(G.query.start){A["start-index"]=G.query.start
-}if(G.query.tags){A.q=G.query.tags
-}if(G.query.userid){A.uname=G.query.userid
-}if(G.query.userids){A.ids=G.query.userids
-}if(G.query.lang){A.hl=G.query.lang
-}if(G.count){A["max-results"]=G.count
-}else{A["max-results"]="20"
-}var E=this;
-var I=null;
-var D=function(J){if(I!==null){dojo.disconnect(I)
-}F(E._processPicasaData(J),G)
+},close:function(A){},_fetchItems:function(B,A,C){if(!B.query){B.query={}
+}var E={alt:"jsonm",pp:"1",psc:"G"};
+E["start-index"]="1";
+if(B.query.start){E["start-index"]=B.query.start
+}if(B.query.tags){E.q=B.query.tags
+}if(B.query.userid){E.uname=B.query.userid
+}if(B.query.userids){E.ids=B.query.userids
+}if(B.query.lang){E.hl=B.query.lang
+}if(B.count){E["max-results"]=B.count
+}else{E["max-results"]="20"
+}var I=this;
+var D=null;
+var H=function(J){if(D!==null){dojo.disconnect(D)
+}A(I._processPicasaData(J),B)
 };
-var B={url:this._picasaUrl,content:A,callbackParamName:"callback",handle:D};
-var C=dojo.io.script.get(B);
-C.addErrback(function(J){dojo.disconnect(I);
-H(J,G)
+var F={url:this._picasaUrl,content:E,callbackParamName:"callback",handle:H};
+var G=dojo.io.script.get(F);
+G.addErrback(function(J){dojo.disconnect(D);
+C(J,B)
 })
-},_processPicasaData:function(C){var D=[];
-if(C.feed){D=C.feed.entry;
-for(var A=0;
-A<D.length;
-A++){var B=D[A];
-B[this._storeRef]=this
-}}return D
+},_processPicasaData:function(D){var A=[];
+if(D.feed){A=D.feed.entry;
+for(var B=0;
+B<A.length;
+B++){var C=A[B];
+C[this._storeRef]=this
+}}return A
 },_unescapeHtml:function(A){A=A.replace(/&amp;/gm,"&").replace(/&lt;/gm,"<").replace(/&gt;/gm,">").replace(/&quot;/gm,'"');
 A=A.replace(/&#39;/gm,"'");
 return A

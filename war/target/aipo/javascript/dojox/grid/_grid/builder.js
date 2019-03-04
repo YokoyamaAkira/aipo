@@ -1,207 +1,433 @@
-if(!dojo._hasResource["dojox.grid._grid.builder"]){dojo._hasResource["dojox.grid._grid.builder"]=true;
+if(!dojo._hasResource["dojox.grid._grid.builder"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojox.grid._grid.builder"] = true;
 dojo.provide("dojox.grid._grid.builder");
 dojo.require("dojox.grid._grid.drag");
-dojo.declare("dojox.grid.Builder",null,{constructor:function(A){this.view=A;
-this.grid=A.grid
-},view:null,_table:'<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation">',generateCellMarkup:function(C,F,D,E){var A=[],B;
-if(E){B=['<th tabIndex="-1" role="wairole:columnheader"']
-}else{B=['<td tabIndex="-1" role="wairole:gridcell"']
-}C.colSpan&&B.push(' colspan="',C.colSpan,'"');
-C.rowSpan&&B.push(' rowspan="',C.rowSpan,'"');
-B.push(' class="dojoxGrid-cell ');
-C.classes&&B.push(C.classes," ");
-D&&B.push(D," ");
-A.push(B.join(""));
-A.push("");
-B=['" idx="',C.index,'" style="'];
-B.push(C.styles,F||"");
-C.unitWidth&&B.push("width:",C.unitWidth,";");
-A.push(B.join(""));
-A.push("");
-B=['"'];
-C.attrs&&B.push(" ",C.attrs);
-B.push(">");
-A.push(B.join(""));
-A.push("");
-A.push("</td>");
-return A
-},isCellNode:function(A){return Boolean(A&&A.getAttribute&&A.getAttribute("idx"))
-},getCellNodeIndex:function(A){return A?Number(A.getAttribute("idx")):-1
-},getCellNode:function(B,C){for(var E=0,F;
-F=dojox.grid.getTr(B.firstChild,E);
-E++){for(var D=0,A;
-A=F.cells[D];
-D++){if(this.getCellNodeIndex(A)==C){return A
-}}}},findCellTarget:function(A,B){var C=A;
-while(C&&!this.isCellNode(C)&&(C!=B)){C=C.parentNode
-}return C!=B?C:null
-},baseDecorateEvent:function(A){A.dispatch="do"+A.type;
-A.grid=this.grid;
-A.sourceView=this.view;
-A.cellNode=this.findCellTarget(A.target,A.rowNode);
-A.cellIndex=this.getCellNodeIndex(A.cellNode);
-A.cell=(A.cellIndex>=0?this.grid.getCell(A.cellIndex):null)
-},findTarget:function(A,C){var B=A;
-while(B&&!(C in B)&&(B!=this.domNode)){B=B.parentNode
-}return(B!=this.domNode)?B:null
-},findRowTarget:function(A){return this.findTarget(A,dojox.grid.rowIndexTag)
-},isIntraNodeEvent:function(B){try{return(B.cellNode&&B.relatedTarget&&dojo.isDescendant(B.relatedTarget,B.cellNode))
-}catch(A){return false
-}},isIntraRowEvent:function(B){try{var C=B.relatedTarget&&this.findRowTarget(B.relatedTarget);
-return !C&&(B.rowIndex==-1)||C&&(B.rowIndex==C.gridRowIndex)
-}catch(A){return false
-}},dispatchEvent:function(A){if(A.dispatch in this){return this[A.dispatch](A)
-}},domouseover:function(A){if(A.cellNode&&(A.cellNode!=this.lastOverCellNode)){this.lastOverCellNode=A.cellNode;
-this.grid.onMouseOver(A)
-}this.grid.onMouseOverRow(A)
-},domouseout:function(A){if(A.cellNode&&(A.cellNode==this.lastOverCellNode)&&!this.isIntraNodeEvent(A,this.lastOverCellNode)){this.lastOverCellNode=null;
-this.grid.onMouseOut(A);
-if(!this.isIntraRowEvent(A)){this.grid.onMouseOutRow(A)
-}}}});
-dojo.declare("dojox.grid.contentBuilder",dojox.grid.Builder,{update:function(){this.prepareHtml()
-},prepareHtml:function(){var D=this.grid.get,E=this.view.structure.rows;
-for(var B=0,F;
-(F=E[B]);
-B++){for(var C=0,A;
-(A=F[C]);
-C++){A.get=A.get||(A.value==undefined)&&D;
-A.markup=this.generateCellMarkup(A,A.cellStyles,A.cellClasses,false)
-}}},generateHtml:function(H,K){var F=[this._table],J=this.view,A=J.onBeforeRow,M=J.structure.rows;
-A&&A(K,M);
-for(var D=0,L;
-(L=M[D]);
-D++){if(L.hidden||L.header){continue
-}F.push(!L.invisible?"<tr>":'<tr class="dojoxGrid-invisible">');
-for(var E=0,I,C,B,G;
-(I=L[E]);
-E++){C=I.markup,B=I.customClasses=[],G=I.customStyles=[];
-C[5]=I.format(H);
-C[1]=B.join(" ");
-C[3]=G.join(";");
-F.push.apply(F,C)
-}F.push("</tr>")
-}F.push("</table>");
-return F.join("")
-},decorateEvent:function(A){A.rowNode=this.findRowTarget(A.target);
-if(!A.rowNode){return false
-}A.rowIndex=A.rowNode[dojox.grid.rowIndexTag];
-this.baseDecorateEvent(A);
-A.cell=this.grid.getCell(A.cellIndex);
-return true
-}});
-dojo.declare("dojox.grid.headerBuilder",dojox.grid.Builder,{bogusClickTime:0,overResizeWidth:4,minColWidth:1,_table:'<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"',update:function(){this.tableMap=new dojox.grid.tableMap(this.view.structure.rows)
-},generateHtml:function(F,A){var D=[this._table],I=this.view.structure.rows;
-if(this.view.viewWidth){D.push([' style="width:',this.view.viewWidth,';"'].join(""))
-}D.push(">");
-dojox.grid.fire(this.view,"onBeforeRow",[-1,I]);
-for(var B=0,H;
-(H=I[B]);
-B++){if(H.hidden){continue
-}D.push(!H.invisible?"<tr>":'<tr class="dojoxGrid-invisible">');
-for(var C=0,E,G;
-(E=H[C]);
-C++){E.customClasses=[];
-E.customStyles=[];
-G=this.generateCellMarkup(E,E.headerStyles,E.headerClasses,true);
-G[5]=(A!=undefined?A:F(E));
-G[3]=E.customStyles.join(";");
-G[1]=E.customClasses.join(" ");
-D.push(G.join(""))
-}D.push("</tr>")
-}D.push("</table>");
-return D.join("")
-},getCellX:function(B){var A=B.layerX;
-if(dojo.isMoz){var C=dojox.grid.ascendDom(B.target,dojox.grid.makeNotTagName("th"));
-A-=(C&&C.offsetLeft)||0
-}var C=dojox.grid.ascendDom(B.target,function(){if(!C||C==B.cellNode){return false
-}A+=(C.offsetLeft<0?0:C.offsetLeft);
-return true
+
+dojo.declare("dojox.grid.Builder", null, {
+	// summary:
+	//	Base class to produce html for grid content.
+	//	Also provide event decoration, providing grid related information inside the event object
+	// passed to grid events.
+	constructor: function(inView){
+		this.view = inView;
+		this.grid = inView.grid;
+	},
+	view: null,
+	// boilerplate HTML
+	_table: '<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation">',
+	// generate starting tags for a cell
+	generateCellMarkup: function(inCell, inMoreStyles, inMoreClasses, isHeader){
+		var result = [], html;
+		if (isHeader){
+			html = [ '<th tabIndex="-1" role="wairole:columnheader"' ];
+		}else{
+			html = [ '<td tabIndex="-1" role="wairole:gridcell"' ];
+		}
+		inCell.colSpan && html.push(' colspan="', inCell.colSpan, '"');
+		inCell.rowSpan && html.push(' rowspan="', inCell.rowSpan, '"');
+		html.push(' class="dojoxGrid-cell ');
+		inCell.classes && html.push(inCell.classes, ' ');
+		inMoreClasses && html.push(inMoreClasses, ' ');
+		// result[0] => td opener, style
+		result.push(html.join(''));
+		// SLOT: result[1] => td classes 
+		result.push('');
+		html = ['" idx="', inCell.index, '" style="'];
+		html.push(inCell.styles, inMoreStyles||'');
+		inCell.unitWidth && html.push('width:', inCell.unitWidth, ';');
+		// result[2] => markup
+		result.push(html.join(''));
+		// SLOT: result[3] => td style 
+		result.push('');
+		html = [ '"' ];
+		inCell.attrs && html.push(" ", inCell.attrs);
+		html.push('>');
+		// result[4] => td postfix
+		result.push(html.join(''));
+		// SLOT: result[5] => content
+		result.push('');
+		// result[6] => td closes
+		result.push('</td>');
+		return result;
+	},
+	// cell finding
+	isCellNode: function(inNode){
+		return Boolean(inNode && inNode.getAttribute && inNode.getAttribute("idx"));
+	},
+	getCellNodeIndex: function(inCellNode){
+		return inCellNode ? Number(inCellNode.getAttribute("idx")) : -1;
+	},
+	getCellNode: function(inRowNode, inCellIndex){
+		for(var i=0, row; row=dojox.grid.getTr(inRowNode.firstChild, i); i++){
+			for(var j=0, cell; cell=row.cells[j]; j++){
+				if(this.getCellNodeIndex(cell) == inCellIndex){
+					return cell;
+				}
+			}
+		}
+	},
+	findCellTarget: function(inSourceNode, inTopNode){
+		var n = inSourceNode;
+		while(n && !this.isCellNode(n) && (n!=inTopNode)){
+			n = n.parentNode;
+		}
+		return n!=inTopNode ? n : null 
+	},
+	// event decoration
+	baseDecorateEvent: function(e){
+		e.dispatch = 'do' + e.type;
+		e.grid = this.grid;
+		e.sourceView = this.view;
+		e.cellNode = this.findCellTarget(e.target, e.rowNode);
+		e.cellIndex = this.getCellNodeIndex(e.cellNode);
+		e.cell = (e.cellIndex >= 0 ? this.grid.getCell(e.cellIndex) : null);
+	},
+	// event dispatch
+	findTarget: function(inSource, inTag){
+		var n = inSource;
+		while(n && !(inTag in n) && (n!=this.domNode)){
+			n = n.parentNode;
+		}
+		return (n != this.domNode) ? n : null; 
+	},
+	findRowTarget: function(inSource){
+		return this.findTarget(inSource, dojox.grid.rowIndexTag);
+	},
+	isIntraNodeEvent: function(e){
+		try{
+			return (e.cellNode && e.relatedTarget && dojo.isDescendant(e.relatedTarget, e.cellNode));
+		}catch(x){
+			// e.relatedTarget has permission problem in FF if it's an input: https://bugzilla.mozilla.org/show_bug.cgi?id=208427
+			return false;
+		}
+	},
+	isIntraRowEvent: function(e){
+		try{
+			var row = e.relatedTarget && this.findRowTarget(e.relatedTarget);
+			return !row && (e.rowIndex==-1) || row && (e.rowIndex==row.gridRowIndex);			
+		}catch(x){
+			// e.relatedTarget on INPUT has permission problem in FF: https://bugzilla.mozilla.org/show_bug.cgi?id=208427
+			return false;
+		}
+	},
+	dispatchEvent: function(e){
+		if(e.dispatch in this){
+			return this[e.dispatch](e);
+		}
+	},
+	// dispatched event handlers
+	domouseover: function(e){
+		if(e.cellNode && (e.cellNode!=this.lastOverCellNode)){
+			this.lastOverCellNode = e.cellNode;
+			this.grid.onMouseOver(e);
+		}
+		this.grid.onMouseOverRow(e);
+	},
+	domouseout: function(e){
+		if(e.cellNode && (e.cellNode==this.lastOverCellNode) && !this.isIntraNodeEvent(e, this.lastOverCellNode)){
+			this.lastOverCellNode = null;
+			this.grid.onMouseOut(e);
+			if(!this.isIntraRowEvent(e)){
+				this.grid.onMouseOutRow(e);
+			}
+		}
+	}
 });
-return A
-},decorateEvent:function(A){this.baseDecorateEvent(A);
-A.rowIndex=-1;
-A.cellX=this.getCellX(A);
-return true
-},prepareLeftResize:function(B){var A=dojox.grid.getTdIndex(B.cellNode);
-B.cellNode=(A?B.cellNode.parentNode.cells[A-1]:null);
-B.cellIndex=(B.cellNode?this.getCellNodeIndex(B.cellNode):-1);
-return Boolean(B.cellNode)
-},canResize:function(B){if(!B.cellNode||B.cellNode.colSpan>1){return false
-}var A=this.grid.getCell(B.cellIndex);
-return !A.noresize&&!A.isFlex()
-},overLeftResizeArea:function(A){return(A.cellIndex>0)&&(A.cellX<this.overResizeWidth)&&this.prepareLeftResize(A)
-},overRightResizeArea:function(A){return A.cellNode&&(A.cellX>=A.cellNode.offsetWidth-this.overResizeWidth)
-},domousemove:function(A){var B=(this.overRightResizeArea(A)?"e-resize":(this.overLeftResizeArea(A)?"w-resize":""));
-if(B&&!this.canResize(A)){B="not-allowed"
-}A.sourceView.headerNode.style.cursor=B||""
-},domousedown:function(A){if(!dojox.grid.drag.dragging){if((this.overRightResizeArea(A)||this.overLeftResizeArea(A))&&this.canResize(A)){this.beginColumnResize(A)
-}}},doclick:function(A){if(new Date().getTime()<this.bogusClickTime){dojo.stopEvent(A);
-return true
-}},beginColumnResize:function(F){dojo.stopEvent(F);
-var E=[],B=this.tableMap.findOverlappingNodes(F.cellNode);
-for(var C=0,A;
-(A=B[C]);
-C++){E.push({node:A,index:this.getCellNodeIndex(A),width:A.offsetWidth})
-}var D={view:F.sourceView,node:F.cellNode,index:F.cellIndex,w:F.cellNode.clientWidth,spanners:E};
-dojox.grid.drag.start(F.cellNode,dojo.hitch(this,"doResizeColumn",D),dojo.hitch(this,"endResizeColumn",D),F)
-},doResizeColumn:function(G,C){var B=G.w+C.deltaX;
-if(B>=this.minColWidth){for(var E=0,F,A;
-(F=G.spanners[E]);
-E++){A=F.width+C.deltaX;
-F.node.style.width=A+"px";
-G.view.setColWidth(F.index,A)
-}G.node.style.width=B+"px";
-G.view.setColWidth(G.index,B)
-}if(G.view.flexCells&&!G.view.testFlexCells()){var D=dojox.grid.findTable(G.node);
-D&&(D.style.width="")
-}},endResizeColumn:function(A){this.bogusClickTime=new Date().getTime()+30;
-setTimeout(dojo.hitch(A.view,"update"),50)
-}});
-dojo.declare("dojox.grid.tableMap",null,{constructor:function(A){this.mapRows(A)
-},map:null,mapRows:function(K){var F=K.length;
-if(!F){return 
-}this.map=[];
-for(var A=0,J;
-(J=K[A]);
-A++){this.map[A]=[]
-}for(var A=0,J;
-(J=K[A]);
-A++){for(var B=0,G=0,H,C,D;
-(H=J[B]);
-B++){while(this.map[A][G]){G++
-}this.map[A][G]={c:B,r:A};
-D=H.rowSpan||1;
-C=H.colSpan||1;
-for(var E=0;
-E<D;
-E++){for(var I=0;
-I<C;
-I++){this.map[A+E][G+I]=this.map[A][G]
-}}G+=C
-}}},dumpMap:function(){for(var B=0,E,D="";
-(E=this.map[B]);
-B++,D=""){for(var C=0,A;
-(A=E[C]);
-C++){D+=A.r+","+A.c+"   "
-}console.log(D)
-}},getMapCoords:function(E,B){for(var C=0,F;
-(F=this.map[C]);
-C++){for(var D=0,A;
-(A=F[D]);
-D++){if(A.c==B&&A.r==E){return{j:C,i:D}
-}}}return{j:-1,i:-1}
-},getNode:function(B,C,A){var D=B&&B.rows[C];
-return D&&D.cells[A]
-},_findOverlappingNodes:function(inTable,inRow,inCol){var nodes=[];
-var m=this.getMapCoords(inRow,inCol);
-var row=this.map[m.j];
-for(var j=0,row;
-(row=this.map[j]);
-j++){if(j==m.j){continue
-}with(row[m.i]){var n=this.getNode(inTable,r,c);
-if(n){nodes.push(n)
-}}}return nodes
-},findOverlappingNodes:function(A){return this._findOverlappingNodes(dojox.grid.findTable(A),dojox.grid.getTrIndex(A.parentNode),dojox.grid.getTdIndex(A))
-}});
-dojox.grid.rowIndexTag="gridRowIndex"
-};
+
+dojo.declare("dojox.grid.contentBuilder", dojox.grid.Builder, {
+	// summary:
+	//	Produces html for grid data content. Owned by grid and used internally 
+	//	for rendering data. Override to implement custom rendering.
+	update: function(){
+		this.prepareHtml();
+	},
+	// cache html for rendering data rows
+	prepareHtml: function(){
+		var defaultGet=this.grid.get, rows=this.view.structure.rows;
+		for(var j=0, row; (row=rows[j]); j++){
+			for(var i=0, cell; (cell=row[i]); i++){
+				cell.get = cell.get || (cell.value == undefined) && defaultGet;
+				cell.markup = this.generateCellMarkup(cell, cell.cellStyles, cell.cellClasses, false);
+			}
+		}
+	},
+	// time critical: generate html using cache and data source
+	generateHtml: function(inDataIndex, inRowIndex){
+		var
+			html = [ this._table ],
+			v = this.view,
+			obr = v.onBeforeRow,
+			rows = v.structure.rows;
+		obr && obr(inRowIndex, rows);
+		for(var j=0, row; (row=rows[j]); j++){
+			if(row.hidden || row.header){
+				continue;
+			}
+			html.push(!row.invisible ? '<tr>' : '<tr class="dojoxGrid-invisible">');
+			for(var i=0, cell, m, cc, cs; (cell=row[i]); i++){
+				m = cell.markup, cc = cell.customClasses = [], cs = cell.customStyles = [];
+				// content (format can fill in cc and cs as side-effects)
+				m[5] = cell.format(inDataIndex);
+				// classes
+				m[1] = cc.join(' ');
+				// styles
+				m[3] = cs.join(';');
+				// in-place concat
+				html.push.apply(html, m);
+			}
+			html.push('</tr>');
+		}
+		html.push('</table>');
+		return html.join('');
+	},
+	decorateEvent: function(e){
+		e.rowNode = this.findRowTarget(e.target);
+		if(!e.rowNode){return false};
+		e.rowIndex = e.rowNode[dojox.grid.rowIndexTag];
+		this.baseDecorateEvent(e);
+		e.cell = this.grid.getCell(e.cellIndex);
+		return true;
+	}
+});
+
+dojo.declare("dojox.grid.headerBuilder", dojox.grid.Builder, {
+	// summary:
+	//	Produces html for grid header content. Owned by grid and used internally 
+	//	for rendering data. Override to implement custom rendering.
+	bogusClickTime: 0,
+	overResizeWidth: 4,
+	minColWidth: 1,
+	_table: '<table class="dojoxGrid-row-table" border="0" cellspacing="0" cellpadding="0" role="wairole:presentation"',
+	update: function(){
+		this.tableMap = new dojox.grid.tableMap(this.view.structure.rows);
+	},
+	generateHtml: function(inGetValue, inValue){
+		var html = [this._table], rows = this.view.structure.rows;
+		
+		// render header with appropriate width, if possible so that views with flex columns are correct height
+		if(this.view.viewWidth){
+			html.push([' style="width:', this.view.viewWidth, ';"'].join(''));
+		}
+		html.push('>');
+		dojox.grid.fire(this.view, "onBeforeRow", [-1, rows]);
+		for(var j=0, row; (row=rows[j]); j++){
+			if(row.hidden){
+				continue;
+			}
+			html.push(!row.invisible ? '<tr>' : '<tr class="dojoxGrid-invisible">');
+			for(var i=0, cell, markup; (cell=row[i]); i++){
+				cell.customClasses = [];
+				cell.customStyles = [];
+				markup = this.generateCellMarkup(cell, cell.headerStyles, cell.headerClasses, true);
+				// content
+				markup[5] = (inValue != undefined ? inValue : inGetValue(cell));
+				// styles
+				markup[3] = cell.customStyles.join(';');
+				// classes
+				markup[1] = cell.customClasses.join(' '); //(cell.customClasses ? ' ' + cell.customClasses : '');
+				html.push(markup.join(''));
+			}
+			html.push('</tr>');
+		}
+		html.push('</table>');
+		return html.join('');
+	},
+	// event helpers
+	getCellX: function(e){
+		var x = e.layerX;
+		if(dojo.isMoz){
+			var n = dojox.grid.ascendDom(e.target, dojox.grid.makeNotTagName("th"));
+			x -= (n && n.offsetLeft) || 0;
+			//x -= getProp(ascendDom(e.target, mkNotTagName("td")), "offsetLeft") || 0;
+		}
+		var n = dojox.grid.ascendDom(e.target, function(){
+			if(!n || n == e.cellNode){
+				return false;
+			}
+			// Mozilla 1.8 (FF 1.5) has a bug that makes offsetLeft = -parent border width
+			// when parent has border, overflow: hidden, and is positioned
+			// handle this problem here ... not a general solution!
+			x += (n.offsetLeft < 0 ? 0 : n.offsetLeft);
+			return true;
+		});
+		return x;
+	},
+	// event decoration
+	decorateEvent: function(e){
+		this.baseDecorateEvent(e);
+		e.rowIndex = -1;
+		e.cellX = this.getCellX(e);
+		return true;
+	},
+	// event handlers
+	// resizing
+	prepareLeftResize: function(e){
+		var i = dojox.grid.getTdIndex(e.cellNode);
+		e.cellNode = (i ? e.cellNode.parentNode.cells[i-1] : null);
+		e.cellIndex = (e.cellNode ? this.getCellNodeIndex(e.cellNode) : -1);
+		return Boolean(e.cellNode);
+	},
+	canResize: function(e){
+		if(!e.cellNode || e.cellNode.colSpan > 1){
+			return false;
+		}
+		var cell = this.grid.getCell(e.cellIndex); 
+		return !cell.noresize && !cell.isFlex();
+	},
+	overLeftResizeArea: function(e){
+		return (e.cellIndex>0) && (e.cellX < this.overResizeWidth) && this.prepareLeftResize(e);
+	},
+	overRightResizeArea: function(e){
+		return e.cellNode && (e.cellX >= e.cellNode.offsetWidth - this.overResizeWidth);
+	},
+	domousemove: function(e){
+		//console.log(e.cellIndex, e.cellX, e.cellNode.offsetWidth);
+		var c = (this.overRightResizeArea(e) ? 'e-resize' : (this.overLeftResizeArea(e) ? 'w-resize' : ''));
+		if(c && !this.canResize(e)){
+			c = 'not-allowed';
+		}
+		e.sourceView.headerNode.style.cursor = c || ''; //'default';
+	},
+	domousedown: function(e){
+		if(!dojox.grid.drag.dragging){
+			if((this.overRightResizeArea(e) || this.overLeftResizeArea(e)) && this.canResize(e)){
+				this.beginColumnResize(e);
+			}
+			//else{
+			//	this.beginMoveColumn(e);
+			//}
+		}
+	},
+	doclick: function(e) {
+		if (new Date().getTime() < this.bogusClickTime) {
+			dojo.stopEvent(e);
+			return true;
+		}
+	},
+	// column resizing
+	beginColumnResize: function(e){
+		dojo.stopEvent(e);
+		var spanners = [], nodes = this.tableMap.findOverlappingNodes(e.cellNode);
+		for(var i=0, cell; (cell=nodes[i]); i++){
+			spanners.push({ node: cell, index: this.getCellNodeIndex(cell), width: cell.offsetWidth });
+			//console.log("spanner: " + this.getCellNodeIndex(cell));
+		}
+		var drag = {
+			view: e.sourceView,
+			node: e.cellNode,
+			index: e.cellIndex,
+			w: e.cellNode.clientWidth,
+			spanners: spanners
+		};
+		//console.log(drag.index, drag.w);
+		dojox.grid.drag.start(e.cellNode, dojo.hitch(this, 'doResizeColumn', drag), dojo.hitch(this, 'endResizeColumn', drag), e);
+	},
+	doResizeColumn: function(inDrag, inEvent){
+		var w = inDrag.w + inEvent.deltaX;
+		if(w >= this.minColWidth){
+			for(var i=0, s, sw; (s=inDrag.spanners[i]); i++){
+				sw = s.width + inEvent.deltaX;
+				s.node.style.width = sw + 'px';
+				inDrag.view.setColWidth(s.index, sw);
+				//console.log('setColWidth', '#' + s.index, sw + 'px');
+			}
+			inDrag.node.style.width = w + 'px';
+			inDrag.view.setColWidth(inDrag.index, w);
+		}
+		if(inDrag.view.flexCells && !inDrag.view.testFlexCells()){
+			var t = dojox.grid.findTable(inDrag.node);
+			t && (t.style.width = '');
+		}
+	},
+	endResizeColumn: function(inDrag){
+		this.bogusClickTime = new Date().getTime() + 30;
+		setTimeout(dojo.hitch(inDrag.view, "update"), 50);
+	}
+});
+
+dojo.declare("dojox.grid.tableMap", null, {
+	// summary:
+	//	Maps an html table into a structure parsable for information about cell row and col spanning.
+	//	Used by headerBuilder
+	constructor: function(inRows){
+		this.mapRows(inRows);
+	},
+	map: null,
+	// map table topography
+	mapRows: function(inRows){
+		//console.log('mapRows');
+		// # of rows
+		var rowCount = inRows.length;
+		if(!rowCount){
+			return;
+		}
+		// map which columns and rows fill which cells
+		this.map = [ ];
+		for(var j=0, row; (row=inRows[j]); j++){
+			this.map[j] = [];
+		}
+		for(var j=0, row; (row=inRows[j]); j++){
+			for(var i=0, x=0, cell, colSpan, rowSpan; (cell=row[i]); i++){
+				while (this.map[j][x]){x++};
+				this.map[j][x] = { c: i, r: j };
+				rowSpan = cell.rowSpan || 1;
+				colSpan = cell.colSpan || 1;
+				for(var y=0; y<rowSpan; y++){
+					for(var s=0; s<colSpan; s++){
+						this.map[j+y][x+s] = this.map[j][x];
+					}
+				}
+				x += colSpan;
+			}
+		}
+		//this.dumMap();
+	},
+	dumpMap: function(){
+		for(var j=0, row, h=''; (row=this.map[j]); j++,h=''){
+			for(var i=0, cell; (cell=row[i]); i++){
+				h += cell.r + ',' + cell.c + '   ';
+			}
+			console.log(h);
+		}
+	},
+	// find node's map coords by it's structure coords
+	getMapCoords: function(inRow, inCol){
+		for(var j=0, row; (row=this.map[j]); j++){
+			for(var i=0, cell; (cell=row[i]); i++){
+				if(cell.c==inCol && cell.r == inRow){
+					return { j: j, i: i };
+				}
+				//else{console.log(inRow, inCol, ' : ', i, j, " : ", cell.r, cell.c); };
+			}
+		}
+		return { j: -1, i: -1 };
+	},
+	// find a node in inNode's table with the given structure coords
+	getNode: function(inTable, inRow, inCol){
+		var row = inTable && inTable.rows[inRow];
+		return row && row.cells[inCol];
+	},
+	_findOverlappingNodes: function(inTable, inRow, inCol){
+		var nodes = [];
+		var m = this.getMapCoords(inRow, inCol);
+		//console.log("node j: %d, i: %d", m.j, m.i);
+		var row = this.map[m.j];
+		for(var j=0, row; (row=this.map[j]); j++){
+			if(j == m.j){ continue; }
+			with(row[m.i]){
+				//console.log("overlaps: r: %d, c: %d", r, c);
+				var n = this.getNode(inTable, r, c);
+				if(n){ nodes.push(n); }
+			}
+		}
+		//console.log(nodes);
+		return nodes;
+	},
+	findOverlappingNodes: function(inNode){
+		return this._findOverlappingNodes(dojox.grid.findTable(inNode), dojox.grid.getTrIndex(inNode.parentNode), dojox.grid.getTdIndex(inNode));
+	}
+});
+
+dojox.grid.rowIndexTag = "gridRowIndex";
+
+}

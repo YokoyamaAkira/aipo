@@ -9,7 +9,7 @@ this._keyListener=A.connect(this.fileInput,"onkeyup",this,"_matchValue")
 },_matchValue:function(){this.inputNode.value=this.fileInput.value;
 if(this.inputNode.value){this.cancelNode.style.visibility="visible";
 A.fadeIn({node:this.cancelNode,duration:275}).play()
-}},setLabel:function(B,C){this.titleNode.innerHTML=B
+}},setLabel:function(C,B){this.titleNode.innerHTML=C
 },_onClick:function(B){A.disconnect(this._listener);
 A.disconnect(this._keyListener);
 this.domNode.removeChild(this.fileInput);

@@ -7,134 +7,134 @@ params={url:this.memberFromUrl,key:this.memberFromOptionKey,value:this.memberFro
 aimluck.io.createOptions(this.memberFromId,params);
 params={url:this.memberGroupUrl,key:this.groupSelectOptionKey,value:this.groupSelectOptionValue,preOptions:{key:"LoginUser",value:"（全体）"}};
 aimluck.io.createOptions(this.groupSelectId,params)
-},addOption:function(E,H,G,F){aimluck.io.addOption(E,H,G,F)
-},addOptionSync:function(K,J,I){var N=dojo.byId(this.memberToId);
-var H=dojo.byId(this.selectId);
-if(this.memberLimit!=0&&N.options.length>=this.memberLimit){return 
-}if(document.all){var L=document.createElement("OPTION");
-L.value=K;
-L.text=J;
-L.selected=I;
-var M=document.createElement("OPTION");
-M.value=K;
-M.text=J;
-M.selected=I;
-if(N.options.length==1&&N.options[0].value==""){N.options.remove(0);
-H.options.remove(0)
-}N.add(L,N.options.length);
-H.add(M,H.options.length)
-}else{var L=document.createElement("OPTION");
-L.value=K;
-L.text=J;
-L.selected=I;
-var M=document.createElement("OPTION");
-M.value=K;
-M.text=J;
-M.selected=I;
-if(N.options.length==1&&N.options[0].value==""){N.removeChild(N.options[0]);
-H.removeChild(N.options[0])
-}N.insertBefore(L,N.options[N.options.length]);
-H.insertBefore(M,H.options[H.options.length])
+},addOption:function(A,B,C,D){aimluck.io.addOption(A,B,C,D)
+},addOptionSync:function(E,F,G){var B=dojo.byId(this.memberToId);
+var A=dojo.byId(this.selectId);
+if(this.memberLimit!=0&&B.options.length>=this.memberLimit){return 
+}if(document.all){var D=document.createElement("OPTION");
+D.value=E;
+D.text=F;
+D.selected=G;
+var C=document.createElement("OPTION");
+C.value=E;
+C.text=F;
+C.selected=G;
+if(B.options.length==1&&B.options[0].value==""){B.options.remove(0);
+A.options.remove(0)
+}B.add(D,B.options.length);
+A.add(C,A.options.length)
+}else{var D=document.createElement("OPTION");
+D.value=E;
+D.text=F;
+D.selected=G;
+var C=document.createElement("OPTION");
+C.value=E;
+C.text=F;
+C.selected=G;
+if(B.options.length==1&&B.options[0].value==""){B.removeChild(B.options[0]);
+A.removeChild(B.options[0])
+}B.insertBefore(D,B.options[B.options.length]);
+A.insertBefore(C,A.options[A.options.length])
 }this.inputMemberSync()
-},addMember:function(I,L){if(document.all){var G=I.options;
-var H=L.options;
-if(G.length==1&&G[0].value==""){return 
+},addMember:function(E,B){if(document.all){var A=E.options;
+var F=B.options;
+if(A.length==1&&A[0].value==""){return 
 }for(i=0;
-i<G.length;
-i++){if(!G[i].selected){continue
-}var J=false;
+i<A.length;
+i++){if(!A[i].selected){continue
+}var D=false;
 for(j=0;
-j<H.length;
-j++){if(H[j].value==G[i].value){J=true;
+j<F.length;
+j++){if(F[j].value==A[i].value){D=true;
 break
-}}if(J){continue
-}var K=document.createElement("OPTION");
-K.value=G[i].value;
-K.text=G[i].text;
-K.selected=true;
-if(H.length==1&&H[0].value==""){H.remove(0)
-}if(this.memberLimit!=0&&L.options.length>=this.memberLimit){return 
-}if(aipo.calendar.maximum_to>H.length){H.add(K,H.length)
-}}}else{var G=I.options;
-var H=L.options;
-if(G.length==1&&G[0].value==""){return 
+}}if(D){continue
+}var C=document.createElement("OPTION");
+C.value=A[i].value;
+C.text=A[i].text;
+C.selected=true;
+if(F.length==1&&F[0].value==""){F.remove(0)
+}if(this.memberLimit!=0&&B.options.length>=this.memberLimit){return 
+}if(aipo.calendar.maximum_to>F.length){F.add(C,F.length)
+}}}else{var A=E.options;
+var F=B.options;
+if(A.length==1&&A[0].value==""){return 
 }for(i=0;
-i<G.length;
-i++){if(!G[i].selected){continue
-}var J=false;
+i<A.length;
+i++){if(!A[i].selected){continue
+}var D=false;
 for(j=0;
-j<H.length;
-j++){if(H[j].value==G[i].value){J=true;
+j<F.length;
+j++){if(F[j].value==A[i].value){D=true;
 break
-}}if(J){continue
-}var K=document.createElement("OPTION");
-K.value=G[i].value;
-K.text=G[i].text;
-K.selected=true;
-if(L.options.length==1&&L.options[0].value==""){L.removeChild(L.options[0])
-}if(this.memberLimit!=0&&L.options.length>=this.memberLimit){return 
-}if(aipo.calendar.maximum_to>H.length){L.insertBefore(K,H[H.length])
-}}}},removeAllMember:function(C){if(document.all){var D=C.options;
+}}if(D){continue
+}var C=document.createElement("OPTION");
+C.value=A[i].value;
+C.text=A[i].text;
+C.selected=true;
+if(B.options.length==1&&B.options[0].value==""){B.removeChild(B.options[0])
+}if(this.memberLimit!=0&&B.options.length>=this.memberLimit){return 
+}if(aipo.calendar.maximum_to>F.length){B.insertBefore(C,F[F.length])
+}}}},removeAllMember:function(A){if(document.all){var B=A.options;
+for(i=0;
+i<B.length;
+i++){if(B[i].selected){B.remove(i);
+i-=1
+}}}else{var B=A.options;
+for(i=0;
+i<B.length;
+i++){if(B[i].selected){A.removeChild(B[i]);
+i-=1
+}}}},removeMember:function(A){if(document.all){var B=A.options;
+for(i=0;
+i<B.length;
+i++){if(B[i].selected){B.remove(i);
+i-=1
+}}}else{var B=A.options;
+for(i=0;
+i<B.length;
+i++){if(B[i].selected){A.removeChild(B[i]);
+i-=1
+}}}},removeMemberSync:function(){var C=dojo.byId(this.memberToId);
+var B=dojo.byId(this.selectId);
+if(document.all){var D=C.options;
+var A=B.options;
 for(i=0;
 i<D.length;
 i++){if(D[i].selected){D.remove(i);
+A.remove(i);
 i-=1
 }}}else{var D=C.options;
+var A=B.options;
 for(i=0;
 i<D.length;
 i++){if(D[i].selected){C.removeChild(D[i]);
+B.removeChild(A[i]);
 i-=1
-}}}},removeMember:function(C){if(document.all){var D=C.options;
+}}}},inputMemberSync:function(){var A=dojo.byId(this.selectId);
+var B=dojo.byId(this.inputId);
+var D="";
+var G=A.options;
 for(i=0;
-i<D.length;
-i++){if(D[i].selected){D.remove(i);
-i-=1
-}}}else{var D=C.options;
-for(i=0;
-i<D.length;
-i++){if(D[i].selected){C.removeChild(D[i]);
-i-=1
-}}}},removeMemberSync:function(){var G=dojo.byId(this.memberToId);
-var H=dojo.byId(this.selectId);
-if(document.all){var F=G.options;
-var E=H.options;
-for(i=0;
-i<F.length;
-i++){if(F[i].selected){F.remove(i);
-E.remove(i);
-i-=1
-}}}else{var F=G.options;
-var E=H.options;
-for(i=0;
-i<F.length;
-i++){if(F[i].selected){G.removeChild(F[i]);
-H.removeChild(E[i]);
-i-=1
-}}}},inputMemberSync:function(){var H=dojo.byId(this.selectId);
-var N=dojo.byId(this.inputId);
-var L="";
-var I=H.options;
-for(i=0;
-i<I.length;
-i++){if(i!=0){L+=" "
-}var M=i%aipo.calendar.maximum_to;
-var J=I[i].text.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-L+='<span class="small color'+M+'">'+J+"</span>"
-}var K=dojo.byId("picked_memberlist-"+this.tmpPortretId);
-if(K){K.innerHTML=H.innerHTML
-}N.innerHTML=L
-},changeGroup:function(E){var F=E.target.options[E.target.selectedIndex].value;
-var H=this.changeGroupUrl+"&groupname="+F;
-var G={url:H,key:this.memberFromOptionKey,value:this.memberFromOptionValue};
-aimluck.io.createOptions(this.memberFromId,G)
-},onMemberAddClick:function(B){this.addMember(dojo.byId(this.memberFromId),dojo.byId(this.memberToId));
+i<G.length;
+i++){if(i!=0){D+=" "
+}var C=i%aipo.calendar.maximum_to;
+var F=G[i].text.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+D+='<span class="small color'+C+'">'+F+"</span>"
+}var E=dojo.byId("picked_memberlist-"+this.tmpPortretId);
+if(E){E.innerHTML=A.innerHTML
+}B.innerHTML=D
+},changeGroup:function(A){var D=A.target.options[A.target.selectedIndex].value;
+var B=this.changeGroupUrl+"&groupname="+D;
+var C={url:B,key:this.memberFromOptionKey,value:this.memberFromOptionValue};
+aimluck.io.createOptions(this.memberFromId,C)
+},onMemberAddClick:function(A){this.addMember(dojo.byId(this.memberFromId),dojo.byId(this.memberToId));
 this.addMember(dojo.byId(this.memberFromId),dojo.byId(this.selectId));
 this.inputMemberSync()
-},onMemberRemoveClick:function(F){this.removeMemberSync();
+},onMemberRemoveClick:function(B){this.removeMemberSync();
 this.inputMemberSync();
-var D=dojo.byId(this.memberToId);
-if(D.options.length==0){if(aipo.schedule.login_aliasname!="undefined"){var E=aipo.schedule.login_aliasname.replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&lt;/g,"<").replace(/&gt;/g,">");
-this.addOptionSync(aipo.schedule.login_id,E,true)
+var A=dojo.byId(this.memberToId);
+if(A.options.length==0){if(aipo.schedule.login_aliasname!="undefined"){var C=aipo.schedule.login_aliasname.replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&lt;/g,"<").replace(/&gt;/g,">");
+this.addOptionSync(aipo.schedule.login_id,C,true)
 }}},onCloseClick:function(){dojo.style(this.domNode,"display","none");
 aipo.calendar.populateWeeklySchedule(this.tmpPortretId)
 }})

@@ -1,9 +1,30 @@
-dojo._xdResourceLoaded({depends:[["provide","dijit._editor.plugins.TextColor"],["require","dijit._editor._Plugin"],["require","dijit.ColorPalette"]],defineResource:function(A){if(!A._hasResource["dijit._editor.plugins.TextColor"]){A._hasResource["dijit._editor.plugins.TextColor"]=true;
-A.provide("dijit._editor.plugins.TextColor");
-A.require("dijit._editor._Plugin");
-A.require("dijit.ColorPalette");
-A.declare("dijit._editor.plugins.TextColor",dijit._editor._Plugin,{buttonClass:dijit.form.DropDownButton,constructor:function(){this.dropDown=new dijit.ColorPalette();
-A.connect(this.dropDown,"onChange",this,function(B){this.editor.execCommand(this.command,B)
-})
-}})
-}}});
+dojo._xdResourceLoaded({
+depends: [["provide", "dijit._editor.plugins.TextColor"],
+["require", "dijit._editor._Plugin"],
+["require", "dijit.ColorPalette"]],
+defineResource: function(dojo){if(!dojo._hasResource["dijit._editor.plugins.TextColor"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dijit._editor.plugins.TextColor"] = true;
+dojo.provide("dijit._editor.plugins.TextColor");
+
+dojo.require("dijit._editor._Plugin");
+dojo.require("dijit.ColorPalette");
+
+dojo.declare("dijit._editor.plugins.TextColor",
+	dijit._editor._Plugin,
+	{
+		buttonClass: dijit.form.DropDownButton,
+
+//TODO: set initial focus/selection state?
+
+		constructor: function(){
+			this.dropDown = new dijit.ColorPalette();
+			dojo.connect(this.dropDown, "onChange", this, function(color){
+				this.editor.execCommand(this.command, color);
+			});
+		}
+	}
+);
+
+}
+
+}});

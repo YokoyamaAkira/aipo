@@ -3,47 +3,47 @@ A.provide("dijit._base.popup");
 A.require("dijit._base.focus");
 A.require("dijit._base.place");
 A.require("dijit._base.window");
-dijit.popup=new function(){var C=[],D=1000,B=1;
-this.open=function(E){var N=E.popup,M=E.orient||{BL:"TL",TL:"BL"},F=E.around,I=(E.around&&E.around.id)?(E.around.id+"_dropdown"):("popup_"+B++);
-var H=A.doc.createElement("div");
-H.id=I;
-H.className="dijitPopup";
-H.style.zIndex=D+C.length;
-H.style.visibility="hidden";
-if(E.parent){H.dijitPopupParent=E.parent.id
-}A.body().appendChild(H);
-N.domNode.style.display="";
-H.appendChild(N.domNode);
-var L=new dijit.BackgroundIframe(H);
-var K=F?dijit.placeOnScreenAroundElement(H,F,M,N.orient?A.hitch(N,"orient"):null):dijit.placeOnScreen(H,E,M=="R"?["TR","BR","TL","BL"]:["TL","BL","TR","BR"]);
-H.style.visibility="visible";
-var J=[];
-function G(){for(var O=C.length-1;
-O>0&&C[O].parent===C[O-1].widget;
-O--){}return C[O]
-}J.push(A.connect(H,"onkeypress",this,function(O){if(O.keyCode==A.keys.ESCAPE&&E.onCancel){E.onCancel()
+dijit.popup=new function(){var B=[],C=1000,D=1;
+this.open=function(M){var L=M.popup,K=M.orient||{BL:"TL",TL:"BL"},N=M.around,G=(M.around&&M.around.id)?(M.around.id+"_dropdown"):("popup_"+D++);
+var F=A.doc.createElement("div");
+F.id=G;
+F.className="dijitPopup";
+F.style.zIndex=C+B.length;
+F.style.visibility="hidden";
+if(M.parent){F.dijitPopupParent=M.parent.id
+}A.body().appendChild(F);
+L.domNode.style.display="";
+F.appendChild(L.domNode);
+var J=new dijit.BackgroundIframe(F);
+var I=N?dijit.placeOnScreenAroundElement(F,N,K,L.orient?A.hitch(L,"orient"):null):dijit.placeOnScreen(F,M,K=="R"?["TR","BR","TL","BL"]:["TL","BL","TR","BR"]);
+F.style.visibility="visible";
+var H=[];
+function E(){for(var O=B.length-1;
+O>0&&B[O].parent===B[O-1].widget;
+O--){}return B[O]
+}H.push(A.connect(F,"onkeypress",this,function(O){if(O.keyCode==A.keys.ESCAPE&&M.onCancel){M.onCancel()
 }else{if(O.keyCode==A.keys.TAB){A.stopEvent(O);
-var P=G();
+var P=E();
 if(P&&P.onCancel){P.onCancel()
 }}}}));
-if(N.onCancel){J.push(A.connect(N,"onCancel",null,E.onCancel))
-}J.push(A.connect(N,N.onExecute?"onExecute":"onChange",null,function(){var O=G();
+if(L.onCancel){H.push(A.connect(L,"onCancel",null,M.onCancel))
+}H.push(A.connect(L,L.onExecute?"onExecute":"onChange",null,function(){var O=E();
 if(O&&O.onExecute){O.onExecute()
 }}));
-C.push({wrapper:H,iframe:L,widget:N,parent:E.parent,onExecute:E.onExecute,onCancel:E.onCancel,onClose:E.onClose,handlers:J});
-if(N.onOpen){N.onOpen(K)
-}return K
+B.push({wrapper:F,iframe:J,widget:L,parent:M.parent,onExecute:M.onExecute,onCancel:M.onCancel,onClose:M.onClose,handlers:H});
+if(L.onOpen){L.onOpen(I)
+}return I
 };
-this.close=function(J){while(A.some(C,function(K){return K.widget==J
-})){var G=C.pop(),I=G.wrapper,E=G.iframe,F=G.widget,H=G.onClose;
-if(F.onClose){F.onClose()
-}A.forEach(G.handlers,A.disconnect);
-if(!F||!F.domNode){return 
-}A.style(F.domNode,"display","none");
-A.body().appendChild(F.domNode);
-E.destroy();
-A._destroyElement(I);
-if(H){H()
+this.close=function(F){while(A.some(B,function(K){return K.widget==F
+})){var I=B.pop(),J=I.wrapper,G=I.iframe,H=I.widget,E=I.onClose;
+if(H.onClose){H.onClose()
+}A.forEach(I.handlers,A.disconnect);
+if(!H||!H.domNode){return 
+}A.style(H.domNode,"display","none");
+A.body().appendChild(H.domNode);
+G.destroy();
+A._destroyElement(J);
+if(E){E()
 }}}
 }();
 dijit._frames=new function(){var B=[];
@@ -68,12 +68,12 @@ C.style.removeExpression("height")
 if(A.isIE&&A.isIE<7){A.addOnLoad(function(){var B=dijit._frames;
 A.forEach([B.pop()],B.push)
 })
-}dijit.BackgroundIframe=function(B){if(!B.id){throw new Error("no id")
-}if((A.isIE&&A.isIE<7)||(A.isFF&&A.isFF<3&&A.hasClass(A.body(),"dijit_a11y"))){var C=dijit._frames.pop();
-B.appendChild(C);
-if(A.isIE){C.style.setExpression("width","document.getElementById('"+B.id+"').offsetWidth");
-C.style.setExpression("height","document.getElementById('"+B.id+"').offsetHeight")
-}this.iframe=C
+}dijit.BackgroundIframe=function(C){if(!C.id){throw new Error("no id")
+}if((A.isIE&&A.isIE<7)||(A.isFF&&A.isFF<3&&A.hasClass(A.body(),"dijit_a11y"))){var B=dijit._frames.pop();
+C.appendChild(B);
+if(A.isIE){B.style.setExpression("width","document.getElementById('"+C.id+"').offsetWidth");
+B.style.setExpression("height","document.getElementById('"+C.id+"').offsetHeight")
+}this.iframe=B
 }};
 A.extend(dijit.BackgroundIframe,{destroy:function(){if(this.iframe){dijit._frames.push(this.iframe);
 delete this.iframe

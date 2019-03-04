@@ -1,46 +1,46 @@
 if(!dojo._hasResource["dojox.encoding.ascii85"]){dojo._hasResource["dojox.encoding.ascii85"]=true;
 dojo.provide("dojox.encoding.ascii85");
-(function(){var A=function(C,F,H){var E,D,B,G=[0,0,0,0,0];
-for(E=0;
-E<F;
-E+=4){B=((C[E]*256+C[E+1])*256+C[E+2])*256+C[E+3];
-if(!B){H.push("z")
-}else{for(D=0;
-D<5;
-G[D++]=B%85+33,B=Math.floor(B/85)){}}H.push(String.fromCharCode(G[4],G[3],G[2],G[1],G[0]))
+(function(){var A=function(D,G,C){var F,E,H,B=[0,0,0,0,0];
+for(F=0;
+F<G;
+F+=4){H=((D[F]*256+D[F+1])*256+D[F+2])*256+D[F+3];
+if(!H){C.push("z")
+}else{for(E=0;
+E<5;
+B[E++]=H%85+33,H=Math.floor(H/85)){}}C.push(String.fromCharCode(B[4],B[3],B[2],B[1],B[0]))
 }};
-dojox.encoding.ascii85.encode=function(F){var D=[],E=F.length%4,C=F.length-E;
-A(F,C,D);
-if(E){var G=F.slice(C);
-while(G.length<4){G.push(0)
-}A(G,4,D);
-var B=D.pop();
+dojox.encoding.ascii85.encode=function(E){var C=[],D=E.length%4,G=E.length-D;
+A(E,G,C);
+if(D){var F=E.slice(G);
+while(F.length<4){F.push(0)
+}A(F,4,C);
+var B=C.pop();
 if(B=="z"){B="!!!!!"
-}D.push(B.substr(0,E+1))
-}return D.join("")
+}C.push(B.substr(0,D+1))
+}return C.join("")
 };
-dojox.encoding.ascii85.decode=function(G){var K=G.length,J=[],F=[0,0,0,0,0],C,B,I,H,E,D;
-for(C=0;
-C<K;
-++C){if(G.charAt(C)=="z"){J.push(0,0,0,0);
+dojox.encoding.ascii85.decode=function(I){var C=I.length,B=[],H=[0,0,0,0,0],E,D,K,J,G,F;
+for(E=0;
+E<C;
+++E){if(I.charAt(E)=="z"){B.push(0,0,0,0);
 continue
-}for(B=0;
-B<5;
-++B){F[B]=G.charCodeAt(C+B)-33
-}D=K-C;
-if(D<5){for(B=D;
-B<4;
-F[++B]=0){}F[D]=85
-}I=(((F[0]*85+F[1])*85+F[2])*85+F[3])*85+F[4];
-H=I&255;
-I>>>=8;
-E=I&255;
-I>>>=8;
-J.push(I>>>8,I&255,E,H);
-for(B=D;
-B<5;
-++B,J.pop()){}C+=4
-}return J
+}for(D=0;
+D<5;
+++D){H[D]=I.charCodeAt(E+D)-33
+}F=C-E;
+if(F<5){for(D=F;
+D<4;
+H[++D]=0){}H[F]=85
+}K=(((H[0]*85+H[1])*85+H[2])*85+H[3])*85+H[4];
+J=K&255;
+K>>>=8;
+G=K&255;
+K>>>=8;
+B.push(K>>>8,K&255,G,J);
+for(D=F;
+D<5;
+++D,B.pop()){}E+=4
+}return B
 }
 })()
 };

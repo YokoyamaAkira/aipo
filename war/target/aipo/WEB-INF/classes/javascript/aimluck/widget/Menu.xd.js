@@ -23,23 +23,23 @@ A.declare("aimluck.widget.ComboButton",[dijit.form.ComboButton],{url:"",itemClas
 A.declare("aimluck.widget.Menubar",[dijit.Toolbar],{selectedIndex:-1,templateString:'<div class="tundra"><div class="dijit dijitToolbar" waiRole="toolbar" tabIndex="${tabIndex}" dojoAttachPoint="containerNode"></div></div>',postCreate:function(){dijit.Toolbar.superclass.postCreate.apply(this,arguments);
 this.makeMenu(this.items);
 this.isShowingNow=true
-},makeMenu:function(D){var B=this;
-var C=0;
-A.forEach(D,function(F){if(F.submenu){var H=new aimluck.widget.Menu({id:F.caption,style:"display: none;"});
+},makeMenu:function(C){var D=this;
+var B=0;
+A.forEach(C,function(F){if(F.submenu){var H=new aimluck.widget.Menu({id:F.caption,style:"display: none;"});
 A.forEach(F.submenu,function(I){if(I!=null){if(I.caption){H.addChild(new aimluck.widget.Menuitem({label:I.caption,url:I.url,iconClass:I.iconClass}))
 }else{H.addChild(new aimluck.widget.Menuseparator())
 }}});
 var E="";
-if(B.selectedIndex==parseInt(C)){E+="menuBarItemSelected"
+if(D.selectedIndex==parseInt(B)){E+="menuBarItemSelected"
 }var G=new aimluck.widget.ComboButton({label:F.caption,iconClass:F.iconClass,dropDown:H,url:F.url,itemClass:E});
 G.addChild(H);
-B.addChild(G)
+D.addChild(G)
 }else{if(F.url){var E="";
-if(B.selectedIndex==C){E+="menuBarItemSelected"
-}var G=new aimluck.widget.MenuButton({id:F.caption+"_Button"+C,label:F.caption,url:F.url,iconClass:F.iconClass,itemClass:E});
-B.addChild(G)
-}else{B.addChild(new aimluck.widget.ToolbarSeparator())
-}}C++
+if(D.selectedIndex==B){E+="menuBarItemSelected"
+}var G=new aimluck.widget.MenuButton({id:F.caption+"_Button"+B,label:F.caption,url:F.url,iconClass:F.iconClass,itemClass:E});
+D.addChild(G)
+}else{D.addChild(new aimluck.widget.ToolbarSeparator())
+}}B++
 })
 }})
 }}});
