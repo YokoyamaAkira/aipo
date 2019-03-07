@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * Forward interface
- * 
+ *
  * @author <a href="mailto:taylor@apache.org">David Sean Taylor</a>
  * @version $Id: Forward.java,v 1.3 2004/02/23 03:50:45 jford Exp $
  */

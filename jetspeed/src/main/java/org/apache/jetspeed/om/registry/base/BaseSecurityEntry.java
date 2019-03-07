@@ -31,7 +31,7 @@ import org.apache.jetspeed.services.security.RoleManagement;
 
 /**
  * Interface for manipulatin the Security Entry on the registry entries
- * 
+ *
  * @author <a href="mailto:paulsp@apache.org">Paul Spencer</a>
  * @author <a href="mailto:weaver@apache.org">Scott T. Weaver</a>
  * @author <a href="mailto:morciuch@apache.org">Mark Orciuch</a>
@@ -41,9 +41,10 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
     SecurityEntry, java.io.Serializable {
 
   /** Holds value of property accesses. */
-  private Vector accesses = new Vector<Object>();
+  private Vector<BaseSecurityAccess> accesses =
+    new Vector<BaseSecurityAccess>();
 
-  private transient Map accessMap = null;
+  private transient Map<String, Map<String, Object>> accessMap = null;
 
   public static final String ALL_ACTIONS = "*";
 
@@ -82,10 +83,10 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
     BaseSecurityEntry obj = (BaseSecurityEntry) object;
 
-    Iterator i = accesses.iterator();
-    Iterator i2 = obj.accesses.iterator();
+    Iterator<BaseSecurityAccess> i = accesses.iterator();
+    Iterator<?> i2 = obj.accesses.iterator();
     while (i.hasNext()) {
-      BaseSecurityAccess c1 = (BaseSecurityAccess) i.next();
+      BaseSecurityAccess c1 = i.next();
       BaseSecurityAccess c2 = null;
 
       if (i2.hasNext()) {
@@ -108,35 +109,35 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Getter for property accesses.
-   * 
+   *
    * @return Value of property accesses.
    */
   @Override
-  public Vector getAccesses() {
+  public Vector<BaseSecurityAccess> getAccesses() {
     return accesses;
   }
 
   /**
    * Setter for property accesses.
-   * 
+   *
    * @param accesses
    *          New value of property accesses.
    */
   @Override
-  public void setAccesses(Vector accesses) {
+  public void setAccesses(Vector<BaseSecurityAccess> accesses) {
     this.accesses = accesses;
     buildAccessMap();
   }
 
   /**
    * Aututhorizes action for a role.
-   * 
+   *
    * o If the requested action and the action ALL_ACTIONS do not exist, then
    * return false.
-   * 
+   *
    * o If the requesting role and ALL_ROLES does not exist for the the action,
    * then return false.
-   * 
+   *
    * @param role
    *          requesting action
    * @param action
@@ -145,7 +146,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    */
   @Override
   public boolean allowsRole(String role, String action) {
-    Map allowMap = null;
+    Map<?, ?> allowMap = null;
     boolean allow = false;
 
     if (accessMap == null) {
@@ -153,14 +154,14 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
     }
 
     // Checked action
-    allowMap = (Map) accessMap.get(action);
+    allowMap = accessMap.get(action);
     allow = isInAllowMap(allowMap, ROLE_MAP, role, ALL_ROLES);
     if (allow == true) {
       return allow;
     }
 
     // Checked all actions
-    allowMap = (Map) accessMap.get(ALL_ACTIONS);
+    allowMap = accessMap.get(ALL_ACTIONS);
     allow = isInAllowMap(allowMap, ROLE_MAP, role, ALL_ROLES);
 
     // Not allowed
@@ -169,13 +170,13 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Aututhorizes action for a group.
-   * 
+   *
    * o If the requested action and the action ALL_ACTIONS do not exist, then
    * return false.
-   * 
+   *
    * o If the requesting role and ALL_GROUP does not exist for the the action,
    * then return false.
-   * 
+   *
    * @param group
    *          requesting action
    * @param action
@@ -184,7 +185,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    */
   @Override
   public boolean allowsGroup(String group, String action) {
-    Map allowMap = null;
+    Map<?, ?> allowMap = null;
     boolean allow = false;
 
     if (accessMap == null) {
@@ -192,14 +193,14 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
     }
 
     // Checked action
-    allowMap = (Map) accessMap.get(action);
+    allowMap = accessMap.get(action);
     allow = isInAllowMap(allowMap, GROUP_MAP, group, ALL_GROUPS);
     if (allow == true) {
       return allow;
     }
 
     // Checked all actions
-    allowMap = (Map) accessMap.get(ALL_ACTIONS);
+    allowMap = accessMap.get(ALL_ACTIONS);
     allow = isInAllowMap(allowMap, GROUP_MAP, group, ALL_GROUPS);
 
     // Not allowed
@@ -208,13 +209,13 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Authorizes action for a group role.
-   * 
+   *
    * o If the requested action and the action ALL_ACTIONS do not exist, then
    * return false.
-   * 
+   *
    * o If the requesting group role and ALL_GROUPS_ROLES does not exist for the
    * the action, then return false.
-   * 
+   *
    * @param group
    *          requesting action
    * @param role
@@ -225,7 +226,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    */
   @Override
   public boolean allowsGroupRole(String group, String role, String action) {
-    Map allowMap = null;
+    Map<?, ?> allowMap = null;
     boolean allow = false;
 
     if (accessMap == null) {
@@ -233,7 +234,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
     }
 
     // Checked action
-    allowMap = (Map) accessMap.get(action);
+    allowMap = accessMap.get(action);
     allow =
       isInAllowMap(allowMap, GROUP_ROLE_MAP, group + role, ALL_GROUP_ROLES);
     if (allow == true) {
@@ -241,7 +242,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
     }
 
     // Checked all actions
-    allowMap = (Map) accessMap.get(ALL_ACTIONS);
+    allowMap = accessMap.get(ALL_ACTIONS);
     allow =
       isInAllowMap(allowMap, GROUP_ROLE_MAP, group + role, ALL_GROUP_ROLES);
 
@@ -251,7 +252,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Aututhorizes action for a named user
-   * 
+   *
    * @param userName
    *          requesting action
    * @param action
@@ -265,7 +266,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Aututhorizes action for a named user
-   * 
+   *
    * @param userName
    *          requesting action
    * @param action
@@ -276,7 +277,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    */
   @Override
   public boolean allowsUser(String userName, String action, String owner) {
-    Map allowMap = null;
+    Map<?, ?> allowMap = null;
     boolean allow = false;
 
     if (accessMap == null) {
@@ -284,14 +285,14 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
     }
     if ((owner != null) && (owner.equals(userName))) {
       // Checked action
-      allowMap = (Map) accessMap.get(action);
+      allowMap = accessMap.get(action);
       allow = isInAllowMap(allowMap, OWNER_MAP, null, null);
       if (allow == true) {
         return allow;
       }
 
       // Checked action
-      allowMap = (Map) accessMap.get(ALL_ACTIONS);
+      allowMap = accessMap.get(ALL_ACTIONS);
       allow = isInAllowMap(allowMap, OWNER_MAP, null, null);
       if (allow == true) {
         return allow;
@@ -299,14 +300,14 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
     }
 
     // Checked action
-    allowMap = (Map) accessMap.get(action);
+    allowMap = accessMap.get(action);
     allow = isInAllowMap(allowMap, USER_MAP, userName, ALL_USERS);
     if (allow == true) {
       return allow;
     }
 
     // Checked all actions
-    allowMap = (Map) accessMap.get(ALL_ACTIONS);
+    allowMap = accessMap.get(ALL_ACTIONS);
     allow = isInAllowMap(allowMap, USER_MAP, userName, ALL_USERS);
 
     // Not allowed
@@ -322,7 +323,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   public boolean allowsSpecificRole(String action, String role) {
     SecurityAccess access = getAccess(action);
     if (access.getAllAllows() != null) {
-      Iterator allAllows = access.getAllows().iterator();
+      Iterator<?> allAllows = access.getAllows().iterator();
       while (allAllows.hasNext()) {
         SecurityAllow allow = (SecurityAllow) allAllows.next();
         if (allow.getRole() != null && allow.getRole().equals(role)) {
@@ -341,7 +342,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   public boolean allowsSpecificGroup(String action, String group) {
     SecurityAccess access = getAccess(action);
     if (access.getAllAllows() != null) {
-      Iterator allAllows = access.getAllows().iterator();
+      Iterator<?> allAllows = access.getAllows().iterator();
       while (allAllows.hasNext()) {
         SecurityAllow allow = (SecurityAllow) allAllows.next();
         if (allow.getGroup() != null && allow.getGroup().equals(group)) {
@@ -362,7 +363,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
       String role) {
     SecurityAccess access = getAccess(action);
     if (access.getAllAllows() != null) {
-      Iterator allAllows = access.getAllows().iterator();
+      Iterator<?> allAllows = access.getAllows().iterator();
       while (allAllows.hasNext()) {
         SecurityAllow allow = (SecurityAllow) allAllows.next();
         if (allow.getGroup() != null
@@ -379,7 +380,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   /**
    * Checks whether a role is specifically allowed to access the request action
    * This method ignores the "*" action and is here to play a maintenance role.
-   * 
+   *
    * @param String
    *          action name of action to check
    * @param String
@@ -391,7 +392,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   public boolean allowsSpecificUser(String action, String user) {
     BaseSecurityAccess access = (BaseSecurityAccess) getAccess(action);
     if (access.getAllAllows() != null) {
-      Iterator allAllows = access.getAllows().iterator();
+      Iterator<?> allAllows = access.getAllows().iterator();
       while (allAllows.hasNext()) {
         BaseSecurityAllow allow = (BaseSecurityAllow) allAllows.next();
         if (allow.getUser() != null && allow.getUser().equals(user)) {
@@ -407,7 +408,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    * null if no specific access is defined for this action. The "*" does change
    * this, if an action is not specifically defined in the registry, null is
    * returned
-   * 
+   *
    * @param SecurityEntry
    *          entry SecurityEntry to check against
    * @param String
@@ -417,7 +418,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    */
   @Override
   public SecurityAccess getAccess(String action) {
-    Iterator itr = getAccesses().iterator();
+    Iterator<?> itr = getAccesses().iterator();
     while (itr.hasNext()) {
       BaseSecurityAccess access = (BaseSecurityAccess) itr.next();
       if (access.getAction().equals(action)) {
@@ -432,7 +433,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    * Grants access for a specific action to a specific role for this
    * SecurityEntry. This grants specific access ignores "*" action, if it
    * exists.
-   * 
+   *
    * @param String
    *          action The action we are granting access to.
    * @param String
@@ -445,9 +446,9 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   public boolean grantRoleAccess(String action, String role) {
     if (!allowsSpecificRole(action, role)) {
       SecurityAccess access = getAccess(action);
-      List allows = access.getAllows();
+      List<Object> allows = access.getAllows();
       if (allows == null) {
-        allows = new Vector();
+        allows = new Vector<Object>();
       }
 
       BaseSecurityAllow allow = new BaseSecurityAllow();
@@ -466,7 +467,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    * Grants access for a specific action to a specific group for this
    * SecurityEntry. This grants specific access ignores "*" action, if it
    * exists.
-   * 
+   *
    * @param String
    *          action The action we are granting access to.
    * @param String
@@ -479,9 +480,9 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   public boolean grantGroupAccess(String action, String group) {
     if (!allowsSpecificGroup(action, role)) {
       SecurityAccess access = getAccess(action);
-      List allows = access.getAllows();
+      List<Object> allows = access.getAllows();
       if (allows == null) {
-        allows = new Vector();
+        allows = new Vector<Object>();
       }
 
       BaseSecurityAllow allow = new BaseSecurityAllow();
@@ -500,7 +501,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    * Grants access for a specific action to a specific group fole for this
    * SecurityEntry. This grants specific access ignores "*" action, if it
    * exists.
-   * 
+   *
    * @param String
    *          action The action we are granting access to.
    * @param String
@@ -512,12 +513,13 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    *         access.
    */
   @Override
-  public boolean grantGroupRoleAccess(String action, String group, String role) {
+  public boolean grantGroupRoleAccess(String action, String group,
+      String role) {
     if (!allowsSpecificGroupRole(action, group, role)) {
       SecurityAccess access = getAccess(action);
-      List allows = access.getAllows();
+      List<Object> allows = access.getAllows();
       if (allows == null) {
-        allows = new Vector();
+        allows = new Vector<Object>();
       }
 
       BaseSecurityAllow allow = new BaseSecurityAllow();
@@ -537,7 +539,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    * Grants access for a specific action to a specific user for this
    * SecurityEntry. This grants specific access ignores "*" action, if it
    * exists.
-   * 
+   *
    * @param String
    *          action The action we are granting access to.
    * @param String
@@ -550,9 +552,9 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   public boolean grantUserAccess(String action, String user) {
     if (!allowsSpecificUser(action, user)) {
       SecurityAccess access = getAccess(action);
-      List allows = access.getAllows();
+      List<Object> allows = access.getAllows();
       if (allows == null) {
-        allows = new Vector();
+        allows = new Vector<Object>();
       }
 
       BaseSecurityAllow allow = new BaseSecurityAllow();
@@ -569,7 +571,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Removes a role's access to a specific action.
-   * 
+   *
    * @param action
    *          Action to remove access from.
    * @param role
@@ -580,7 +582,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   public boolean revokeRoleAccess(String action, String role) {
     if (allowsSpecificRole(action, role)) {
       SecurityAccess access = getAccess(action);
-      List allows = access.getAllows();
+      List<?> allows = access.getAllows();
       if (allows == null || allows.isEmpty()) {
         revokeAccess(action);
         return false;
@@ -603,7 +605,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Removes a group's access to a specific action.
-   * 
+   *
    * @param action
    *          Action to remove access from.
    * @param group
@@ -614,7 +616,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   public boolean revokeGroupAccess(String action, String group) {
     if (allowsSpecificGroup(action, group)) {
       SecurityAccess access = getAccess(action);
-      List allows = access.getAllows();
+      List<?> allows = access.getAllows();
       if (allows == null || allows.isEmpty()) {
         revokeAccess(action);
         return false;
@@ -637,7 +639,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Removes a group role's access to a specific action.
-   * 
+   *
    * @param action
    *          Action to remove access from.
    * @param group
@@ -647,10 +649,11 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    * @return boolean Whether or not the access existed and was removed.
    */
   @Override
-  public boolean revokeGroupRoleAccess(String action, String group, String role) {
+  public boolean revokeGroupRoleAccess(String action, String group,
+      String role) {
     if (allowsSpecificGroupRole(action, group, role)) {
       SecurityAccess access = getAccess(action);
-      List allows = access.getAllows();
+      List<?> allows = access.getAllows();
       if (allows == null || allows.isEmpty()) {
         revokeAccess(action);
         return false;
@@ -676,7 +679,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Removes a user's access to a specific action.
-   * 
+   *
    * @param action
    *          Action to remove access from.
    * @param role
@@ -687,7 +690,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   public boolean revokeUserAccess(String action, String user) {
     if (allowsSpecificUser(action, user)) {
       SecurityAccess access = getAccess(action);
-      List allows = access.getAllows();
+      List<?> allows = access.getAllows();
       if (allows == null || allows.isEmpty()) {
         revokeAccess(action);
         return false;
@@ -710,14 +713,15 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Removes a security access for the named action. This does not take into
-   * account the "*" action when the "*" is not the named action.
-   * 
+   * account the "*" action when the "*" is not the named action. <br>
+   * akr ロジック変更20190305
+   *
    * @param String
    *          access name of access to remove in its entirety
    */
   @Override
   public void revokeAccess(String action) {
-    List list = getAccesses();
+    List<?> list = getAccesses();
     for (int i = 0; i < list.size(); i++) {
       BaseSecurityAccess access = (BaseSecurityAccess) list.get(i);
       if (access.getAction().equals(action)) {
@@ -728,18 +732,18 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
   }
 
   private void buildAccessMap() {
-    Map actionMap = null;
+    Map<String, Object> actionMap = null;
     SecurityAccess accessElement = null;
 
     synchronized (accessMapSync) {
       if (accessMap == null) {
-        accessMap = new HashMap();
+        accessMap = new HashMap<String, Map<String, Object>>();
       }
 
       accessMap.clear();
     }
     // Build allow map
-    for (Iterator accessIterator = getAccesses().iterator(); accessIterator
+    for (Iterator<?> accessIterator = getAccesses().iterator(); accessIterator
       .hasNext();) {
       accessElement = (SecurityAccess) accessIterator.next();
 
@@ -750,33 +754,36 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
         action = ALL_ACTIONS;
       }
 
-      actionMap = (Map) accessMap.get(action);
-      if (actionMap == null) {
-        actionMap = new HashMap();
+      // actionMap = accessMap.get(action);
+      if (accessMap.get(action) == null) {
+        // if (actionMap == null) {
+        actionMap = new HashMap<String, Object>();
         accessMap.put(action, actionMap);
       }
-      addAllows(actionMap, accessElement);
+      addAllows(accessMap, accessElement);
     }
   }
 
   /**
    * Add access elements to the access map. The elements will be appened to the
-   * appropiate map.
-   * 
+   * appropiate map. <br>
+   * akr ロジック変更20190305
+   *
    * @param accessMap
    *          to receive accessElements
    * @param accessElement
    *          to copy to access map
    */
-  private void addAllows(Map accessMap, SecurityAccess accessElement) {
+  private void addAllows(Map<String, Map<String, Object>> accessMap,
+      SecurityAccess accessElement) {
     SecurityAllow allowElement = null;
     String role = null;
     String group = null;
-    Map ownerMap = null; // Map of owner allowed
-    Map roleMap = null; // Map of roles allowed
-    Map groupMap = null; // Map of groups allowed
-    Map groupRoleMap = null; // Map of group role allowed
-    Map userMap = null; // Map of users allowed
+    Map<String, Object> ownerMap = null; // Map of owner allowed
+    Map<String, Object> roleMap = null; // Map of roles allowed
+    Map<String, Object> groupMap = null; // Map of groups allowed
+    Map<String, Object> groupRoleMap = null; // Map of group role allowed
+    Map<String, Object> userMap = null; // Map of users allowed
     String userName = null;
 
     if (accessElement.getAllAllows() == null) {
@@ -784,8 +791,8 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
     }
 
     // Add allows to the action Map
-    for (Iterator allowIterator = accessElement.getAllAllows().iterator(); allowIterator
-      .hasNext();) {
+    for (Iterator<?> allowIterator =
+      accessElement.getAllAllows().iterator(); allowIterator.hasNext();) {
       allowElement = (SecurityAllow) allowIterator.next();
       role = null;
       userName = null;
@@ -793,9 +800,9 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
       // Add Owner
       if (allowElement.isOwner() == true) {
-        ownerMap = (Map) accessMap.get(OWNER_MAP);
+        ownerMap = accessMap.get(OWNER_MAP);
         if (ownerMap == null) {
-          ownerMap = new HashMap();
+          ownerMap = new HashMap<String, Object>();
           accessMap.put(OWNER_MAP, ownerMap);
         }
         ownerMap.put(null, null);
@@ -805,17 +812,17 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
       role = allowElement.getRole();
       if (role != null) {
         // Role map
-        roleMap = (Map) accessMap.get(ROLE_MAP);
+        roleMap = accessMap.get(ROLE_MAP);
         if (roleMap == null) {
-          roleMap = new HashMap();
+          roleMap = new HashMap<String, Object>();
           accessMap.put(ROLE_MAP, roleMap);
         }
         roleMap.put(role, null);
 
         // Group role map
-        groupRoleMap = (Map) accessMap.get(GROUP_ROLE_MAP);
+        groupRoleMap = accessMap.get(GROUP_ROLE_MAP);
         if (groupRoleMap == null) {
-          groupRoleMap = new HashMap();
+          groupRoleMap = new HashMap<String, Object>();
           accessMap.put(GROUP_ROLE_MAP, groupRoleMap);
         }
         if (group == null) {
@@ -829,17 +836,17 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
       group = allowElement.getGroup();
       if (group != null) {
         // Group map
-        groupMap = (Map) accessMap.get(GROUP_MAP);
+        groupMap = accessMap.get(GROUP_MAP);
         if (groupMap == null) {
-          groupMap = new HashMap();
+          groupMap = new HashMap<String, Object>();
           accessMap.put(GROUP_MAP, groupMap);
         }
         groupMap.put(group, null);
 
         // Group role map
-        groupRoleMap = (Map) accessMap.get(GROUP_ROLE_MAP);
+        groupRoleMap = accessMap.get(GROUP_ROLE_MAP);
         if (groupRoleMap == null) {
-          groupRoleMap = new HashMap();
+          groupRoleMap = new HashMap<String, Object>();
           accessMap.put(GROUP_ROLE_MAP, groupRoleMap);
         }
         if (role == null) {
@@ -852,9 +859,9 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
       // Add User
       userName = allowElement.getUser();
       if (userName != null) {
-        userMap = (Map) accessMap.get(USER_MAP);
+        userMap = accessMap.get(USER_MAP);
         if (userMap == null) {
-          userMap = new HashMap();
+          userMap = new HashMap<String, Object>();
           accessMap.put(USER_MAP, userMap);
         }
         userMap.put(userName, null);
@@ -864,7 +871,7 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
 
   /**
    * Search allow map of user/role or "all user/role"
-   * 
+   *
    * @param allowMap
    *          Map of allow-if
    * @param mapType
@@ -875,11 +882,11 @@ public class BaseSecurityEntry extends BaseRegistryEntry implements
    *          ALL_ROLE or ALL_USER or ALL_GROUP or ALL_GROUP_ROLE
    * @return <CODE>true</CODE> or <CODE>false</CODE>
    */
-  private boolean isInAllowMap(Map allowMap, String mapType, String mapKey,
-      String allKey) {
+  private boolean isInAllowMap(Map<?, ?> allowMap, String mapType,
+      String mapKey, String allKey) {
     boolean allow = false;
     if (allowMap != null) {
-      Map allowTypeMap = (Map) allowMap.get(mapType);
+      Map<?, ?> allowTypeMap = (Map<?, ?>) allowMap.get(mapType);
       if (allowTypeMap == null) {
         return allowMap.isEmpty(); // If action exist and no allows, then grant
                                    // permission

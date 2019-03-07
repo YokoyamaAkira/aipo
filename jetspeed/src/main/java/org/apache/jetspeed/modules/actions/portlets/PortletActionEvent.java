@@ -37,7 +37,7 @@ import org.apache.velocity.context.Context;
  * Provides form based action handling via the eventSubmit_do[action] pattern.
  * Works just like the mechanism described for the velocity portlet. Extends
  * this convienent functionality to all GenericMVCPortlets
- * 
+ *
  * @author tkuebler
  * @author <a href="mailto:weaver@apache.org">Scott T. Weaver</a>
  * @version $Id: PortletActionEvent.java,v 1.3.2.1 2003/02/24 18:45:42 tkuebler
@@ -54,7 +54,7 @@ public abstract class PortletActionEvent extends ActionEvent {
 
   /**
    * You need to implement this in your classes that extend this class.
-   * 
+   *
    * @param data
    *          A Turbine RunData object.
    * @exception Exception
@@ -66,7 +66,7 @@ public abstract class PortletActionEvent extends ActionEvent {
   /**
    * This overrides the default Action.perform() to execute the doEvent()
    * method. If that fails, then it will execute the doPerform() method instead.
-   * 
+   *
    * @param data
    *          A Turbine RunData object.
    * @exception Exception
@@ -84,7 +84,7 @@ public abstract class PortletActionEvent extends ActionEvent {
 
   /**
    * This method should be called to execute the event based system.
-   * 
+   *
    * @param data
    *          A Turbine RunData object.
    * @param context
@@ -134,14 +134,14 @@ public abstract class PortletActionEvent extends ActionEvent {
 
   /**
    * Convenience method for firing portlet events.
-   * 
+   *
    * @author <a href="mailto:weaver@apache.org">Scott T. Weaver</a>
    */
   protected boolean fireEvent(RunData data, Class<?> deltaClass,
       Object deltaValue, String theButton) {
     try {
       // The arguments to the method to find.
-      Class[] classes = new Class[2];
+      Class<?>[] classes = new Class[2];
       classes[0] = RunData.class;
       classes[1] = deltaClass;
 

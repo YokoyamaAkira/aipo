@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,32 +28,35 @@ import org.apache.jetspeed.om.registry.RegistryEntry;
 
 /**
  * Provides base functionality within a Registry.
- * 
+ *
  * @author <a href="mailto:burton@apache.org">Kevin A. Burton</a>
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  */
 public class BaseRegistry implements LocalRegistry {
   protected static final boolean DEBUG = false;
 
-  protected Map entries = new TreeMap();
+  protected Map<String, RegistryEntry> entries =
+    new TreeMap<String, RegistryEntry>();
 
   /** @see Registry#getEntryCount */
+  @Override
   public int getEntryCount() {
     return this.entries.size();
   }
 
   /** @see Registry#getEntry */
+  @Override
   public RegistryEntry getEntry(String name) throws InvalidEntryException {
 
     RegistryEntry entry = null;
 
     if (name != null) {
-      entry = (RegistryEntry) this.entries.get(name);
+      entry = this.entries.get(name);
     }
 
     if (entry == null) {
       throw new InvalidEntryException(
-          InvalidEntryException.ENTRY_DOES_NOT_EXIST + " " + name);
+        InvalidEntryException.ENTRY_DOES_NOT_EXIST + " " + name);
     }
 
     return entry;
@@ -62,12 +65,13 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * @see Registry#setEntry
    */
+  @Override
   public void setEntry(RegistryEntry entry) throws InvalidEntryException {
     synchronized (this) {
 
       if (this.hasEntry(entry.getName()) == false) {
         throw new InvalidEntryException(
-            InvalidEntryException.ENTRY_DOES_NOT_EXIST + " " + entry.getName());
+          InvalidEntryException.ENTRY_DOES_NOT_EXIST + " " + entry.getName());
       }
 
       this.entries.put(entry.getName(), entry);
@@ -77,12 +81,13 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * @see Registry#addEntry
    */
+  @Override
   public void addEntry(RegistryEntry entry) throws InvalidEntryException {
 
     synchronized (this) {
       if (this.hasEntry(entry.getName())) {
         throw new InvalidEntryException(
-            InvalidEntryException.ENTRY_ALREADY_PRESENT);
+          InvalidEntryException.ENTRY_ALREADY_PRESENT);
       }
 
       this.entries.put(entry.getName(), entry);
@@ -92,6 +97,7 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * @see Registry#hasEntry
    */
+  @Override
   public boolean hasEntry(String name) {
     return this.entries.containsKey(name);
   }
@@ -99,6 +105,7 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * @see Registry#removeEntry
    */
+  @Override
   public void removeEntry(String name) {
     synchronized (this) {
       this.entries.remove(name);
@@ -109,6 +116,7 @@ public class BaseRegistry implements LocalRegistry {
    * @see Registry#removeEntry
    */
 
+  @Override
   public void removeEntry(RegistryEntry entry) {
     synchronized (this) {
       this.entries.remove(entry.getName());
@@ -118,12 +126,13 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * @see Registry#getEntries
    */
-  public Enumeration getEntries() {
-    Vector v = null;
+  @Override
+  public Enumeration<RegistryEntry> getEntries() {
+    Vector<RegistryEntry> v = null;
 
     synchronized (this) {
       // this is ne
-      v = new Vector(this.entries.values());
+      v = new Vector<RegistryEntry>(this.entries.values());
     }
 
     return v.elements();
@@ -132,17 +141,19 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * @see Registry#listEntryNames
    */
-  public Iterator listEntryNames() {
+  @Override
+  public Iterator<String> listEntryNames() {
     return entries.keySet().iterator();
   }
 
   /**
    * @see Registry#toArray
    */
+  @Override
   public RegistryEntry[] toArray() {
 
-    Enumeration enu = getEntries();
-    Vector v = new Vector();
+    Enumeration<RegistryEntry> enu = getEntries();
+    Vector<RegistryEntry> v = new Vector<RegistryEntry>();
 
     while (enu.hasMoreElements()) {
       v.addElement(enu.nextElement());
@@ -157,9 +168,10 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * Creates a new RegistryEntry instance compatible with the current Registry
    * instance implementation
-   * 
+   *
    * @return the newly created RegistryEntry
    */
+  @Override
   public RegistryEntry createEntry() {
     return new BaseRegistryEntry();
   }
@@ -169,16 +181,17 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * This method is used to only set the entry in the local memory cache of the
    * registry without any coherency check with persistent storage
-   * 
+   *
    * @param entry
-   *            the RegistryEntry to store
+   *          the RegistryEntry to store
    */
+  @Override
   public void setLocalEntry(RegistryEntry entry) throws InvalidEntryException {
     synchronized (this) {
 
       if (this.hasEntry(entry.getName()) == false) {
         throw new InvalidEntryException(
-            InvalidEntryException.ENTRY_DOES_NOT_EXIST + " " + entry.getName());
+          InvalidEntryException.ENTRY_DOES_NOT_EXIST + " " + entry.getName());
       }
 
       this.entries.put(entry.getName(), entry);
@@ -188,16 +201,17 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * This method is used to only add the entry in the local memory cache of the
    * registry without any coherency check with persistent storage
-   * 
+   *
    * @param entry
-   *            the RegistryEntry to store
+   *          the RegistryEntry to store
    */
+  @Override
   public void addLocalEntry(RegistryEntry entry) throws InvalidEntryException {
 
     synchronized (this) {
       if (this.hasEntry(entry.getName())) {
         throw new InvalidEntryException(
-            InvalidEntryException.ENTRY_ALREADY_PRESENT);
+          InvalidEntryException.ENTRY_ALREADY_PRESENT);
       }
 
       this.entries.put(entry.getName(), entry);
@@ -207,10 +221,11 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * This method is used to only remove the entry from the local memory cache of
    * the registry without any coherency check with persistent storage
-   * 
+   *
    * @param name
-   *            the name of the RegistryEntry to remove
+   *          the name of the RegistryEntry to remove
    */
+  @Override
   public void removeLocalEntry(String name) {
     synchronized (this) {
       this.entries.remove(name);
@@ -220,10 +235,11 @@ public class BaseRegistry implements LocalRegistry {
   /**
    * This method is used to only remove the entry from the local memory cache of
    * the registry without any coherency check with persistent storage
-   * 
+   *
    * @param entry
-   *            the RegistryEntry to remove
+   *          the RegistryEntry to remove
    */
+  @Override
   public void removeLocalEntry(RegistryEntry entry) {
     synchronized (this) {
       this.entries.remove(entry.getName());

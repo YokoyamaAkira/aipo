@@ -65,7 +65,7 @@ import org.xml.sax.InputSource;
  * This registry aggregates multiple RegistryFragment to store the regsistry
  * entries
  * </p>
- * 
+ *
  * <p>
  * This service expects the following properties to be set for correct
  * operation:
@@ -86,7 +86,7 @@ import org.xml.sax.InputSource;
  * minutes)</dd>
  * </dl>
  * </p>
- * 
+ *
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @author <a href="mailto:sgala@apache.org">Santiago Gala</a>
  */
@@ -95,8 +95,8 @@ public class CastorRegistryService extends TurbineBaseService implements
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(CastorRegistryService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(CastorRegistryService.class.getName());
 
   public static final int DEFAULT_REFRESH = 300;
 
@@ -106,16 +106,20 @@ public class CastorRegistryService extends TurbineBaseService implements
     "${webapp}/WEB-INF/conf/mapping.xml";
 
   /** regsitry type keyed list of entries */
-  private final Hashtable registries = new Hashtable();
+  private final Hashtable<String, Registry> registries =
+    new Hashtable<String, Registry>();
 
   /** The Castor generated RegsitryFragment objects */
-  private final Hashtable fragments = new Hashtable();
+  private final Hashtable<String, RegistryFragment> fragments =
+    new Hashtable<String, RegistryFragment>();
 
   /** The list of default fragments stores for newly created objects */
-  private final Hashtable defaults = new Hashtable();
+  private final Hashtable<String, String> defaults =
+    new Hashtable<String, String>();
 
   /** Associates entries with their fragments name for quick lookup */
-  private final Hashtable entryIndex = new Hashtable();
+  private final Hashtable<String, String> entryIndex =
+    new Hashtable<String, String>();
 
   /** the Watcher object which monitors the regsitry directory */
   private RegistryWatcher watcher = null;
@@ -134,35 +138,38 @@ public class CastorRegistryService extends TurbineBaseService implements
 
   /**
    * Returns a Registry object for further manipulation
-   * 
+   *
    * @param regName
    *          the name of the registry to fetch
    * @return a Registry object if found by the manager or null
    */
+  @Override
   public Registry get(String regName) {
-    return (Registry) registries.get(regName);
+    return registries.get(regName);
   }
 
   /**
    * List all the registry currently available to this service
-   * 
+   *
    * @return an Enumeration of registry names.
    */
-  public Enumeration getNames() {
+  @Override
+  public Enumeration<String> getNames() {
     return registries.keys();
   }
 
   /**
    * Creates a new RegistryEntry instance compatible with the current Registry
    * instance implementation
-   * 
+   *
    * @param regName
    *          the name of the registry to use
    * @return the newly created RegistryEntry
    */
+  @Override
   public RegistryEntry createEntry(String regName) {
     RegistryEntry entry = null;
-    Registry registry = (Registry) registries.get(regName);
+    Registry registry = registries.get(regName);
 
     if (registry != null) {
       entry = registry.createEntry();
@@ -174,22 +181,25 @@ public class CastorRegistryService extends TurbineBaseService implements
   /**
    * Returns a RegistryEntry from the named Registry. This is a convenience
    * wrapper around {@link org.apache.jetspeed.om.registry.Registry#getEntry }
-   * 
+   *
    * @param regName
    *          the name of the registry
    * @param entryName
    *          the name of the entry to retrieve from the registry
    * @return a RegistryEntry object if the key is found or null
    */
+  @Override
   public RegistryEntry getEntry(String regName, String entryName) {
     try {
-      return ((Registry) registries.get(regName)).getEntry(entryName);
+      return registries.get(regName).getEntry(entryName);
     } catch (RegistryException e) {
       if (logger.isInfoEnabled()) {
-        logger.info("RegistryService: Failed to retrieve "
-          + entryName
-          + " from "
-          + regName);
+        logger
+          .info(
+            "RegistryService: Failed to retrieve "
+              + entryName
+              + " from "
+              + regName);
       }
     } catch (NullPointerException e) {
       logger
@@ -202,7 +212,7 @@ public class CastorRegistryService extends TurbineBaseService implements
   /**
    * Add a new RegistryEntry in the named Registry. This is a convenience
    * wrapper around {@link org.apache.jetspeed.om.registry.Registry#addEntry }
-   * 
+   *
    * @param regName
    *          the name of the registry
    * @param entry
@@ -211,6 +221,7 @@ public class CastorRegistryService extends TurbineBaseService implements
    *              a RegistryException if the manager can't add the provided
    *              entry
    */
+  @Override
   public void addEntry(String regName, RegistryEntry entry)
       throws RegistryException {
     if (entry == null) {
@@ -220,26 +231,25 @@ public class CastorRegistryService extends TurbineBaseService implements
     LocalRegistry registry = (LocalRegistry) registries.get(regName);
 
     if (registry != null) {
-      String fragmentName = (String) entryIndex.get(entry.getName());
+      String fragmentName = entryIndex.get(entry.getName());
 
       if (fragmentName == null) {
         // either the entry was deleted or it does not exist
         // in both cases, use the default fragment
-        fragmentName = (String) defaults.get(regName);
+        fragmentName = defaults.get(regName);
       }
 
-      RegistryFragment fragment =
-        (RegistryFragment) fragments.get(fragmentName);
+      RegistryFragment fragment = fragments.get(fragmentName);
 
       // Fragment can be (and sometimes is, but should not be) null
       if (fragment == null) {
         fragment = new RegistryFragment();
-        fragment.put(regName, new Vector());
+        fragment.put(regName, new Vector<Object>());
         fragments.put(fragmentName, fragment);
       } else {
-        Vector vectRegistry = (Vector) fragment.get(regName);
+        Vector<?> vectRegistry = (Vector<?>) fragment.get(regName);
         if (vectRegistry == null) {
-          fragment.put(regName, new Vector());
+          fragment.put(regName, new Vector<Object>());
         }
       }
 
@@ -262,13 +272,15 @@ public class CastorRegistryService extends TurbineBaseService implements
 
   /**
    * Deletes a RegistryEntry from the named Registry This is a convenience
-   * wrapper around {@link org.apache.jetspeed.om.registry.Registry#removeEntry }
-   * 
+   * wrapper around
+   * {@link org.apache.jetspeed.om.registry.Registry#removeEntry }
+   *
    * @param regName
    *          the name of the registry
    * @param entryName
    *          the name of the entry to remove
    */
+  @Override
   public void removeEntry(String regName, String entryName) {
     if (entryName == null) {
       return;
@@ -277,11 +289,10 @@ public class CastorRegistryService extends TurbineBaseService implements
     LocalRegistry registry = (LocalRegistry) registries.get(regName);
 
     if (registry != null) {
-      String fragmentName = (String) entryIndex.get(entryName);
+      String fragmentName = entryIndex.get(entryName);
 
       if (fragmentName != null) {
-        RegistryFragment fragment =
-          (RegistryFragment) fragments.get(fragmentName);
+        RegistryFragment fragment = fragments.get(fragmentName);
 
         synchronized (entryIndex) {
           fragment.removeEntry(regName, entryName);
@@ -315,7 +326,7 @@ public class CastorRegistryService extends TurbineBaseService implements
       ((TurbineServices) TurbineServices.getInstance())
         .getResources(RegistryService.SERVICE_NAME);
     String mapFile = null;
-    Vector names = new Vector();
+    Vector<String> names = new Vector<String>();
     int refreshRate = 0;
 
     // read the configuration keys
@@ -336,7 +347,7 @@ public class CastorRegistryService extends TurbineBaseService implements
     // with at least one fragment
     try {
       ResourceService defaults = serviceConf.getResources("default");
-      Iterator i = defaults.getKeys();
+      Iterator<?> i = defaults.getKeys();
       while (i.hasNext()) {
         String name = (String) i.next();
         String fragmentFileName = defaults.getString(name);
@@ -401,11 +412,11 @@ public class CastorRegistryService extends TurbineBaseService implements
     setInit(true);
 
     // load the registries
-    Enumeration en = names.elements();
+    Enumeration<String> en = names.elements();
 
     while (en.hasMoreElements()) {
-      String name = (String) en.nextElement();
-      Registry registry = (Registry) registries.get(name);
+      String name = en.nextElement();
+      Registry registry = registries.get(name);
 
       if (registry == null) {
         String registryClass = null;
@@ -416,9 +427,11 @@ public class CastorRegistryService extends TurbineBaseService implements
           registry = (Registry) Class.forName(registryClass).newInstance();
         } catch (Exception e) {
           if (logger.isWarnEnabled()) {
-            logger.warn("RegistryService: Class "
-              + registryClass
-              + " not found, reverting to default Registry");
+            logger
+              .warn(
+                "RegistryService: Class "
+                  + registryClass
+                  + " not found, reverting to default Registry");
           }
           registry = new BaseRegistry();
         }
@@ -436,8 +449,10 @@ public class CastorRegistryService extends TurbineBaseService implements
     }
 
     if (logger.isDebugEnabled()) {
-      logger.debug("RegistryService: early init()....end!, this.getInit()= "
-        + getInit());
+      logger
+        .debug(
+          "RegistryService: early init()....end!, this.getInit()= "
+            + getInit());
     }
 
   }
@@ -474,9 +489,9 @@ public class CastorRegistryService extends TurbineBaseService implements
   public void shutdown() {
     this.watcher.setDone();
 
-    Iterator i = fragments.keySet().iterator();
+    Iterator<String> i = fragments.keySet().iterator();
     while (i.hasNext()) {
-      saveFragment((String) i.next());
+      saveFragment(i.next());
     }
   }
 
@@ -486,11 +501,12 @@ public class CastorRegistryService extends TurbineBaseService implements
    * Refresh the state of the registry implementation. Should be called whenever
    * the underlying fragments are modified
    */
+  @Override
   public void refresh() {
     synchronized (watcher) {
-      Enumeration en = getNames();
+      Enumeration<String> en = getNames();
       while (en.hasMoreElements()) {
-        refresh((String) en.nextElement());
+        refresh(en.nextElement());
       }
     }
   }
@@ -498,16 +514,19 @@ public class CastorRegistryService extends TurbineBaseService implements
   /**
    * @return a Map of all fragments keyed by file names
    */
-  public Map getFragmentMap() {
-    return (Map) fragments.clone();
+  @SuppressWarnings("unchecked")
+  @Override
+  public Map<String, RegistryFragment> getFragmentMap() {
+    return (Map<String, RegistryFragment>) fragments.clone();
   }
 
   /**
    * Load and unmarshal a RegistryFragment from the file
-   * 
+   *
    * @param file
    *          the absolute file path storing this fragment
    */
+  @Override
   public void loadFragment(String file) {
     try {
       DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
@@ -532,7 +551,7 @@ public class CastorRegistryService extends TurbineBaseService implements
 
   /**
    * Read and unmarshal a fragment in memory
-   * 
+   *
    * @param name
    *          the name of this fragment
    * @param reader
@@ -540,6 +559,7 @@ public class CastorRegistryService extends TurbineBaseService implements
    * @param persistent
    *          whether this fragment should be persisted on disk in the registry
    */
+  @Override
   public void createFragment(String name, Reader reader, boolean persistent) {
     String file = null;
 
@@ -572,25 +592,28 @@ public class CastorRegistryService extends TurbineBaseService implements
 
   /**
    * Marshal and save a RegistryFragment to disk
-   * 
+   *
    * @param file
    *          the absolute file path storing this fragment
    */
+  @Override
   public void saveFragment(String file) {
     OutputStreamWriter writer = null;
     FileOutputStream fos = null;
-    RegistryFragment fragment = (RegistryFragment) fragments.get(file);
+    RegistryFragment fragment = fragments.get(file);
 
     if (fragment != null) {
       try {
         fos = new FileOutputStream(file);
         writer =
-          new OutputStreamWriter(fos, JetspeedResources.getString(
-            JetspeedResources.CONTENT_ENCODING_KEY,
-            "utf-8"));
-        format.setEncoding(JetspeedResources.getString(
-          JetspeedResources.CONTENT_ENCODING_KEY,
-          "utf-8"));
+          new OutputStreamWriter(
+            fos,
+            JetspeedResources
+              .getString(JetspeedResources.CONTENT_ENCODING_KEY, "utf-8"));
+        format
+          .setEncoding(
+            JetspeedResources
+              .getString(JetspeedResources.CONTENT_ENCODING_KEY, "utf-8"));
         Serializer serializer = new XMLSerializer(writer, format);
         Marshaller marshaller = new Marshaller(serializer.asDocumentHandler());
         marshaller.setMapping(this.mapping);
@@ -615,17 +638,18 @@ public class CastorRegistryService extends TurbineBaseService implements
 
   /**
    * Remove a fragment from storage
-   * 
+   *
    * @param file
    *          the absolute file path storing this fragment
    */
+  @Override
   public void removeFragment(String file) {
-    RegistryFragment fragment = (RegistryFragment) fragments.get(file);
+    RegistryFragment fragment = fragments.get(file);
 
     if (fragment != null) {
       synchronized (entryIndex) {
         // clear the entry index
-        Iterator i = entryIndex.keySet().iterator();
+        Iterator<String> i = entryIndex.keySet().iterator();
         while (i.hasNext()) {
           if (file.equals(entryIndex.get(i.next()))) {
             i.remove();
@@ -650,7 +674,7 @@ public class CastorRegistryService extends TurbineBaseService implements
   protected void updateFragment(String name, RegistryFragment fragment) {
     synchronized (entryIndex) {
       // remove the old keys
-      Iterator i = entryIndex.keySet().iterator();
+      Iterator<String> i = entryIndex.keySet().iterator();
       while (i.hasNext()) {
         if (name.equals(entryIndex.get(i.next()))) {
           i.remove();
@@ -662,10 +686,10 @@ public class CastorRegistryService extends TurbineBaseService implements
 
       // recreate the index entries (only this fragment)
 
-      Enumeration enu = fragment.keys();
+      Enumeration<?> enu = fragment.keys();
       while (enu.hasMoreElements()) {
         String strReg = (String) enu.nextElement();
-        Vector v = fragment.getEntries(strReg);
+        Vector<?> v = fragment.getEntries(strReg);
 
         for (int counter = 0; counter < v.size(); counter++) {
           RegistryEntry str = (RegistryEntry) v.elementAt(counter);
@@ -678,7 +702,7 @@ public class CastorRegistryService extends TurbineBaseService implements
   /**
    * Scan all the registry fragments for new entries relevant to this registry
    * and update its definition.
-   * 
+   *
    * @param regName
    *          the name of the Registry to refresh
    */
@@ -689,6 +713,7 @@ public class CastorRegistryService extends TurbineBaseService implements
     }
 
     int count = 0;
+    @SuppressWarnings("unused")
     int counDeleted = 0;
     LocalRegistry registry = (LocalRegistry) get(regName);
 
@@ -697,18 +722,18 @@ public class CastorRegistryService extends TurbineBaseService implements
       return;
     }
 
-    Vector toDelete = new Vector();
-    Iterator i = registry.listEntryNames();
+    Vector<String> toDelete = new Vector<String>();
+    Iterator<String> i = registry.listEntryNames();
 
     while (i.hasNext()) {
       toDelete.add(i.next());
     }
 
     // for each fragment...
-    Enumeration en = fragments.keys();
+    Enumeration<String> en = fragments.keys();
     while (en.hasMoreElements()) {
-      String location = (String) en.nextElement();
-      RegistryFragment fragment = (RegistryFragment) fragments.get(location);
+      String location = en.nextElement();
+      RegistryFragment fragment = fragments.get(location);
       int fragCount = 0;
 
       if (!fragment.hasChanged()) {
@@ -717,10 +742,11 @@ public class CastorRegistryService extends TurbineBaseService implements
         }
 
         // remove this fragment entries from the delete list
-        Vector entries = fragment.getEntries(regName);
+        Vector<String> entries = fragment.getEntries(regName);
         i = entries.iterator();
         while (i.hasNext()) {
-          toDelete.remove(((RegistryEntry) i.next()).getName());
+          toDelete.remove(i.next());
+          // toDelete.remove(((RegistryEntry) i.next()).getName());
         }
 
         continue;
@@ -728,12 +754,12 @@ public class CastorRegistryService extends TurbineBaseService implements
 
       // the fragment has some changes, iterate over its entries...
 
-      Vector entries = fragment.getEntries(regName);
+      Vector<String> entries = fragment.getEntries(regName);
 
       // ... if it has entries related to this regsistry,
       if (entries != null) {
         // for all these entries
-        Enumeration en2 = entries.elements();
+        Enumeration<?> en2 = entries.elements();
         while (en2.hasMoreElements()) {
           RegistryEntry entry = (RegistryEntry) en2.nextElement();
           // update or add the entry in the registry
@@ -741,17 +767,21 @@ public class CastorRegistryService extends TurbineBaseService implements
             if (registry.hasEntry(entry.getName())) {
               if (registry.getEntry(entry.getName()).equals(entry)) {
                 if (logger.isDebugEnabled()) {
-                  logger.debug("RegistryService: No changes to entry "
-                    + entry.getName());
+                  logger
+                    .debug(
+                      "RegistryService: No changes to entry "
+                        + entry.getName());
                 }
               } else {
                 if (logger.isDebugEnabled()) {
-                  logger.debug("RegistryService: Updating entry "
-                    + entry.getName()
-                    + " of class "
-                    + entry.getClass()
-                    + " to registry "
-                    + name);
+                  logger
+                    .debug(
+                      "RegistryService: Updating entry "
+                        + entry.getName()
+                        + " of class "
+                        + entry.getClass()
+                        + " to registry "
+                        + name);
                 }
 
                 registry.setLocalEntry(entry);
@@ -766,19 +796,24 @@ public class CastorRegistryService extends TurbineBaseService implements
               ++fragCount;
 
               if (logger.isDebugEnabled()) {
-                logger.debug("RegistryService: Adding entry "
-                  + entry.getName()
-                  + " of class "
-                  + entry.getClass()
-                  + " to registry "
-                  + name);
+                logger
+                  .debug(
+                    "RegistryService: Adding entry "
+                      + entry.getName()
+                      + " of class "
+                      + entry.getClass()
+                      + " to registry "
+                      + name);
               }
             }
           } catch (RegistryException e) {
-            logger.error("RegistryService: RegistryException while adding "
-              + entry.getName()
-              + "from "
-              + location, e);
+            logger
+              .error(
+                "RegistryService: RegistryException while adding "
+                  + entry.getName()
+                  + "from "
+                  + location,
+                e);
           }
 
           // remove this entry from the delete list
@@ -792,7 +827,7 @@ public class CastorRegistryService extends TurbineBaseService implements
     // now delete the entries not found in any fragment
     i = toDelete.iterator();
     while (i.hasNext()) {
-      String entryName = (String) i.next();
+      String entryName = i.next();
 
       if (logger.isDebugEnabled()) {
         logger.debug("RegistryService: removing entry " + entryName);
@@ -802,12 +837,14 @@ public class CastorRegistryService extends TurbineBaseService implements
     }
 
     if (logger.isDebugEnabled()) {
-      logger.debug("RegistryService: Merged "
-        + count
-        + " entries and deleted "
-        + toDelete.size()
-        + " in "
-        + name);
+      logger
+        .debug(
+          "RegistryService: Merged "
+            + count
+            + " entries and deleted "
+            + toDelete.size()
+            + " in "
+            + name);
     }
   }
 
@@ -819,6 +856,7 @@ public class CastorRegistryService extends TurbineBaseService implements
       this.extension = extension;
     }
 
+    @Override
     public boolean accept(File f) {
       return f.toString().endsWith(extension);
     }

@@ -33,13 +33,13 @@ import org.apache.jetspeed.services.logging.JetspeedLogger;
  * policy. The eviction policy will keep n items in the cache, and then start
  * evicting the items ordered-by least used first. The cache runs a thread to
  * check for both evictions and refreshes.
- * 
+ *
  * @author David S. Taylor <a href="mailto:taylor@apache.org">David Sean
  *         Taylor</a>
  * @version $Id: FileCache.java,v 1.5 2004/03/25 16:27:41 jford Exp $
  */
 
-public class FileCache implements java.util.Comparator {
+public class FileCache implements java.util.Comparator<Object> {
   protected long scanRate = 300; // every 5 minutes
 
   protected int maxSize = 100; // maximum of 100 items
@@ -54,12 +54,12 @@ public class FileCache implements java.util.Comparator {
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(FileCache.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(FileCache.class.getName());
 
   /**
    * Default constructor. Use default values for scanReate and maxSize
-   * 
+   *
    */
   public FileCache() {
     cache = new HashMap<String, FileCacheEntry>();
@@ -69,7 +69,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Set scanRate and maxSize
-   * 
+   *
    * @param scanRate
    *          how often in seconds to refresh and evict from the cache
    * @param maxSize
@@ -86,7 +86,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Set all parameters on the cache
-   * 
+   *
    * @param initialCapacity
    *          the initial size of the cache as passed to HashMap
    * @param loadFactor
@@ -108,7 +108,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Set the new refresh scan rate on managed files.
-   * 
+   *
    * @param scanRate
    *          the new scan rate in seconds
    */
@@ -118,7 +118,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Get the refresh scan rate
-   * 
+   *
    * @return the current refresh scan rate in seconds
    */
   public long getScanRate() {
@@ -127,7 +127,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Set the new maximum size of the cache
-   * 
+   *
    * @param maxSize
    *          the maximum size of the cache
    */
@@ -137,7 +137,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Get the maximum size of the cache
-   * 
+   *
    * @return the current maximum size of the cache
    */
   public int getMaxSize() {
@@ -146,7 +146,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Gets an entry from the cache given a key
-   * 
+   *
    * @param key
    *          the key to look up the entry by
    * @return the entry
@@ -157,7 +157,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Gets an entry from the cache given a key
-   * 
+   *
    * @param key
    *          the key to look up the entry by
    * @return the entry
@@ -172,7 +172,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Puts a file entry in the file cache
-   * 
+   *
    * @param file
    *          The file to be put in the cache
    * @param document
@@ -185,7 +185,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Puts a file entry in the file cache
-   * 
+   *
    * @param path
    *          the full path name of the file
    * @param document
@@ -199,7 +199,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Removes a file entry from the file cache
-   * 
+   *
    * @param key
    *          the full path name of the file
    * @return the entry removed
@@ -210,7 +210,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Add a File Cache Event Listener
-   * 
+   *
    * @param listener
    *          the event listener
    */
@@ -220,7 +220,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Start the file Scanner running at the current scan rate.
-   * 
+   *
    */
   public void startFileScanner() {
     try {
@@ -233,7 +233,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Stop the file Scanner
-   * 
+   *
    */
   public void stopFileScanner() {
     this.scanner.setStopping(true);
@@ -241,7 +241,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Evicts entries based on last accessed time stamp
-   * 
+   *
    */
   protected void evict() {
     synchronized (cache) {
@@ -269,8 +269,8 @@ public class FileCache implements java.util.Comparator {
           logger.error("Exception getting file path: ", e);
         }
         // notify that eviction will soon take place
-        for (Iterator<FileCacheEventListener> lit = this.listeners.iterator(); lit
-          .hasNext();) {
+        for (Iterator<FileCacheEventListener> lit =
+          this.listeners.iterator(); lit.hasNext();) {
           FileCacheEventListener listener = lit.next();
           listener.evict(entry);
         }
@@ -283,7 +283,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * Comparator function for sorting by last accessed during eviction
-   * 
+   *
    */
   @Override
   public int compare(Object o1, Object o2) {
@@ -300,7 +300,7 @@ public class FileCache implements java.util.Comparator {
   /**
    * inner class that runs as a thread to scan the cache for updates or
    * evictions
-   * 
+   *
    */
   protected class FileCacheScanner extends Thread {
     private boolean stopping = false;
@@ -311,7 +311,7 @@ public class FileCache implements java.util.Comparator {
 
     /**
      * Run the file scanner thread
-     * 
+     *
      */
     @Override
     public void run() {
@@ -360,7 +360,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * get an iterator over the cache values
-   * 
+   *
    * @return iterator over the cache values
    */
   public Iterator<FileCacheEntry> getIterator() {
@@ -371,7 +371,7 @@ public class FileCache implements java.util.Comparator {
 
   /**
    * get the size of the cache
-   * 
+   *
    * @return the size of the cache
    */
   public int getSize() {

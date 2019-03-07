@@ -36,7 +36,7 @@ import org.apache.jetspeed.services.resources.JetspeedResources;
 import org.apache.turbine.services.TurbineBaseService;
 
 /**
- * 
+ *
  * @author <a href="mailto:burton@apache.org">Kevin A. Burton</a>
  * @author <a href="mailto:sgala@hisitech.com">Santiago Gala</a>
  */
@@ -45,8 +45,9 @@ public class JetspeedDaemonFactoryService extends TurbineBaseService implements
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(JetspeedDaemonFactoryService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(JetspeedDaemonFactoryService.class.getName());
 
   // BEGIN define the keys for various/default Daemons
   public final static String FEEDDAEMON_KEY =
@@ -133,7 +134,7 @@ public class JetspeedDaemonFactoryService extends TurbineBaseService implements
    * <p>
    * Starts any daemons that need processing.
    * </p>
-   * 
+   *
    * <p>
    * This should be called right after init() so that any daemons that need to
    * be started will be. If you need to do any per-daemon initialization then do
@@ -161,12 +162,12 @@ public class JetspeedDaemonFactoryService extends TurbineBaseService implements
 
   /**
    * Starts a daemon entry
-   * 
+   *
    * @param entry
    */
   private void start(DaemonEntry entry) {
-    logger.info("DaemonFactory:  start(): starting daemon -> "
-      + entry.getName());
+    logger
+      .info("DaemonFactory:  start(): starting daemon -> " + entry.getName());
     DaemonThread dt = new DaemonThread(entry);
     this.threads.put(entry, dt);
     dt.start();
@@ -174,7 +175,7 @@ public class JetspeedDaemonFactoryService extends TurbineBaseService implements
 
   /**
    * Stop all daemon thread
-   * 
+   *
    * @param entry
    */
   public void stop() {
@@ -195,6 +196,7 @@ public class JetspeedDaemonFactoryService extends TurbineBaseService implements
       Iterator<Daemon> daemonsIter = daemonsValues.iterator();
       while (daemonsIter.hasNext()) {
         Object obj = daemonsIter.next();
+        @SuppressWarnings("unlikely-arg-type")
         Daemon daemon = this.daemons.get(obj.getClass());
         daemon.wait();
 
@@ -239,8 +241,8 @@ public class JetspeedDaemonFactoryService extends TurbineBaseService implements
       throw new DaemonException("daemon not found: " + e.getMessage());
     } catch (InstantiationException e) {
       logger.error("Exception", e);
-      throw new DaemonException("couldn't instantiate daemon: "
-        + e.getMessage());
+      throw new DaemonException(
+        "couldn't instantiate daemon: " + e.getMessage());
     } catch (IllegalAccessException e) {
       logger.error("Exception", e);
       throw new DaemonException(e.getMessage());
@@ -250,7 +252,7 @@ public class JetspeedDaemonFactoryService extends TurbineBaseService implements
 
   /**
    * Get a daemon with the given classname.
-   * 
+   *
    * @see #getDaemon(DaemonEntry entry )
    */
   @Override
@@ -365,7 +367,8 @@ public class JetspeedDaemonFactoryService extends TurbineBaseService implements
    * Given the name of a DaemonEntry... get it from the DaemonFactory
    */
   @Override
-  public DaemonEntry getDaemonEntry(String name) throws DaemonNotFoundException {
+  public DaemonEntry getDaemonEntry(String name)
+      throws DaemonNotFoundException {
 
     DaemonEntry[] entries = this.getDaemonEntries();
     for (int i = 0; i < entries.length; ++i) {

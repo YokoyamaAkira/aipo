@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <registry>
-    <portlet-entry name="Page" hidden="false" type="ref" parent="Velocity" application="false">
+    <portlet-entry name="Page" hidden="false" type="active" parent="Velocity" application="false">
         <security-ref parent="owner-view"/>
         <meta-info>
             <title>ページ設定</title>

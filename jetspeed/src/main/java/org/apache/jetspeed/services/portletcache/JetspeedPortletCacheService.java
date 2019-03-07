@@ -36,7 +36,7 @@ import org.apache.turbine.services.cache.RefreshableCachedObject;
  * This implementation of the PortletCache service is a simple adapter to the
  * Turbine GlobalCacheService
  * </p>
- * 
+ *
  * @author <a href="mailto:burton@apache.org">Kevin A. Burton</a>
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @author <a href="mailto:paulsp@apache.org">Paul Spencer</a>
@@ -48,18 +48,21 @@ public class JetspeedPortletCacheService extends TurbineBaseService implements
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(JetspeedPortletCacheService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(JetspeedPortletCacheService.class.getName());
 
-  private static int DefaultTimeToLiveMillis = (JetspeedResources.getInt(
-    TurbineServices.SERVICE_PREFIX
-      + PortletCacheService.SERVICE_NAME
-      + ".TimeToLive.default",
-    (30 * 60 * 1000))); // 30 minutes
+  private static int DefaultTimeToLiveMillis =
+    (JetspeedResources
+      .getInt(
+        TurbineServices.SERVICE_PREFIX
+          + PortletCacheService.SERVICE_NAME
+          + ".TimeToLive.default",
+        (30 * 60 * 1000))); // 30 minutes
 
   /**
    * Called during Turbine.init()
-   * 
+   *
    * @param config
    *          A ServletConfig.
    */
@@ -69,17 +72,19 @@ public class JetspeedPortletCacheService extends TurbineBaseService implements
       logger.info("JetspeedPortletCacheService early init()....starting!");
       if (DefaultTimeToLiveMillis < 0) {
         logger
-          .info("JetspeedPortletCacheService - By default refreshable objects will live for ever");
+          .info(
+            "JetspeedPortletCacheService - By default refreshable objects will live for ever");
       } else {
         logger
-          .info("JetspeedPortletCacheService - By default refreshable objects will be removed after "
-            + DefaultTimeToLiveMillis
-            + " Millis ( "
-            + (DefaultTimeToLiveMillis / (1000 * 60))
-            + " minutes "
-            + ((DefaultTimeToLiveMillis % (1000 * 60)) / 1000.00)
-            + " Seconds "
-            + ")");
+          .info(
+            "JetspeedPortletCacheService - By default refreshable objects will be removed after "
+              + DefaultTimeToLiveMillis
+              + " Millis ( "
+              + (DefaultTimeToLiveMillis / (1000 * 60))
+              + " minutes "
+              + ((DefaultTimeToLiveMillis % (1000 * 60)) / 1000.00)
+              + " Seconds "
+              + ")");
       }
       // no specific init required, relies on GlobalCacheService
       logger.info("JetspeedPortletCacheService early init()....finished!");
@@ -91,7 +96,7 @@ public class JetspeedPortletCacheService extends TurbineBaseService implements
 
   /**
    * Add a Cacheable object to the cache.
-   * 
+   *
    * @param item
    *          the object to store in the Cache
    */
@@ -106,12 +111,13 @@ public class JetspeedPortletCacheService extends TurbineBaseService implements
     }
 
     if (item.isCacheable()) {
-      CachedObject cachedObject = null;
+      CachedObject cachedObject = new CachedObject(0);// null;
       Long expirationMillis = item.getExpirationMillis();
       if (expirationMillis != null) {
         if (System.currentTimeMillis() < expirationMillis.longValue()) {
-          cachedObject.setExpires(expirationMillis.longValue()
-            - cachedObject.getCreated());
+          cachedObject
+            .setExpires(
+              expirationMillis.longValue() - cachedObject.getCreated());
         }
       }
       if (item instanceof Refreshable) {
@@ -120,15 +126,18 @@ public class JetspeedPortletCacheService extends TurbineBaseService implements
         if (item instanceof AbstractPortlet) {
           AbstractPortlet portlet = (AbstractPortlet) item;
           String tempString =
-            portlet.getPortletConfig().getInitParameter(
-              JetspeedResources.TIME_TO_LIVE);
+            portlet
+              .getPortletConfig()
+              .getInitParameter(JetspeedResources.TIME_TO_LIVE);
           if (tempString != null) {
             rco.setTTL(Integer.parseInt(tempString));
             if (logger.isWarnEnabled()) {
-              logger.warn("PortletCache: portlet "
-                + item.getHandle()
-                + " overrides default time to live with "
-                + tempString);
+              logger
+                .warn(
+                  "PortletCache: portlet "
+                    + item.getHandle()
+                    + " overrides default time to live with "
+                    + tempString);
             }
           } else {
             rco.setTTL(DefaultTimeToLiveMillis);
@@ -150,7 +159,7 @@ public class JetspeedPortletCacheService extends TurbineBaseService implements
 
   /**
    * Removes an object from the cache based on its handle
-   * 
+   *
    * @see PortletCacheService#removeCacheable
    * @param handle
    *          the identifier of the object we wish to retrieve
@@ -173,7 +182,7 @@ public class JetspeedPortletCacheService extends TurbineBaseService implements
 
   /**
    * Retrieves a Cacheable object from the cache.
-   * 
+   *
    * @param handle
    *          the identifier of the object we wish to retrieve
    * @return the cacehd object or null if not found

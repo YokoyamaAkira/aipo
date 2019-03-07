@@ -68,7 +68,7 @@ import org.xml.sax.InputSource;
  * are defined in a centralized configuration file. By using the forward
  * service, you use logical forward names in your java code.
  * </P>
- * 
+ *
  * @see org.apache.jetspeed.om.profile.Profile
  * @author <a href="mailto:david@bluesunrise.com">David Sean Taylor</a>
  * @version $Id: JetspeedForwardService.java,v 1.7 2004/02/23 03:51:09 jford Exp
@@ -80,8 +80,8 @@ public class JetspeedForwardService extends TurbineBaseService implements
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(JetspeedForwardService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(JetspeedForwardService.class.getName());
 
   // configuration keys
   protected final static String CONFIG_MAPPING = "mapping";
@@ -113,11 +113,12 @@ public class JetspeedForwardService extends TurbineBaseService implements
   /**
    * This is the early initialization method called by the Turbine
    * <code>Service</code> framework
-   * 
+   *
    * @param conf
    *          The <code>ServletConfig</code>
-   * @exception throws a <code>InitializationException</code> if the service
-   *            fails to initialize
+   * @exception throws
+   *              a <code>InitializationException</code> if the service fails to
+   *              initialize
    */
   @Override
   public synchronized void init(ServletConfig conf)
@@ -163,7 +164,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
   /**
    * Forward to a specific forward by name. All parameters are resolved
    * statically (via the forward definition)
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param forwardName
@@ -179,7 +180,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
    * Forward to a specific forward by name. Parameters are resolved both
    * statically and dynamically, with the dynamic parameter overriding the
    * static parameter definitions.
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param forwardName
@@ -198,7 +199,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
   /**
    * Internal implementation of Forward used by both forwards and portlet
    * forwards.
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param name
@@ -212,7 +213,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
    * @return DynamicURI the full link to the referenced page
    */
   private DynamicURI forwardInternal(RunData rundata, String forwardName,
-      Map<String, QueryParam> staticParams, Map<?, ?> dynamicParams) {
+      Map<?, ?> staticParams, Map<?, ?> dynamicParams) {
     DynamicURI duri = null;
     Forward forward = null;
 
@@ -279,17 +280,18 @@ public class JetspeedForwardService extends TurbineBaseService implements
         }
 
         duri =
-          link.getLink(
-            rootType,
-            rootValue,
-            pageName,
-            elementType,
-            elementValue,
-            actionName,
-            templateName, // not yet implemented
-            mediaType, // not yet implemented
-            language, // not yet implemented
-            country); // not yet implemented
+          link
+            .getLink(
+              rootType,
+              rootValue,
+              pageName,
+              elementType,
+              elementValue,
+              actionName,
+              templateName, // not yet implemented
+              mediaType, // not yet implemented
+              language, // not yet implemented
+              country); // not yet implemented
 
       } else {
         // forward not found, log it and return to home page
@@ -322,7 +324,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
    * Adds query parameters to the final URI. Parameters are merged from the base
    * forwards definition, with the overlay parameters being overlaid over th
    * base parameters
-   * 
+   *
    * @param duri
    *          The dynamic URI to have query parameters added to it
    * @param baseQueryParams
@@ -335,8 +337,8 @@ public class JetspeedForwardService extends TurbineBaseService implements
    *          PortletForward parameters and static Forwards query parameters
    * @return DynamicURI The new URI including query parameters
    */
-  private DynamicURI setQueryParams(DynamicURI duri, Map baseQueryParams,
-      Map<String, QueryParam> staticParams, Map<?, ?> dynamicParams) {
+  private DynamicURI setQueryParams(DynamicURI duri, Map<?, ?> baseQueryParams,
+      Map<?, ?> staticParams, Map<?, ?> dynamicParams) {
     if (baseQueryParams == null
       && staticParams == null
       && dynamicParams == null) {
@@ -347,13 +349,13 @@ public class JetspeedForwardService extends TurbineBaseService implements
 
     // First add the base params
     if (baseQueryParams != null) {
-      it = baseQueryParams.values().iterator();
+      it = (Iterator<QueryParam>) baseQueryParams.values().iterator();
       while (it.hasNext()) {
         QueryParam qparam = it.next();
-        if ((null == staticParams || !staticParams
-          .containsKey(qparam.getName()))
-          && (null == dynamicParams || !dynamicParams.containsKey(qparam
-            .getName()))) {
+        if ((null == staticParams
+          || !staticParams.containsKey(qparam.getName()))
+          && (null == dynamicParams
+            || !dynamicParams.containsKey(qparam.getName()))) {
           duri.addQueryData(qparam.getName(), qparam.getValue());
         }
       }
@@ -361,7 +363,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
 
     // Then add the static params
     if (staticParams != null) {
-      it = staticParams.values().iterator();
+      it = (Iterator<QueryParam>) staticParams.values().iterator();
       while (it.hasNext()) {
         QueryParam qparam = it.next();
         if (null == dynamicParams
@@ -389,10 +391,9 @@ public class JetspeedForwardService extends TurbineBaseService implements
     Iterator<?> it = map.values().iterator();
     while (it.hasNext()) {
       QueryParam qparam = (QueryParam) it.next();
-      System.out.println("name = "
-        + qparam.getName()
-        + ", value = "
-        + qparam.getValue());
+      System.out
+        .println(
+          "name = " + qparam.getName() + ", value = " + qparam.getValue());
     }
   }
 
@@ -400,7 +401,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
    * For the given portlet and given action, forward to the target defined in
    * the forward configuration for the portlet + action. All parameters are
    * resolved statically (via the forward definition)
-   * 
+   *
    * @param portlet
    *          The name of the portlet for which we are forwarding.
    * @param target
@@ -417,7 +418,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
    * the forward configuration for the portlet + action. Parameters are resolved
    * both statically and dynamically, with the dynamic parameter overriding the
    * static parameter definitions.
-   * 
+   *
    * @param portlet
    *          The name of the portlet for which we are forwarding.
    * @param target
@@ -452,27 +453,27 @@ public class JetspeedForwardService extends TurbineBaseService implements
 
   /**
    * Get a collection of all forwards in the system.
-   * 
+   *
    * @return Collection of all forward definitions
    */
   @Override
-  public Collection getForwards() {
+  public Collection<Forward> getForwards() {
     return this.forwards.values();
   }
 
   /**
    * Get a collection of all portlet forwards in the system.
-   * 
+   *
    * @return Collection of all portlet forward definitions
    */
   @Override
-  public Collection getPortletForwards() {
+  public Collection<PortletForward> getPortletForwards() {
     return this.portletForwards.values();
   }
 
   /**
    * Lookup a single forward definition by forward name
-   * 
+   *
    * @param forwardName
    *          The name of the Forward to find
    * @return Forward The found forward definition or null if not found
@@ -484,7 +485,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
 
   /**
    * Lookup a single portlet forward definition by portlet name + target name
-   * 
+   *
    * @param portlet
    *          The name of the portlet in the Portlet Forward to find
    * @param target
@@ -498,8 +499,8 @@ public class JetspeedForwardService extends TurbineBaseService implements
 
   /**
    * Load all forward configuration files from forwards directory.
-   * 
-   * 
+   *
+   *
    */
   protected void loadForwards() throws InitializationException {
     // create the serializer output format
@@ -556,7 +557,7 @@ public class JetspeedForwardService extends TurbineBaseService implements
 
   /**
    * Load and unmarshal a Forward Configuration from a file.
-   * 
+   *
    * @param file
    *          the absolute file path storing this fragment
    */
@@ -575,8 +576,10 @@ public class JetspeedForwardService extends TurbineBaseService implements
       while (it.hasNext()) {
         Forward forward = (Forward) it.next();
         if (this.forwards.containsKey(forward.getName())) {
-          logger.error("ForwardService: already contains Forward key: "
-            + forward.getName());
+          logger
+            .error(
+              "ForwardService: already contains Forward key: "
+                + forward.getName());
         } else {
           this.forwards.put(forward.getName(), forward);
         }
@@ -590,8 +593,9 @@ public class JetspeedForwardService extends TurbineBaseService implements
         PortletForward pf = (PortletForward) it.next();
         String key = makePortletForwardKey(pf.getPortlet(), pf.getTarget());
         if (this.portletForwards.containsKey(key)) {
-          logger.error("ForwardService: already contains portletForward key: "
-            + key);
+          logger
+            .error(
+              "ForwardService: already contains portletForward key: " + key);
         } else {
           this.portletForwards.put(key, pf);
           resyncParamMap((Map<String, QueryParam>) pf.getQueryParams());
@@ -621,4 +625,5 @@ public class JetspeedForwardService extends TurbineBaseService implements
     }
 
   }
+
 }

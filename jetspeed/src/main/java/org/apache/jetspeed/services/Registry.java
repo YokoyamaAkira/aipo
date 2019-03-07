@@ -28,7 +28,7 @@ import org.apache.turbine.services.TurbineServices;
  * This is a commodity static accessor class around the
  * <code>RegistryService</code>
  * </P>
- * 
+ *
  * @see org.apache.jetspeed.services.registry.RegistryService
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @version $Id: Registry.java,v 1.8 2004/02/23 04:00:57 jford Exp $
@@ -60,14 +60,15 @@ public class Registry {
    * Commodity method for getting a reference to the service singleton
    */
   private static RegistryService getService() {
-    return (RegistryService) TurbineServices.getInstance().getService(
-      RegistryService.SERVICE_NAME);
+    return (RegistryService) TurbineServices
+      .getInstance()
+      .getService(RegistryService.SERVICE_NAME);
   }
 
   /**
    * @see RegistryService#getNames
    */
-  public static Enumeration<?> getNames() {
+  public static Enumeration<String> getNames() {
     return getService().getNames();
   }
 

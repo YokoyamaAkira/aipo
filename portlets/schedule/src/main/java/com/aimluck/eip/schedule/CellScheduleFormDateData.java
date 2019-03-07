@@ -45,17 +45,18 @@ import com.aimluck.eip.util.ALEipUtils;
 
 /**
  * スケジュールのフォームデータを管理するクラスです。
- * 
+ *
  */
 public class CellScheduleFormDateData extends AbstractCellScheduleFormData {
 
   /** <code>logger</code> logger */
   @SuppressWarnings("unused")
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(CellScheduleFormDateData.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(CellScheduleFormDateData.class.getName());
 
   /**
-   * 
+   *
    * @param action
    * @param rundata
    * @param context
@@ -90,7 +91,6 @@ public class CellScheduleFormDateData extends AbstractCellScheduleFormData {
         // スケジュールの登録ユーザがすでにメンバーから抜けているかを検証する．
         int createUserId = record.getOwnerId().intValue();
         boolean inculudeCreateUser = false;
-        @SuppressWarnings("unchecked")
         List<EipTScheduleMap> scheduleMaps = record.getEipTScheduleMaps();
         for (EipTScheduleMap map : scheduleMaps) {
           if (createUserId == map.getUserId().intValue()
@@ -115,8 +115,8 @@ public class CellScheduleFormDateData extends AbstractCellScheduleFormData {
     SelectQuery<EipTScheduleMap> mapquery =
       Database.query(EipTScheduleMap.class);
     Expression mapexp =
-      ExpressionFactory.matchExp(EipTScheduleMap.SCHEDULE_ID_PROPERTY, record
-        .getScheduleId());
+      ExpressionFactory
+        .matchExp(EipTScheduleMap.SCHEDULE_ID_PROPERTY, record.getScheduleId());
     mapquery.setQualifier(mapexp);
     List<EipTScheduleMap> list = mapquery.fetchList();
     List<Integer> users = new ArrayList<Integer>();
@@ -136,23 +136,24 @@ public class CellScheduleFormDateData extends AbstractCellScheduleFormData {
       Expression exp =
         ExpressionFactory.inDbExp(TurbineUser.USER_ID_PK_COLUMN, users);
       query.setQualifier(exp);
-      form_data.getMemberList().addAll(
-        ALEipUtils.getUsersFromSelectQuery(query));
+      form_data
+        .getMemberList()
+        .addAll(ALEipUtils.getUsersFromSelectQuery(query));
     }
     if (facilityIds.size() > 0) {
       SelectQuery<EipMFacility> fquery = Database.query(EipMFacility.class);
       Expression fexp =
-        ExpressionFactory.inDbExp(
-          EipMFacility.FACILITY_ID_PK_COLUMN,
-          facilityIds);
+        ExpressionFactory
+          .inDbExp(EipMFacility.FACILITY_ID_PK_COLUMN, facilityIds);
       fquery.setQualifier(fexp);
-      form_data.getFacilityMemberList().addAll(
-        FacilitiesUtils.getFacilitiesFromSelectQuery(fquery));
+      form_data
+        .getFacilityMemberList()
+        .addAll(FacilitiesUtils.getFacilitiesFromSelectQuery(fquery));
     }
   }
 
   /**
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -166,7 +167,7 @@ public class CellScheduleFormDateData extends AbstractCellScheduleFormData {
   }
 
   /**
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -181,7 +182,7 @@ public class CellScheduleFormDateData extends AbstractCellScheduleFormData {
   }
 
   /**
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList

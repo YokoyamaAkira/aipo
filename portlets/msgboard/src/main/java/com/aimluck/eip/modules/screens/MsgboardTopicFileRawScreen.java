@@ -41,11 +41,12 @@ import com.aimluck.eip.util.ALEipUtils;
 public class MsgboardTopicFileRawScreen extends FileuploadRawScreen {
 
   /** logger */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(MsgboardTopicFileRawScreen.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(MsgboardTopicFileRawScreen.class.getName());
 
   /**
-   * 
+   *
    * @param rundata
    * @throws Exception
    */
@@ -72,10 +73,12 @@ public class MsgboardTopicFileRawScreen extends FileuploadRawScreen {
 
       doFileCheckView(rundata, msgboardfile);
 
-      super.setFilePath(MsgboardUtils.getSaveDirPath(
-        Database.getDomainName(),
-        msgboardfile.getOwnerId().intValue())
-        + msgboardfile.getFilePath());
+      super.setFilePath(
+        MsgboardUtils
+          .getSaveDirPath(
+            Database.getDomainName(),
+            msgboardfile.getOwnerId().intValue())
+          + msgboardfile.getFilePath());
       super.setFileName(msgboardfile.getFileName());
       super.doOutput(rundata);
     } catch (ALPermissionException e) {
@@ -85,8 +88,8 @@ public class MsgboardTopicFileRawScreen extends FileuploadRawScreen {
     }
   }
 
-  private boolean doFileCheckView(RunData rundata, EipTMsgboardFile msgboardfile)
-      throws ALPermissionException {
+  private boolean doFileCheckView(RunData rundata,
+      EipTMsgboardFile msgboardfile) throws ALPermissionException {
     int userid = ALEipUtils.getUserId(rundata);
     EipTMsgboardTopic msgboardtopic = msgboardfile.getEipTMsgboardTopic();
     EipTMsgboardCategory msgboardcategory =
@@ -95,7 +98,6 @@ public class MsgboardTopicFileRawScreen extends FileuploadRawScreen {
     if ("T".equals(msgboardcategory.getPublicFlag())) {
       return true;
     } else {
-      @SuppressWarnings("unchecked")
       List<EipTMsgboardCategoryMap> categoryMap =
         msgboardcategory.getEipTMsgboardCategoryMaps();
       for (EipTMsgboardCategoryMap map : categoryMap) {

@@ -79,13 +79,13 @@ import com.aimluck.eip.util.ALEipUtils;
 
 /**
  * ユーザーを管理するクラスです。 <br />
- * 
+ *
  */
 public class ALUserManagement extends TurbineBaseService implements
     UserManagement, CredentialsManagement {
 
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ALUserManagement.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(ALUserManagement.class.getName());
 
   private final static String CONFIG_SECURE_PASSWORDS_KEY = "secure.passwords";
 
@@ -106,9 +106,8 @@ public class ALUserManagement extends TurbineBaseService implements
 
   private final static String[] DEFAULT_CONFIG_NEWUSER_ROLES = { "user" };
 
-  private final static String[] DEFAULT_CONFIG_NEW_ADMINUSER_ROLES = {
-    "user",
-    "admin" };
+  private final static String[] DEFAULT_CONFIG_NEW_ADMINUSER_ROLES =
+    { "user", "admin" };
 
   String roles[] = null;
 
@@ -116,7 +115,8 @@ public class ALUserManagement extends TurbineBaseService implements
 
   private JetspeedRunDataService runDataService = null;
 
-  protected JetspeedUser row2UserObject(TurbineUser tuser) throws UserException {
+  protected JetspeedUser row2UserObject(TurbineUser tuser)
+      throws UserException {
     try {
       JetspeedUser user = JetspeedUserFactory.getInstance(false);
       ALBaseUser baseuser = (ALBaseUser) user;
@@ -134,12 +134,14 @@ public class ALUserManagement extends TurbineBaseService implements
       baseuser.setDisabled(tuser.getDisabled());
       // baseuser.setObjectdata(null);
       baseuser.setPasswordChanged(tuser.getPasswordChanged());
-      baseuser.setCompanyId((tuser.getCompanyId() != null) ? tuser
-        .getCompanyId()
-        .intValue() : 0);
-      baseuser.setPositionId((tuser.getPositionId() != null) ? tuser
-        .getPositionId()
-        .intValue() : 0);
+      baseuser
+        .setCompanyId(
+          (tuser.getCompanyId() != null) ? tuser.getCompanyId().intValue() : 0);
+      baseuser
+        .setPositionId(
+          (tuser.getPositionId() != null)
+            ? tuser.getPositionId().intValue()
+            : 0);
       baseuser.setInTelephone(tuser.getInTelephone());
       baseuser.setOutTelephone(tuser.getOutTelephone());
       baseuser.setCellularPhone(tuser.getCellularPhone());
@@ -149,12 +151,16 @@ public class ALUserManagement extends TurbineBaseService implements
       baseuser.setFirstNameKana(tuser.getFirstNameKana());
       baseuser.setPhoto(tuser.getPhoto());
       baseuser.setPhotoSmartphone(tuser.getPhotoSmartphone());
-      baseuser.setCreatedUserId((tuser.getCreatedUserId() != null) ? tuser
-        .getCreatedUserId()
-        .intValue() : 0);
-      baseuser.setUpdatedUserId((tuser.getUpdatedUserId() != null) ? tuser
-        .getUpdatedUserId()
-        .intValue() : 0);
+      baseuser
+        .setCreatedUserId(
+          (tuser.getCreatedUserId() != null)
+            ? tuser.getCreatedUserId().intValue()
+            : 0);
+      baseuser
+        .setUpdatedUserId(
+          (tuser.getUpdatedUserId() != null)
+            ? tuser.getUpdatedUserId().intValue()
+            : 0);
       baseuser.setPhotoModified(tuser.getPhotoModified());
       baseuser.setPhotoModifiedSmartphone(tuser.getPhotoModifiedSmartphone());
       baseuser.setHasPhoto("T".equals(tuser.getHasPhoto()));
@@ -179,8 +185,9 @@ public class ALUserManagement extends TurbineBaseService implements
       } else if (principal instanceof UserIdPrincipal) {
         user = ALEipUtils.getTurbineUser(Integer.valueOf(principal.getName()));
       } else {
-        throw new UserException("Invalid Principal Type in getUser: "
-          + principal.getClass().getName());
+        throw new UserException(
+          "Invalid Principal Type in getUser: "
+            + principal.getClass().getName());
       }
     } catch (IllegalStateException e) {
       // session Timeout Errorによるerrorはログに残さない。
@@ -260,9 +267,8 @@ public class ALUserManagement extends TurbineBaseService implements
   @Override
   public void saveUser(JetspeedUser user) throws JetspeedSecurityException {
     if (!accountExists(user, true)) {
-      throw new UnknownUserException("Cannot save user '"
-        + user.getUserName()
-        + "', User doesn't exist");
+      throw new UnknownUserException(
+        "Cannot save user '" + user.getUserName() + "', User doesn't exist");
     }
 
     try {
@@ -272,9 +278,8 @@ public class ALUserManagement extends TurbineBaseService implements
       TurbineUser tuser =
         ALEipUtils.getTurbineUser(Integer.valueOf(user.getUserId()));
       if (tuser == null) {
-        throw new UnknownUserException("Cannot save user '"
-          + user.getUserName()
-          + "', User doesn't exist");
+        throw new UnknownUserException(
+          "Cannot save user '" + user.getUserName() + "', User doesn't exist");
       }
       tuser.setLoginName(baseuser.getUserName());
       tuser.setPasswordValue(baseuser.getPassword());
@@ -334,9 +339,8 @@ public class ALUserManagement extends TurbineBaseService implements
   @Override
   public void addUser(JetspeedUser user) throws JetspeedSecurityException {
     if (accountExists(user)) {
-      throw new NotUniqueUserException("The account '"
-        + user.getUserName()
-        + "' already exists");
+      throw new NotUniqueUserException(
+        "The account '" + user.getUserName() + "' already exists");
     }
 
     boolean hasAdminCredential = (Boolean) user.getPerm("isAdmin", false);
@@ -433,7 +437,7 @@ public class ALUserManagement extends TurbineBaseService implements
 
   /**
    * 指定したユーザーにデフォルトのPSMLを設定します。
-   * 
+   *
    * @param user
    * @throws JetspeedSecurityException
    */
@@ -465,7 +469,7 @@ public class ALUserManagement extends TurbineBaseService implements
 
   /**
    * ユーザーのロールを承認します
-   * 
+   *
    * @param user
    * @param hasAdminCredential
    */
@@ -479,21 +483,25 @@ public class ALUserManagement extends TurbineBaseService implements
 
     for (int i = 0; i < _roles.length; i++) {
       try {
-        JetspeedSecurity.grantRole(user.getUserName(), JetspeedSecurity
-          .getRole(_roles[i])
-          .getName());
+        JetspeedSecurity
+          .grantRole(
+            user.getUserName(),
+            JetspeedSecurity.getRole(_roles[i]).getName());
       } catch (Exception e) {
-        logger.error("Could not grant role: "
-          + _roles[i]
-          + " to user "
-          + user.getUserName(), e);
+        logger
+          .error(
+            "Could not grant role: "
+              + _roles[i]
+              + " to user "
+              + user.getUserName(),
+            e);
       }
     }
   }
 
   /**
    * 指定したユーザのPSMLにシステム管理のページを追加します。
-   * 
+   *
    * @param user
    * @throws Exception
    */
@@ -503,7 +511,7 @@ public class ALUserManagement extends TurbineBaseService implements
 
   /**
    * 指定したユーザのPSMLからシステム管理のページを取り除きます。
-   * 
+   *
    * @param user
    * @throws Exception
    */
@@ -531,11 +539,12 @@ public class ALUserManagement extends TurbineBaseService implements
 
   /**
    * 指定したユーザに管理者権限を付与します。
-   * 
+   *
    * @param tuser
    * @throws JetspeedSecurityException
    */
-  private void setAdminRole(TurbineUser tuser) throws JetspeedSecurityException {
+  private void setAdminRole(TurbineUser tuser)
+      throws JetspeedSecurityException {
     Role adminrole = JetspeedSecurity.getRole("admin");
     Group group = JetspeedSecurity.getGroup("LoginUser");
     // 新規オブジェクトモデル
@@ -548,11 +557,10 @@ public class ALUserManagement extends TurbineBaseService implements
 
   /**
    * 指定したユーザの管理者権限を取り除きます。
-   * 
+   *
    * @param tuser
    * @throws JetspeedSecurityException
    */
-  @SuppressWarnings("unchecked")
   private void removeAdminRole(TurbineUser tuser)
       throws JetspeedSecurityException {
     String admin_role_id = JetspeedSecurity.getRole("admin").getId();
@@ -571,9 +579,8 @@ public class ALUserManagement extends TurbineBaseService implements
   @Override
   public void removeUser(Principal principal) throws JetspeedSecurityException {
     if (systemUsers.contains(principal.getName())) {
-      throw new UserException("["
-        + principal.getName()
-        + "] is a system user and cannot be removed");
+      throw new UserException(
+        "[" + principal.getName() + "] is a system user and cannot be removed");
     }
 
     JetspeedUser user = getUser(principal);
@@ -582,9 +589,10 @@ public class ALUserManagement extends TurbineBaseService implements
         ALEipUtils.getTurbineUser(Integer.valueOf(user.getUserId()));
 
       if (tuser == null) {
-        throw new UserException("["
-          + principal.getName()
-          + "] is a system user and cannot be removed");
+        throw new UserException(
+          "["
+            + principal.getName()
+            + "] is a system user and cannot be removed");
       }
 
       Database.delete(tuser);
@@ -610,12 +618,12 @@ public class ALUserManagement extends TurbineBaseService implements
 
     String encrypted = JetspeedSecurity.encryptPassword(oldPassword);
     if (!accountExists(user)) {
-      throw new UnknownUserException(Localization
-        .getString("UPDATEACCOUNT_NOUSER"));
+      throw new UnknownUserException(
+        Localization.getString("UPDATEACCOUNT_NOUSER"));
     }
     if (!user.getPassword().equals(encrypted)) {
-      throw new UserException(Localization
-        .getString("UPDATEACCOUNT_BADOLDPASSWORD"));
+      throw new UserException(
+        Localization.getString("UPDATEACCOUNT_BADOLDPASSWORD"));
     }
     user.setPassword(JetspeedSecurity.encryptPassword(newPassword));
 
@@ -631,9 +639,8 @@ public class ALUserManagement extends TurbineBaseService implements
   public void forcePassword(JetspeedUser user, String password)
       throws JetspeedSecurityException {
     if (!accountExists(user)) {
-      throw new UnknownUserException("The account '"
-        + user.getUserName()
-        + "' does not exist");
+      throw new UnknownUserException(
+        "The account '" + user.getUserName() + "' does not exist");
     }
     user.setPassword(JetspeedSecurity.encryptPassword(password));
     saveUser(user);
@@ -709,9 +716,8 @@ public class ALUserManagement extends TurbineBaseService implements
     securePasswords =
       serviceConf.getBoolean(CONFIG_SECURE_PASSWORDS_KEY, securePasswords);
     passwordsAlgorithm =
-      serviceConf.getString(
-        CONFIG_SECURE_PASSWORDS_ALGORITHM,
-        passwordsAlgorithm);
+      serviceConf
+        .getString(CONFIG_SECURE_PASSWORDS_ALGORITHM, passwordsAlgorithm);
     systemUsers =
       serviceConf.getVector(CONFIG_SYSTEM_USERS, new Vector<Object>());
 
@@ -730,14 +736,15 @@ public class ALUserManagement extends TurbineBaseService implements
     }
 
     this.runDataService =
-      (JetspeedRunDataService) TurbineServices.getInstance().getService(
-        RunDataService.SERVICE_NAME);
+      (JetspeedRunDataService) TurbineServices
+        .getInstance()
+        .getService(RunDataService.SERVICE_NAME);
 
     setInit(true);
   }
 
   /**
-   * 
+   *
    * @param user
    * @return
    * @throws UserException

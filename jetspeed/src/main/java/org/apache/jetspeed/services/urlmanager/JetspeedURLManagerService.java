@@ -45,7 +45,7 @@ import org.apache.turbine.services.TurbineBaseService;
  * Example: (Set in <code>JetspeedResources.properties</code>)<br>
  * <code>services.URLManager.proxy.http.host=myproxy.mydomain</code><br>
  * <code>services.URLManager.proxy.http.port=81</code><br>
- * 
+ *
  * @see URLManagerService
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @author <a href="mailto:sgala@hisitech.com">Santiago Gala</a>
@@ -57,8 +57,9 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(JetspeedURLManagerService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(JetspeedURLManagerService.class.getName());
 
   /**
    * Map used to store all URL Information.
@@ -93,7 +94,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
 
   /**
    * Called during Turbine.init()
-   * 
+   *
    * @param config
    *          A ServletConfig.
    */
@@ -130,9 +131,8 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
       }
 
       path =
-        JetspeedResources.getString("services."
-          + URLManagerService.SERVICE_NAME
-          + ".url");
+        JetspeedResources
+          .getString("services." + URLManagerService.SERVICE_NAME + ".url");
 
       if (path == null) {
         String tempdir = new String("WEB-INF/conf/datasources.properties");
@@ -149,13 +149,15 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
               + ps
               + "datasources.properties";
           logger
-            .debug("URLMangler: will create file in servlet temp directory "
-              + tempdir);
+            .debug(
+              "URLMangler: will create file in servlet temp directory "
+                + tempdir);
         } catch (Exception e) {
           logger
-            .debug("URLMangler: problems creating file in servlet temp directory "
-              + " falling back to WEB-INF/conf : "
-              + e);
+            .debug(
+              "URLMangler: problems creating file in servlet temp directory "
+                + " falling back to WEB-INF/conf : "
+                + e);
         }
         path = tempdir;
       } else {
@@ -185,7 +187,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
   /**
    * Registers a new URL record. If the url is already registered in the system,
    * doesn't modify the current record.
-   * 
+   *
    * @param url
    *          the url to register
    */
@@ -202,7 +204,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
   /**
    * Registers a new URL record. If the url is already registered in the system,
    * updates the status of this URL info record
-   * 
+   *
    * @param url
    *          the url to register
    * @param status
@@ -223,7 +225,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
   /**
    * Registers a new URL record. If the url is already registered in the system,
    * updates both the status and the message of this URL info record
-   * 
+   *
    * @param url
    *          the url to register
    * @param status
@@ -247,7 +249,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
   /**
    * Register or replace an URL record. All records are keyed to the imutable
    * URL of URLInfo.
-   * 
+   *
    * @param info
    *          the info record to store
    */
@@ -264,7 +266,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
 
   /**
    * Unregister an URL from the repository
-   * 
+   *
    * @param url
    *          the url to remove
    */
@@ -279,7 +281,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
 
   /**
    * Get the information record stored in the database about an URL.
-   * 
+   *
    * @param url
    *          the url whose record is sought
    * @return the description record found in the repository or null.
@@ -299,7 +301,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
 
   /**
    * Test whether the URL is currently believed to be OK by this repository.
-   * 
+   *
    * @param url
    *          the url to be tested
    * @return false is the url is known by this repository and has a status
@@ -319,7 +321,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
 
   /**
    * List of the current known URLs in the repository
-   * 
+   *
    * @return a List of URL strings known to this repository
    */
   @Override
@@ -332,7 +334,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
   /**
    * List of the current known URLs in the repository which have the given
    * status.
-   * 
+   *
    * @param status
    *          the status to be retrieved. May be
    *          {@link URLManagerService#STATUS_ANY} to indicate any status
@@ -345,6 +347,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
     synchronized (urls) {
       Iterator<?> i = urls.entrySet().iterator();
       while (i.hasNext()) {
+        @SuppressWarnings("rawtypes")
         Map.Entry entry = (Map.Entry) i.next();
         URLInfo info = (URLInfo) entry.getValue();
         if ((info.getStatus() & status) != 0) {
@@ -369,10 +372,10 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
     try {
       /*-
         config = new Configuration( path );
-
+      
         int count = 1;
         String url = null;
-
+      
         while ( ( url = ( config
                           .getString("entry."+count+".url") ) ) != null ) {
             //Intern the url to ensure we can use "==" to compare
@@ -383,7 +386,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
                 store.put( url, new URLInfo( url, status ) );
             count++;
         }
-
+      
         logger.info( "URLManager loaded " + count + " urls" );
        */
     } catch (Exception e) {
@@ -438,7 +441,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
 
   /**
    * Return the port of a proxy
-   * 
+   *
    * @param protocol
    *          The protocol that the proxy supports, e.g. 'http'
    * @return The port number (1-65535), or -1 if no port was specified (= use
@@ -458,7 +461,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
 
   /**
    * Return a proxy's hostname
-   * 
+   *
    * @param protocol
    *          The protocol that the proxy supports, e.g. 'http'
    * @return The hostname of the proxy, or <code>null</code> if no proxy is
@@ -479,7 +482,7 @@ public class JetspeedURLManagerService extends TurbineBaseService implements
    * <p>
    * We assume that commas are unescaped.
    * </p>
-   * 
+   *
    * @param sink
    *          a StringBuffer to write output
    * @param element

@@ -1,12 +1,12 @@
 /*
  * Copyright 2000-2001,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,384 +28,334 @@ import org.apache.jetspeed.services.logging.JetspeedLogFactoryService;
 import org.apache.jetspeed.services.logging.JetspeedLogger;
 
 /**
- * Monitors a Registry directory and notifies the associated Registry
- * of file updates.
+ * Monitors a Registry directory and notifies the associated Registry of file
+ * updates.
  *
  * @author <a href="mailto:raphael@apache.org">Rapha Luta</a>
  * @version $Id: RegistryWatcher.java,v 1.10 2004/02/23 03:31:50 jford Exp $
  */
-public class RegistryWatcher extends Thread
-{
-    /**
-     * Static initialization of the logger for this class
-     */    
-    private static final JetspeedLogger logger = JetspeedLogFactoryService.getLogger(RegistryWatcher.class.getName());
-    
-    /** Minimum scan rate for evaluating file refresh */
-    public static final int SCAN_RATE = 10;
+public class RegistryWatcher extends Thread {
+  /**
+   * Static initialization of the logger for this class
+   */
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(RegistryWatcher.class.getName());
 
-    /**
-    The files monitored by this watcher
-    */
-    private Hashtable files = new Hashtable();
+  /** Minimum scan rate for evaluating file refresh */
+  public static final int SCAN_RATE = 10;
 
-    /**
-    the refresh rate, in milliseconds, to use for monitoring this file
-    */
-    private long refreshRate = 0;
+  /**
+   * The files monitored by this watcher
+   */
+  private final Hashtable<File, Long> files = new Hashtable<File, Long>();
 
-    /**
-    The object that relies on this RegsitryWatcher
-    */
-    private FileRegistry subscriber = null;
+  /**
+   * the refresh rate, in milliseconds, to use for monitoring this file
+   */
+  private long refreshRate = 0;
 
-    /**
-    The filter to use for filtering registry files
-    */
-    private FileFilter filter = null;
+  /**
+   * The object that relies on this RegsitryWatcher
+   */
+  private FileRegistry subscriber = null;
 
-    /**
-     * This object marks that we are done
-    */
-    private boolean done = false;
+  /**
+   * The filter to use for filtering registry files
+   */
+  private FileFilter filter = null;
 
-    /**
-     * Creates a default RegistryWatcher
-     */
-    public RegistryWatcher()
-    {
-        setDaemon(true);
-        setPriority(Thread.MIN_PRIORITY);
-    }
+  /**
+   * This object marks that we are done
+   */
+  private boolean done = false;
 
-    /** Modifies the subscriber to this Watcher
-     *
-     * @param registry the new registry subscriber
-     */
-    public void setSubscriber(FileRegistry registry)
-    {
-        synchronized (this)
-        {
-            if (subscriber!=null)
-            {
-                Enumeration en = files.keys();
-                while(en.hasMoreElements())
-                {
-                    try
-                    {
-                        subscriber.removeFragment(((File)en.nextElement()).getCanonicalPath());
-                    }
-                    catch (Exception e)
-                    {
-                        logger.error("RegistryWatcher: Can't remove fragment", e);
-                    }
-                }
-            }
+  /**
+   * Creates a default RegistryWatcher
+   */
+  public RegistryWatcher() {
+    setDaemon(true);
+    setPriority(Thread.MIN_PRIORITY);
+  }
 
-            this.subscriber = registry;
-
-            if (subscriber!=null)
-            {
-                Enumeration en = files.keys();
-                while(en.hasMoreElements())
-                {
-                    try
-                    {
-                        subscriber.loadFragment(((File)en.nextElement()).getCanonicalPath());
-                    }
-                    catch (Exception e)
-                    {
-                        logger.error("RegistryWatcher: Can't load fragment", e);
-                    }
-                }
-            }
+  /**
+   * Modifies the subscriber to this Watcher
+   *
+   * @param registry
+   *          the new registry subscriber
+   */
+  public void setSubscriber(FileRegistry registry) {
+    synchronized (this) {
+      if (subscriber != null) {
+        Enumeration<File> en = files.keys();
+        while (en.hasMoreElements()) {
+          try {
+            subscriber.removeFragment(en.nextElement().getCanonicalPath());
+          } catch (Exception e) {
+            logger.error("RegistryWatcher: Can't remove fragment", e);
+          }
         }
-    }
+      }
 
-    /** @return the subscriber to this watcher */
-    public FileRegistry getSubscriber()
-    {
-        return this.subscriber;
-    }
+      this.subscriber = registry;
 
-    /** Sets the refresh rate for this watcher
-     *  @param refresh the refresh rate in seconds
-     */
-    public void setRefreshRate(long refresh)
-    {
-        this.refreshRate = (( refresh > SCAN_RATE ) ? refresh : SCAN_RATE) * 1000;
-    }
-
-    /** @return the refresh rate, in seconds, of this watcher */
-    public long getRefreshRate()
-    {
-        return refreshRate / 1000;
-    }
-
-    /** Sets the file filter for selecting the registry files
-     *  @param filter the file filter to use
-     */
-    public void setFilter(FileFilter filter)
-    {
-        this.filter = filter;
-    }
-
-    /** @return the file filter used by this watcher instance */
-    public FileFilter getFilter()
-    {
-        return filter;
-    }
-
-    /** Change the base file or directory to be monitored by this watcher
-     *
-     * @param f the file or directory to monitor
-     */
-    public void changeBase(File f)
-    {
-        synchronized (this)
-        {
-            if (this.subscriber!=null)
-            {
-                Enumeration en = files.keys();
-                while (en.hasMoreElements())
-                {
-                    try
-                    {
-                        subscriber.removeFragment(((File)en.nextElement()).getCanonicalPath());
-                    }
-                    catch (Exception e)
-                    {
-                        logger.error("RegistryWatcher: Can't remove fragment", e);
-                    }
-                }
-            }
-            files.clear();
-            findFiles(f);
+      if (subscriber != null) {
+        Enumeration<File> en = files.keys();
+        while (en.hasMoreElements()) {
+          try {
+            subscriber.loadFragment(en.nextElement().getCanonicalPath());
+          } catch (Exception e) {
+            logger.error("RegistryWatcher: Can't load fragment", e);
+          }
         }
+      }
     }
+  }
 
-    /**
-     * Refresh the monitored file list
-     *
-     * @param f the file or directory to monitor
-     */
-    private void findFiles(File f)
-    {
-        File[] contents = null;
+  /** @return the subscriber to this watcher */
+  public FileRegistry getSubscriber() {
+    return this.subscriber;
+  }
 
-        if (f.exists() && f.canRead())
-        {
-            this.files.put(f,new Long(f.lastModified()));
+  /**
+   * Sets the refresh rate for this watcher
+   *
+   * @param refresh
+   *          the refresh rate in seconds
+   */
+  public void setRefreshRate(long refresh) {
+    this.refreshRate = ((refresh > SCAN_RATE) ? refresh : SCAN_RATE) * 1000;
+  }
 
-            if (f.isDirectory())
-            {
+  /** @return the refresh rate, in seconds, of this watcher */
+  public long getRefreshRate() {
+    return refreshRate / 1000;
+  }
 
-                if (filter != null)
-                    contents = f.listFiles(filter);
-                else
-                    contents = f.listFiles();
+  /**
+   * Sets the file filter for selecting the registry files
+   *
+   * @param filter
+   *          the file filter to use
+   */
+  public void setFilter(FileFilter filter) {
+    this.filter = filter;
+  }
 
-                if (contents!=null)
-                {
-                    for (int i=0; i< contents.length; i++)
-                    {
-                        files.put(contents[i],new Long(contents[i].lastModified()));
+  /** @return the file filter used by this watcher instance */
+  public FileFilter getFilter() {
+    return filter;
+  }
 
-                        if (subscriber!=null)
-                        {
-                            try
-                            {
-                                subscriber.loadFragment(contents[i].getCanonicalPath());
-                            }
-                            catch (Exception e)
-                            {
-                                logger.error("RegistryWatcher: Can't load fragment", e);
-                            }
-                        }
-                    }
-                }
-            }
+  /**
+   * Change the base file or directory to be monitored by this watcher
+   *
+   * @param f
+   *          the file or directory to monitor
+   */
+  public void changeBase(File f) {
+    synchronized (this) {
+      if (this.subscriber != null) {
+        Enumeration<File> en = files.keys();
+        while (en.hasMoreElements()) {
+          try {
+            subscriber.removeFragment(en.nextElement().getCanonicalPath());
+          } catch (Exception e) {
+            logger.error("RegistryWatcher: Can't remove fragment", e);
+          }
         }
+      }
+      files.clear();
+      findFiles(f);
     }
+  }
 
-    /**
-     * <p>Main routine for the monitor which periodically checks whether
-     * the filex have been modified.</p>
-     * The algorithm used does not guarantee a constant refresh rate
-     * between invocations.
-     */
-    public void run()
-    {
-        try
-        {
-            while(!done)
-            {
-                boolean needRefresh = false;
+  /**
+   * Refresh the monitored file list
+   *
+   * @param f
+   *          the file or directory to monitor
+   */
+  private void findFiles(File f) {
+    File[] contents = null;
 
-                synchronized (this)
-                {
-                    Map fragments = subscriber.getFragmentMap();
+    if (f.exists() && f.canRead()) {
+      this.files.put(f, new Long(f.lastModified()));
 
-                    if (logger.isDebugEnabled())
-                    {
-                        logger.debug( "RegistryWatcher: Saving dirty fragments.");
-                    }
+      if (f.isDirectory()) {
 
-                    Iterator i = fragments.keySet().iterator();
-                    while(i.hasNext())
-                    {
-                        try
-                        {
-                            String filename = (String)i.next();
-                            RegistryFragment fragment = (RegistryFragment)subscriber.getFragmentMap().get(filename);
+        if (filter != null) {
+          contents = f.listFiles(filter);
+        } else {
+          contents = f.listFiles();
+        }
 
-                            // if fragment has some uncommitted changes
-                            if (fragment.isDirty())
-                            {
-                                //save it to disk
-                                subscriber.saveFragment(filename);
+        if (contents != null) {
+          for (int i = 0; i < contents.length; i++) {
+            files.put(contents[i], new Long(contents[i].lastModified()));
 
-                                if (logger.isDebugEnabled())
-                                {
-                                    logger.debug( "RegistryWatcher: Saved " + filename);
-                                }
+            if (subscriber != null) {
+              try {
+                subscriber.loadFragment(contents[i].getCanonicalPath());
+              } catch (Exception e) {
+                logger.error("RegistryWatcher: Can't load fragment", e);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
-                                //and update the stored timestamp
-                                Enumeration en = files.keys();
-                                while(en.hasMoreElements())
-                                {
-                                    File f = (File)en.nextElement();
-                                    if (filename.equals(f.getCanonicalPath()))
-                                    {
-                                        files.put(f,new Long(f.lastModified()));
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            logger.error("RegistryWatcher: exception during update",e);
-                        }
-                    }
+  /**
+   * <p>
+   * Main routine for the monitor which periodically checks whether the filex
+   * have been modified.
+   * </p>
+   * The algorithm used does not guarantee a constant refresh rate between
+   * invocations.
+   */
+  @Override
+  public void run() {
+    try {
+      while (!done) {
+        boolean needRefresh = false;
 
-                    if (logger.isDebugEnabled())
-                    {
-                        logger.debug( "RegistryWatcher: Checking for updated files.");
-                    }
+        synchronized (this) {
+          Map<?, ?> fragments = subscriber.getFragmentMap();
 
-                    Enumeration en = files.keys();
-                    while(en.hasMoreElements())
-                    {
-                        try
-                        {
-                            File f = (File)en.nextElement();
-                            long modified = ((Long)files.get(f)).longValue();
+          if (logger.isDebugEnabled()) {
+            logger.debug("RegistryWatcher: Saving dirty fragments.");
+          }
 
-                            if (!f.exists())
-                            {
-                                files.remove(f);
-                            }
-                            else
-                            {
-                                if (f.lastModified() > modified)
-                                {
-                                    files.put(f,new Long(f.lastModified()));
+          Iterator<?> i = fragments.keySet().iterator();
+          while (i.hasNext()) {
+            try {
+              String filename = (String) i.next();
+              RegistryFragment fragment =
+                (RegistryFragment) subscriber.getFragmentMap().get(filename);
 
-                                    if (f.isDirectory())
-                                    {
-                                        File[] contents = null;
+              // if fragment has some uncommitted changes
+              if (fragment.isDirty()) {
+                // save it to disk
+                subscriber.saveFragment(filename);
 
-                                        if (filter != null)
-                                        {
-                                            contents = f.listFiles(filter);
-                                        }
-                                        else
-                                        {
-                                            contents = f.listFiles();
-                                        }
-
-                                        if (contents!=null)
-                                        {
-                                            for (int idx=0; idx< contents.length; idx++)
-                                            {
-                                                if (files.get(contents[idx])==null)
-                                                {
-                                                    files.put(contents[idx],new Long(contents[idx].lastModified()));
-
-                                                    if (subscriber!=null)
-                                                    {
-                                                        subscriber.loadFragment(contents[idx].getCanonicalPath());
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        subscriber.loadFragment(f.getCanonicalPath());
-                                    }
-
-                                    if (logger.isDebugEnabled())
-                                    {
-                                        logger.debug("RegistryWatcher: Refreshing because "
-                                                    + f.getCanonicalPath()
-                                                    + " was modified.("
-                                                    + f.lastModified()
-                                                    + " "
-                                                    + modified
-                                                    + ")");
-                                    }
-
-                                    RegistryFragment frag = (RegistryFragment)fragments.get(f.getCanonicalPath());
-
-                                    if (frag!=null)
-                                    {
-                                        frag.setChanged(true);
-                                    }
-
-                                    needRefresh = true;
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            logger.error("RegistryWatcher: exception during update",e);
-                        }
-                    }
-
-                    if (needRefresh)
-                    {
-                        subscriber.refresh();
-                        needRefresh = false;
-                    }
-
-                    // make sure to reset the state of all fragments
-                    i = fragments.keySet().iterator();
-                    while(i.hasNext())
-                    {
-                        RegistryFragment frag = (RegistryFragment)fragments.get((String)i.next());
-                        frag.setDirty(false);
-                        frag.setChanged(false);
-                    }
+                if (logger.isDebugEnabled()) {
+                  logger.debug("RegistryWatcher: Saved " + filename);
                 }
 
-                sleep( refreshRate );
+                // and update the stored timestamp
+                Enumeration<File> en = files.keys();
+                while (en.hasMoreElements()) {
+                  File f = en.nextElement();
+                  if (filename.equals(f.getCanonicalPath())) {
+                    files.put(f, new Long(f.lastModified()));
+                  }
+                }
+              }
+            } catch (Exception e) {
+              logger.error("RegistryWatcher: exception during update", e);
             }
-        }
-        catch  (InterruptedException e)
-        {
-            logger.error("RegistryWatcher: Stopping monitor: ", e);
-            return;
-        }
-    }
+          }
 
-    /**
-     * Mark that the watching thread should be stopped
-     */
-    public void setDone()
-    {
-        done = true;
-        logger.info("RegistryWatcher: Watching thread stop requested");
+          if (logger.isDebugEnabled()) {
+            logger.debug("RegistryWatcher: Checking for updated files.");
+          }
+
+          Enumeration<File> en = files.keys();
+          while (en.hasMoreElements()) {
+            try {
+              File f = en.nextElement();
+              long modified = files.get(f).longValue();
+
+              if (!f.exists()) {
+                files.remove(f);
+              } else {
+                if (f.lastModified() > modified) {
+                  files.put(f, new Long(f.lastModified()));
+
+                  if (f.isDirectory()) {
+                    File[] contents = null;
+
+                    if (filter != null) {
+                      contents = f.listFiles(filter);
+                    } else {
+                      contents = f.listFiles();
+                    }
+
+                    if (contents != null) {
+                      for (int idx = 0; idx < contents.length; idx++) {
+                        if (files.get(contents[idx]) == null) {
+                          files
+                            .put(
+                              contents[idx],
+                              new Long(contents[idx].lastModified()));
+
+                          if (subscriber != null) {
+                            subscriber
+                              .loadFragment(contents[idx].getCanonicalPath());
+                          }
+                        }
+                      }
+                    }
+                  } else {
+                    subscriber.loadFragment(f.getCanonicalPath());
+                  }
+
+                  if (logger.isDebugEnabled()) {
+                    logger
+                      .debug(
+                        "RegistryWatcher: Refreshing because "
+                          + f.getCanonicalPath()
+                          + " was modified.("
+                          + f.lastModified()
+                          + " "
+                          + modified
+                          + ")");
+                  }
+
+                  RegistryFragment frag =
+                    (RegistryFragment) fragments.get(f.getCanonicalPath());
+
+                  if (frag != null) {
+                    frag.setChanged(true);
+                  }
+
+                  needRefresh = true;
+                }
+              }
+            } catch (Exception e) {
+              logger.error("RegistryWatcher: exception during update", e);
+            }
+          }
+
+          if (needRefresh) {
+            subscriber.refresh();
+            needRefresh = false;
+          }
+
+          // make sure to reset the state of all fragments
+          i = fragments.keySet().iterator();
+          while (i.hasNext()) {
+            RegistryFragment frag = (RegistryFragment) fragments.get(i.next());
+            frag.setDirty(false);
+            frag.setChanged(false);
+          }
+        }
+
+        sleep(refreshRate);
+      }
+    } catch (InterruptedException e) {
+      logger.error("RegistryWatcher: Stopping monitor: ", e);
+      return;
     }
+  }
+
+  /**
+   * Mark that the watching thread should be stopped
+   */
+  public void setDone() {
+    done = true;
+    logger.info("RegistryWatcher: Watching thread stop requested");
+  }
 
 }

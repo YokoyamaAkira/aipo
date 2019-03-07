@@ -61,23 +61,23 @@ import org.apache.turbine.util.RunData;
 
 /**
  * Utility class for accessing Jetspeed in a "pull" mode
- * 
+ *
  * <strong>Since the tool stores a RunData object, it may not be shared between
  * threads and/or requests</strong>
- * 
+ *
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @author <a href="mailto:taylor@apache.org">David Sean Taylor</a>
  * @author <a href="mark_orciuch@ngsltd.com">Mark Orciuch</a>
  * @author <a href="mailto:weaver@apache.org">Scott T. Weaver</a>
- * 
+ *
  * @version $Id: JetspeedTool.java,v 1.38 2004/03/29 21:38:43 taylor Exp $
  */
 public class JetspeedTool implements ApplicationTool {
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(JetspeedTool.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(JetspeedTool.class.getName());
 
   /** RunData object for this request */
   protected JetspeedRunData rundata = null;
@@ -90,7 +90,7 @@ public class JetspeedTool implements ApplicationTool {
 
   /**
    * The Tool constructor
-   * 
+   *
    * @param data
    *          the RunData object for the current request
    */
@@ -101,7 +101,7 @@ public class JetspeedTool implements ApplicationTool {
   /**
    * This will initialise a JetspeedTool object that was constructed with the
    * default constructor (ApplicationTool method).
-   * 
+   *
    * @param data
    *          assumed to be a RunData object
    */
@@ -124,7 +124,7 @@ public class JetspeedTool implements ApplicationTool {
    * files. If the pane name is null or "default", the profiler will
    * automatically chose the PSML content, else the tool will try to load the
    * PSML file with the specified name
-   * 
+   *
    * @param name
    *          the name of the pane to render
    * @return the rendered content of the pane
@@ -162,7 +162,8 @@ public class JetspeedTool implements ApplicationTool {
         ClientEntry entry = registry.findEntry(useragent);
         if ("IPHONE".equals(entry == null ? null : entry.getManufacturer())) {
           for (Iterator<Portlets> it =
-            (Iterator<Portlets>) portlets.getPortletsIterator(); it.hasNext();) {
+            (Iterator<Portlets>) portlets.getPortletsIterator(); it
+              .hasNext();) {
             Portlets subset = it.next();
 
             {
@@ -172,7 +173,8 @@ public class JetspeedTool implements ApplicationTool {
                 int scheduleindex = 0;
                 for (int i = 0; i < preentrylist.length; i++) {
                   if ("Schedule".equals(preentrylist[i].getParent())
-                    || "AjaxScheduleWeekly".equals(preentrylist[i].getParent())) {
+                    || "AjaxScheduleWeekly"
+                      .equals(preentrylist[i].getParent())) {
                     scheduleindex = i;
                   }
                   subset.removeEntry(0);
@@ -221,10 +223,12 @@ public class JetspeedTool implements ApplicationTool {
           result = PortalToolkit.getSet(doc.getPortlets()).getContent(rundata);
         }
       } catch (Exception e) {
-        logger.warn("JetspeedTool.getPane: problem getting: "
-          + name
-          + " from current request's profile: "
-          + e.toString());
+        logger
+          .warn(
+            "JetspeedTool.getPane: problem getting: "
+              + name
+              + " from current request's profile: "
+              + e.toString());
         msg = e.getMessage();
       }
 
@@ -240,17 +244,17 @@ public class JetspeedTool implements ApplicationTool {
   /**
    * Return the content of a named portlet. This portlet is sought in the
    * current PSML resource.
-   * 
+   *
    * If a control is attached to the portlet description, returns the defined
    * portlet and control, otherwise use the default control.
-   * 
+   *
    * Note: This will return the FIRST portlet with a name = name. Use
    * getPortletById().
-   * 
+   *
    * @param name
    *          the name of the portlet to render
    * @return the rendered content of the portlet
-   * 
+   *
    * @deprecated Use getPortletById()
    */
   @Deprecated
@@ -301,7 +305,7 @@ public class JetspeedTool implements ApplicationTool {
   /**
    * This method retrieves the appropriate customizer portlet for the current
    * portlet
-   * 
+   *
    * @param p
    *          the portlet to customize
    * @param data
@@ -332,8 +336,9 @@ public class JetspeedTool implements ApplicationTool {
 
       try {
         customizer = PortletFactory.getPortlet(name, p.getID() + "customize");
-        customizer.getPortletConfig().setPortletSkin(
-          p.getPortletConfig().getPortletSkin());
+        customizer
+          .getPortletConfig()
+          .setPortletSkin(p.getPortletConfig().getPortletSkin());
         PortletControl control = PortalToolkit.getControl((String) null);
         if (control != null) {
           control.setPortlet(customizer);
@@ -351,7 +356,7 @@ public class JetspeedTool implements ApplicationTool {
   /**
    * This method retrieves the appropriate information portlet for the current
    * portlet
-   * 
+   *
    * @param p
    *          the portlet to display information about
    * @param data
@@ -362,9 +367,8 @@ public class JetspeedTool implements ApplicationTool {
     Portlet info = null;
 
     String name =
-      JetspeedResources.getString(
-        "PortletInfoPortlet.name",
-        "PortletInfoPortlet");
+      JetspeedResources
+        .getString("PortletInfoPortlet.name", "PortletInfoPortlet");
 
     try {
 
@@ -382,8 +386,9 @@ public class JetspeedTool implements ApplicationTool {
         if (source != null) {
           jdata.setPortlet(source.getName());
           info = PortletFactory.getPortlet(name, "PortletInfoPortlet");
-          info.getPortletConfig().setPortletSkin(
-            source.getPortletConfig().getPortletSkin());
+          info
+            .getPortletConfig()
+            .setPortletSkin(source.getPortletConfig().getPortletSkin());
           PortletControl control = PortalToolkit.getControl((String) null);
           if (control != null) {
             control.setPortlet(info);
@@ -401,7 +406,7 @@ public class JetspeedTool implements ApplicationTool {
 
   /**
    * Finds portlet identified by js_peid in the current user's profile
-   * 
+   *
    * @param rundata
    *          for this request
    * @return portlet identified by js_peid
@@ -451,7 +456,7 @@ public class JetspeedTool implements ApplicationTool {
 
   /**
    * Return the content of a portal element given the id of the element.
-   * 
+   *
    * @param id
    *          The portlet id
    * @return the rendered content of the portlet
@@ -501,10 +506,10 @@ public class JetspeedTool implements ApplicationTool {
   /**
    * Return the content of a portlet using the portlet's id (PEID). This portlet
    * is sought in the current PSML resource.
-   * 
+   *
    * If a control is attached to the portlet description, returns the defined
    * portlet and control, otherwise use the default control.
-   * 
+   *
    * @param peid
    *          the peid of the portlet to render
    * @return the rendered content of the portlet
@@ -573,7 +578,7 @@ public class JetspeedTool implements ApplicationTool {
    * <LI>interactive portlets (such as DatabaseBrowser) lose functionality (such
    * as sorting in DatabaseBrowser).</LI>
    * </UL>
-   * 
+   *
    * @param portletName
    *          Name of the portlet as defined in registry
    * @param controlName
@@ -595,10 +600,11 @@ public class JetspeedTool implements ApplicationTool {
 
       // Verify security for the parameter
       boolean canAccess =
-        JetspeedSecurity.checkPermission(
-          (JetspeedUser) data.getUser(),
-          new PortalResource(entry),
-          JetspeedSecurity.PERMISSION_CUSTOMIZE);
+        JetspeedSecurity
+          .checkPermission(
+            (JetspeedUser) data.getUser(),
+            new PortalResource(entry),
+            JetspeedSecurity.PERMISSION_CUSTOMIZE);
 
       if (canAccess) {
         // Always set portlet id to "preview" so each preview request gets it
@@ -612,12 +618,12 @@ public class JetspeedTool implements ApplicationTool {
         if (control != null) {
           JetspeedRunData jdata = rundata;
           // Use the profile's skin
-          p.getPortletConfig().setPortletSkin(
-            PortalToolkit.getSkin(jdata
-              .getProfile()
-              .getDocument()
-              .getPortlets()
-              .getSkin()));
+          p
+            .getPortletConfig()
+            .setPortletSkin(
+              PortalToolkit
+                .getSkin(
+                  jdata.getProfile().getDocument().getPortlets().getSkin()));
           control.setPortlet(p);
           control.init();
           result = control.getContent(rundata);
@@ -626,9 +632,8 @@ public class JetspeedTool implements ApplicationTool {
         }
       } else {
         result =
-          new JetspeedClearElement(Localization.getString(
-            data,
-            "SECURITY_NO_ACCESS_TO_PORTLET"));
+          new JetspeedClearElement(
+            Localization.getString(data, "SECURITY_NO_ACCESS_TO_PORTLET"));
       }
     } catch (Exception e) {
       logger.error("Exception", e);
@@ -662,7 +667,7 @@ public class JetspeedTool implements ApplicationTool {
    * <LI>interactive portlets (such as DatabaseBrowser) lose functionality (such
    * as sorting in DatabaseBrowser).</LI>
    * </UL>
-   * 
+   *
    * @param portletName
    *          Name of the portlet as defined in registry
    * @param controlName
@@ -690,12 +695,12 @@ public class JetspeedTool implements ApplicationTool {
       if (control != null) {
         JetspeedRunData jdata = rundata;
         // Use the profile's skin
-        p.getPortletConfig().setPortletSkin(
-          PortalToolkit.getSkin(jdata
-            .getProfile()
-            .getDocument()
-            .getPortlets()
-            .getSkin()));
+        p
+          .getPortletConfig()
+          .setPortletSkin(
+            PortalToolkit
+              .getSkin(
+                jdata.getProfile().getDocument().getPortlets().getSkin()));
         control.setPortlet(p);
         control.init();
         result = control.getContent(rundata);
@@ -717,7 +722,7 @@ public class JetspeedTool implements ApplicationTool {
 
   /**
    * Returns a parameter in its defined parameter style
-   * 
+   *
    * @param data
    *          for this request
    * @param portlet
@@ -740,7 +745,7 @@ public class JetspeedTool implements ApplicationTool {
 
   /**
    * Returns a parameter in its defined parameter style
-   * 
+   *
    * @param data
    *          for this request
    * @param portlet
@@ -763,26 +768,27 @@ public class JetspeedTool implements ApplicationTool {
 
         // Verify security for the parameter
         boolean canAccess =
-          JetspeedSecurity.checkPermission(
-            (JetspeedUser) data.getUser(),
-            new PortalResource(entry, param),
-            JetspeedSecurity.PERMISSION_CUSTOMIZE);
-        Map portletParms = portlet.getPortletConfig().getInitParameters();
+          JetspeedSecurity
+            .checkPermission(
+              (JetspeedUser) data.getUser(),
+              new PortalResource(entry, param),
+              JetspeedSecurity.PERMISSION_CUSTOMIZE);
+        // Map portletParms =
+        Map<String, String> portletParms =
+          portlet.getPortletConfig().getInitParameters();
         String parmStyle =
           portlet.getPortletConfig().getInitParameter(parmName + ".style");
 
         // Add portlet reference
-        portletParms.put(parmName.concat(".style.portlet"), portlet);
+        portletParms.put(parmName.concat(".style.portlet"), portlet.toString());
+        // portletParms.put(parmName.concat(".style.portlet"), portlet);
 
         if (canAccess) {
           if (parmStyle != null) {
             result =
-              ParameterLoader.getInstance().eval(
-                data,
-                parmStyle,
-                parmName,
-                parmValue,
-                portletParms);
+              ParameterLoader
+                .getInstance()
+                .eval(data, parmStyle, parmName, parmValue, portletParms);
           } else {
             result =
               "<input type=\"text\" name=\""
@@ -795,26 +801,32 @@ public class JetspeedTool implements ApplicationTool {
           // If security does not allow access to specific parameter, allow to
           // provide a fallback parameter
           String parmNameNoAccess =
-            portlet.getPortletConfig().getInitParameter(
-              parmName + ".style.no-access");
+            portlet
+              .getPortletConfig()
+              .getInitParameter(parmName + ".style.no-access");
           if (parmNameNoAccess != null) {
             if (logger.isDebugEnabled()) {
-              logger.debug("JetspeedTool: access to parm ["
-                + parmName
-                + "] disallowed, redirecting to parm ["
-                + parmNameNoAccess
-                + "]");
+              logger
+                .debug(
+                  "JetspeedTool: access to parm ["
+                    + parmName
+                    + "] disallowed, redirecting to parm ["
+                    + parmNameNoAccess
+                    + "]");
             }
             String parmStyleNoAccess =
-              portlet.getPortletConfig().getInitParameter(
-                parmNameNoAccess + ".style");
+              portlet
+                .getPortletConfig()
+                .getInitParameter(parmNameNoAccess + ".style");
             result =
-              ParameterLoader.getInstance().eval(
-                data,
-                parmStyleNoAccess,
-                parmNameNoAccess,
-                parmValue,
-                portletParms);
+              ParameterLoader
+                .getInstance()
+                .eval(
+                  data,
+                  parmStyleNoAccess,
+                  parmNameNoAccess,
+                  parmValue,
+                  portletParms);
           }
         }
       }
@@ -827,7 +839,7 @@ public class JetspeedTool implements ApplicationTool {
 
   /**
    * Returns a parameter rendered in specific parameter style
-   * 
+   *
    * @param data
    *          for this request
    * @param parmStyle
@@ -847,29 +859,27 @@ public class JetspeedTool implements ApplicationTool {
     try {
       if (parmName != null) {
         if (parmStyle != null) {
-          Map options = null;
+          Map<String, String> options = null;
           if (parmOptions != null && parmOptions.length() > 0) {
-            options = new Hashtable();
+            options = new Hashtable<String, String>();
 
             StringTokenizer st = new StringTokenizer(parmOptions, ";");
             String prefix = parmName + ".style.";
             while (st.hasMoreTokens()) {
               StringTokenizer pair = new StringTokenizer(st.nextToken(), "=");
               if (pair.countTokens() == 2) {
-                options.put(prefix + pair.nextToken().trim(), pair
-                  .nextToken()
-                  .trim());
+                options
+                  .put(
+                    prefix + pair.nextToken().trim(),
+                    pair.nextToken().trim());
               }
             }
 
           }
           result =
-            ParameterLoader.getInstance().eval(
-              data,
-              parmStyle,
-              parmName,
-              parmValue,
-              options);
+            ParameterLoader
+              .getInstance()
+              .eval(data, parmStyle, parmName, parmValue, options);
         } else {
           result =
             "<input type=\"text\" name=\""

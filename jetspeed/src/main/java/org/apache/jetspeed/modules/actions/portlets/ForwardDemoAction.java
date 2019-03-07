@@ -36,8 +36,8 @@ import org.apache.velocity.context.Context;
 
 /**
  * Demo of Forward stuff
- * 
- * 
+ *
+ *
  * @author <a href="mailto:taylor@apache.org">David Sean Taylor</a>
  * @version $Id: ForwardDemoAction.java,v 1.6 2004/02/23 02:56:58 jford Exp $
  */
@@ -72,11 +72,8 @@ public class ForwardDemoAction extends VelocityPortletAction {
       (String) PortletSessionState.getAttribute(rundata, PARAM_TARGET);
     if (null == target) {
       target =
-        PortletConfigState.getParameter(
-          portlet,
-          rundata,
-          PARAM_TARGET,
-          "NOT_SET");
+        PortletConfigState
+          .getParameter(portlet, rundata, PARAM_TARGET, "NOT_SET");
 
       PortletSessionState.setAttribute(rundata, PARAM_TARGET, target);
     }
@@ -136,7 +133,7 @@ public class ForwardDemoAction extends VelocityPortletAction {
     ForwardService fs =
       (ForwardService) ServiceUtil
         .getServiceByName(ForwardService.SERVICE_NAME);
-    List<HtmlItem> vList = new java.util.LinkedList();
+    List<HtmlItem> vList = new java.util.LinkedList<HtmlItem>();
     Iterator<?> it = fs.getForwards().iterator();
     int index = 1;
     while (it.hasNext()) {
@@ -182,7 +179,7 @@ public class ForwardDemoAction extends VelocityPortletAction {
     ForwardService fs =
       (ForwardService) ServiceUtil
         .getServiceByName(ForwardService.SERVICE_NAME);
-    List<HtmlItem> vList = new java.util.LinkedList();
+    List<HtmlItem> vList = new java.util.LinkedList<HtmlItem>();
     Iterator<?> it = fs.getPortletForwards().iterator();
     int index = 1;
     while (it.hasNext()) {

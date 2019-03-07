@@ -44,7 +44,7 @@ import org.apache.turbine.util.TurbineException;
  * Also done here, because this is so nicely bracketed around each http request
  * by Turbine, is the association of the http session for this request / thread
  * with the state manager.
- * 
+ *
  * @author <a href="mailto:ggolden@umich.edu">Glenn R. Golden</a>
  * @version $Revision: 1.5 $
  */
@@ -52,8 +52,8 @@ public class JetspeedRunDataService extends TurbineRunDataService {
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(JetspeedRunDataService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(JetspeedRunDataService.class.getName());
 
   /** The collection of active JetspeedRunData objects, keyed by Thread. */
   private Map<Thread, JetspeedRunData> m_runDataStore = null;
@@ -64,7 +64,7 @@ public class JetspeedRunDataService extends TurbineRunDataService {
 
   /**
    * Initializes the service
-   * 
+   *
    * @throws InitializationException
    *           if initialization fails.
    */
@@ -73,7 +73,8 @@ public class JetspeedRunDataService extends TurbineRunDataService {
     super.init();
 
     // allocate a thread-safe map
-    m_runDataStore = Collections.synchronizedMap(new HashMap());
+    m_runDataStore =
+      Collections.synchronizedMap(new HashMap<Thread, JetspeedRunData>());
 
   } // init
 
@@ -83,7 +84,7 @@ public class JetspeedRunDataService extends TurbineRunDataService {
 
   /**
    * Gets a RunData instance from a specific configuration.
-   * 
+   *
    * @param key
    *          a configuration key.
    * @param req
@@ -111,17 +112,20 @@ public class JetspeedRunDataService extends TurbineRunDataService {
 
     // associate this http session with this thread in the state manager
     StateManagerService stateManager =
-      (StateManagerService) TurbineServices.getInstance().getService(
-        StateManagerService.SERVICE_NAME);
+      (StateManagerService) TurbineServices
+        .getInstance()
+        .getService(StateManagerService.SERVICE_NAME);
     if (stateManager != null) {
       stateManager.setCurrentContext(req.getSession(true));
     }
 
     if (logger.isDebugEnabled()) {
-      logger.debug("JetspeedRunDataService: storing rundata "
-        + r
-        + " for thread: "
-        + Thread.currentThread());
+      logger
+        .debug(
+          "JetspeedRunDataService: storing rundata "
+            + r
+            + " for thread: "
+            + Thread.currentThread());
     }
 
     return r;
@@ -130,7 +134,7 @@ public class JetspeedRunDataService extends TurbineRunDataService {
 
   /**
    * Puts the used RunData object back to the factory for recycling.
-   * 
+   *
    * @param data
    *          the used RunData object.
    * @return true, if pooling is supported and the object was accepted.
@@ -139,8 +143,9 @@ public class JetspeedRunDataService extends TurbineRunDataService {
   public boolean putRunData(RunData data) {
     // un-associate this http session with this thread in the state manager
     StateManagerService stateManager =
-      (StateManagerService) TurbineServices.getInstance().getService(
-        StateManagerService.SERVICE_NAME);
+      (StateManagerService) TurbineServices
+        .getInstance()
+        .getService(StateManagerService.SERVICE_NAME);
     if (stateManager != null) {
       stateManager.clearCurrentContext();
     }
@@ -149,8 +154,10 @@ public class JetspeedRunDataService extends TurbineRunDataService {
     m_runDataStore.remove(Thread.currentThread());
 
     if (logger.isDebugEnabled()) {
-      logger.debug("JetspeedRunDataService: releasing rundata for thread: "
-        + Thread.currentThread());
+      logger
+        .debug(
+          "JetspeedRunDataService: releasing rundata for thread: "
+            + Thread.currentThread());
     }
 
     // let super do the work
@@ -161,16 +168,18 @@ public class JetspeedRunDataService extends TurbineRunDataService {
   /**
    * Access the current rundata object - the one associated with the current
    * thread.
-   * 
+   *
    * @return The current JetspeedRunData object associatd with the current
    *         thread.
    */
   public JetspeedRunData getCurrentRunData() {
     if (logger.isDebugEnabled()) {
-      logger.debug("JetspeedRunDataService: accessing rundata "
-        + m_runDataStore.get(Thread.currentThread())
-        + " for thread: "
-        + Thread.currentThread());
+      logger
+        .debug(
+          "JetspeedRunDataService: accessing rundata "
+            + m_runDataStore.get(Thread.currentThread())
+            + " for thread: "
+            + Thread.currentThread());
     }
 
     return m_runDataStore.get(Thread.currentThread());
@@ -180,10 +189,9 @@ public class JetspeedRunDataService extends TurbineRunDataService {
 } // JetspeedRunDataService
 
 /**********************************************************************************
- * 
+ *
  * $Header:
  * /home/cvspublic/jakarta-jetspeed/src/java/org/apache/jetspeed/services
  * /rundata/JetspeedRunDataService.java,v 1.5 2004/02/23 03:36:10 jford Exp $
- * 
+ *
  **********************************************************************************/
-

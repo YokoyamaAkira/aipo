@@ -53,13 +53,14 @@ import com.aimluck.eip.util.ALEipUtils;
 
 /**
  * 掲示板カテゴリのフォームデータを管理するクラスです。 <BR>
- * 
+ *
  */
 public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /** logger */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(MsgboardCategoryFormData.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(MsgboardCategoryFormData.class.getName());
 
   /** カテゴリ名 */
   private ALStringField category_name;
@@ -89,7 +90,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
   private boolean authority_delete;
 
   /**
-   * 
+   *
    * @param action
    * @param rundata
    * @param context
@@ -104,18 +105,20 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
     groups = ALEipUtils.getMyGroups(rundata);
 
     authority_edit =
-      MsgboardUtils.checkPermission(
-        rundata,
-        context,
-        ALAccessControlConstants.VALUE_ACL_UPDATE,
-        ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_CATEGORY_OTHER);
+      MsgboardUtils
+        .checkPermission(
+          rundata,
+          context,
+          ALAccessControlConstants.VALUE_ACL_UPDATE,
+          ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_CATEGORY_OTHER);
 
     authority_delete =
-      MsgboardUtils.checkPermission(
-        rundata,
-        context,
-        ALAccessControlConstants.VALUE_ACL_DELETE,
-        ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_CATEGORY_OTHER);
+      MsgboardUtils
+        .checkPermission(
+          rundata,
+          context,
+          ALAccessControlConstants.VALUE_ACL_DELETE,
+          ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_CATEGORY_OTHER);
 
     // スーパークラスのメソッドを呼び出す。
     super.init(action, rundata, context);
@@ -145,8 +148,8 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * 掲示板カテゴリの各フィールドに対する制約条件を設定します。 <BR>
-   * 
-   * 
+   *
+   *
    */
   @Override
   protected void setValidator() {
@@ -162,10 +165,10 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * 掲示板カテゴリのフォームに入力されたデータの妥当性検証を行います。 <BR>
-   * 
+   *
    * @param msgList
    * @return
-   * 
+   *
    */
   @Override
   protected boolean validate(List<String> msgList) {
@@ -190,7 +193,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * 掲示板カテゴリをデータベースから読み出します。 <BR>
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -222,9 +225,10 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
       SelectQuery<EipTMsgboardCategoryMap> mapquery =
         Database.query(EipTMsgboardCategoryMap.class);
       Expression mapexp =
-        ExpressionFactory.matchDbExp(
-          EipTMsgboardCategory.CATEGORY_ID_PK_COLUMN,
-          category.getCategoryId());
+        ExpressionFactory
+          .matchDbExp(
+            EipTMsgboardCategory.CATEGORY_ID_PK_COLUMN,
+            category.getCategoryId());
       mapquery.setQualifier(mapexp);
 
       List<EipTMsgboardCategoryMap> list = mapquery.fetchList();
@@ -272,7 +276,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * 掲示板カテゴリをデータベースに格納します。 <BR>
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -283,8 +287,10 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
     try {
       TurbineUser tuser =
-        Database.get(TurbineUser.class, Integer.valueOf(ALEipUtils
-          .getUserId(rundata)));
+        Database
+          .get(
+            TurbineUser.class,
+            Integer.valueOf(ALEipUtils.getUserId(rundata)));
 
       // 新規オブジェクトモデル
       EipTMsgboardCategory category =
@@ -334,10 +340,13 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
       Database.commit();
 
       // イベントログに保存
-      ALEventlogFactoryService.getInstance().getEventlogHandler().log(
-        category.getCategoryId(),
-        ALEventlogConstants.PORTLET_TYPE_MSGBOARD_CATEGORY,
-        category.getCategoryName());
+      ALEventlogFactoryService
+        .getInstance()
+        .getEventlogHandler()
+        .log(
+          category.getCategoryId(),
+          ALEventlogConstants.PORTLET_TYPE_MSGBOARD_CATEGORY,
+          category.getCategoryName());
 
     } catch (Exception e) {
       Database.rollback();
@@ -349,7 +358,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * データベースに格納されている掲示板カテゴリを更新します。 <BR>
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -386,9 +395,10 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
       SelectQuery<EipTMsgboardCategoryMap> mapquery =
         Database.query(EipTMsgboardCategoryMap.class);
       Expression mapexp =
-        ExpressionFactory.matchExp(
-          EipTMsgboardCategoryMap.CATEGORY_ID_PROPERTY,
-          category.getCategoryId());
+        ExpressionFactory
+          .matchExp(
+            EipTMsgboardCategoryMap.CATEGORY_ID_PROPERTY,
+            category.getCategoryId());
       mapquery.setQualifier(mapexp);
 
       List<EipTMsgboardCategoryMap> maplist = mapquery.fetchList();
@@ -418,10 +428,13 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
       Database.commit();
 
       // イベントログに保存
-      ALEventlogFactoryService.getInstance().getEventlogHandler().log(
-        category.getCategoryId(),
-        ALEventlogConstants.PORTLET_TYPE_MSGBOARD_CATEGORY,
-        category.getCategoryName());
+      ALEventlogFactoryService
+        .getInstance()
+        .getEventlogHandler()
+        .log(
+          category.getCategoryId(),
+          ALEventlogConstants.PORTLET_TYPE_MSGBOARD_CATEGORY,
+          category.getCategoryName());
 
     } catch (Exception e) {
       Database.rollback();
@@ -433,13 +446,12 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * 掲示板カテゴリを削除します。 <BR>
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
    * @return
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected boolean deleteFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
@@ -456,10 +468,13 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
       // トピックおよび添付ファイルのレコードも自動的に削除される．
 
       // イベントログに保存
-      ALEventlogFactoryService.getInstance().getEventlogHandler().log(
-        category.getCategoryId(),
-        ALEventlogConstants.PORTLET_TYPE_MSGBOARD_CATEGORY,
-        category.getCategoryName());
+      ALEventlogFactoryService
+        .getInstance()
+        .getEventlogHandler()
+        .log(
+          category.getCategoryId(),
+          ALEventlogConstants.PORTLET_TYPE_MSGBOARD_CATEGORY,
+          category.getCategoryName());
 
       List<EipTMsgboardTopic> topics = category.getEipTMsgboardTopics();
       for (EipTMsgboardTopic topic : topics) {
@@ -481,7 +496,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
   }
 
   /**
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -529,7 +544,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * カテゴリ名を取得します。 <BR>
-   * 
+   *
    * @return
    */
   public ALStringField getCategoryName() {
@@ -538,7 +553,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * メモを取得します。 <BR>
-   * 
+   *
    * @return
    */
   public ALStringField getNote() {
@@ -550,7 +565,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
   }
 
   /**
-   * 
+   *
    * @return
    */
   public boolean isMember() {
@@ -559,7 +574,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * グループメンバーを取得します。
-   * 
+   *
    * @return
    */
   public List<ALEipUser> getMemberList() {
@@ -568,7 +583,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * 指定したグループ名のユーザーを取得します。
-   * 
+   *
    * @param groupname
    * @return
    */
@@ -578,7 +593,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * グループリストを取得します。
-   * 
+   *
    * @return
    */
   public List<ALEipGroup> getGroupList() {
@@ -587,7 +602,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * ログインユーザを取得します。
-   * 
+   *
    * @return
    */
   public ALEipUser getLoginUser() {
@@ -604,7 +619,7 @@ public class MsgboardCategoryFormData extends ALAbstractFormData {
 
   /**
    * アクセス権限チェック用メソッド。 アクセス権限の機能名を返します。
-   * 
+   *
    * @return
    */
   @Override

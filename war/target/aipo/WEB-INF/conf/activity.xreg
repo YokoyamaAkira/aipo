@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <registry>
-    <portlet-entry name="Activity" hidden="false" type="ref" parent="Velocity" application="false">
+    <portlet-entry name="Activity" hidden="false" type="active" parent="Velocity" application="false">
         <security-ref parent="user-view"/>
         <meta-info>
             <title>更新情報</title>

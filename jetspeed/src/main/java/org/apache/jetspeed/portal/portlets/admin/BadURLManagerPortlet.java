@@ -15,6 +15,8 @@
  */
 package org.apache.jetspeed.portal.portlets.admin;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
 //ecs stuff
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +42,7 @@ import org.apache.turbine.util.RunData;
 
 /**
  * Shows the user what URLs are considered bad.
- * 
+ *
  * @author <a href="mailto:burton@apache.org">Kevin A. Burton</a>
  * @author <a href="mailto:sgala@hisitech.com">Santiago Gala</a>
  * @version $Id: BadURLManagerPortlet.java,v 1.13 2004/02/23 03:26:19 jford Exp
@@ -64,14 +66,16 @@ public class BadURLManagerPortlet extends AbstractPortlet {
 
     List<?> urls = URLManager.list(URLManagerService.STATUS_BAD);
 
-    root.addElement("The following "
-      + urls.size()
-      + " URL(s) are considered bad: ");
+    root
+      .addElement(
+        "The following " + urls.size() + " URL(s) are considered bad: ");
 
     root.addElement(new BR());
 
-    root.addElement("Click on a url to take it out of the list"
-      + " and retry it in when requested. ");
+    root
+      .addElement(
+        "Click on a url to take it out of the list"
+          + " and retry it in when requested. ");
 
     root.addElement(new BR());
 
@@ -92,15 +96,17 @@ public class BadURLManagerPortlet extends AbstractPortlet {
       if (info != null) {
         uri.removeQueryData(RETRY_URL);
         uri.addQueryData(RETRY_URL, info.getURL());
-        ul.addElement(new LI().addElement(
-          new A(uri.toString()).addElement(info.getURL())).addElement(
-          new B(info.getMessage())));
+        ul
+          .addElement(
+            new LI()
+              .addElement(new A(uri.toString()).addElement(info.getURL()))
+              .addElement(new B(info.getMessage())));
       }
     }
 
     root.addElement(ul);
 
-    java.util.Hashtable rt = URLFetcher.getRealtimeURLs();
+    Hashtable<String, Vector<Thread>> rt = URLFetcher.getRealtimeURLs();
 
     root
       .addElement("The following " + rt.size() + " URL(s) are being loaded: ");
@@ -108,9 +114,9 @@ public class BadURLManagerPortlet extends AbstractPortlet {
     root.addElement(new BR());
     ul = new UL();
 
-    java.util.Enumeration en = rt.keys();
+    Enumeration<String> en = rt.keys();
     while (en.hasMoreElements()) {
-      String key = (String) en.nextElement();
+      String key = en.nextElement();
       LI li = new LI().addElement(key).addElement(" - by ");
       if (rt.get(key) != null) {
         li

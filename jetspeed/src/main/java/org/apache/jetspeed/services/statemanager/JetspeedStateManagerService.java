@@ -38,7 +38,7 @@ import java.util.Vector;
  * hang around forever. (see clear() and retireState() of the
  * StateManagerService).
  * </p>
- * 
+ *
  * @version $Revision: 1.6 $
  * @see org.apache.jetspeed.services.statemanager.BaseStateManagerService
  * @see org.apache.jetspeed.services.statemanager.StateManagerService
@@ -58,7 +58,8 @@ public class JetspeedStateManagerService extends BaseStateManagerService {
   @Override
   protected void initStates() {
     // create our states map synchronized
-    m_states = Collections.synchronizedMap(new HashMap());
+    m_states =
+      Collections.synchronizedMap(new HashMap<String, Map<String, Object>>());
 
   } // initStates
 
@@ -74,7 +75,7 @@ public class JetspeedStateManagerService extends BaseStateManagerService {
 
   /**
    * Access the Map which is the set of attributes for a state.
-   * 
+   *
    * @param key
    *          The state key.
    * @return The Map which is the set of attributes for a state.
@@ -87,7 +88,7 @@ public class JetspeedStateManagerService extends BaseStateManagerService {
 
   /**
    * Add a new state to the states we are managing.
-   * 
+   *
    * @param key
    *          The state key.
    * @param state
@@ -101,7 +102,7 @@ public class JetspeedStateManagerService extends BaseStateManagerService {
 
   /**
    * Remove a state from the states we are managing.
-   * 
+   *
    * @param key
    *          The state key.
    */
@@ -114,7 +115,7 @@ public class JetspeedStateManagerService extends BaseStateManagerService {
   /**
    * Access an array of the keys of all states managed, those that start with
    * the parameter.
-   * 
+   *
    * @param start
    *          The starting string used to select the keys.
    * @return an array of the keys of all states managed.
@@ -149,11 +150,10 @@ public class JetspeedStateManagerService extends BaseStateManagerService {
 } // JetspeedStateManagerService
 
 /**********************************************************************************
- * 
+ *
  * $Header:
  * /home/cvspublic/jakarta-jetspeed/src/java/org/apache/jetspeed/services
  * /statemanager/JetspeedStateManagerService.java,v 1.6 2004/02/23 03:38:28
  * jford Exp $
- * 
+ *
  **********************************************************************************/
-

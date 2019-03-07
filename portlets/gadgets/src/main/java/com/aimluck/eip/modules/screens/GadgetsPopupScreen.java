@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.sf.json.JSONObject;
-
 import org.apache.jetspeed.portal.Portlet;
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
@@ -41,6 +39,8 @@ import com.aimluck.eip.services.social.gadgets.ALGadgetContext;
 import com.aimluck.eip.services.social.model.ALApplicationGetRequest;
 import com.aimluck.eip.util.ALEipUtils;
 import com.aimluck.eip.util.ALLocalizationUtils;
+
+import net.sf.json.JSONObject;
 
 /**
  *
@@ -98,8 +98,8 @@ public class GadgetsPopupScreen extends ALVelocityScreen {
       } else {
         moduleId = 0l;
       }
-    } else {
-      moduleId = 0l;
+      // } else {
+      // moduleId = 0l;
     }
 
     ALGadgetContext gadgetContext =
@@ -109,8 +109,9 @@ public class GadgetsPopupScreen extends ALVelocityScreen {
     context.put("isActive", isActive);
 
     String id =
-      moduleId == 0 ? String.valueOf(System.nanoTime()) : String
-        .valueOf(moduleId);
+      moduleId == 0
+        ? String.valueOf(System.nanoTime())
+        : String.valueOf(moduleId);
     context.put("portletId", id);
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("portletId", id);
@@ -130,8 +131,12 @@ public class GadgetsPopupScreen extends ALVelocityScreen {
     }
     context.put("assignData", jsonObject.toString());
     context.put("title", title);
-    context.put("nocache", "true".equals(ALContainerConfigService
-      .get(Property.CACHE_GADGET_XML)) ? "0" : "1");
+    context
+      .put(
+        "nocache",
+        "true".equals(ALContainerConfigService.get(Property.CACHE_GADGET_XML))
+          ? "0"
+          : "1");
 
     String template = "portlets/html/ja/gadgets-popup.vm";
     setTemplate(rundata, context, template);

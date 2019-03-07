@@ -42,8 +42,8 @@ import org.apache.turbine.util.RunData;
  * LoggingService. In order to facilitate the new Log4J logging in Jetspeed, the
  * default logging service behavior of Turbine must be overridden. The
  * JetspeedLoggingService now just reroutes to JetspeedLogFactoryService
- * 
- * 
+ *
+ *
  * @see org.apache.jetspeed.services.logging.JetspeedLogFactoryService
  * @author <a href="mailto:morciuch@apache.org">Mark Orciuch</a>
  * @author <a href="mailto:harald@ommang.com">Harald Ommang</a>
@@ -56,8 +56,8 @@ public class JetspeedLoggingService extends TurbineBaseService implements
    * Static initialization. Facilitates configuration via
    * JetspeedLogFactoryService
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(JetspeedLoggingService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(JetspeedLoggingService.class.getName());
 
   /**
    * loggers repository
@@ -92,7 +92,7 @@ public class JetspeedLoggingService extends TurbineBaseService implements
   /**
    * Load all configured components and initialize them. This is a zero
    * parameter variant which queries the Turbine Servlet for its config.
-   * 
+   *
    * @throws InitializationException
    *           Something went wrong in the init stage
    */
@@ -105,10 +105,10 @@ public class JetspeedLoggingService extends TurbineBaseService implements
   /**
    * Inits the service using servlet parameters to obtain path to the
    * configuration file. Change relatives paths.
-   * 
+   *
    * @param config
    *          The ServletConfiguration from Turbine
-   * 
+   *
    * @throws InitializationException
    *           Something went wrong when starting up.
    */
@@ -133,8 +133,9 @@ public class JetspeedLoggingService extends TurbineBaseService implements
     if (resources == null) {
       // Get the properties for this Service
       resources =
-        TurbineResources.getResources(TurbineServices.SERVICE_PREFIX
-          + LoggingService.SERVICE_NAME);
+        TurbineResources
+          .getResources(
+            TurbineServices.SERVICE_PREFIX + LoggingService.SERVICE_NAME);
 
       // add webappRoot manually - cos logging is a primary
       // service and so it is not yet defined
@@ -150,8 +151,9 @@ public class JetspeedLoggingService extends TurbineBaseService implements
   private void internalInit() throws InitializationException {
     ResourceService props = getResources();
     if (props == null) {
-      throw new InitializationException("LoggingService failed to "
-        + "get access to the properties for this service.");
+      throw new InitializationException(
+        "LoggingService failed to "
+          + "get access to the properties for this service.");
     }
 
     // looking for default logger name
@@ -159,8 +161,9 @@ public class JetspeedLoggingService extends TurbineBaseService implements
 
     // checking whether default logger is properly configured
     if (defaultLoggerName == null) {
-      throw new InitializationException("LoggingService can't find "
-        + "default logger name in the configuration file.");
+      throw new InitializationException(
+        "LoggingService can't find "
+          + "default logger name in the configuration file.");
     }
 
     // Create default logger
@@ -168,8 +171,8 @@ public class JetspeedLoggingService extends TurbineBaseService implements
 
     // checking whether default logger is properly configured
     if (defaultLogger == null) {
-      throw new InitializationException("LoggingService can't find "
-        + "default logger in working loggers.");
+      throw new InitializationException(
+        "LoggingService can't find " + "default logger in working loggers.");
     }
   }
 
@@ -184,6 +187,7 @@ public class JetspeedLoggingService extends TurbineBaseService implements
     }
 
     for (Iterator<?> iter = loggers.entrySet().iterator(); iter.hasNext();) {
+      @SuppressWarnings("rawtypes")
       Map.Entry entry = (Map.Entry) iter.next();
       ((Logger) entry.getValue()).shutdown();
     }

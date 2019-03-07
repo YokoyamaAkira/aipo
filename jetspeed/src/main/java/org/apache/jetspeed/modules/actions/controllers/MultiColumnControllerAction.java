@@ -58,7 +58,7 @@ import org.apache.velocity.context.Context;
 /**
  * This action builds a context suitable for controllers handling grid
  * positioned layout using PortletSet.Constraints
- * 
+ *
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @author <a href="mailto:paulsp@apache.org">Paul Spencer</a>
  * @version $Id: MultiColumnControllerAction.java,v 1.30 2004/02/23 02:49:58
@@ -71,13 +71,15 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(MultiColumnControllerAction.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(MultiColumnControllerAction.class.getName());
 
   /**
    * Subclasses must override this method to provide default behavior for the
    * portlet action
    */
+  @SuppressWarnings("rawtypes")
   @Override
   protected void buildNormalContext(PortletController controller,
       Context context, RunData rundata) {
@@ -134,14 +136,16 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
       }
 
       if (logger.isDebugEnabled()) {
-        logger.debug("Controller calculated setSize "
-          + set.size()
-          + " row "
-          + row
-          + " colNum: "
-          + colNum
-          + " rowNum: "
-          + rowNum);
+        logger
+          .debug(
+            "Controller calculated setSize "
+              + set.size()
+              + " row "
+              + row
+              + " colNum: "
+              + colNum
+              + " rowNum: "
+              + rowNum);
       }
       // initialize the result position table and the work list
       List[] table = new List[colNum];
@@ -208,6 +212,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
    * Subclasses must override this method to provide default behavior for the
    * portlet action
    */
+  @SuppressWarnings("rawtypes")
   @Override
   protected void buildCustomizeContext(PortletController controller,
       Context context, RunData rundata) {
@@ -243,8 +248,10 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
     columns = (List[]) customizationState.getAttribute("customize-columns");
     PortletSet customizedSet = (PortletSet) jdata.getCustomized();
     Portlets set =
-      jdata.getCustomizedProfile().getDocument().getPortletsById(
-        customizedSet.getID());
+      jdata
+        .getCustomizedProfile()
+        .getDocument()
+        .getPortletsById(customizedSet.getID());
 
     if (logger.isDebugEnabled()) {
       logger.debug("MultiCol: columns " + columns + " set " + set);
@@ -257,11 +264,13 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
       }
 
       if (logger.isDebugEnabled()) {
-        logger.debug("MultiCol: eCount "
-          + eCount
-          + " setCount"
-          + set.getEntryCount()
-          + set.getPortletsCount());
+        logger
+          .debug(
+            "MultiCol: eCount "
+              + eCount
+              + " setCount"
+              + set.getEntryCount()
+              + set.getPortletsCount());
       }
       if (eCount != set.getEntryCount() + set.getPortletsCount()) {
         if (logger.isDebugEnabled()) {
@@ -294,8 +303,8 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
         if (identityElement instanceof Entry) {
           Entry entry = (Entry) identityElement;
           PortletEntry pentry =
-            (PortletEntry) Registry.getEntry(Registry.PORTLET, entry
-              .getParent());
+            (PortletEntry) Registry
+              .getEntry(Registry.PORTLET, entry.getParent());
           if ((pentry != null) && (pentry.getTitle() != null)) {
             titles.put(entry.getId(), pentry.getTitle());
             continue;
@@ -306,16 +315,18 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
         }
 
         if (identityElement instanceof Reference) {
-          titles.put(identityElement.getId(), Localization.getString(
-            rundata,
-            "CUSTOMIZER_REF_DEFAULTTITLE"));
+          titles
+            .put(
+              identityElement.getId(),
+              Localization.getString(rundata, "CUSTOMIZER_REF_DEFAULTTITLE"));
           continue;
         }
 
         // Let's make sure their is a title
-        titles.put(identityElement.getId(), Localization.getString(
-          rundata,
-          "CUSTOMIZER_NOTITLESET"));
+        titles
+          .put(
+            identityElement.getId(),
+            Localization.getString(rundata, "CUSTOMIZER_NOTITLESET"));
       }
     }
 
@@ -342,6 +353,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
     }
   }
 
+  @SuppressWarnings("rawtypes")
   public void doSave(RunData data, Context context) {
     // get the customization state for this page
     SessionState customizationState =
@@ -386,6 +398,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
     }
   }
 
+  @SuppressWarnings("rawtypes")
   public void doDelete(RunData data, Context context) {
     JetspeedRunData jdata = (JetspeedRunData) data;
 
@@ -411,8 +424,10 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
         columns[col].remove(row);
 
         Portlets portlets =
-          jdata.getCustomizedProfile().getDocument().getPortletsById(
-            customizedSet.getID());
+          jdata
+            .getCustomizedProfile()
+            .getDocument()
+            .getPortletsById(customizedSet.getID());
 
         if (portlets != null) {
           if (identityElement instanceof Entry) {
@@ -432,13 +447,15 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
         }
       } catch (Exception e) {
         // probably got wrong coordinates
-        logger.error(
-          "MultiColumnControllerAction: Probably got wrong coordinates",
-          e);
+        logger
+          .error(
+            "MultiColumnControllerAction: Probably got wrong coordinates",
+            e);
       }
     }
   }
 
+  @SuppressWarnings("rawtypes")
   public void doLeft(RunData data, Context context) {
     // get the customization state for this page
     SessionState customizationState =
@@ -457,6 +474,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
     }
   }
 
+  @SuppressWarnings("rawtypes")
   public void doRight(RunData data, Context context) {
     // get the customization state for this page
     SessionState customizationState =
@@ -475,6 +493,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
     }
   }
 
+  @SuppressWarnings("rawtypes")
   public void doUp(RunData data, Context context) {
     // get the customization state for this page
     SessionState customizationState =
@@ -493,6 +512,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
     }
   }
 
+  @SuppressWarnings("rawtypes")
   public void doDown(RunData data, Context context) {
     // get the customization state for this page
     SessionState customizationState =
@@ -577,7 +597,9 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
     }
   }
 
-  protected static void move(List[] cols, int oCol, int oRow, int nCol, int nRow) {
+  @SuppressWarnings("rawtypes")
+  protected static void move(List[] cols, int oCol, int oRow, int nCol,
+      int nRow) {
     Object obj = null;
 
     if ((oCol < cols.length) && (oRow < cols[oCol].size())) {
@@ -598,6 +620,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
     }
   }
 
+  @SuppressWarnings("rawtypes")
   protected static List[] buildColumns(Portlets set, int colNum) {
     // normalize the constraints and calculate max num of rows needed
     Iterator<?> iterator = set.getEntriesIterator();
@@ -639,10 +662,8 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
     }
 
     if (logger.isDebugEnabled()) {
-      logger.debug("Controller customize colNum: "
-        + colNum
-        + " rowNum: "
-        + rowNum);
+      logger
+        .debug("Controller customize colNum: " + colNum + " rowNum: " + rowNum);
     }
     // initialize the result position table and the work list
     List[] table = new List[colNum];
@@ -702,7 +723,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
   /**
    * Parses the size config info and returns a list of size values for the
    * current set
-   * 
+   *
    * @param sizeList
    *          java.lang.String a comma separated string a values
    * @return a List of values
@@ -737,7 +758,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
    * Add an element to the "table" or "work" objects. If the element is
    * unconstrained, and the position is within the number of columns, then the
    * element is added to "table". Othewise the element is added to "work"
-   * 
+   *
    * @param element
    *          to add
    * @param table
@@ -747,6 +768,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
    * @param columnCount
    *          Number of colum
    */
+  @SuppressWarnings("rawtypes")
   protected static void addElement(IdentityElement element, List[] table,
       List<IdentityElement> work, int columnCount) {
     Layout layout = element.getLayout();
@@ -789,6 +811,7 @@ public class MultiColumnControllerAction extends VelocityControllerAction {
 
   }
 
+  @SuppressWarnings("rawtypes")
   protected void dumpColumns(List[] cols) {
     for (int i = 0; i < cols.length; i++) {
       logger.debug("Column " + i);

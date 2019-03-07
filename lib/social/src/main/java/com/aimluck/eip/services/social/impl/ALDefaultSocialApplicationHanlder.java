@@ -76,8 +76,9 @@ import com.aimluck.eip.util.ALEipUtils;
 public class ALDefaultSocialApplicationHanlder extends
     ALSocialApplicationHandler {
 
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ALDefaultSocialApplicationHanlder.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(ALDefaultSocialApplicationHanlder.class.getName());
 
   private static ALSocialApplicationHandler instance;
 
@@ -122,8 +123,11 @@ public class ALDefaultSocialApplicationHanlder extends
       list.add(model);
     }
     ResultList<ALApplication> result =
-      new ResultList<ALApplication>(list, resultList.getLimit(), resultList
-        .getPage(), resultList.getTotalCount());
+      new ResultList<ALApplication>(
+        list,
+        resultList.getLimit(),
+        resultList.getPage(),
+        resultList.getTotalCount());
     return result;
   }
 
@@ -187,10 +191,11 @@ public class ALDefaultSocialApplicationHanlder extends
   @Override
   public List<ALOAuthConsumer> getOAuthConsumer(String appId) {
     ALApplication app =
-      getApplication(new ALApplicationGetRequest()
-        .withAppId(appId)
-        .withIsDetail(true)
-        .withStatus(Status.ALL));
+      getApplication(
+        new ALApplicationGetRequest()
+          .withAppId(appId)
+          .withIsDetail(true)
+          .withStatus(Status.ALL));
     return app.getOAuthConsumers();
   }
 
@@ -274,16 +279,19 @@ public class ALDefaultSocialApplicationHanlder extends
             .append("」をインストールしました。")
             .toString();
         String portletParams =
-          new StringBuilder("?template=GadgetsAdminDetailScreen").append(
-            "&entityid=").append(app.getAppId().toString()).toString();
-        createActivity(new ALActivityPutRequest()
-          .withAppId("GadgetAdd")
-          .withPortletParams(portletParams)
-          .withUserId(request.getActivityUserId())
-          .withTitle(title)
-          .withPriority(0f)
-          .withLoginName(request.getActivityLoginName())
-          .withExternalId(String.valueOf(app.getAppId().toString())));
+          new StringBuilder("?template=GadgetsAdminDetailScreen")
+            .append("&entityid=")
+            .append(app.getAppId().toString())
+            .toString();
+        createActivity(
+          new ALActivityPutRequest()
+            .withAppId("GadgetAdd")
+            .withPortletParams(portletParams)
+            .withUserId(request.getActivityUserId())
+            .withTitle(title)
+            .withPriority(0f)
+            .withLoginName(request.getActivityLoginName())
+            .withExternalId(String.valueOf(app.getAppId().toString())));
       }
 
     } catch (Throwable t) {
@@ -293,7 +301,7 @@ public class ALDefaultSocialApplicationHanlder extends
   }
 
   /**
-   * 
+   *
    * @param appId
    * @param request
    */
@@ -314,7 +322,7 @@ public class ALDefaultSocialApplicationHanlder extends
   }
 
   /**
-   * 
+   *
    * @param appIdList
    */
   @Override
@@ -334,7 +342,7 @@ public class ALDefaultSocialApplicationHanlder extends
   }
 
   /**
-   * 
+   *
    * @param appIdList
    */
   @Override
@@ -343,7 +351,7 @@ public class ALDefaultSocialApplicationHanlder extends
   }
 
   /**
-   * 
+   *
    * @param appIdList
    */
   @Override
@@ -363,7 +371,7 @@ public class ALDefaultSocialApplicationHanlder extends
   }
 
   /**
-   * 
+   *
    * @param appIdList
    */
   @Override
@@ -372,7 +380,7 @@ public class ALDefaultSocialApplicationHanlder extends
   }
 
   /**
-   * 
+   *
    * @param appIdList
    */
   @Override
@@ -450,7 +458,7 @@ public class ALDefaultSocialApplicationHanlder extends
   }
 
   /**
-   * 
+   *
    * @param property
    * @return
    */
@@ -469,21 +477,21 @@ public class ALDefaultSocialApplicationHanlder extends
             Operations.eq(ContainerConfig.NAME_PROPERTY, property.toString()))
           .fetchSingle();
       if (config == null) {
-        ALEipManager.getInstance().setContainerConfig(
-          property.toString(),
-          property.defaultValue());
+        ALEipManager
+          .getInstance()
+          .setContainerConfig(property.toString(), property.defaultValue());
         return property.defaultValue();
       } else {
-        ALEipManager.getInstance().setContainerConfig(
-          property.toString(),
-          config.getValue());
+        ALEipManager
+          .getInstance()
+          .setContainerConfig(property.toString(), config.getValue());
         return config.getValue();
       }
     }
   }
 
   /**
-   * 
+   *
    * @param property
    * @param value
    */
@@ -540,8 +548,11 @@ public class ALDefaultSocialApplicationHanlder extends
       list.add(activity);
     }
     ResultList<ALActivity> result =
-      new ResultList<ALActivity>(list, resultList.getLimit(), resultList
-        .getPage(), resultList.getTotalCount());
+      new ResultList<ALActivity>(
+        list,
+        resultList.getLimit(),
+        resultList.getPage(),
+        resultList.getTotalCount());
     return result;
   }
 
@@ -607,7 +618,8 @@ public class ALDefaultSocialApplicationHanlder extends
         StringBuilder b =
           new StringBuilder("update activity_map set is_read = 1 ");
         b
-          .append(" from activity where activity_map.activity_id = activity.id ");
+          .append(
+            " from activity where activity_map.activity_id = activity.id ");
         b.append(" and activity_map.login_name = #bind($loginName) ");
         sql = b.toString();
       } else {
@@ -648,7 +660,8 @@ public class ALDefaultSocialApplicationHanlder extends
         StringBuilder b =
           new StringBuilder("update activity_map set is_read = 1 ");
         b
-          .append(" from activity where activity_map.activity_id = activity.id ");
+          .append(
+            " from activity where activity_map.activity_id = activity.id ");
         b.append(" and activity.id = #bind($activityId) ");
         b.append(" and activity_map.login_name = #bind($loginName) ");
         sql = b.toString();
@@ -716,9 +729,14 @@ public class ALDefaultSocialApplicationHanlder extends
     }
     int isRead = request.isRead();
     if (isRead >= 0) {
-      query.where(Operations.eq(Activity.ACTIVITY_MAPS_PROPERTY
-        + "."
-        + ActivityMap.IS_READ_PROPERTY, isRead));
+      query
+        .where(
+          Operations
+            .eq(
+              Activity.ACTIVITY_MAPS_PROPERTY
+                + "."
+                + ActivityMap.IS_READ_PROPERTY,
+              isRead));
     }
     int external_id = request.getExternalId();
 
@@ -733,8 +751,11 @@ public class ALDefaultSocialApplicationHanlder extends
     String keyword = request.getKeyword();
     if ((keyword != null) && (!keyword.equals(""))) {
       // 選択したキーワードを指定する．
-      query.where(Operations.contains(Activity.TITLE_PROPERTY, keyword).or(
-        Operations.contains(Activity.LOGIN_NAME_PROPERTY, keyword)));
+      query
+        .where(
+          Operations
+            .contains(Activity.TITLE_PROPERTY, keyword)
+            .or(Operations.contains(Activity.LOGIN_NAME_PROPERTY, keyword)));
     }
     String loginName = request.getLoginName();
     if (loginName != null && loginName.length() > 0) {
@@ -747,17 +768,19 @@ public class ALDefaultSocialApplicationHanlder extends
       }
 
       if (priority < 1f) {
-        if (!aclhandler.hasAuthority(
-          (int) user.getUserId().getValue(),
-          ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_TOPIC,
-          ALAccessControlConstants.VALUE_ACL_LIST)) {
+        if (!aclhandler
+          .hasAuthority(
+            (int) user.getUserId().getValue(),
+            ALAccessControlConstants.POERTLET_FEATURE_MSGBOARD_TOPIC,
+            ALAccessControlConstants.VALUE_ACL_LIST)) {
           query.where(Operations.ne(Activity.APP_ID_PROPERTY, "Msgboard"));
         }
 
-        if (!aclhandler.hasAuthority(
-          (int) user.getUserId().getValue(),
-          ALAccessControlConstants.POERTLET_FEATURE_BLOG_ENTRY_OTHER,
-          ALAccessControlConstants.VALUE_ACL_LIST)) {
+        if (!aclhandler
+          .hasAuthority(
+            (int) user.getUserId().getValue(),
+            ALAccessControlConstants.POERTLET_FEATURE_BLOG_ENTRY_OTHER,
+            ALAccessControlConstants.VALUE_ACL_LIST)) {
           query.where(Operations.ne(Activity.APP_ID_PROPERTY, "blog"));
         }
       }
@@ -769,14 +792,25 @@ public class ALDefaultSocialApplicationHanlder extends
     if (targetLoginName != null && targetLoginName.length() > 0) {
       if (!targetLoginNameLimit) {
         // 更新情報
-        query.where(Operations.in(Activity.ACTIVITY_MAPS_PROPERTY
-          + "."
-          + ActivityMap.LOGIN_NAME_PROPERTY, targetLoginName, "-1"));
+        query
+          .where(
+            Operations
+              .in(
+                Activity.ACTIVITY_MAPS_PROPERTY
+                  + "."
+                  + ActivityMap.LOGIN_NAME_PROPERTY,
+                targetLoginName,
+                "-1"));
       } else {
         // あなた(自分)宛のお知らせ
-        query.where(Operations.in(Activity.ACTIVITY_MAPS_PROPERTY
-          + "."
-          + ActivityMap.LOGIN_NAME_PROPERTY, targetLoginName));
+        query
+          .where(
+            Operations
+              .in(
+                Activity.ACTIVITY_MAPS_PROPERTY
+                  + "."
+                  + ActivityMap.LOGIN_NAME_PROPERTY,
+                targetLoginName));
       }
     }
     String appId = request.getAppId();
@@ -808,9 +842,9 @@ public class ALDefaultSocialApplicationHanlder extends
 
       // priority は 0 <= 1 の間
       Float priority = request.getPriority();
-      if (priority == null) {
-        priority = 0f;
-      }
+      // if (priority == null) {
+      // priority = 0f;
+      // }
       if (priority < 0) {
         priority = 0f;
       }
@@ -838,8 +872,8 @@ public class ALDefaultSocialApplicationHanlder extends
       }
 
       ALApplication application =
-        getApplication(new ALApplicationGetRequest().withAppId(request
-          .getAppId()));
+        getApplication(
+          new ALApplicationGetRequest().withAppId(request.getAppId()));
       if (application != null) {
         activity.setIcon(application.getIcon().getValue());
       }
@@ -855,10 +889,16 @@ public class ALDefaultSocialApplicationHanlder extends
       Calendar cal = Calendar.getInstance();
       cal.add(Calendar.DAY_OF_MONTH, -limit);
 
-      Database.query(ActivityMap.class).where(
-        Operations.lt(ActivityMap.ACTIVITY_PROPERTY
-          + "."
-          + Activity.UPDATE_DATE_PROPERTY, cal.getTime())).deleteAll();
+      Database
+        .query(ActivityMap.class)
+        .where(
+          Operations
+            .lt(
+              ActivityMap.ACTIVITY_PROPERTY
+                + "."
+                + Activity.UPDATE_DATE_PROPERTY,
+              cal.getTime()))
+        .deleteAll();
 
       String sql =
         "delete from activity where update_date < '"
@@ -873,36 +913,54 @@ public class ALDefaultSocialApplicationHanlder extends
         Calendar tCal = Calendar.getInstance();
         int parentId = 0;
         Calendar tCalBefore = Calendar.getInstance();
-        tCalBefore.set(tCal.get(Calendar.YEAR), tCal.get(Calendar.MONTH), tCal
-          .get(Calendar.DATE), 0, 0, 0);
+        tCalBefore
+          .set(
+            tCal.get(Calendar.YEAR),
+            tCal.get(Calendar.MONTH),
+            tCal.get(Calendar.DATE),
+            0,
+            0,
+            0);
         Calendar tCalAfter = Calendar.getInstance();
-        tCalAfter.set(tCal.get(Calendar.YEAR), tCal.get(Calendar.MONTH), tCal
-          .get(Calendar.DATE), 0, 0, 0);
+        tCalAfter
+          .set(
+            tCal.get(Calendar.YEAR),
+            tCal.get(Calendar.MONTH),
+            tCal.get(Calendar.DATE),
+            0,
+            0,
+            0);
         tCalAfter.add(Calendar.DATE, 1);
 
         Expression exp1 =
-          ExpressionFactory.matchExp(EipTTimeline.OWNER_ID_PROPERTY, Integer
-            .valueOf(request.getUserId()));
+          ExpressionFactory
+            .matchExp(
+              EipTTimeline.OWNER_ID_PROPERTY,
+              Integer.valueOf(request.getUserId()));
         Expression exp2 =
-          ExpressionFactory.matchExp(
-            EipTTimeline.TIMELINE_TYPE_PROPERTY,
-            EipTTimeline.TIMELINE_TYPE_ACTIVITY);
+          ExpressionFactory
+            .matchExp(
+              EipTTimeline.TIMELINE_TYPE_PROPERTY,
+              EipTTimeline.TIMELINE_TYPE_ACTIVITY);
         Expression exp3 =
           ExpressionFactory.matchExp(EipTTimeline.PARENT_ID_PROPERTY, 0);
         Expression exp4 =
-          ExpressionFactory.betweenExp(
-            EipTTimeline.CREATE_DATE_PROPERTY,
-            tCalBefore.getTime(),
-            tCalAfter.getTime());
+          ExpressionFactory
+            .betweenExp(
+              EipTTimeline.CREATE_DATE_PROPERTY,
+              tCalBefore.getTime(),
+              tCalAfter.getTime());
         Expression exp5 =
-          ExpressionFactory.matchExp(
-            EipTTimeline.APP_ID_PROPERTY,
-            "ACTIVITY_PARENT");
+          ExpressionFactory
+            .matchExp(EipTTimeline.APP_ID_PROPERTY, "ACTIVITY_PARENT");
         Expression exp6 =
           ExpressionFactory.matchExp(EipTTimeline.EXTERNAL_ID_PROPERTY, "0");
         SelectQuery<EipTTimeline> tQuery = Database.query(EipTTimeline.class);
-        tQuery.andQualifier(exp1.andExp(exp2.andExp(exp3.andExp(exp4.andExp(
-          exp5).andExp(exp6)))));
+        tQuery
+          .andQualifier(
+            exp1
+              .andExp(
+                exp2.andExp(exp3.andExp(exp4.andExp(exp5).andExp(exp6)))));
         tQuery.distinct(true);
         List<EipTTimeline> parents = tQuery.fetchList();
         if (parents != null && parents.size() != 0) {
@@ -919,8 +977,8 @@ public class ALDefaultSocialApplicationHanlder extends
           timeline.setExternalId("0");
           timeline.setNote("");
           timeline.setTimelineType(EipTTimeline.TIMELINE_TYPE_ACTIVITY);
-          timeline.setParams(new SimpleDateFormat("yyyyMMdd").format(cal
-            .getTime()));
+          timeline
+            .setParams(new SimpleDateFormat("yyyyMMdd").format(cal.getTime()));
           // 作成日
           timeline.setCreateDate(tCal.getTime());
           // 更新日
@@ -929,8 +987,8 @@ public class ALDefaultSocialApplicationHanlder extends
           Database.commit();
 
           ALApplication application2 =
-            getApplication(new ALApplicationGetRequest().withAppId(request
-              .getAppId()));
+            getApplication(
+              new ALApplicationGetRequest().withAppId(request.getAppId()));
           if (application2 != null) {
             activity.setIcon(application2.getIcon().getValue());
           }
@@ -946,15 +1004,24 @@ public class ALDefaultSocialApplicationHanlder extends
           Calendar cal2 = Calendar.getInstance();
           cal2.add(Calendar.DAY_OF_MONTH, -limit2);
 
-          Database.query(EipTTimelineMap.class).where(
-            Operations.lt(EipTTimelineMap.EIP_TTIMELINE_PROPERTY
-              + "."
-              + EipTTimeline.UPDATE_DATE_PROPERTY, cal2.getTime())).deleteAll();
+          Database
+            .query(EipTTimelineMap.class)
+            .where(
+              Operations
+                .lt(
+                  EipTTimelineMap.EIP_TTIMELINE_PROPERTY
+                    + "."
+                    + EipTTimeline.UPDATE_DATE_PROPERTY,
+                  cal2.getTime()))
+            .deleteAll();
 
           // 親データ再検索
           tQuery = Database.query(EipTTimeline.class);
-          tQuery.andQualifier(exp1.andExp(exp2.andExp(exp3.andExp(exp4.andExp(
-            exp5).andExp(exp6)))));
+          tQuery
+            .andQualifier(
+              exp1
+                .andExp(
+                  exp2.andExp(exp3.andExp(exp4.andExp(exp5).andExp(exp6)))));
           tQuery.distinct(true);
           parents = tQuery.fetchList();
           if (parents != null && parents.size() != 0) {
@@ -965,18 +1032,23 @@ public class ALDefaultSocialApplicationHanlder extends
           }
         }
         exp1 =
-          ExpressionFactory.matchExp(
-            EipTTimeline.TIMELINE_TYPE_PROPERTY,
-            EipTTimeline.TIMELINE_TYPE_ACTIVITY);
+          ExpressionFactory
+            .matchExp(
+              EipTTimeline.TIMELINE_TYPE_PROPERTY,
+              EipTTimeline.TIMELINE_TYPE_ACTIVITY);
         exp2 =
-          ExpressionFactory.matchExp(EipTTimeline.OWNER_ID_PROPERTY, Integer
-            .valueOf(request.getUserId()));
+          ExpressionFactory
+            .matchExp(
+              EipTTimeline.OWNER_ID_PROPERTY,
+              Integer.valueOf(request.getUserId()));
         exp3 =
-          ExpressionFactory.matchExp(EipTTimeline.APP_ID_PROPERTY, request
-            .getAppId());
+          ExpressionFactory
+            .matchExp(EipTTimeline.APP_ID_PROPERTY, request.getAppId());
         exp4 =
-          ExpressionFactory.matchExp(EipTTimeline.EXTERNAL_ID_PROPERTY, request
-            .getExternalId());
+          ExpressionFactory
+            .matchExp(
+              EipTTimeline.EXTERNAL_ID_PROPERTY,
+              request.getExternalId());
         tQuery = Database.query(EipTTimeline.class);
         tQuery.andQualifier(exp1.andExp(exp2.andExp(exp3.andExp(exp4))));
         // tQuery.andQualifier(exp3);

@@ -41,7 +41,7 @@ import org.apache.turbine.util.RunData;
 
 /**
  * Handles enumerating Portlets that are also applications
- * 
+ *
  * @author <a href="mailto:burton@apache.org">Kevin A. Burton</a>
  * @author <a href="mailto:sgala@hisitech.com">Santiago Gala</a>
  * @version $Id: ApplicationsPortlet.java,v 1.39 2004/02/23 04:03:34 jford Exp $
@@ -51,8 +51,8 @@ public class ApplicationsPortlet extends AbstractPortlet {
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(ApplicationsPortlet.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(ApplicationsPortlet.class.getName());
 
   /* SGP: here we cache Applications */
   private final Vector<PortletEntry> applications = new Vector<PortletEntry>();
@@ -67,16 +67,16 @@ public class ApplicationsPortlet extends AbstractPortlet {
 
     this.setTitle("Applications");
     this
-      .setDescription("A list of Applications that are installed within Jetspeed");
+      .setDescription(
+        "A list of Applications that are installed within Jetspeed");
 
     logger.info("Jetspeed: initializing the ApplicationsPortlet: BEGIN ");
 
-    Enumeration<PortletEntry> portlets =
-      Registry.get(Registry.PORTLET).getEntries();
+    Enumeration<?> portlets = Registry.get(Registry.PORTLET).getEntries();
 
     while (portlets.hasMoreElements()) {
 
-      PortletEntry entry = portlets.nextElement();
+      PortletEntry entry = (PortletEntry) portlets.nextElement();
 
       if (entry.isApplication()) {
         applications.addElement(entry);
@@ -108,8 +108,9 @@ public class ApplicationsPortlet extends AbstractPortlet {
       }
       A anchor = new A(url).addElement(portlet.getTitle());
       table.addElement(new TR().addElement(new TD().addElement(anchor)));
-      table.addElement(new TR().addElement(new TD().addElement(portlet
-        .getDescription())));
+      table
+        .addElement(
+          new TR().addElement(new TD().addElement(portlet.getDescription())));
     }
 
     return table;

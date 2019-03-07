@@ -34,7 +34,7 @@ import org.apache.turbine.util.RunData;
  * a centralized configuration file. By using the forward service, you use
  * logical forward names in your java code.
  * </P>
- * 
+ *
  * @author <a href="mailto:david@bluesunrise.com">David Sean Taylor</a>
  * @version $Id: ForwardService.java,v 1.5 2004/02/23 03:51:09 jford Exp $
  */
@@ -47,7 +47,7 @@ public interface ForwardService extends Service {
   /**
    * Forward to a specific forward by name. All parameters are resolved
    * statically (via the forward definition)
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param forwardName
@@ -60,7 +60,7 @@ public interface ForwardService extends Service {
    * For the given portlet and given action, forward to the target defined in
    * the forward configuration for the portlet + action. All parameters are
    * resolved statically (via the forward definition)
-   * 
+   *
    * @param portlet
    *          The name of the portlet for which we are forwarding.
    * @param target
@@ -73,7 +73,7 @@ public interface ForwardService extends Service {
    * Forward to a specific forward by name. Parameters are resolved both
    * statically and dynamically, with the dynamic parameter overriding the
    * static parameter definitions.
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param forwardName
@@ -91,7 +91,7 @@ public interface ForwardService extends Service {
    * the forward configuration for the portlet + action. Parameters are resolved
    * both statically and dynamically, with the dynamic parameter overriding the
    * static parameter definitions.
-   * 
+   *
    * @param portlet
    *          The name of the portlet for which we are forwarding.
    * @param target
@@ -106,21 +106,21 @@ public interface ForwardService extends Service {
 
   /**
    * Get a collection of all forwards in the system.
-   * 
+   *
    * @return Collection of all forward definitions
    */
   public Collection<?> getForwards();
 
   /**
    * Get a collection of all portlet forwards in the system.
-   * 
+   *
    * @return Collection of all portlet forward definitions
    */
   public Collection<?> getPortletForwards();
 
   /**
    * Lookup a single forward definition by forward name
-   * 
+   *
    * @param forwardName
    *          The name of the Forward to find
    * @return Forward The found forward definition or null if not found
@@ -129,7 +129,7 @@ public interface ForwardService extends Service {
 
   /**
    * Lookup a single portlet forward definition by portlet name + target name
-   * 
+   *
    * @param portlet
    *          The name of the portlet in the Portlet Forward to find
    * @param target

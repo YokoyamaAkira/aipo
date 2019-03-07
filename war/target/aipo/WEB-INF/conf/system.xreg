@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <registry>
-    <portlet-entry name="SysInfo" hidden="false" type="ref" parent="Velocity" application="false">
+    <portlet-entry name="SysInfo" hidden="false" type="active" parent="Velocity" application="false">
         <security-ref parent="admin-view"/>
         <meta-info>
             <title>基本情報</title>

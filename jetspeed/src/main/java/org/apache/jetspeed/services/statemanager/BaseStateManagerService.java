@@ -50,7 +50,7 @@ import org.apache.turbine.util.RunData;
  * See the proposal: jakarta-jetspeed/proposals/StateManager.txt for more
  * details.
  * </p>
- * 
+ *
  * @version $Revision: 1.5 $
  * @see org.apache.jetspeed.services.statemanager.StateManagerService
  * @see org.apache.jetspeed.services.statemanager.SessionState
@@ -61,8 +61,9 @@ public abstract class BaseStateManagerService extends TurbineBaseService
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(BaseStateManagerService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(BaseStateManagerService.class.getName());
 
   /** map of thread to http session for that thread. */
   protected Map<Thread, HttpSession> m_httpSessions = null;
@@ -83,7 +84,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Access the Map which is the set of attributes for a state.
-   * 
+   *
    * @param key
    *          The state key.
    * @return The Map which is the set of attributes for a state.
@@ -92,7 +93,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Add a new state to the states we are managing.
-   * 
+   *
    * @param key
    *          The state key.
    * @param state
@@ -102,7 +103,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Remove a state from the states we are managing.
-   * 
+   *
    * @param key
    *          The state key.
    */
@@ -111,7 +112,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
   /**
    * Access an array of the keys of all states managed, those that start with
    * the parameter.
-   * 
+   *
    * @param start
    *          The starting string used to select the keys.
    * @return an array of the keys of all states managed.
@@ -120,7 +121,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * retire the attributes of the state.
-   * 
+   *
    * @param key
    *          The state key.
    * @param m_map
@@ -135,9 +136,12 @@ public abstract class BaseStateManagerService extends TurbineBaseService
     synchronized (m_map) {
       Iterator<?> i = attributes.iterator();
       while (i.hasNext()) {
+        @SuppressWarnings("rawtypes")
         Map.Entry attribute = (Map.Entry) i.next();
-        unBindAttributeValue(key, (String) attribute.getKey(), attribute
-          .getValue());
+        unBindAttributeValue(
+          key,
+          (String) attribute.getKey(),
+          attribute.getValue());
       }
     }
 
@@ -148,7 +152,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * If the object is a SessionStateBindingListener, unbind it
-   * 
+   *
    * @param stateKey
    *          The state key.
    * @param attributeName
@@ -162,9 +166,8 @@ public abstract class BaseStateManagerService extends TurbineBaseService
     if ((attribute != null)
       && (attribute instanceof SessionStateBindingListener)) {
       try {
-        ((SessionStateBindingListener) attribute).valueUnbound(
-          stateKey,
-          attributeName);
+        ((SessionStateBindingListener) attribute)
+          .valueUnbound(stateKey, attributeName);
       } catch (Throwable e) {
         logger
           .warn(
@@ -177,7 +180,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * If the object is a SessionStateBindingListener, bind it
-   * 
+   *
    * @param stateKey
    *          The state key.
    * @param attributeName
@@ -191,9 +194,8 @@ public abstract class BaseStateManagerService extends TurbineBaseService
     if ((attribute != null)
       && (attribute instanceof SessionStateBindingListener)) {
       try {
-        ((SessionStateBindingListener) attribute).valueBound(
-          stateKey,
-          attributeName);
+        ((SessionStateBindingListener) attribute)
+          .valueBound(stateKey, attributeName);
       } catch (Throwable e) {
         logger
           .warn(
@@ -210,7 +212,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Performs early initialization.
-   * 
+   *
    * @param config
    *          A ServletConfing to use for initialization activities.
    * @exception InitializationException
@@ -224,7 +226,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Performs early initialization.
-   * 
+   *
    * @param data
    *          An RunData to use for initialization activities.
    * @exception InitializationException
@@ -238,11 +240,11 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Performs late initialization.
-   * 
+   *
    * If your class relies on early initialization, and the object it expects was
    * not received, you can use late initialization to throw an exception and
    * complain.
-   * 
+   *
    * @exception InitializationException
    *              , if initialization of this class was not successful.
    */
@@ -252,7 +254,8 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
     // allocate a thread-safe map to store the "current" http session for each
     // thread
-    m_httpSessions = Collections.synchronizedMap(new HashMap());
+    m_httpSessions =
+      Collections.synchronizedMap(new HashMap<Thread, HttpSession>());
 
     // create our states storage
     initStates();
@@ -261,7 +264,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Returns to uninitialized state.
-   * 
+   *
    * You can use this method to release resources thet your Service allocated
    * when Turbine shuts down.
    */
@@ -280,7 +283,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Access the named attribute of the keyed state.
-   * 
+   *
    * @param key
    *          The state key.
    * @param name
@@ -299,7 +302,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Set the named state attribute of the keyed state with the provided object.
-   * 
+   *
    * @param key
    *          The state key.
    * @param name
@@ -312,7 +315,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
     Map<String, Object> state = getState(key);
     if (state == null) {
       // create a synchronized map to store the state attributes
-      state = Collections.synchronizedMap(new HashMap());
+      state = Collections.synchronizedMap(new HashMap<String, Object>());
       addState(key, state);
     }
 
@@ -334,7 +337,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Remove the named state attribute of the keyed state, if it exists.
-   * 
+   *
    * @param key
    *          The state key.
    * @param name
@@ -367,7 +370,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Remove all state attribute of the keyed state.
-   * 
+   *
    * @param key
    *          The state key.
    */
@@ -388,7 +391,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Access an array of all names of attributes stored in the keyed state.
-   * 
+   *
    * @param key
    *          The state key.
    * @return An array of all names of attributes stored in the keyed state.
@@ -410,7 +413,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Access an SessionState object with the given key.
-   * 
+   *
    * @param key
    *          The SessionState key.
    * @return an SessionState object with the given key.
@@ -424,7 +427,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
   /**
    * Access the SessionState object associated with the current request's http
    * session. The session id is used as the key.
-   * 
+   *
    * @return an SessionState object associated with the current request's http
    *         session.
    */
@@ -442,7 +445,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
   /**
    * Access the SessionState object associated with the current request's http
    * session with the given key.
-   * 
+   *
    * @param key
    *          The string to add to the session id to form the SessionState key.
    * @return an SessionState object associated with the current request's http
@@ -461,7 +464,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
   /**
    * Retire, forget about and clean up all states that start with the given key.
-   * 
+   *
    * @param keyStart
    *          The beginning of the key of the states to clean up.
    */
@@ -484,7 +487,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
    * Set the "current" context for this thread - Call this at the start of each
    * request, and call %%% at the end. getCurrentSession() uses this for the
    * session state key.
-   * 
+   *
    * @param session
    *          the HttpSession of the current request.
    */
@@ -522,7 +525,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
     /**
      * Construct.
-     * 
+     *
      * @param key
      *          The state key.
      * @param service
@@ -536,7 +539,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
     /**
      * Access the named attribute.
-     * 
+     *
      * @param name
      *          The attribute name.
      * @return The named attribute value.
@@ -549,7 +552,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
     /**
      * Set the named attribute value to the provided object.
-     * 
+     *
      * @param name
      *          The attribute name.
      * @param value
@@ -563,7 +566,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
     /**
      * Remove the named attribute, if it exists.
-     * 
+     *
      * @param name
      *          The attribute name.
      */
@@ -584,7 +587,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
     /**
      * Access an array of all names of attributes stored in the SessionState.
-     * 
+     *
      * @return An array of all names of attribute stored in the SessionState.
      */
     @Override
@@ -595,7 +598,7 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 
     /**
      * Access the full unique StateManager key for the SessionState.
-     * 
+     *
      * @return the full unique StateManager key for the SessionState.
      */
     @Override
@@ -618,11 +621,10 @@ public abstract class BaseStateManagerService extends TurbineBaseService
 } // BaseStateManagerService
 
 /**********************************************************************************
- * 
+ *
  * $Header:
  * /home/cvspublic/jakarta-jetspeed/src/java/org/apache/jetspeed/services
  * /statemanager/BaseStateManagerService.java,v 1.5 2004/02/23 03:38:28 jford
  * Exp $
- * 
+ *
  **********************************************************************************/
-

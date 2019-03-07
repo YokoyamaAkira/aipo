@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <registry>
-    <portlet-entry name="Cell_Workflow" hidden="false" type="ref" parent="Velocity" application="false">
+    <portlet-entry name="Cell_Workflow" hidden="false" type="active" parent="Velocity" application="false">
         <security-ref parent="user-view"/>
         <meta-info>
             <title>ﾜｰｸﾌﾛｰ</title>
@@ -56,7 +56,7 @@
         <media-type ref="vodafone"/>
         <url cachedOnURL="true"/>
     </portlet-entry>
-    <portlet-entry name="Cell_WorkflowCategory" hidden="false" type="ref" parent="Velocity" application="false">
+    <portlet-entry name="Cell_WorkflowCategory" hidden="false" type="active" parent="Velocity" application="false">
         <security-ref parent="admin-view"/>
         <meta-info>
             <title>ワークフロー管理</title>

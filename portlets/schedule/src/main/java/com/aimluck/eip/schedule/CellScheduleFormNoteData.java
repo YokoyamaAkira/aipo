@@ -69,13 +69,14 @@ import com.aimluck.eip.util.ALLocalizationUtils;
 
 /**
  * スケジュールのフォームデータを管理するクラスです。
- * 
+ *
  */
 public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
   /** <code>logger</code> logger */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(CellScheduleFormNoteData.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(CellScheduleFormNoteData.class.getName());
 
   /** <code>name</code> タイトル */
   private ALStringField name;
@@ -105,7 +106,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
   /**
    * フォームを表示します。
-   * 
+   *
    * @param action
    * @param rundata
    * @param context
@@ -116,13 +117,16 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
     try {
       init(action, rundata, context);
       boolean isedit =
-        (ALEipUtils.getTemp(rundata, context, ALEipConstants.ENTITY_ID) != null);
+        (ALEipUtils
+          .getTemp(rundata, context, ALEipConstants.ENTITY_ID) != null);
       if (is_copy) {
         isedit = false;
       }
-      action.setMode(isedit
-        ? ALEipConstants.MODE_EDIT_FORM
-        : ALEipConstants.MODE_NEW_FORM);
+      action
+        .setMode(
+          isedit
+            ? ALEipConstants.MODE_EDIT_FORM
+            : ALEipConstants.MODE_NEW_FORM);
       setMode(action.getMode());
       List<String> msgList = new ArrayList<String>();
 
@@ -161,15 +165,18 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
           Calendar limitStartCal = Calendar.getInstance();
           limitStartCal.setTime(form_data.getStartDate().getValue());
-          limitStartCal.set(Calendar.YEAR, Integer.parseInt(form_data
-            .getLimitStartDate()
-            .getYear()));
-          limitStartCal.set(Calendar.MONTH, Integer.parseInt(form_data
-            .getLimitStartDate()
-            .getMonth()) - 1);
-          limitStartCal.set(Calendar.DATE, Integer.parseInt(form_data
-            .getLimitStartDate()
-            .getDay()));
+          limitStartCal
+            .set(
+              Calendar.YEAR,
+              Integer.parseInt(form_data.getLimitStartDate().getYear()));
+          limitStartCal
+            .set(
+              Calendar.MONTH,
+              Integer.parseInt(form_data.getLimitStartDate().getMonth()) - 1);
+          limitStartCal
+            .set(
+              Calendar.DATE,
+              Integer.parseInt(form_data.getLimitStartDate().getDay()));
           schedule.setStartDate(limitStartCal.getTime());
           schedule.setEndDate(cal.getTime());
         } else {
@@ -177,29 +184,32 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           schedule.setEndDate(form_data.getEndDate().getValue());
         }
         if ("D".equals(form_data.getRepeatType().getValue())) {
-          schedule.setRepeatPattern(new StringBuffer()
-            .append('D')
-            .append(lim)
-            .toString());
+          schedule
+            .setRepeatPattern(
+              new StringBuffer().append('D').append(lim).toString());
         } else if ("W".equals(form_data.getRepeatType().getValue())) {
-          schedule.setRepeatPattern(new StringBuffer()
-            .append('W')
-            .append(form_data.getWeek0().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek1().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek2().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek3().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek4().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek5().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek6().getValue() != null ? 1 : 0)
-            .append(lim)
-            .toString());
+          schedule
+            .setRepeatPattern(
+              new StringBuffer()
+                .append('W')
+                .append(form_data.getWeek0().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek1().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek2().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek3().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek4().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek5().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek6().getValue() != null ? 1 : 0)
+                .append(lim)
+                .toString());
         } else {
           DecimalFormat format = new DecimalFormat("00");
-          schedule.setRepeatPattern(new StringBuffer()
-            .append('M')
-            .append(format.format(form_data.getMonthDay().getValue()))
-            .append(lim)
-            .toString());
+          schedule
+            .setRepeatPattern(
+              new StringBuffer()
+                .append('M')
+                .append(format.format(form_data.getMonthDay().getValue()))
+                .append(lim)
+                .toString());
         }
       }
 
@@ -211,11 +221,8 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
         for (FacilityResultData facility : facilityList) {
           fids.add(Integer.valueOf((int) facility.getFacilityId().getValue()));
         }
-        if (ScheduleUtils.isDuplicateFacilitySchedule(
-          schedule,
-          fids,
-          null,
-          null)) {
+        if (ScheduleUtils
+          .isDuplicateFacilitySchedule(schedule, fids, null, null)) {
           context.put("isDuplicateFacility", "true");
         }
       }
@@ -229,8 +236,10 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           int[] old_ids = ScheduleUtils.getFacilityIds(schedule);
           boolean check = false;
           if (old_ids.length != facilityList.size()) {
-            msgList.add(ALLocalizationUtils
-              .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
+            msgList
+              .add(
+                ALLocalizationUtils
+                  .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
             res = false;
           } else {
             for (int old_id : old_ids) {
@@ -243,8 +252,10 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
                 }
               }
               if (!check) {
-                msgList.add(ALLocalizationUtils
-                  .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
+                msgList
+                  .add(
+                    ALLocalizationUtils
+                      .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
                 res = false;
               }
               check = false;
@@ -252,8 +263,10 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           }
         } else {
           if (facilityList.size() > 0) {
-            msgList.add(ALLocalizationUtils
-              .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
+            msgList
+              .add(
+                ALLocalizationUtils
+                  .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
             res = false;
           }
         }
@@ -261,11 +274,12 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
       res =
         res
-          && (form_data.validateDelegate(
-            msgList,
-            getLoginUser(),
-            getEntityId(),
-            getScheduleType().getValue()));
+          && (form_data
+            .validateDelegate(
+              msgList,
+              getLoginUser(),
+              getEntityId(),
+              getScheduleType().getValue()));
       action.setResultData(this);
       action.addErrorMessages(msgList);
       action.putData(rundata, context);
@@ -281,7 +295,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
   }
 
   /**
-   * 
+   *
    * @param action
    * @param rundata
    * @param context
@@ -302,13 +316,13 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
   public void initField() {
     // タイトル
     name = new ALStringField();
-    name.setFieldName(ALLocalizationUtils
-      .getl10n("SCHEDULE_SETFIELDNAME_TITLE"));
+    name
+      .setFieldName(ALLocalizationUtils.getl10n("SCHEDULE_SETFIELDNAME_TITLE"));
     name.setTrim(true);
     // 場所
     place = new ALStringField();
-    place.setFieldName(ALLocalizationUtils
-      .getl10n("SCHEDULE_SETFIELDNAME_PLACE"));
+    place
+      .setFieldName(ALLocalizationUtils.getl10n("SCHEDULE_SETFIELDNAME_PLACE"));
     place.setTrim(true);
     // 内容
     note = new ALStringField();
@@ -317,8 +331,9 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
     note.setTrim(false);
     // 公開区分
     public_flag = new ALStringField();
-    public_flag.setFieldName(ALLocalizationUtils
-      .getl10n("SCHEDULE_SETFIELDNAME_PUBLIC"));
+    public_flag
+      .setFieldName(
+        ALLocalizationUtils.getl10n("SCHEDULE_SETFIELDNAME_PUBLIC"));
     public_flag.setTrim(true);
     public_flag.setValue("O");
 
@@ -334,8 +349,9 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
     // 2007.3.28 ToDo連携
     common_category_id = new ALCellNumberField();
-    common_category_id.setFieldName(ALLocalizationUtils
-      .getl10n("SCHEDULE_SETFIELDNAME_CATEGORY"));
+    common_category_id
+      .setFieldName(
+        ALLocalizationUtils.getl10n("SCHEDULE_SETFIELDNAME_CATEGORY"));
     common_category_id.setValue(1);
 
     super.initField();
@@ -361,7 +377,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
   }
 
   /**
-   * 
+   *
    * @param msgList
    * @return
    * @throws ALDBErrorException
@@ -413,7 +429,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
   }
 
   /**
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -437,7 +453,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
   }
 
   /**
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -524,10 +540,11 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
         cal.setTime(form_data.getEndDate().getValue());
         if ("ON".equals(form_data.getLimitFlag().getValue())) {
           lim = 'L';
-          cal.set(form_data.getLimitEndDate().getValue().getYear(), form_data
-            .getLimitEndDate()
-            .getValue()
-            .getMonth() - 1, form_data.getLimitEndDate().getValue().getDay());
+          cal
+            .set(
+              form_data.getLimitEndDate().getValue().getYear(),
+              form_data.getLimitEndDate().getValue().getMonth() - 1,
+              form_data.getLimitEndDate().getValue().getDay());
 
           ALDateContainer container = form_data.getLimitStartDate().getValue();
           Calendar limitStartCal = Calendar.getInstance();
@@ -542,29 +559,32 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
         schedule.setEndDate(cal.getTime());
         if ("D".equals(form_data.getRepeatType().getValue())) {
-          schedule.setRepeatPattern(new StringBuffer()
-            .append('D')
-            .append(lim)
-            .toString());
+          schedule
+            .setRepeatPattern(
+              new StringBuffer().append('D').append(lim).toString());
         } else if ("W".equals(form_data.getRepeatType().getValue())) {
-          schedule.setRepeatPattern(new StringBuffer()
-            .append('W')
-            .append(form_data.getWeek0().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek1().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek2().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek3().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek4().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek5().getValue() != null ? 1 : 0)
-            .append(form_data.getWeek6().getValue() != null ? 1 : 0)
-            .append(lim)
-            .toString());
+          schedule
+            .setRepeatPattern(
+              new StringBuffer()
+                .append('W')
+                .append(form_data.getWeek0().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek1().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek2().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek3().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek4().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek5().getValue() != null ? 1 : 0)
+                .append(form_data.getWeek6().getValue() != null ? 1 : 0)
+                .append(lim)
+                .toString());
         } else {
           DecimalFormat format = new DecimalFormat("00");
-          schedule.setRepeatPattern(new StringBuffer()
-            .append('M')
-            .append(format.format(form_data.getMonthDay().getValue()))
-            .append(lim)
-            .toString());
+          schedule
+            .setRepeatPattern(
+              new StringBuffer()
+                .append('M')
+                .append(format.format(form_data.getMonthDay().getValue()))
+                .append(lim)
+                .toString());
         }
       }
 
@@ -586,15 +606,16 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
         }
 
         EipTCommonCategory category =
-          CommonCategoryUtils.getEipTCommonCategory(common_category_id
-            .getValue());
+          CommonCategoryUtils
+            .getEipTCommonCategory(common_category_id.getValue());
         if (category == null) {
           map.setCommonCategoryId(Integer.valueOf(1));
           map.setEipTSchedule(schedule);
           map.setEipTCommonCategory(category1);
         } else {
-          map.setCommonCategoryId(Integer.valueOf((int) (common_category_id
-            .getValue())));
+          map
+            .setCommonCategoryId(
+              Integer.valueOf((int) (common_category_id.getValue())));
           map.setEipTSchedule(schedule);
           map.setEipTCommonCategory(category);
         }
@@ -624,23 +645,29 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
         && !facilityCheckAclPermission(
           rundata,
           ALAccessControlConstants.VALUE_ACL_INSERT)) {
-        msgList.add(ALLocalizationUtils
-          .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
+        msgList
+          .add(
+            ALLocalizationUtils
+              .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
         return false;
       }
 
       Database.commit();
 
       // イベントログに保存
-      ALEipUtils.setTemp(
-        rundata,
-        context,
-        ALEipConstants.MODE,
-        ALEipConstants.MODE_INSERT);
-      ALEventlogFactoryService.getInstance().getEventlogHandler().log(
-        schedule.getScheduleId(),
-        ALEventlogConstants.PORTLET_TYPE_SCHEDULE,
-        schedule.getName());
+      ALEipUtils
+        .setTemp(
+          rundata,
+          context,
+          ALEipConstants.MODE,
+          ALEipConstants.MODE_INSERT);
+      ALEventlogFactoryService
+        .getInstance()
+        .getEventlogHandler()
+        .log(
+          schedule.getScheduleId(),
+          ALEventlogConstants.PORTLET_TYPE_SCHEDULE,
+          schedule.getName());
 
       // アクティビティ
       ALEipUser loginUser = getLoginUser();
@@ -653,20 +680,18 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
             recipients.add(user.getName().getValue());
           }
         }
-        ScheduleUtils.createShareScheduleActivity(
-          schedule,
-          loginName,
-          recipients,
-          true,
-          ownerid); // createShareScheduleActivity関数に引数1個追加
+        ScheduleUtils
+          .createShareScheduleActivity(
+            schedule,
+            loginName,
+            recipients,
+            true,
+            ownerid); // createShareScheduleActivity関数に引数1個追加
 
         // アクティビティが公開スケジュールである場合、「更新情報」に表示させる。
         if ("O".equals(public_flag.toString())) {
-          ScheduleUtils.createNewScheduleActivity(
-            schedule,
-            loginName,
-            true,
-            ownerid);
+          ScheduleUtils
+            .createNewScheduleActivity(schedule, loginName, true, ownerid);
         }
       }
 
@@ -683,12 +708,16 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
       if (msgType > 0) {
         // パソコンへメールを送信
         List<ALEipUserAddr> destMemberList =
-          ALMailUtils.getALEipUserAddrs(form_data.getMemberList(), ALEipUtils
-            .getUserId(rundata), false);
+          ALMailUtils
+            .getALEipUserAddrs(
+              form_data.getMemberList(),
+              ALEipUtils.getUserId(rundata),
+              false);
         String subject =
-          ALLocalizationUtils.getl10nFormat(
-            "SCHEDULE_SUB_SCHEDULE",
-            ALOrgUtilsService.getAlias());
+          ALLocalizationUtils
+            .getl10nFormat(
+              "SCHEDULE_SUB_SCHEDULE",
+              ALOrgUtilsService.getAlias());
         String org_id = ALOrgUtilsService.getAlias();
 
         // メール送信
@@ -698,23 +727,28 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           ALAdminMailMessage message = new ALAdminMailMessage(destMember);
           message.setPcSubject(subject);
           message.setCellularSubject(subject);
-          message.setPcBody(ScheduleUtils.createMsgForPc(
-            rundata,
-            schedule,
-            form_data.getMemberList()));
-          message.setCellularBody(ScheduleUtils.createMsgForCellPhone(
-            rundata,
-            schedule,
-            form_data.getMemberList(),
-            destMember.getUserId()));
+          message
+            .setPcBody(
+              ScheduleUtils
+                .createMsgForPc(rundata, schedule, form_data.getMemberList()));
+          message
+            .setCellularBody(
+              ScheduleUtils
+                .createMsgForCellPhone(
+                  rundata,
+                  schedule,
+                  form_data.getMemberList(),
+                  destMember.getUserId()));
           messageList.add(message);
         }
 
-        ALMailService.sendAdminMailAsync(new ALAdminMailContext(
-          org_id,
-          ALEipUtils.getUserId(rundata),
-          messageList,
-          ALMailUtils.getSendDestType(ALMailUtils.KEY_MSGTYPE_SCHEDULE)));
+        ALMailService
+          .sendAdminMailAsync(
+            new ALAdminMailContext(
+              org_id,
+              ALEipUtils.getUserId(rundata),
+              messageList,
+              ALMailUtils.getSendDestType(ALMailUtils.KEY_MSGTYPE_SCHEDULE)));
         // msgList.addAll(errors);
 
       }
@@ -729,7 +763,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
   }
 
   /**
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -737,7 +771,6 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
    * @throws ALPageNotFoundException
    * @throws ALDBErrorException
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected boolean updateFormData(RunData rundata, Context context,
       List<String> msgList) throws ALPageNotFoundException, ALDBErrorException {
@@ -792,8 +825,10 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
         ALAccessControlConstants.VALUE_ACL_UPDATE)) {
         int[] old_ids = ScheduleUtils.getFacilityIds(schedule);
         if (old_ids.length != facilityList.size()) {
-          msgList.add(ALLocalizationUtils
-            .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
+          msgList
+            .add(
+              ALLocalizationUtils
+                .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
           return false;
         }
         boolean check = false;
@@ -807,8 +842,10 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
             }
           }
           if (!check) {
-            msgList.add(ALLocalizationUtils
-              .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
+            msgList
+              .add(
+                ALLocalizationUtils
+                  .getl10n("SCHEDULE_NO_PERMISSION_TO_MAKE_A_RESERVATION"));
             return false;
           }
           check = false;
@@ -819,9 +856,10 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
       SelectQuery<EipTScheduleMap> mapquery =
         Database.query(EipTScheduleMap.class);
       Expression mapexp =
-        ExpressionFactory.matchExp(
-          EipTScheduleMap.SCHEDULE_ID_PROPERTY,
-          schedule.getScheduleId());
+        ExpressionFactory
+          .matchExp(
+            EipTScheduleMap.SCHEDULE_ID_PROPERTY,
+            schedule.getScheduleId());
       mapquery.setQualifier(mapexp);
       List<EipTScheduleMap> list = mapquery.fetchList();
       if (list != null && list.size() > 0) {
@@ -830,16 +868,17 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
         if (category == null) {
           common_category_id.setValue(1);
         } else {
-          common_category_id.setValue(category
-            .getCommonCategoryId()
-            .longValue());
+          common_category_id
+            .setValue(category.getCommonCategoryId().longValue());
         }
       }
 
       EipTCommonCategory category1 =
         CommonCategoryUtils.getEipTCommonCategory(Long.valueOf(1));
 
-      if (form_data.getEditRepeatFlag().getValue() == CellScheduleUtils.FLAG_EDIT_REPEAT_ONE) {
+      if (form_data
+        .getEditRepeatFlag()
+        .getValue() == CellScheduleUtils.FLAG_EDIT_REPEAT_ONE) {
         // 繰り返しスケジュールの個別日程を変更する．
         // 新規オブジェクトモデル
         EipTSchedule newSchedule = Database.create(EipTSchedule.class);
@@ -897,14 +936,15 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
               }
             }
             EipTCommonCategory category =
-              CommonCategoryUtils.getEipTCommonCategory(common_category_id
-                .getValue());
+              CommonCategoryUtils
+                .getEipTCommonCategory(common_category_id.getValue());
             if (category == null) {
               map.setCommonCategoryId(Integer.valueOf(1));
               map.setEipTCommonCategory(category1);
             } else {
-              map.setCommonCategoryId(Integer.valueOf((int) (common_category_id
-                .getValue())));
+              map
+                .setCommonCategoryId(
+                  Integer.valueOf((int) (common_category_id.getValue())));
               map.setEipTCommonCategory(category);
             }
             map.setType(ScheduleUtils.SCHEDULEMAP_TYPE_USER);
@@ -948,9 +988,13 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           memberIds[i] = memberIdList.get(i).intValue();
         }
         // ダミーのスケジュールを登録する．
-        ScheduleUtils.insertDummySchedule(schedule, ownerid, form_data
-          .getViewDate()
-          .getValue(), form_data.getViewDate().getValue(), memberIds);
+        ScheduleUtils
+          .insertDummySchedule(
+            schedule,
+            ownerid,
+            form_data.getViewDate().getValue(),
+            form_data.getViewDate().getValue(),
+            memberIds);
       } else {
         // タイトル
         schedule.setName(name.getValue());
@@ -1002,7 +1046,8 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           schedule.setStartDate(form_data.getStartDate().getValue());
           schedule.setEndDate(form_data.getEndDate().getValue());
           schedule.setRepeatPattern("S");
-        } else if (CellScheduleUtils.SCHEDULE_TYPE_ONEDAY.equals(schedule_type)) {
+        } else if (CellScheduleUtils.SCHEDULE_TYPE_ONEDAY
+          .equals(schedule_type)) {
           schedule.setStartDate(form_data.getStartDate().getValue());
           schedule.setEndDate(form_data.getEndDate().getValue());
           schedule.setRepeatPattern("N");
@@ -1012,10 +1057,11 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           cal.setTime(form_data.getEndDate().getValue());
           if ("ON".equals(form_data.getLimitFlag().getValue())) {
             lim = 'L';
-            cal.set(form_data.getLimitEndDate().getValue().getYear(), form_data
-              .getLimitEndDate()
-              .getValue()
-              .getMonth() - 1, form_data.getLimitEndDate().getValue().getDay());
+            cal
+              .set(
+                form_data.getLimitEndDate().getValue().getYear(),
+                form_data.getLimitEndDate().getValue().getMonth() - 1,
+                form_data.getLimitEndDate().getValue().getDay());
 
             ALDateContainer container =
               form_data.getLimitStartDate().getValue();
@@ -1051,20 +1097,23 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
             schedule.setRepeatPattern(tmpPattern);
           } else {
             DecimalFormat format = new DecimalFormat("00");
-            schedule.setRepeatPattern(new StringBuffer()
-              .append('M')
-              .append(format.format(form_data.getMonthDay().getValue()))
-              .append(lim)
-              .toString());
+            schedule
+              .setRepeatPattern(
+                new StringBuffer()
+                  .append('M')
+                  .append(format.format(form_data.getMonthDay().getValue()))
+                  .append(lim)
+                  .toString());
           }
         }
 
         SelectQuery<EipTScheduleMap> query =
           Database.query(EipTScheduleMap.class);
         Expression exp =
-          ExpressionFactory.matchExp(
-            EipTScheduleMap.SCHEDULE_ID_PROPERTY,
-            schedule.getScheduleId());
+          ExpressionFactory
+            .matchExp(
+              EipTScheduleMap.SCHEDULE_ID_PROPERTY,
+              schedule.getScheduleId());
         query.setQualifier(exp);
         List<EipTScheduleMap> schedulemaps = query.fetchList();
         Database.deleteAll(schedulemaps);
@@ -1092,15 +1141,16 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           }
 
           EipTCommonCategory category =
-            CommonCategoryUtils.getEipTCommonCategory(common_category_id
-              .getValue());
+            CommonCategoryUtils
+              .getEipTCommonCategory(common_category_id.getValue());
           if (category == null) {
             map.setCommonCategoryId(Integer.valueOf(1));
             map.setEipTSchedule(schedule);
             map.setEipTCommonCategory(category1);
           } else {
-            map.setCommonCategoryId(Integer.valueOf((int) (common_category_id
-              .getValue())));
+            map
+              .setCommonCategoryId(
+                Integer.valueOf((int) (common_category_id.getValue())));
             map.setEipTSchedule(schedule);
             map.setEipTCommonCategory(category);
           }
@@ -1126,15 +1176,19 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
       Database.commit();
 
       // イベントログに保存
-      ALEipUtils.setTemp(
-        rundata,
-        context,
-        ALEipConstants.MODE,
-        ALEipConstants.MODE_UPDATE);
-      ALEventlogFactoryService.getInstance().getEventlogHandler().log(
-        schedule.getScheduleId(),
-        ALEventlogConstants.PORTLET_TYPE_SCHEDULE,
-        schedule.getName());
+      ALEipUtils
+        .setTemp(
+          rundata,
+          context,
+          ALEipConstants.MODE,
+          ALEipConstants.MODE_UPDATE);
+      ALEventlogFactoryService
+        .getInstance()
+        .getEventlogHandler()
+        .log(
+          schedule.getScheduleId(),
+          ALEventlogConstants.PORTLET_TYPE_SCHEDULE,
+          schedule.getName());
 
       // アクティビティ
       ALEipUser loginUser = getLoginUser();
@@ -1147,19 +1201,17 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
             recipients.add(user.getName().getValue());
           }
         }
-        ScheduleUtils.createShareScheduleActivity(
-          schedule,
-          loginName,
-          recipients,
-          false,
-          ownerid);
-        // アクティビティが公開スケジュールである場合、「更新情報」に表示させる。
-        if ("O".equals(public_flag.toString())) {
-          ScheduleUtils.createNewScheduleActivity(
+        ScheduleUtils
+          .createShareScheduleActivity(
             schedule,
             loginName,
+            recipients,
             false,
             ownerid);
+        // アクティビティが公開スケジュールである場合、「更新情報」に表示させる。
+        if ("O".equals(public_flag.toString())) {
+          ScheduleUtils
+            .createNewScheduleActivity(schedule, loginName, false, ownerid);
         }
       }
 
@@ -1176,12 +1228,16 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
       if (msgType > 0) {
         // パソコンへメールを送信
         List<ALEipUserAddr> destMemberList =
-          ALMailUtils.getALEipUserAddrs(form_data.getMemberList(), ALEipUtils
-            .getUserId(rundata), false);
+          ALMailUtils
+            .getALEipUserAddrs(
+              form_data.getMemberList(),
+              ALEipUtils.getUserId(rundata),
+              false);
         String subject =
-          ALLocalizationUtils.getl10nFormat(
-            "SCHEDULE_SUB_SCHEDULE",
-            ALOrgUtilsService.getAlias());
+          ALLocalizationUtils
+            .getl10nFormat(
+              "SCHEDULE_SUB_SCHEDULE",
+              ALOrgUtilsService.getAlias());
         String org_id = ALOrgUtilsService.getAlias();
 
         List<ALAdminMailMessage> messageList =
@@ -1190,23 +1246,28 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           ALAdminMailMessage message = new ALAdminMailMessage(destMember);
           message.setPcSubject(subject);
           message.setCellularSubject(subject);
-          message.setPcBody(ScheduleUtils.createMsgForPc(
-            rundata,
-            schedule,
-            form_data.getMemberList()));
-          message.setCellularBody(ScheduleUtils.createMsgForCellPhone(
-            rundata,
-            schedule,
-            form_data.getMemberList(),
-            destMember.getUserId()));
+          message
+            .setPcBody(
+              ScheduleUtils
+                .createMsgForPc(rundata, schedule, form_data.getMemberList()));
+          message
+            .setCellularBody(
+              ScheduleUtils
+                .createMsgForCellPhone(
+                  rundata,
+                  schedule,
+                  form_data.getMemberList(),
+                  destMember.getUserId()));
           messageList.add(message);
         }
 
-        ALMailService.sendAdminMailAsync(new ALAdminMailContext(
-          org_id,
-          ALEipUtils.getUserId(rundata),
-          messageList,
-          ALMailUtils.getSendDestType(ALMailUtils.KEY_MSGTYPE_SCHEDULE)));
+        ALMailService
+          .sendAdminMailAsync(
+            new ALAdminMailContext(
+              org_id,
+              ALEipUtils.getUserId(rundata),
+              messageList,
+              ALMailUtils.getSendDestType(ALMailUtils.KEY_MSGTYPE_SCHEDULE)));
         // msgList.addAll(errors);
 
       }
@@ -1230,7 +1291,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
   }
 
   /**
-   * 
+   *
    * @param rundata
    * @param context
    * @param msgList
@@ -1288,13 +1349,15 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
       }
       if (!isMember) {
         logger
-          .error("[ScheduleFormData] ALPageNotFoundException: The user does not have the auth to delete the schedule.");
+          .error(
+            "[ScheduleFormData] ALPageNotFoundException: The user does not have the auth to delete the schedule.");
         throw new ALPageNotFoundException();
       }
 
       if (loginuserId != schedule.getOwnerId().intValue()
         && "F".equals(schedule.getEditFlag())
-        && CellScheduleUtils.FLAG_DEL_MEMBER_ONE != del_member_flag.getValue()) {
+        && CellScheduleUtils.FLAG_DEL_MEMBER_ONE != del_member_flag
+          .getValue()) {
         // del_member_flag.setValue(FLAG_DEL_MEMBER_ONE);
         return true;
       }
@@ -1330,9 +1393,13 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
             memberIdList[i] =
               (int) form_data.getMemberList().get(i).getUserId().getValue();
           }
-          ScheduleUtils.insertDummySchedule(schedule, ownerid, form_data
-            .getViewDate()
-            .getValue(), form_data.getViewDate().getValue(), memberIdList);
+          ScheduleUtils
+            .insertDummySchedule(
+              schedule,
+              ownerid,
+              form_data.getViewDate().getValue(),
+              form_data.getViewDate().getValue(),
+              memberIdList);
         }
       } else if (delFlag == 2) {
         List<EipTScheduleMap> scheduleMaps =
@@ -1342,8 +1409,8 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
           List<EipTScheduleMap> userScheduleMap =
             new ArrayList<EipTScheduleMap>();
           for (EipTScheduleMap scheduleMap : scheduleMaps) {
-            if (ScheduleUtils.SCHEDULEMAP_TYPE_USER.equals(scheduleMap
-              .getType())) {
+            if (ScheduleUtils.SCHEDULEMAP_TYPE_USER
+              .equals(scheduleMap.getType())) {
               userScheduleMap.add(scheduleMap);
               if ("R".equals(scheduleMap.getStatus())) {
                 rejectedScheduleCount++;
@@ -1396,9 +1463,13 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
             memberIdList[i] =
               (int) form_data.getMemberList().get(i).getUserId().getValue();
           }
-          ScheduleUtils.insertDummySchedule(schedule, ownerid, form_data
-            .getViewDate()
-            .getValue(), form_data.getViewDate().getValue(), memberIdList);
+          ScheduleUtils
+            .insertDummySchedule(
+              schedule,
+              ownerid,
+              form_data.getViewDate().getValue(),
+              form_data.getViewDate().getValue(),
+              memberIdList);
         }
       } else {
         Database.delete(schedule);
@@ -1407,15 +1478,19 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
       Database.commit();
 
       // イベントログに保存
-      ALEipUtils.setTemp(
-        rundata,
-        context,
-        ALEipConstants.MODE,
-        ALEipConstants.MODE_DELETE);
-      ALEventlogFactoryService.getInstance().getEventlogHandler().log(
-        schedule.getScheduleId(),
-        ALEventlogConstants.PORTLET_TYPE_SCHEDULE,
-        schedule.getName());
+      ALEipUtils
+        .setTemp(
+          rundata,
+          context,
+          ALEipConstants.MODE,
+          ALEipConstants.MODE_DELETE);
+      ALEventlogFactoryService
+        .getInstance()
+        .getEventlogHandler()
+        .log(
+          schedule.getScheduleId(),
+          ALEventlogConstants.PORTLET_TYPE_SCHEDULE,
+          schedule.getName());
 
     } catch (Exception e) {
       Database.rollback();
@@ -1428,7 +1503,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
   /**
    * 指定したスケジュールを削除する．
-   * 
+   *
    * @param schedule
    */
   private void deleteSchedule(EipTSchedule schedule) {
@@ -1439,13 +1514,16 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
     // ダミースケジュールの取得
     SelectQuery<EipTSchedule> query = Database.query(EipTSchedule.class);
     Expression exp1 =
-      ExpressionFactory.matchExp(EipTSchedule.PARENT_ID_PROPERTY, Integer
-        .valueOf(scheduleId));
+      ExpressionFactory
+        .matchExp(EipTSchedule.PARENT_ID_PROPERTY, Integer.valueOf(scheduleId));
     query.setQualifier(exp1);
     Expression exp2 =
-      ExpressionFactory.matchExp(EipTSchedule.EIP_TSCHEDULE_MAPS_PROPERTY
-        + "."
-        + EipTScheduleMap.STATUS_PROPERTY, "D");
+      ExpressionFactory
+        .matchExp(
+          EipTSchedule.EIP_TSCHEDULE_MAPS_PROPERTY
+            + "."
+            + EipTScheduleMap.STATUS_PROPERTY,
+          "D");
     query.andQualifier(exp2);
     List<EipTSchedule> dellist = query.fetchList();
     // ダミースケジュールの削除
@@ -1456,7 +1534,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
   /**
    * Facilityのアクセス権限をチェック
-   * 
+   *
    * @param rundata
    * @param aclType
    * @return
@@ -1468,16 +1546,17 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
     ALAccessControlHandler aclhandler = aclservice.getAccessControlHandler();
 
     hasAuthority =
-      aclhandler.hasAuthority(
-        ALEipUtils.getUserId(rundata),
-        ALAccessControlConstants.POERTLET_FEATURE_SCHEDULE_FACILITY,
-        aclType);
+      aclhandler
+        .hasAuthority(
+          ALEipUtils.getUserId(rundata),
+          ALAccessControlConstants.POERTLET_FEATURE_SCHEDULE_FACILITY,
+          aclType);
     return hasAuthority;
   }
 
   /**
    * タイトルを取得します。
-   * 
+   *
    * @return
    */
   public ALStringField getName() {
@@ -1486,7 +1565,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
   /**
    * 内容を取得します。
-   * 
+   *
    * @return
    */
   public ALStringField getNote() {
@@ -1495,7 +1574,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
   /**
    * 場所を取得します。
-   * 
+   *
    * @return
    */
   public ALStringField getPlace() {
@@ -1504,7 +1583,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
   /**
    * 公開/非公開フラグを取得します。
-   * 
+   *
    * @return
    */
   public ALStringField getPublicFlag() {
@@ -1513,7 +1592,7 @@ public class CellScheduleFormNoteData extends AbstractCellScheduleFormData {
 
   /**
    * グループリストを取得します。
-   * 
+   *
    * @return
    */
   @Override

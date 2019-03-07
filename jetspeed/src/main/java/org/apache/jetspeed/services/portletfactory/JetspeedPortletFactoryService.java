@@ -53,7 +53,7 @@ import org.apache.turbine.services.rundata.RunDataService;
 
 /**
  * Simple implementation of the PortalFactoryService.
- * 
+ *
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @author <a href="mailto:weaver@apache.org">Scott T. Weaver</a>
  * @version $Id: JetspeedPortletFactoryService.java,v 1.23 2004/02/23 03:36:42
@@ -64,8 +64,9 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(JetspeedPortletFactoryService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(JetspeedPortletFactoryService.class.getName());
 
   /** The default control to use when none is specified */
   private boolean enableCache = false;
@@ -88,15 +89,16 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
 
     // get the runData service
     this.runDataService =
-      (JetspeedRunDataService) TurbineServices.getInstance().getService(
-        RunDataService.SERVICE_NAME);
+      (JetspeedRunDataService) TurbineServices
+        .getInstance()
+        .getService(RunDataService.SERVICE_NAME);
 
     setInit(true);
   }
 
   /**
    * Given a PSML Entry return an instanciated Portlet.
-   * 
+   *
    * @param entry
    *          a PSML Entry describing a portlet
    * @param id
@@ -131,7 +133,7 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
 
   /**
    * Given a Portlet registry entry name, instanciate it
-   * 
+   *
    * @param name
    *          the name of a portlet in the registry
    * @return an instanciated portlet corresponding to this entry
@@ -159,7 +161,7 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
   /**
    * Instanciates or retrieve from memory cache a portlet corresponding to the
    * passed parameters
-   * 
+   *
    * @param classname
    *          the classname of the portlet to instanciate
    * @param pc
@@ -181,19 +183,19 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
     try {
       portletClass = Class.forName(classname);
     } catch (Exception e) {
-      throw new PortletException("PortletFactory: Unable to load class "
-        + classname);
+      throw new PortletException(
+        "PortletFactory: Unable to load class " + classname);
     }
 
     if (enableCache) {
       try {
         // try to invoke a static getHandle() for this class
-        Class[] signatureParams = { Object.class };
+        Class<?>[] signatureParams = { Object.class };
         Object[] methodParams = { pc };
         handle =
-          (String) portletClass.getMethod("getHandle", signatureParams).invoke(
-            null,
-            methodParams);
+          (String) portletClass
+            .getMethod("getHandle", signatureParams)
+            .invoke(null, methodParams);
         // make sure the handle is differenciated by class
         handle = String.valueOf(classname.hashCode()) + handle;
       } catch (NoSuchMethodException e) {
@@ -211,7 +213,8 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
         portlet = (Portlet) PortletCache.getCacheable(handle);
 
         // portlet in cache but expired, remove it from cache
-        if ((portlet != null) && ((Cacheable) portlet).getExpire().isExpired()) {
+        if ((portlet != null)
+          && ((Cacheable) portlet).getExpire().isExpired()) {
           logger.info("The portlet (" + handle + ") is expired");
           PortletCache.removeCacheable(handle);
           if (logger.isDebugEnabled()) {
@@ -264,10 +267,12 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
         long milliseconds = (System.currentTimeMillis() - begin);
 
         if (logger.isDebugEnabled()) {
-          logger.debug("PortletFactory.getPortlet(): found in cache in "
-            + milliseconds
-            + " ms - handle: "
-            + handle);
+          logger
+            .debug(
+              "PortletFactory.getPortlet(): found in cache in "
+                + milliseconds
+                + " ms - handle: "
+                + handle);
         }
 
         return PortletWrapper.wrap(portlet);
@@ -327,10 +332,12 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
     long milliseconds = (System.currentTimeMillis() - begin);
 
     if (logger.isDebugEnabled()) {
-      logger.debug("PortletFactory.getPortlet(): constructed in "
-        + milliseconds
-        + " ms - handle: "
-        + handle);
+      logger
+        .debug(
+          "PortletFactory.getPortlet(): constructed in "
+            + milliseconds
+            + " ms - handle: "
+            + handle);
     }
 
     return PortletWrapper.wrap(portlet);
@@ -339,14 +346,15 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
 
   /**
    * Given a Registry Entry, get the value of what its PortletConfig would be.
-   * 
+   *
    * @param entry
    *          the PSML Entry containing the config
    * @param portletId
    *          the PSML entry's portlet id
    * @return the newly created PortletConfig object
    */
-  protected PortletConfig getPortletConfig(PortletEntry portletEntry, String id) {
+  protected PortletConfig getPortletConfig(PortletEntry portletEntry,
+      String id) {
     Map<String, String> map = new HashMap<String, String>();
     map.putAll(portletEntry.getParameterMap());
 
@@ -376,7 +384,7 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
 
   /**
    * Fetches the parameters out of a PSML Entry
-   * 
+   *
    * @param entry
    *          the Entry to check for parameters
    * @return a Map containing the parameters names/values, an empty Map is
@@ -396,7 +404,7 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
 
   /**
    * Create a MetaData object from a PSML Metainfo object
-   * 
+   *
    * @param meta
    *          the Metainfo to copy
    * @return the new MetaData object, empty if meta is null
@@ -438,7 +446,7 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
 
   /**
    * Create a MetaData object from a registry Metainfo object
-   * 
+   *
    * @param meta
    *          the Metainfo to copy
    * @return the new MetaData object, empty if meta is null
@@ -480,7 +488,7 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
   /**
    * Retruns the classname defined for this PortletEntry. If no classname was
    * defined, the parent is queried
-   * 
+   *
    * @author <a href="mailto:weaver@apache.org">Scott T. Weaver</a>
    */
   protected String getClassname(PortletEntry entry) {
@@ -499,7 +507,7 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
   /**
    * Maps all parameters, not found within the <code>entry</code>, from the
    * <code>entry</code>'s parent into the entry
-   * 
+   *
    * @author <a href="mailto:weaver@apache.org">Scott T. Weaver</a>
    */
   protected void addParentInitParameters(PortletEntry entry,
@@ -530,8 +538,9 @@ public class JetspeedPortletFactoryService extends TurbineBaseService implements
     // If something happended during init() that prevented this
     if (runDataService == null) {
       this.runDataService =
-        (JetspeedRunDataService) TurbineServices.getInstance().getService(
-          RunDataService.SERVICE_NAME);
+        (JetspeedRunDataService) TurbineServices
+          .getInstance()
+          .getService(RunDataService.SERVICE_NAME);
     }
     JetspeedRunData rundata = runDataService.getCurrentRunData();
 

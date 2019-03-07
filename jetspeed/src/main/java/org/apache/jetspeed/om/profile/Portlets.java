@@ -25,7 +25,7 @@ import org.apache.jetspeed.om.SecurityReference;
 /**
  * Portlets is collection of portlet entries and other portlet sets within a
  * configuration Document.
- * 
+ *
  * @author <a href="mailto:taylor@apache.org">David Sean Taylor</a>
  * @version $Id: Portlets.java,v 1.7 2004/02/23 03:05:01 jford Exp $
  */
@@ -60,9 +60,9 @@ public interface Portlets extends IdentityElement {
 
   public Iterator<?> getEntriesIterator();
 
-  public Iterator<?> getPortletsIterator();
+  public Iterator<Portlets> getPortletsIterator();
 
-  public Iterator<?> getReferenceIterator();
+  public Iterator<Reference> getReferenceIterator();
 
   public void addEntry(Entry entry) throws java.lang.IndexOutOfBoundsException;
 
@@ -80,14 +80,14 @@ public interface Portlets extends IdentityElement {
 
   /**
    * Getter for property securityRef.
-   * 
+   *
    * @return Value of property securityRef.
    */
   public SecurityReference getSecurityRef();
 
   /**
    * Setter for property securityRef.
-   * 
+   *
    * @param securityRef
    *          New value of property securityRef.
    */
@@ -103,7 +103,7 @@ public interface Portlets extends IdentityElement {
    * @param Portlets
    *          Sets the parent <code>Portlets</code> collection for this Portlets
    *          collection
-   * 
+   *
    */
   public void setParentPortlets(Portlets parent);
 }

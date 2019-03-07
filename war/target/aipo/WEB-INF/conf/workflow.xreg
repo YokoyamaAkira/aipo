@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <registry>
-    <portlet-entry name="Workflow" hidden="false" type="ref" parent="Velocity" application="false">
+    <portlet-entry name="Workflow" hidden="false" type="active" parent="Velocity" application="false">
         <security-ref parent="user-view"/>
         <meta-info>
             <title>ワークフロー</title>
@@ -38,7 +38,7 @@
         <media-type ref="html"/>
         <url cachedOnURL="true"/>
     </portlet-entry>
-    <portlet-entry name="WorkflowCategory" hidden="false" type="ref" parent="Velocity" application="false">
+    <portlet-entry name="WorkflowCategory" hidden="false" type="active" parent="Velocity" application="false">
         <security-ref parent="admin-view"/>
         <meta-info>
             <title>ワークフロー管理</title>

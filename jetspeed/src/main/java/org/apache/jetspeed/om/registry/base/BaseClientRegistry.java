@@ -40,7 +40,7 @@ import org.apache.jetspeed.services.logging.JetspeedLogger;
  * call the addLocalEntry/removeLocalEntry methods to modify the in memory state
  * of this Registry
  * </p>
- * 
+ *
  * @author <a href="shesmer@raleigh.ibm.com">Stephan Hesmer</a>
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @version $Id: BaseClientRegistry.java,v 1.5 2004/02/23 03:08:26 jford Exp $
@@ -51,8 +51,8 @@ public class BaseClientRegistry extends BaseOrderedRegistry implements
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(BaseClientRegistry.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(BaseClientRegistry.class.getName());
 
   /**
    * @see Registry#setEntry
@@ -110,7 +110,7 @@ public class BaseClientRegistry extends BaseOrderedRegistry implements
 
   /**
    * Returns the client which matches the given useragent string.
-   * 
+   *
    * @param useragent
    *          the useragent to match
    * @return the found client or null if the user-agent does not match any
@@ -119,11 +119,12 @@ public class BaseClientRegistry extends BaseOrderedRegistry implements
   @Override
   public ClientEntry findEntry(String useragent) {
     ClientEntry clientEntry = null;
-    Enumeration clients = getEntries();
+    Enumeration<RegistryEntry> clients = getEntries();
 
     if (logger.isDebugEnabled()) {
-      logger.debug("ClientRegistry: Looking for client with useragent :"
-        + useragent);
+      logger
+        .debug(
+          "ClientRegistry: Looking for client with useragent :" + useragent);
     }
 
     if (clients != null) {
@@ -136,26 +137,31 @@ public class BaseClientRegistry extends BaseOrderedRegistry implements
 
             // org.apache.regexp -> java.util.regex
             Pattern r =
-              Pattern.compile(
-                client.getUseragentpattern(),
-                Pattern.CASE_INSENSITIVE);
+              Pattern
+                .compile(
+                  client.getUseragentpattern(),
+                  Pattern.CASE_INSENSITIVE);
 
             if (r.matcher(useragent).matches()) {
 
               if (logger.isDebugEnabled()) {
-                logger.debug("ClientRegistry: "
-                  + useragent
-                  + " matches "
-                  + client.getUseragentpattern());
+                logger
+                  .debug(
+                    "ClientRegistry: "
+                      + useragent
+                      + " matches "
+                      + client.getUseragentpattern());
               }
 
               return client;
             } else {
               if (logger.isDebugEnabled()) {
-                logger.debug("ClientRegistry: "
-                  + useragent
-                  + " does not match "
-                  + client.getUseragentpattern());
+                logger
+                  .debug(
+                    "ClientRegistry: "
+                      + useragent
+                      + " does not match "
+                      + client.getUseragentpattern());
               }
             }
           } catch (org.apache.regexp.RESyntaxException e) {
@@ -176,7 +182,7 @@ public class BaseClientRegistry extends BaseOrderedRegistry implements
   /**
    * Creates a new RegistryEntry instance compatible with the current Registry
    * instance implementation
-   * 
+   *
    * @return the newly created RegistryEntry
    */
   @Override

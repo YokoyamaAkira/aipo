@@ -41,7 +41,7 @@ import org.apache.turbine.services.resources.TurbineResourceService;
  * This implementation of the <code>resourcesService</code> relies on an
  * external properties file for storing the configuration keys and values
  * </p>
- * 
+ *
  * <P>
  * In order to be compatible with legacy applications, this implementation kept
  * a static method for initializing the service, so it's still possible to write
@@ -52,7 +52,7 @@ import org.apache.turbine.services.resources.TurbineResourceService;
  * Vector myVar = TurbineResources.getVector("myvar");
  * </code>
  * </p>
- * 
+ *
  * <p>
  * This implementation allows the use of several pre-defined variables within
  * the configuration file. The variables are identified by the following
@@ -69,7 +69,7 @@ import org.apache.turbine.services.resources.TurbineResourceService;
  * The init parameters of the servlet are also imported as default variables.
  * They may override the previously defined default variables
  * </p>
- * 
+ *
  * @author <a href="mailto:raphael@apache.org">Rapha�l Luta</a>
  * @version $Id: VariableResourcesService.java,v 1.15 2004/02/23 03:29:53 jford
  *          Exp $
@@ -78,8 +78,9 @@ public class VariableResourcesService extends TurbineResourceService {
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(VariableResourcesService.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService
+      .getLogger(VariableResourcesService.class.getName());
 
   public static final String WEBAPP_DIR = "webapp.dir";
 
@@ -117,7 +118,7 @@ public class VariableResourcesService extends TurbineResourceService {
 
   /**
    * This method is called when the Service is initialized
-   * 
+   *
    * @param config
    *          a ServletConfig object
    */
@@ -141,7 +142,7 @@ public class VariableResourcesService extends TurbineResourceService {
 
   /**
    * Initializer method that sets up the generic resources.
-   * 
+   *
    * @param confs
    *          A Configurations object.
    */
@@ -242,7 +243,7 @@ public class VariableResourcesService extends TurbineResourceService {
   /**
    * The purpose of this method is to get the configuration resource with the
    * given name as a string.
-   * 
+   *
    * @param name
    *          The resource name.
    * @return The value of the resource as a string.
@@ -264,7 +265,7 @@ public class VariableResourcesService extends TurbineResourceService {
   /**
    * The purpose of this method is to get the configuration resource with the
    * given name as a string, or a default value.
-   * 
+   *
    * @param name
    *          The resource name.
    * @param def
@@ -285,7 +286,7 @@ public class VariableResourcesService extends TurbineResourceService {
   /**
    * The purpose of this method is to get the configuration resource with the
    * given name as a string array.
-   * 
+   *
    * @param name
    *          The resource name.
    * @return The value of the resource as a string array.
@@ -309,11 +310,12 @@ public class VariableResourcesService extends TurbineResourceService {
   /**
    * The purpose of this method is to get the configuration resource with the
    * given name as a vector.
-   * 
+   *
    * @param name
    *          The resource name.
    * @return The value of the resource as a vector.
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Vector<String> getVector(String name) {
     Vector<String> std = vectors.get(name);
@@ -337,15 +339,16 @@ public class VariableResourcesService extends TurbineResourceService {
   /**
    * The purpose of this method is to get the configuration resource with the
    * given name as a vector, or a default value.
-   * 
+   *
    * @param name
    *          The resource name.
    * @param def
    *          The default value of the resource.
    * @return The value of the resource as a vector.
    */
+  @SuppressWarnings("rawtypes")
   @Override
-  public Vector getVector(String name, Vector def) {
+  public Vector<String> getVector(String name, Vector def) {
     Vector<String> std = getVector(name);
     if (std == null) {
       if (def != null) {
@@ -364,7 +367,7 @@ public class VariableResourcesService extends TurbineResourceService {
    * The purpose of this method is to extract a subset of configuraton resources
    * sharing a common name prefix. The prefix is stripped from the names of the
    * resulting resources.
-   * 
+   *
    * @param prefix
    *          the common name prefix
    * @return A ResourceService providing the subset of configuration.

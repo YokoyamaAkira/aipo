@@ -32,17 +32,17 @@ import org.apache.turbine.util.ObjectUtils;
 
 /**
  * The default Jetspeed implementation of User interface.
- * 
+ *
  * This basic implementation contains the functionality that is expected to be
  * common among all User implementations. You are welcome to extend this class
  * if you wish to have custom functionality in your user objects (like accessor
  * methods for custom attributes).
- * 
+ *
  * @author <a href="mailto:taylor@apache.org">David Sean Taylor</a>
  * @author <a href="mailto:morciuch@apache.org">Mark Orciuch</a>
  * @version $Id: BaseJetspeedUser.java,v 1.11 2004/02/23 03:14:12 jford Exp $
  */
-public class BaseJetspeedUser /* extends SecurityObject */implements
+public class BaseJetspeedUser /* extends SecurityObject */ implements
     JetspeedUser {
   /** The date on which the user account was created. */
   private Date createDate = null;
@@ -63,8 +63,8 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(BaseJetspeedUser.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(BaseJetspeedUser.class.getName());
 
   /**
    * Constructor. Create a new User and set the createDate.
@@ -80,7 +80,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Returns the primary principle for this User, the user id.
-   * 
+   *
    * @return the user id.
    */
   @Override
@@ -105,7 +105,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Gets the access counter for a user during a session.
-   * 
+   *
    * @return The access counter for the user for the session.
    */
   @Override
@@ -125,7 +125,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Gets the access counter for a user from perm storage.
-   * 
+   *
    * @return The access counter for the user.
    */
   @Override
@@ -145,7 +145,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Gets the create date for this User. This is the time at which the user
    * object was created.
-   * 
+   *
    * @return A Java Date with the date of creation for the user.
    */
   @Override
@@ -156,7 +156,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Gets the last access date for this User. This is the last time that the
    * user object was referenced.
-   * 
+   *
    * @return A Java Date with the last access date for the user.
    */
   @Override
@@ -169,7 +169,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Get last login date/time for this user.
-   * 
+   *
    * @return A Java Date with the last login date for the user.
    */
   @Override
@@ -179,7 +179,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Get password for this user.
-   * 
+   *
    * @return A String with the password for the user.
    */
   @Override
@@ -189,7 +189,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Get an object from permanent storage.
-   * 
+   *
    * @param name
    *          The object's name.
    * @return An Object with the given name.
@@ -201,7 +201,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Get an object from permanent storage; return default if value is null.
-   * 
+   *
    * @param name
    *          The object's name.
    * @param def
@@ -222,7 +222,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * This should only be used in the case where we want to save the data to the
    * database.
-   * 
+   *
    * @return A Hashtable.
    */
   @Override
@@ -235,7 +235,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Get an object from temporary storage.
-   * 
+   *
    * @param name
    *          The object's name.
    * @return An Object with the given name.
@@ -247,7 +247,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Get an object from temporary storage; return default if value is null.
-   * 
+   *
    * @param name
    *          The object's name.
    * @param def
@@ -272,7 +272,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Returns the username for this user. If this is defined, then the user is
    * considered logged in.
-   * 
+   *
    * @return A String with the username.
    */
   @Override
@@ -292,7 +292,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Returns the first name for this user. If this is defined, then the user is
    * considered logged in.
-   * 
+   *
    * @return A String with the user's first name.
    */
   @Override
@@ -312,7 +312,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Returns the last name for this user. If this is defined, then the user is
    * considered logged in.
-   * 
+   *
    * @return A String with the user's last name.
    */
   @Override
@@ -331,7 +331,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * The user is considered logged in if they have not timed out.
-   * 
+   *
    * @return Whether the user has logged in.
    */
   @Override
@@ -342,7 +342,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Returns the email address for this user.
-   * 
+   *
    * @return A String with the user's email address.
    */
   @Override
@@ -368,7 +368,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Remove an object from temporary storage and return the object.
-   * 
+   *
    * @param name
    *          The name of the object to remove.
    * @return An Object.
@@ -380,7 +380,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Sets the access counter for a user, saved in perm storage.
-   * 
+   *
    * @param cnt
    *          The new count.
    */
@@ -391,7 +391,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Sets the session access counter for a user, saved in temp storage.
-   * 
+   *
    * @param cnt
    *          The new count.
    */
@@ -412,7 +412,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Sets the create date for this User. This is the time at which the user
    * object was created.
-   * 
+   *
    * @param date
    *          The create date.
    */
@@ -423,7 +423,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Set last login date/time.
-   * 
+   *
    * @param date
    *          The last login date.
    */
@@ -434,7 +434,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Set password.
-   * 
+   *
    * @param password
    *          The new password.
    */
@@ -447,7 +447,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
    * Put an object into permanent storage. If the value is null, it will convert
    * that to a "" because the underlying storage mechanism within TurbineUser is
    * currently a Hashtable and null is not a valid value.
-   * 
+   *
    * @param name
    *          The object's name.
    * @param value
@@ -461,10 +461,11 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * This should only be used in the case where we want to save the data to the
    * database.
-   * 
+   *
    * @param stuff
    *          A Hashtable.
    */
+  @SuppressWarnings("rawtypes")
   @Override
   public void setPermStorage(Hashtable stuff) {
     this.permStorage = stuff;
@@ -473,7 +474,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * This should only be used in the case where we want to save the data to the
    * database.
-   * 
+   *
    * @return A Hashtable.
    */
   @Override
@@ -487,10 +488,11 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * This should only be used in the case where we want to save the data to the
    * database.
-   * 
+   *
    * @param storage
    *          A Hashtable.
    */
+  @SuppressWarnings("rawtypes")
   @Override
   public void setTempStorage(Hashtable storage) {
     this.tempStorage = storage;
@@ -500,7 +502,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
    * This gets whether or not someone has logged in. hasLoggedIn() returns this
    * value as a boolean. This is private because you should use hasLoggedIn()
    * instead.
-   * 
+   *
    * @return True if someone has logged in.
    */
   private Boolean getHasLoggedIn() {
@@ -510,7 +512,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * This sets whether or not someone has logged in. hasLoggedIn() returns this
    * value.
-   * 
+   *
    * @param value
    *          Whether someone has logged in or not.
    */
@@ -523,7 +525,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
    * Put an object into temporary storage. If the value is null, it will convert
    * that to a "" because the underlying storage mechanism within TurbineUser is
    * currently a Hashtable and null is not a valid value.
-   * 
+   *
    * @param name
    *          The object's name.
    * @param value
@@ -536,7 +538,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Sets the username for this user.
-   * 
+   *
    * @param username
    *          The user's username.
    */
@@ -547,7 +549,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Sets the first name for this user.
-   * 
+   *
    * @param firstName
    *          User's first name.
    */
@@ -558,7 +560,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Sets the last name for this user.
-   * 
+   *
    * @param lastName
    *          User's last name.
    */
@@ -569,7 +571,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Sets the email address.
-   * 
+   *
    * @param address
    *          The email address.
    */
@@ -582,7 +584,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
    * This method reports whether or not the user has been confirmed in the
    * system by checking the User.CONFIRM_VALUE column in the users record to see
    * if it is equal to User.CONFIRM_DATA.
-   * 
+   *
    * @return True if the user has been confirmed.
    */
   @Override
@@ -594,7 +596,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Sets the confirmation value. The value should be either a random string or
    * User.CONFIRM_DATA
-   * 
+   *
    * @param value
    *          The confirmation key value.
    */
@@ -609,7 +611,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Gets the confirmation value.
-   * 
+   *
    * @return status The confirmation value for this User
    */
   @Override
@@ -619,7 +621,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Updates the last login date in the database.
-   * 
+   *
    * @exception Exception
    *              , a generic exception.
    */
@@ -631,7 +633,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Implement this method if you wish to be notified when the User has been
    * Bound to the session.
-   * 
+   *
    * @param hsbe
    *          The HttpSessionBindingEvent.
    */
@@ -643,7 +645,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
   /**
    * Implement this method if you wish to be notified when the User has been
    * Unbound from the session.
-   * 
+   *
    * @param hsbe
    *          The HttpSessionBindingEvent.
    */
@@ -688,7 +690,7 @@ public class BaseJetspeedUser /* extends SecurityObject */implements
 
   /**
    * Returns the disabled status for the user
-   * 
+   *
    * @return True when the account is disabled
    */
   @Override

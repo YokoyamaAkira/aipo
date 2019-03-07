@@ -39,7 +39,7 @@ import org.apache.velocity.context.Context;
 /**
  * This action sets up the template context for managing of security entries in
  * the Turbine database.
- * 
+ *
  * @author <a href="mailto:jford@apache.org">Jeremy Ford</a>
  * @author <a href="mailto:morciuch@apache.org">Mark Orciuch</a>
  * @version $Id: $
@@ -50,8 +50,8 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
   /**
    * Static initialization of the logger for this class
    */
-  private static final JetspeedLogger logger = JetspeedLogFactoryService
-    .getLogger(SecurityUpdateAction.class.getName());
+  private static final JetspeedLogger logger =
+    JetspeedLogFactoryService.getLogger(SecurityUpdateAction.class.getName());
 
   public SecurityUpdateAction() {
     registryEntryName = "security_name";
@@ -81,8 +81,8 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
     }
 
     if (mode != null
-      && (mode.equals(SecurityConstants.PARAM_MODE_DELETE) || mode
-        .equals(SecurityConstants.PARAM_MODE_UPDATE))) {
+      && (mode.equals(SecurityConstants.PARAM_MODE_DELETE)
+        || mode.equals(SecurityConstants.PARAM_MODE_UPDATE))) {
       String securityName = rundata.getParameters().getString("security_name");
       BaseSecurityEntry securityEntry =
         (BaseSecurityEntry) Registry.getEntry(Registry.SECURITY, securityName);
@@ -95,7 +95,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
           context.put("accessIndex", new Integer(accessIndex));
           accessIndex--;
           BaseSecurityAccess securityAccess =
-            (BaseSecurityAccess) securityEntry.getAccesses().get(accessIndex);
+            securityEntry.getAccesses().get(accessIndex);
           context.put("securityAccess", securityAccess);
         }
       }
@@ -121,7 +121,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
 
   /**
    * Update a security entry in the registry
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param context
@@ -186,14 +186,15 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
 
   /**
    * Update a security entry in the registry
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param context
    *          The velocity context for this request.
    * @throws Exception
    */
-  public void doUpdateaccess(RunData rundata, Context context) throws Exception {
+  public void doUpdateaccess(RunData rundata, Context context)
+      throws Exception {
     try {
       String securityName = rundata.getParameters().getString("security_name");
       BaseSecurityEntry securityEntry =
@@ -206,7 +207,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
         if (accessIndex >= 0
           && accessIndex < securityEntry.getAccesses().size()) {
           BaseSecurityAccess securityAccess =
-            (BaseSecurityAccess) securityEntry.getAccesses().get(accessIndex);
+            securityEntry.getAccesses().get(accessIndex);
           securityAccess.setAction(action);
 
           Registry.addEntry(Registry.SECURITY, securityEntry);
@@ -222,7 +223,8 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
         resetForm(rundata);
 
         logger
-          .error("Failed to find registry entry while trying to update accesses");
+          .error(
+            "Failed to find registry entry while trying to update accesses");
       }
     } catch (Exception e) {
       DynamicURI duri =
@@ -239,14 +241,15 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
 
   /**
    * Remove a access entry from a security entry in the registry
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param context
    *          The velocity context for this request.
    * @throws Exception
    */
-  public void doRemoveaccess(RunData rundata, Context context) throws Exception {
+  public void doRemoveaccess(RunData rundata, Context context)
+      throws Exception {
     try {
       String securityName = rundata.getParameters().getString("security_name");
       BaseSecurityEntry securityEntry =
@@ -269,7 +272,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
             }
           }
 
-          Vector<?> accesses = securityEntry.getAccesses();
+          Vector<BaseSecurityAccess> accesses = securityEntry.getAccesses();
           Iterator<?> deleteIter = deleteList.iterator();
           while (deleteIter.hasNext()) {
             SecurityAccess sa = (SecurityAccess) deleteIter.next();
@@ -299,7 +302,8 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
         resetForm(rundata);
 
         logger
-          .error("Failed to find registry entry while trying to remove accesses");
+          .error(
+            "Failed to find registry entry while trying to remove accesses");
       }
     } catch (Exception e) {
       DynamicURI duri =
@@ -316,7 +320,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
 
   /**
    * Update a security entry in the registry
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param context
@@ -335,7 +339,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
         if (accessIndex >= 0
           && accessIndex < securityEntry.getAccesses().size()) {
           BaseSecurityAccess securityAccess =
-            (BaseSecurityAccess) securityEntry.getAccesses().get(accessIndex);
+            securityEntry.getAccesses().get(accessIndex);
           addAllow(rundata, securityAccess);
           Registry.addEntry(Registry.SECURITY, securityEntry);
           clearUserData(rundata);
@@ -374,7 +378,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
 
   /**
    * Update a security entry in the registry
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    * @param context
@@ -393,7 +397,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
         if (accessIndex >= 0
           && accessIndex < securityEntry.getAccesses().size()) {
           BaseSecurityAccess securityAccess =
-            (BaseSecurityAccess) securityEntry.getAccesses().get(accessIndex);
+            securityEntry.getAccesses().get(accessIndex);
 
           String allowType =
             rundata.getParameters().getString("allow_type", "allows");
@@ -500,7 +504,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
 
   /**
    * Clears the temporary storage of any data that was used
-   * 
+   *
    * @param rundata
    */
   @Override
@@ -522,7 +526,7 @@ public class SecurityUpdateAction extends RegistryUpdateAction {
 
   /**
    * Populates the user's temp storage with form data
-   * 
+   *
    * @param rundata
    *          The turbine rundata context for this request.
    */
